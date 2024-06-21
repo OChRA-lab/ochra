@@ -1,5 +1,5 @@
-from ochra_chem_engine.singleton import SingletonMeta
-from ochra_chem_engine.rest_adapter import RestAdapter, Result, LabEngineException
+from utils.singleton import SingletonMeta
+from connections.rest_adapter import RestAdapter, Result, LabEngineException
 import logging
 
 

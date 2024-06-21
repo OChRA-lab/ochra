@@ -1,6 +1,6 @@
 from .operationModels import OperationDocument, OperationDbModel
-from ochra_chem_engine.db_connection import DbConnection
-from ochra_chem_engine.lab_connection import LabConnection
+from connections.db_connection import DbConnection
+from connections.lab_connection import LabConnection
 from bson import ObjectId
 import json
 

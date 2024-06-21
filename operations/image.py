@@ -1,5 +1,5 @@
-from ochra_catalogue.operations.operation import Operation, Operation_
-from ochra_catalogue.operations.operationModels import OperationResultDbModel
+from operations.operation import Operation, Operation_
+from operations.operationModels import OperationResultDbModel
 import cv2
 import numpy as np
 

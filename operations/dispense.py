@@ -1,4 +1,4 @@
-from ochra_catalogue.operations.operation import Operation, Operation_
+from operations.operation import Operation, Operation_
 
 
 class Dispense(Operation):
