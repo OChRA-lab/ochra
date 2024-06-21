@@ -1,5 +1,5 @@
-from utils.singleton import SingletonMeta
-from connections.mongo_adapter import MongoDbAdapter
+from ..utils.singleton import SingletonMeta
+from .mongo_adapter import MongoDbAdapter
 import logging
 from typing_extensions import Self
 

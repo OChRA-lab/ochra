@@ -1,5 +1,5 @@
-from operations.operation import Operation, Operation_
-from operations.operationModels import OperationResultDbModel
+from .operation import Operation, Operation_
+from .operationModels import OperationResultDbModel
 import cv2
 import numpy as np
 

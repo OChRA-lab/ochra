@@ -1,4 +1,4 @@
-from operations.operation import Operation, Operation_
+from .operation import Operation, Operation_
 
 
 class Dispense(Operation):

@@ -1,5 +1,5 @@
-from utils.singleton import SingletonMeta
-from connections.rest_adapter import RestAdapter, Result, LabEngineException
+from ..utils.singleton import SingletonMeta
+from .rest_adapter import RestAdapter, Result, LabEngineException
 import logging
 
 

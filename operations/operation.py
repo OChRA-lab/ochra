@@ -1,6 +1,6 @@
 from .operationModels import OperationDocument, OperationDbModel
-from connections.db_connection import DbConnection
-from connections.lab_connection import LabConnection
+from ..connections.db_connection import DbConnection
+from ..connections.lab_connection import LabConnection
 from bson import ObjectId
 import json
 
