@@ -5,6 +5,7 @@ import uvicorn
 from typing import Dict, Any, Optional
 from OChRA_Common.connections.db_connection import DbConnection
 
+
 class operationExecute(BaseModel):
     operation: str
     deviceName: str
@@ -18,22 +19,22 @@ class Comunicator:
         self.devices = []
         self.router.add_api_route(
             "/process_op", self.process_operation, methods=["POST"])
-        self.router.add_api_route("/ping",self.ping,methods=["GET"])
+        self.router.add_api_route("/ping", self.ping, methods=["GET"])
         self.app.include_router(self.router)
         self.db_conn = DbConnection("138.253.124.144:27017")
 
     def run(self):
         uvicorn.run(self.app, host="0.0.0.0")
 
-    def ping(self,request:Request):
+    def ping(self, request: Request):
         clientHost = request.client.host
         print(clientHost)
-        return 
+        return
 
     def process_operation(self, args: operationExecute):
         try:
             for i in self.devices:
                 if i.name == args.deviceName:
-                    return i.execute(args.operation,**args.args)
+                    return i.execute(args.operation, **args.args)
         except Exception as e:
-            raise HTTPException(500,detail= str(e))
+            raise HTTPException(500, detail=str(e))
