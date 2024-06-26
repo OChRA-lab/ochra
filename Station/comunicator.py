@@ -3,6 +3,7 @@ from typing import Dict, Any
 from pydantic import BaseModel
 import uvicorn
 from typing import Dict, Any, Optional
+from OChRA_Common.connections.db_connection import DbConnection
 
 class operationExecute(BaseModel):
     operation: str
@@ -19,6 +20,7 @@ class Comunicator:
             "/process_op", self.process_operation, methods=["POST"])
         self.router.add_api_route("/ping",self.ping,methods=["GET"])
         self.app.include_router(self.router)
+        self.db_conn = DbConnection("138.253.124.144:27017")
 
     def run(self):
         uvicorn.run(self.app, host="0.0.0.0")
