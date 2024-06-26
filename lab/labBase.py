@@ -1,4 +1,4 @@
-from ochra_chem_engine.db_connection import DbConnection
+from OChRA_Common.connections.db_connection import DbConnection
 from fastapi import FastAPI, APIRouter, HTTPException
 from typing import Dict, Any
 from pydantic import BaseModel
@@ -7,7 +7,7 @@ import uvicorn
 import importlib
 import pkgutil
 import logging
-from ochra_catalogue.operations.operationModels import OperationResultDbModel
+from OChRA_Common.operations.operationModels import OperationResultDbModel
 import datetime
 from bson import ObjectId
 from bson.errors import InvalidId
