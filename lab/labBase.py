@@ -81,7 +81,7 @@ class LabBase():
         except (ModuleNotFoundError, ImportError):
             return None
 
-    def _find_module_in_catalogue(self, cls_name, catalogue):
+    def _find_module_in_lib(self, cls_name, catalogue):
         """find module of a class in a given catalogue
 
         Args:
@@ -94,7 +94,16 @@ class LabBase():
         Returns:
             str: path to module
         """
-        pkg = importlib.import_module("ochra_catalogue." + catalogue)
+        if catalogue not in ["robots", "devices", "containers", "reagents",
+                             "operations"]:
+            raise NameError(f"Catalogue {catalogue} is not defined")
+        if catalogue == "operations":
+            lib = "OChRA_Common"
+        elif catalogue == "robots":
+            lib = "OChRA_Devices_front.robots"
+        elif catalogue == "devices":
+            lib = "OChRA_Devices_front.devices"
+        pkg = importlib.import_module(f"{lib}.{catalogue}")
         for module_itr in pkgutil.iter_modules(
             path=pkg.__path__, prefix=f"{pkg.__name__}."
         ):
@@ -161,7 +170,7 @@ class LabBase():
                 logger.debug(logstr.format(
                     args.object_type, args.catalogue_module))
 
-                module = self._find_module_in_catalogue(
+                module = self._find_module_in_lib(
                     args.object_type, args.catalogue_module)
             # get backend class and construct
                 logger.debug(f"attempting import of {args.object_type}")
