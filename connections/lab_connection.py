@@ -1,5 +1,5 @@
-from ..utils.singleton import SingletonMeta
-from .rest_adapter import RestAdapter, Result, LabEngineException
+from OChRA_Common.utils.singleton import SingletonMeta
+from OChRA_Common.connections.rest_adapter import RestAdapter, Result, LabEngineException
 import logging
 
 
@@ -58,7 +58,8 @@ class LabConnection(metaclass=SingletonMeta):
         """
         data = {"object_function": object_function}
         data["args"] = kwargs
-        result = self.rest_adapter.post(endpoint=f"object/call/{object_id}", data=data)
+        result = self.rest_adapter.post(
+            endpoint=f"object/call/{object_id}", data=data)
         return result
 
     def get_object(self, object_id) -> Result:
@@ -84,5 +85,6 @@ class LabConnection(metaclass=SingletonMeta):
         """
         data = {}
         data["properties"] = kwargs
-        result = self.rest_adapter.patch(endpoint=f"object/set/{object_id}", data=data)
+        result = self.rest_adapter.patch(
+            endpoint=f"object/set/{object_id}", data=data)
         return result
