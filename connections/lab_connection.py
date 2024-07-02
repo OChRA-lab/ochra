@@ -88,3 +88,12 @@ class LabConnection(metaclass=SingletonMeta):
         result = self.rest_adapter.patch(
             endpoint=f"object/set/{object_id}", data=data)
         return result
+
+    def create_station(self) -> Result:
+        """create station using api endpoint station/create
+
+        Returns:
+            Result: api response
+        """
+        result = self.rest_adapter.post(endpoint="station/create")
+        return result.data
