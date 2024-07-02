@@ -33,6 +33,7 @@ class Comunicator:
         self.db_conn = DbConnection(dbip)
 
     def run(self):
+        self.start_up()
         uvicorn.run(self.app, host=self.host_ip, port=self.port)
 
     def ping(self, request: Request):
@@ -43,9 +44,9 @@ class Comunicator:
     def start_up(self):
         station_id = self.lab_conn.create_station()
         for device in self.devices:
-            id = self.lab_conn.construct_object(
-                device.__class__.__name__, "devices", **device.__dict__)
-            self.lab_conn.add_device_to_station(station_id, id)
+            self.lab_conn.construct_object(
+                device.__class__.__name__, "devices",
+                station_conn=station_id, **device.__dict__)
 
     def process_operation(self, args: operationExecute):
         try:

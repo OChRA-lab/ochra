@@ -1,5 +1,5 @@
 from OChRA_Common.connections.db_connection import DbConnection
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Request
 from typing import Dict, Any
 from pydantic import BaseModel
 from mongoengine import ValidationError
@@ -11,6 +11,7 @@ from OChRA_Common.operations.operationModels import OperationResultDbModel
 import datetime
 from bson import ObjectId
 from bson.errors import InvalidId
+from OChRA_Common.connections.station_connection import StationConnection
 
 logger = logging.getLogger(__name__)
 
@@ -61,6 +62,10 @@ class LabBase():
             "/object/get/{objectName}",
             self.get_object,
             methods=["GET"])
+        self.router.add_api_route(
+            "/station/create",
+            self.create_station,
+            methods=["POST"])
 
         self.app.include_router(self.router)
 
@@ -255,6 +260,11 @@ class LabBase():
     def add_device(self, device):
         logger.info(f"added {device.object_id} to lab")
         self.objects_dict[str(device.object_id)] = device
+
+    def create_station(self, request: Request):
+        clientHost = request.client.host
+        self.objects_dict[clientHost] = StationConnection(clientHost)
+        return clientHost
 
 
 if __name__ == "__main__":
