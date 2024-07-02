@@ -105,9 +105,9 @@ class LabBase():
         if catalogue == "operations":
             lib = "OChRA_Common"
         elif catalogue == "robots":
-            lib = "OChRA_Devices_front.robots"
+            lib = "OChRA_Devices_front"
         elif catalogue == "devices":
-            lib = "OChRA_Devices_front.devices"
+            lib = "OChRA_Devices_front"
         pkg = importlib.import_module(f"{lib}.{catalogue}")
         for module_itr in pkgutil.iter_modules(
             path=pkg.__path__, prefix=f"{pkg.__name__}."
@@ -255,7 +255,7 @@ class LabBase():
 
     def run(self):
         logger.info("started server")
-        uvicorn.run(self.app)
+        uvicorn.run(self.app, host="0.0.0.0")
 
     def add_device(self, device):
         logger.info(f"added {device.object_id} to lab")
