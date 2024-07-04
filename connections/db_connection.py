@@ -1,4 +1,4 @@
-from OChRA_Common.utils.singleton import SingletonMeta
+from OChRA_Common.utils.singleton_meta import SingletonMeta
 from OChRA_Common.connections.mongo_adapter import MongoDbAdapter
 import logging
 from typing_extensions import Self

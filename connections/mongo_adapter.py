@@ -5,7 +5,7 @@ from bson import ObjectId
 import gridfs
 
 
-class MongoDbAdapter:
+class MongoAdapter:
     """mongodb adapter class"""
 
     def __init__(
@@ -14,7 +14,7 @@ class MongoDbAdapter:
         db_name: str,
         logger: logging.Logger = None,
     ):
-        """Constructor for MongoDbAdapter
+        """Constructor for MongoAdapter
 
         Args:
             hostname (str): address of db host
