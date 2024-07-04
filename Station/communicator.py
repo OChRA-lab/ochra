@@ -14,7 +14,7 @@ class operationExecute(BaseModel):
     args: Optional[Dict] = None
 
 
-class Comunicator:
+class Communicator:
     def __init__(self,
                  dbip="138.253.124.144:27017",
                  host_ip="0.0.0.0",
