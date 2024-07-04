@@ -1,4 +1,4 @@
-from OChRA_Common.utils.singleton import SingletonMeta
+from OChRA_Common.utils.singleton_meta import SingletonMeta
 from OChRA_Common.connections.rest_adapter import RestAdapter, Result, LabEngineException
 import logging
 
