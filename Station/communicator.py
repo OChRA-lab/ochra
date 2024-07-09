@@ -44,9 +44,11 @@ class Communicator:
     def start_up(self):
         station_id = self.lab_conn.create_station()
         for device in self.devices:
+            device_dict: dict = device.__dict__
+            device_dict.pop("driver")
             self.lab_conn.construct_object(
-                device.__class__.__name__, "devices",
-                station_conn=station_id, **device.__dict__)
+                device.__class__, "devices",
+                station_conn=station_id, **device_dict)
 
     def process_operation(self, args: operationExecute):
         try:
