@@ -11,7 +11,7 @@ class StopStir(Operation):
         super().__init__(self.__class__, **kwargs)
         
     @staticmethod
-    def name(self):
+    def operation_name():
         return "StopStir"
 
 class StopStir_(Operation_):
@@ -28,5 +28,5 @@ class StopStir_(Operation_):
                              {"arguments": self._doc.arguments})
         
     @staticmethod
-    def name(self):
+    def operation_name():
         return "StopStir"
