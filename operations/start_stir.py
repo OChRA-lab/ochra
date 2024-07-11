@@ -51,3 +51,4 @@ class StartStir_(Operation_):
     @staticmethod
     def operation_name():
         return "StartStir"
+    
