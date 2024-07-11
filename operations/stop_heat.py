@@ -1,25 +1,25 @@
 from .operation import Operation, Operation_
 
 
-class StopStir(Operation):
-    """StopStir operation class
+class StopHeat(Operation):
+    """StopHeat operation class
     """
 
     def __init__(self, **kwargs) -> None:
-        """initializes the StopStir class
+        """initializes the StopHeat class
         """
         super().__init__(self.__class__, **kwargs)
         
     @staticmethod
     def operation_name():
-        return "StopStir"
+        return "StopHeat"
 
-class StopStir_(Operation_):
-    """StopStir operation class
+class StopHeat_(Operation_):
+    """StopHeat operation class
     """
 
-    def __init__(self, name="StopStir", id=None, **kwargs) -> None:
-        """initializes the StopStir class
+    def __init__(self, name="StopHeat", id=None, **kwargs) -> None:
+        """initializes the StopHeat class
         """
         super().__init__(name=name, id=id)
         self._doc.arguments = kwargs
@@ -29,5 +29,5 @@ class StopStir_(Operation_):
         
     @staticmethod
     def operation_name():
-        return "StopStir"
+        return "StopHeat"
     
