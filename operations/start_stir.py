@@ -21,7 +21,7 @@ class StartStir(Operation):
         return self._doc.arguments["speed"]
     
     @staticmethod
-    def name(self):
+    def operation_name():
         return "StartStir"
 
 
@@ -49,5 +49,5 @@ class StartStir_(Operation_):
         return self._doc.arguments["speed"]
     
     @staticmethod
-    def name(self):
+    def operation_name():
         return "StartStir"
