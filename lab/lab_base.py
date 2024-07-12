@@ -171,6 +171,9 @@ class LabBase():
             raise HTTPException(status_code=501, detail="Not implemented yet")
         else:
             try:
+                if "Handler" in args.object_type:
+                    logger.debug("removing handler tag")
+                    args.object_type = args.object_type.replace("Handler", "")
                 logstr = ("Trying to load module {} from {}")
                 logger.debug(logstr.format(
                     args.object_type, args.catalogue_module))
@@ -184,10 +187,15 @@ class LabBase():
                 obj = cls(**args.contstructor_params)
 
             except ValidationError as e:
+
                 logger.info(f"could not load {args.object_type}")
                 raise HTTPException(status_code=500, detail=str(e))
             except TypeError as e:
-                detail = f"Type {args.object_type} does not exist on lab"
+                if "arguments" in str(e):
+                    detail = str(e)
+                else:
+                    logger.debug(e)
+                    detail = f"Type {args.object_type} does not exist on lab"
                 logger.info(detail)
                 raise HTTPException(
                     status_code=404, detail=detail)
