@@ -11,7 +11,7 @@ class StationConnection():
         ssl_verify: bool = False,
         logger: logging.Logger = None,
     ):
-        self.rest_adapter = RestAdapter(hostname, api_key, ssl_verify, logger)
+        self.rest_adapter: RestAdapter = RestAdapter(hostname, api_key, ssl_verify, logger)
 
     def execute_op(self, op, deviceName, **kwargs):
         data = {"operation": op,

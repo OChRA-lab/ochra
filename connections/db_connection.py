@@ -21,7 +21,7 @@ class DbConnection(metaclass=SingletonMeta):
             logger (logging.Logger, optional): logger if you have one.
                 Defaults to None.
         """
-        self.db_adapter = MongoAdapter(hostname, db_name, logger)
+        self.db_adapter: MongoAdapter = MongoAdapter(hostname, db_name, logger)
 
     def create(self, collection_name, document):
         """Create a new document in the specified collection."""

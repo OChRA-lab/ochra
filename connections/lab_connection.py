@@ -26,7 +26,7 @@ class LabConnection(metaclass=SingletonMeta):
             logger (logging.Logger, optional): logger if you have one.
                 Defaults to None.
         """
-        self.rest_adapter = RestAdapter(hostname, api_key, ssl_verify, logger)
+        self.rest_adapter: RestAdapter = RestAdapter(hostname, api_key, ssl_verify, logger)
 
     def construct_object(self, object_type, catalogue_module, **kwargs) -> Result:
         """create data structure for object construct api and
