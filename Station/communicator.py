@@ -44,15 +44,21 @@ class Communicator:
     def start_up(self):
         station_id = self.lab_conn.create_station()
         for device in self.devices:
+            device_dict: dict = device.__dict__.copy()
+            keys_to_pop = []
+            for key in device_dict.keys():
+                if key[0] =="_":
+                    keys_to_pop.append(key)
+            [device_dict.pop(key) for key in keys_to_pop]
             self.lab_conn.construct_object(
-                device.__class__.__name__, "devices",
-                station_conn=station_id, **device.__dict__)
+                device.__class__, "devices",
+                station_conn=station_id, **device_dict)
 
     def process_operation(self, args: operationExecute):
         try:
             for i in self.devices:
                 if i.name == args.deviceName:
-                    op = eval(f"{args.operation}()")
-                    return i.execute(op, **args.args)
+                    #op = eval(f"{args.operation}()")
+                    return i.execute(args.operation, **args.args)
         except Exception as e:
             raise HTTPException(500, detail=str(e))
