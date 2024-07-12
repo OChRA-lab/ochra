@@ -21,6 +21,10 @@ class Dispense(Operation):
                          dest=dest,
                          direction=direction,
                          **kwargs,)
+        
+    @staticmethod
+    def operation_name():
+        return "Dispense"
 
 
 class Dispense_(Operation_):
@@ -51,3 +55,7 @@ class Dispense_(Operation_):
         self._db_conn.update(self._doc.collection_name,
                              self._doc.id,
                              {"arguments": self._doc.arguments})
+    
+    @staticmethod
+    def operation_name():
+        return "Dispense"
