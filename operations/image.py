@@ -48,6 +48,10 @@ class Image(Operation):
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         cv2.imwrite("image.png", img)
         return path
+    
+    @staticmethod
+    def operation_name():
+        return "Image"
 
 
 class Image_(Operation_):
@@ -76,3 +80,7 @@ class Image_(Operation_):
         self._doc.data = self._db_conn.read(
             self._doc.collection_name, self._doc.id, "data")
         return self._doc.data
+    
+    @staticmethod
+    def operation_name():
+        return "Image"
