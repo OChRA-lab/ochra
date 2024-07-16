@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
-from OChRA_Common.connections.db_connection import DbConnection
+from src.OChRA_Common.connections.db_connection import DbConnection
 
 
 @pytest.fixture
