@@ -6,25 +6,23 @@ build-backend = "hatchling.build"
 name = "OChRA_Discovery"
 version = "0.0.0" #can switch to dynamic versioning and take from git tag later
 authors = [ #add authors here
-    {name = "placeholder", email = "place@holder"},
+    #{name = "placeholder", email = "place@holder"},
 ]
 description = "OChRA_Discovery package..." #add summary of OChRA_Discovery here
 readme = "README.md"
 #license = {file = "LICENSE"} #don't need license a license yet
-requires-python = ">=3.8" #this version seems to work but needs compatability testing
+requires-python = ">=3.11"
 dependencies = [ #add dependencies here
     #"dependency==version",
 ] 
-
-#don't need classifiers or keywords unless we want to publish to PyPI
-#classifiers = [
-#    "Intended Audience :: Developers",
-#    "Intended Audience :: Science/Research",
-#    "Topic :: Scientific/Engineering :: Chemistry",
-#    "License :: OSI Approved :: [LICENSE]", #need to choose a license 
-#    "Programming Language :: Python",
-#    ]
-#keywords = ["OChRA", "chemistry", "lab", "framework", "automated"] #keywords for PyPI search results
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    #"License :: OSI Approved :: [LICENSE]", #need to choose a license 
+    "Programming Language :: Python",
+    ]
+keywords = ["OChRA", "chemistry", "lab", "framework", "automated"] #keywords for PyPI search results
 
 [project.urls]
 Repository = "https://github.com/OChRA-lab/OChRA_Discovery"
