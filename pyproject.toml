@@ -11,8 +11,8 @@ authors = [ #add authors here
 description = "OChRA_Common package..." #add summary of OChRA_Common here
 readme = "README.md"
 #license = {file = "LICENSE"} #don't need license a license yet
-requires-python = ">=3.8" #this version seems to work but needs compatability testing
-dependencies = [ #add dependencies here
+requires-python = ">=3.11"
+dependencies = [
     "mongoengine==0.28.2",
     "numpy==2.0.0",
     "opencv_python==4.10.0.84",
@@ -21,16 +21,14 @@ dependencies = [ #add dependencies here
     "Requests==2.32.3",
     "typing_extensions==4.12.2",
 ] 
-
-#don't need classifiers or keywords unless we want to publish to PyPI
-#classifiers = [
-#    "Intended Audience :: Developers",
-#    "Intended Audience :: Science/Research",
-#    "Topic :: Scientific/Engineering :: Chemistry",
-#    "License :: OSI Approved :: [LICENSE]", #need to choose a license 
-#    "Programming Language :: Python",
-#    ]
-#keywords = ["OChRA", "chemistry", "lab", "framework", "automated"] #keywords for PyPI search results
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    #"License :: OSI Approved :: [LICENSE]", #need to choose a license 
+    "Programming Language :: Python",
+    ]
+keywords = ["OChRA", "chemistry", "lab", "framework", "automated"]
 
 [project.urls]
 Repository = "https://github.com/OChRA-lab/OChRA_Common"
