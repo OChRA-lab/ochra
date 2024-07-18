@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "OChRA_Common"
 version = "0.0.0" #can switch to dynamic versioning and take from git tag later
 authors = [ #add authors here
-    {name = "placeholder", email = "place@holder"},
+    #{name = "placeholder", email = "place@holder"},
 ] 
 description = "OChRA_Common package..." #add summary of OChRA_Common here
 readme = "README.md"
