@@ -1,7 +1,0 @@
-mongoengine==0.28.2
-numpy==2.0.0
-opencv_python==4.10.0.84
-pymongo==4.8.0
-pytest==8.2.2
-Requests==2.32.3
-typing_extensions==4.12.2
