@@ -6,29 +6,27 @@ build-backend = "hatchling.build"
 name = "OChRA_Manager"
 version = "0.0.0" #can switch to dynamic versioning and take from git tag later
 authors = [ #add authors here
-    {name = "placeholder", email = "place@holder"},
+    #{name = "placeholder", email = "place@holder"},
 ]
 description = "OChRA_Manager package..." #add summary of OChRA_Manager here
 readme = "README.md"
 #license = {file = "LICENSE"} #don't need license a license yet
-requires-python = ">=3.8" #this version seems to work but needs compatability testing
-dependencies = [ #add dependencies here
+requires-python = ">=3.11"
+dependencies = [
     "fastapi==0.111.1",
     "mongoengine==0.28.2",
     "pydantic==2.8.2",
     "pymongo==4.8.0",
     "uvicorn==0.30.1",
 ] 
-
-#don't need classifiers or keywords unless we want to publish to PyPI
-#classifiers = [
-#    "Intended Audience :: Developers",
-#    "Intended Audience :: Science/Research",
-#    "Topic :: Scientific/Engineering :: Chemistry",
-#    "License :: OSI Approved :: [LICENSE]", #need to choose a license 
-#    "Programming Language :: Python",
-#    ]
-#keywords = ["OChRA", "chemistry", "lab", "framework", "automated"] #keywords for PyPI search results
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    #"License :: OSI Approved :: [LICENSE]", #need to choose a license 
+    "Programming Language :: Python",
+    ]
+keywords = ["OChRA", "chemistry", "lab", "framework", "automated"]
 
 [project.urls]
 Repository = "https://github.com/OChRA-lab/OChRA_Manager"
