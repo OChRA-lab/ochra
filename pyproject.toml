@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "OChRA_Common"
+name = "ochra_common"
 version = "0.0.0" #can switch to dynamic versioning and take from git tag later
 authors = [ #add authors here
     #{name = "placeholder", email = "place@holder"},
@@ -33,3 +33,5 @@ keywords = ["OChRA", "chemistry", "lab", "framework", "automated"]
 [project.urls]
 Repository = "https://github.com/OChRA-lab/OChRA_Common"
 
+[tool.hatch.build.targets.wheel]
+package = "ochra_common"
