@@ -14,8 +14,7 @@ def lab_connection():
     # Create an instance of LabConnection with the mocked adapter
     lab_conn = LabConnection(hostname="test_host", api_key="test_key", ssl_verify=True, logger=mock_logger)
     return lab_conn, mock_rest_adapter
-        
-@pytest.fixture
+
 def test_construct_object(lab_connection):
     lab_conn, mock_rest_adapter = lab_connection
     mock_rest_adapter.construct.return_value = "mocked_construct_result"
@@ -23,4 +22,4 @@ def test_construct_object(lab_connection):
     mock_rest_adapter.construct.assert_called_once_with(
         object_type=str, catalogue_module="test_module", param1="test_value")
     assert result == "mocked_construct_result"
-    
+
