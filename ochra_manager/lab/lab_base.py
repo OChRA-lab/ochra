@@ -206,7 +206,7 @@ class LabBase():
             object_id = str(obj.object_id)
             self.objects_dict[object_id] = obj
         logger.info(string)
-        return object_idOChRA_Common
+        return object_id
 
     def call_on_object(self, object_id, call: ObjectCallModel):
         """call method of object on object
