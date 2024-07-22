@@ -3,9 +3,9 @@ from typing import Dict, Any
 from pydantic import BaseModel
 import uvicorn
 from typing import Dict, Any, Optional
-from OChRA_Common.connections.db_connection import DbConnection
-from OChRA_Common.connections.lab_connection import LabConnection
-from OChRA_Common.operations import *
+from ochra_common.connections.db_connection import DbConnection
+from ochra_common.connections.lab_connection import LabConnection
+from ochra_common.operations import *
 
 
 class operationExecute(BaseModel):
