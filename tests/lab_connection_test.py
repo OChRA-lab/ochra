@@ -37,4 +37,11 @@ def test_get_object(lab_connection):
     result = lab_conn.get_object("test_id")
     mock_rest_adapter.get.assert_called_once_with("test_id")
     assert result == "mocked_get_result"
+    
+def test_patch_object(lab_connection):
+    lab_conn, mock_rest_adapter = lab_connection
+    mock_rest_adapter.patch.return_value = "mocked_patch_result"
+    result = lab_conn.patch_object("test_id", "test_value")
+    mock_rest_adapter.patch.assert_called_once_with("test_id", "test_value")
+    assert result == "mocked_patch_result"
 
