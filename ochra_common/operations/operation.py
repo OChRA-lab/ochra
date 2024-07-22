@@ -1,6 +1,6 @@
 from .operationModels import OperationDocument, OperationDbModel
-from OChRA_Common.connections.db_connection import DbConnection
-from OChRA_Common.connections.lab_connection import LabConnection
+from ochra_common.connections.db_connection import DbConnection
+from ochra_common.connections.lab_connection import LabConnection
 from bson import ObjectId
 import json
 

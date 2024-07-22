@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
-from OChRA_Common.connections.db_connection import DbConnection
+from ochra_common.connections.db_connection import DbConnection
 
 
 @pytest.fixture
@@ -8,7 +8,7 @@ def db_connection():
     # Mock the MongoDbAdapter used in DbConnection
     with pytest.MonkeyPatch.context() as m:
         mock_adapter = MagicMock()
-        m.setattr("OChRA_Common.connections.mongo_adapter.MongoDbAdapter",
+        m.setattr("ochra_common.connections.mongo_adapter.MongoDbAdapter",
                   lambda *args, **kwargs: mock_adapter)
         # Create an instance of DbConnection with the mocked adapter
         db_conn = DbConnection(hostname="test_host", db_name="test_db")
