@@ -31,3 +31,10 @@ def test_call_on_object(lab_connection):
         "test_id", "test_function", "test_value")
     assert result == "mocked_call_result"
 
+def test_get_object(lab_connection):
+    lab_conn, mock_rest_adapter = lab_connection
+    mock_rest_adapter.get.return_value = "mocked_get_result"
+    result = lab_conn.get_object("test_id")
+    mock_rest_adapter.get.assert_called_once_with("test_id")
+    assert result == "mocked_get_result"
+
