@@ -44,4 +44,11 @@ def test_patch_object(lab_connection):
     result = lab_conn.patch_object("test_id", "test_value")
     mock_rest_adapter.patch.assert_called_once_with("test_id", "test_value")
     assert result == "mocked_patch_result"
+    
+def test_create_station(lab_connection):
+    lab_conn, mock_rest_adapter = lab_connection
+    mock_rest_adapter.create_station.return_value = "mocked_create_station_result"
+    result = lab_conn.create_station()
+    mock_rest_adapter.create_station.assert_called_once_with()
+    assert result == "mocked_create_station_result"
 
