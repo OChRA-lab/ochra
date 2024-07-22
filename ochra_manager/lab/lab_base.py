@@ -1,4 +1,4 @@
-from OChRA_Common.connections.db_connection import DbConnection
+from ochra_common.connections.db_connection import DbConnection
 from fastapi import FastAPI, APIRouter, HTTPException, Request
 from typing import Dict, Any
 from pydantic import BaseModel
@@ -7,11 +7,11 @@ import uvicorn
 import importlib
 import pkgutil
 import logging
-from OChRA_Common.operations.operationModels import OperationResultDbModel
+from ochra_common.operations.operationModels import OperationResultDbModel
 import datetime
 from bson import ObjectId
 from bson.errors import InvalidId
-from OChRA_Common.connections.station_connection import StationConnection
+from ochra_common.connections.station_connection import StationConnection
 
 logger = logging.getLogger(__name__)
 
