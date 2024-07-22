@@ -18,8 +18,16 @@ def lab_connection():
 def test_construct_object(lab_connection):
     lab_conn, mock_rest_adapter = lab_connection
     mock_rest_adapter.construct.return_value = "mocked_construct_result"
-    result = lab_conn.construct_object(object_type=str, catalogue_module="test_module", param1="test_value")
+    result = lab_conn.construct_object("test_type", "test_module", "test_value")
     mock_rest_adapter.construct.assert_called_once_with(
-        object_type=str, catalogue_module="test_module", param1="test_value")
+        "test_type", "test_module", "test_value")
     assert result == "mocked_construct_result"
+    
+def test_call_on_object(lab_connection):
+    lab_conn, mock_rest_adapter = lab_connection
+    mock_rest_adapter.call.return_value = "mocked_call_result"
+    result = lab_conn.call_on_object("test_id", "test_function", "test_value")
+    mock_rest_adapter.call.assert_called_once_with(
+        "test_id", "test_function", "test_value")
+    assert result == "mocked_call_result"
 
