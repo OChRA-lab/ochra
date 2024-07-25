@@ -68,3 +68,12 @@ def test_patch_object(lab_connection, mock_rest_adapter):
         )
         assert result.data == "object_patched"
         
+def test_create_station(lab_connection, mock_rest_adapter):
+    with pytest.raises(LabEngineException):
+        mock_result = MagicMock(data={"id": "new_station_id"})
+        mock_result.data = {"id": "new_station_id"}
+        mock_rest_adapter.post.return_value = mock_result
+        result = lab_connection.create_station()
+        mock_rest_adapter.post.assert_called_once_with(endpoint="station/create")
+        assert result == {"id": "new_station_id"}
+        
