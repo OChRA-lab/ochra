@@ -10,7 +10,7 @@ def lab_connection():
         mock_rest = MagicMock()
         mocker.setattr("ochra_common.connections.rest_adapter.RestAdapter",
                   lambda *args, **kwargs: mock_rest)
-        lab_conn = LabConnection(hostname="testhost", api_key="testkey", ssl_verify=False)
+        lab_conn = LabConnection(hostname="test_host", api_key="test_key", ssl_verify=False)
     return lab_conn, mock_rest
 
 
