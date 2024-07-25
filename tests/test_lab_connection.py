@@ -30,4 +30,20 @@ def test_construct_object(lab_connection, mock_rest_adapter):
             }
         )
         assert result == {"id": "test_object_id"}
+
+
+def test_call_on_object(lab_connection, mock_rest_adapter):
+    with pytest.raises(LabEngineException):
+        mock_result = MagicMock(data="function_called")
+        mock_rest_adapter.post.return_value = mock_result
+        result = lab_connection.call_on_object(
+            object_id="test_id", object_function="test_function", arg1="value1")
+        mock_rest_adapter.post.assert_called_once_with(
+            endpoint=f"object/call/test_id",
+            data={
+                "object_function": "test_function",
+                "args": {"arg1": "value1"}
+            }
+        )
+        assert result.data == "function_called"
         
