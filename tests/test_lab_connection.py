@@ -56,6 +56,7 @@ def test_get_object(lab_connection, mock_rest_adapter):
         mock_rest_adapter.get.assert_called_once_with(endpoint=f"object/get/test_id")
         assert result == {"id": "test_id", "name": "test_name"}
  
+ 
 def test_patch_object(lab_connection, mock_rest_adapter):
     with pytest.raises(LabEngineException):
         mock_result = MagicMock(data="object_patched")
@@ -67,6 +68,7 @@ def test_patch_object(lab_connection, mock_rest_adapter):
             data={"properties": {"property1": "value1"}}
         )
         assert result.data == "object_patched"
+        
         
 def test_create_station(lab_connection, mock_rest_adapter):
     with pytest.raises(LabEngineException):
