@@ -56,3 +56,15 @@ def test_get_object(lab_connection, mock_rest_adapter):
         mock_rest_adapter.get.assert_called_once_with(endpoint=f"object/get/test_id")
         assert result == {"id": "test_id", "name": "test_name"}
  
+def test_patch_object(lab_connection, mock_rest_adapter):
+    with pytest.raises(LabEngineException):
+        mock_result = MagicMock(data="object_patched")
+        mock_rest_adapter.patch.return_value = mock_result
+        result = lab_connection.patch_object(
+            object_id="test_id", property1="value1")
+        mock_rest_adapter.patch.assert_called_once_with(
+            endpoint=f"object/set/test_id",
+            data={"properties": {"property1": "value1"}}
+        )
+        assert result.data == "object_patched"
+        
