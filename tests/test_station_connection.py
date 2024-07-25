@@ -5,23 +5,23 @@ from ochra_common.connections.rest_adapter import LabEngineException
 
 
 @pytest.fixture
-def mock_rest_adapter():
-    with patch('ochra_common.connections.rest_adapter.RestAdapter') as mock_adapter:
-        yield mock_adapter
-
-
-@pytest.fixture
 def station_connection():
-    return StationConnection(hostname="test_host", api_key="test_key", ssl_verify=False)
+    with pytest.MonkeyPatch.context() as mocker:
+        mock_rest = MagicMock()
+        mocker.setattr("ochra_common.connections.rest_adapter.RestAdapter",
+                  lambda *args, **kwargs: mock_rest)
+        station_conn = StationConnection(hostname="test_host", api_key="test_key", ssl_verify=False)
+    return station_conn, mock_rest
 
 
-def test_execute_op(station_connection, mock_rest_adapter):
+def test_execute_op(station_connection):
+    station_conn, mock_rest = station_connection
     with pytest.raises(LabEngineException):
         mock_result = MagicMock(data="success")
-        mock_rest_adapter.post.return_value = mock_result
-        result = station_connection.execute_op(
+        mock_rest.post.return_value = mock_result
+        result = station_conn.execute_op(
             op="start", deviceName="test_device", param1="value1")
-        mock_rest_adapter.return_value.post.assert_called_once_with(
+        mock_rest.return_value.post.assert_called_once_with(
             endpoint="process_op",
             data={"operation": "start",
                 "deviceName": "test_device",
