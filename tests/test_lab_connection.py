@@ -47,3 +47,12 @@ def test_call_on_object(lab_connection, mock_rest_adapter):
         )
         assert result.data == "function_called"
         
+        
+def test_get_object(lab_connection, mock_rest_adapter):
+    with pytest.raises(LabEngineException):
+        mock_result = MagicMock(data={"id": "test_id", "name": "test_name"})
+        mock_rest_adapter.get.return_value = mock_result
+        result = lab_connection.get_object(object_id="test_id")
+        mock_rest_adapter.get.assert_called_once_with(endpoint=f"object/get/test_id")
+        assert result == {"id": "test_id", "name": "test_name"}
+ 
