@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 from ochra_common.connections.station_connection import StationConnection
 from ochra_common.connections.rest_adapter import LabEngineException
 
