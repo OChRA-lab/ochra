@@ -1,21 +1,8 @@
-from mongoengine import Document, fields
 from bson import ObjectId, json_util
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields, asdict
 from datetime import datetime
 from abc import ABC, abstractmethod
 import json
-
-
-class OperationResultDocument(Document):
-    type = fields.StringField()
-    dataSource = fields.ObjectIdField()
-    data = fields.FileField("ochra_test_db")
-
-    meta = {
-        "collection": "operations_results",
-        "db_alias": "ochra_test_db",
-        "allow_inheritance": False,
-    }
 
 
 @dataclass
@@ -46,26 +33,7 @@ class OperationDbModel(ABC):
     db_name: str = "ochra_test_db"
 
     def to_json(self):
-        return json_util.dumps(self.__dict__,
-                               default=lambda x: x.__dict__, indent=4)
-
-
-class OperationDocument(Document):
-    """Operation mongo Document for db model
-    """
-    name = fields.StringField()
-    start_timestamp = fields.DateTimeField()
-    end_timestamp = fields.DateTimeField()
-    status = fields.StringField(default="idle")
-    arguments = fields.DictField()
-    data = fields.ListField(fields.ReferenceField(
-        OperationResultDocument), default=[])
-
-    meta = {
-        "collection": "operations",
-        "db_alias": "ochra_test_db",
-        "allow_inheritance": False,
-    }
+        return json_util.dumps(asdict(self), indent=4)
 
 
 if __name__ == "__main__":
