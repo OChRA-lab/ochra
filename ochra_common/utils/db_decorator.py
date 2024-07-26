@@ -25,7 +25,8 @@ def backend_db(cls):
             # Create custom getter
 
             def getter(self, name=field.name):
-                value = self._db_conn.read(self.collection_name, self.id, name)
+                value = self._db_conn.read(
+                    self.collection_name, self.id, name)
                 print(f"Getting {name}: {value}")
                 return value
 
@@ -55,18 +56,23 @@ def frontend_db(cls):
     def pre_init(self, **kwargs):
         self._lab_conn = LabConnection()
         self._db_conn = DbConnection()
-        self.id = self._lab_conn.construct_object(
-            cls, "operations",
-            **kwargs
-        )
 
     def post_init(self):
         # Loop through all fields defined in the dataclass
+        self.id = self._lab_conn.construct_object(
+            cls, "operations",
+            **self.arguments
+        )
         for field in fields(cls):
+            # skip over id and collection_name
+            if field.name == "id":
+                continue
+            if field.name == "collection_name":
+                continue
 
             # Create custom getter
             def getter(self, name=field.name):
-                value = self._db_conn.get(name)
+                value = self._db_conn.read(self.collection_name, self.id, name)
                 print(f"Getting {name}: {value}")
                 return value
 
@@ -80,7 +86,7 @@ def frontend_db(cls):
     orig_init = cls.__init__
 
     def new_init(self, *args, **kwargs):
-        pre_init(self)
+        pre_init(self, **kwargs)
         orig_init(self, *args, **kwargs)
         post_init(self)
 
