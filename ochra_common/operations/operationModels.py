@@ -2,6 +2,7 @@ from mongoengine import Document, fields
 from bson import ObjectId, json_util
 from dataclasses import dataclass, field
 from datetime import datetime
+from abc import ABC, abstractmethod
 import json
 
 
@@ -32,7 +33,7 @@ class OperationResultDbModel():
 
 
 @dataclass
-class OperationDbModel():
+class OperationDbModel(ABC):
     name: str
     _cls: str = "OperationDbModel"
     id: ObjectId = None
