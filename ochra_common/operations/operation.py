@@ -1,4 +1,4 @@
-from .operationModels import OperationDocument, OperationDbModel
+from .operationModels import OperationDbModel
 from ochra_common.connections.db_connection import DbConnection
 from ochra_common.connections.lab_connection import LabConnection
 from bson import ObjectId
@@ -11,7 +11,7 @@ class Operation:
 
     def __init__(self, cls, **kwargs) -> None:
 
-        self._lab_conn = LabConnection()
+        self._lab_conn: LabConnection = LabConnection()
         self._db_conn: DbConnection = DbConnection()
         doc_id = self._lab_conn.construct_object(
             cls, "operations",
