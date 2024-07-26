@@ -52,32 +52,38 @@ def backend_db(cls):
 
 def frontend_db(cls):
 
-    def pre_init(self):
-        self._db = DbConnection()
-        print("Pre init called")
+    def pre_init(self, **kwargs):
+        self._lab_conn = LabConnection()
+        self._db_conn = DbConnection()
+        self.id = self._lab_conn.construct_object(
+            cls, "operations",
+            **kwargs
+        )
+
+    def post_init(self):
+        # Loop through all fields defined in the dataclass
+        for field in fields(cls):
+
+            # Create custom getter
+            def getter(self, name=field.name):
+                value = self._db_conn.get(name)
+                print(f"Getting {name}: {value}")
+                return value
+
+            # Create custom setter
+            def setter(self, value, name=field.name):
+                print(f"Setting {name} to {value} not allowed")
+
+            # Set the property on the class with the custom getter and setter
+            setattr(cls, field.name, property(getter, setter))
 
     orig_init = cls.__init__
 
     def new_init(self, *args, **kwargs):
         pre_init(self)
         orig_init(self, *args, **kwargs)
+        post_init(self)
 
     cls.__init__ = new_init
-
-    # Loop through all fields defined in the dataclass
-    for field in fields(cls):
-
-        # Create custom getter
-        def getter(self, name=field.name):
-            value = self._db.get(name)
-            print(f"Getting {name}: {value}")
-            return value
-
-        # Create custom setter
-        def setter(self, value, name=field.name):
-            print(f"Setting {name} to {value} not allowed")
-
-        # Set the property on the class with the custom getter and setter
-        setattr(cls, field.name, property(getter, setter))
 
     return cls
