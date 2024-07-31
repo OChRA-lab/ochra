@@ -13,7 +13,6 @@ class LabCommunication(LabProcessor):
         super().__init__()
         self.app = FastAPI()
         self.router = APIRouter()
-        self.db_conn: DbConnection = DbConnection(logger=logger)
         logging.basicConfig(filename="labServer.log",
                             level=logging.DEBUG,
                             format='%(asctime)s %(message)s',
