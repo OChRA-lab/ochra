@@ -27,7 +27,7 @@ class OperationResultDbModel():
 
 
 @dataclass(kw_only=True)
-class OperationModel():
+class Operation():
     name: str
     start_timestamp: datetime = None
     end_timestamp: datetime = None
