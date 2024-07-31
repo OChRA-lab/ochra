@@ -34,13 +34,20 @@ class OperationDbModel(ABC):
 
     def to_json(self):
         dict = self.__dict__
-        arguments = {}
         dbEntry = asdict(self)
         for key in dict:
             if not str(key).startswith("_") and key not in dbEntry.keys():
-                arguments[key] = dict[key]
-        dbEntry["arguments"] = arguments
+                dbEntry[key] = dict[key]
         return json_util.dumps(dbEntry, indent=4)
+
+    def get_args(self):
+        dict = self.__dict__
+        dbEntry = asdict(self)
+        args = {}
+        for key in dict:
+            if not str(key).startswith("_") and key not in dbEntry.keys():
+                args[key] = dict[key]
+        return args
 
 
 if __name__ == "__main__":
