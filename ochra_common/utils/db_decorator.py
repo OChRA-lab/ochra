@@ -13,7 +13,7 @@ def backend_db(cls):
         print("run pre init")
 
     def post_init(self, **kwargs):
-        self.id = self._db_conn.create(self.db_data, self)
+        self.db_data["id"] = self._db_conn.create(self.db_data, self)
         print("run post init")
         for field in fields(self):
             # skip over db stuff
@@ -29,7 +29,6 @@ def backend_db(cls):
 
             # Create custom setter
             def setter(self, value, name=field.name):
-                print(self.id, self.db_data)
                 value = self._db_conn.update(
                     self.db_data, {str(name): value})
                 print(f"Setting {name} to: {value}")
@@ -60,7 +59,7 @@ def frontend_db(cls):
 
     def post_init(self, **kwargs):
         # Loop through all fields defined in the dataclass
-        self.id = self._lab_conn.construct_object(
+        self.db_data["id"] = self._lab_conn.construct_object(
             cls, "operations",
             **kwargs
         )
@@ -73,7 +72,8 @@ def frontend_db(cls):
 
             # Create custom getter
             def getter(self, name=field.name):
-                value = self._db_conn.read(self.collection_name, self.id, name)
+                value = self._db_conn.read(
+                    self.db_data, name)
                 print(f"Getting {name}: {value}")
                 return value
 
