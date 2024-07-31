@@ -1,7 +1,7 @@
 from dataclasses import fields
-from OChRA_Common.ochra_common.connections.db_connection import DbConnection
-from OChRA_Common.ochra_common.connections.lab_connection import LabConnection
-from OChRA_Common.ochra_common.operations.operationModels import Operation
+from ochra_common.connections.db_connection import DbConnection
+from ochra_common.connections.lab_connection import LabConnection
+from ochra_common.operations.operationModels import Operation
 
 
 def backend_db(cls):
