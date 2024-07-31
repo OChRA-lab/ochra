@@ -4,6 +4,13 @@ from datetime import datetime
 from abc import ABC, abstractmethod
 import json
 
+OPERATIONDBDEFAULTS = {
+    "_cls": "OperationDbModel",
+    "id": None,
+    "collection_name": "operations",
+    "db_name": "ochra_test_db"
+}
+
 
 @dataclass
 class OperationResultDbModel():
@@ -19,18 +26,14 @@ class OperationResultDbModel():
                                default=lambda x: x.__dict__, indent=4)
 
 
-@dataclass
-class OperationDbModel(ABC):
+@dataclass(kw_only=True)
+class OperationModel():
     name: str
-    _cls: str = "OperationDbModel"
-    id: ObjectId = None
     start_timestamp: datetime = None
     end_timestamp: datetime = None
     status: str = None
-    arguments: dict = None
     data: list[OperationResultDbModel] = field(default_factory=list)
-    collection_name: str = "operations"
-    db_name: str = "ochra_test_db"
+    db_data = OPERATIONDBDEFAULTS
 
     def to_json(self):
         dict = self.__dict__
@@ -38,7 +41,7 @@ class OperationDbModel(ABC):
         for key in dict:
             if not str(key).startswith("_") and key not in dbEntry.keys():
                 dbEntry[key] = dict[key]
-        return json_util.dumps(dbEntry, indent=4)
+        return json_util.dumps(asdict(self), indent=4)
 
     def get_args(self):
         dict = self.__dict__
@@ -51,6 +54,7 @@ class OperationDbModel(ABC):
 
 
 if __name__ == "__main__":
+    OperationModel
     print(OperationResultDbModel(type="test", dataSource=ObjectId()).to_json())
     print(OperationDbModel(name="test", start_timestamp=datetime.now(),
                            end_timestamp=datetime.now(),
