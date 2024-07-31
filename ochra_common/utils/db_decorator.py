@@ -13,14 +13,11 @@ def backend_db(cls):
         print("run pre init")
 
     def post_init(self, **kwargs):
-        self.id = self._db_conn.create(
-            self.collection_name, self)
+        self.id = self._db_conn.create(self.collection_name, self)
         print("run post init")
-        for field in fields(cls):
-            # skip over id and collection_name
-            if field.name == "id":
-                continue
-            if field.name == "collection_name":
+        for field in fields(self):
+            # skip over db stuff
+            if field.name in ["id", "collection_name", "name", "_cls", "db_name"]:
                 continue
             # Create custom getter
 
@@ -39,6 +36,10 @@ def backend_db(cls):
 
             # Set the property on the class with the custom getter and setter
             setattr(cls, field.name, property(getter, setter))
+            if field.name in kwargs:
+                att = getattr(cls, field.name)
+                att.fset(self, kwargs[field.name])
+
     original_init = cls.__init__
 
     def new_init(self, *args, **kwargs):
@@ -57,11 +58,11 @@ def frontend_db(cls):
         self._lab_conn = LabConnection()
         self._db_conn = DbConnection()
 
-    def post_init(self):
+    def post_init(self, **kwargs):
         # Loop through all fields defined in the dataclass
         self.id = self._lab_conn.construct_object(
             cls, "operations",
-            **self.arguments
+            **kwargs
         )
         for field in fields(cls):
             # skip over id and collection_name
@@ -88,7 +89,7 @@ def frontend_db(cls):
     def new_init(self, *args, **kwargs):
         pre_init(self, **kwargs)
         orig_init(self, *args, **kwargs)
-        post_init(self)
+        post_init(self, **kwargs)
 
     cls.__init__ = new_init
 
