@@ -103,7 +103,7 @@ class LabBase():
                              "operations"]:
             raise NameError(f"Catalogue {catalogue} is not defined")
         if catalogue == "operations":
-            lib = "OChRA_Common"
+            lib = "ochra_manager"
         elif catalogue == "robots":
             lib = "OChRA_Devices_front"
         elif catalogue == "devices":
@@ -183,7 +183,7 @@ class LabBase():
             # get backend class and construct
                 logger.debug(f"attempting import of {args.object_type}")
                 cls = self._import_class_from_module(
-                    f"{args.object_type}_", module)
+                    f"{args.object_type}", module)
                 obj = cls(**args.contstructor_params)
 
             except ValidationError as e:
@@ -203,7 +203,7 @@ class LabBase():
                 logger.error(e)
                 raise HTTPException(status_code=500, detail=str(e))
             # retrieve object_id and append to objects dict
-            object_id = str(obj.object_id)
+            object_id = str(obj.id)
             self.objects_dict[object_id] = obj
         logger.info(string)
         return object_id
@@ -230,7 +230,7 @@ class LabBase():
                 operation.status = "running"
                 operation.start_timestamp = datetime.datetime.now()
                 # attempt to run the operation
-                result = method(operation.name, **operation.arguments)
+                result = method(operation.name, **operation.get_args())
                 # update the operation status and end time
                 operation.end_timestamp = datetime.datetime.now()
                 operation.status = "completed"
