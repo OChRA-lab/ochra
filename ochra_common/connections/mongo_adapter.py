@@ -89,7 +89,7 @@ class MongoAdapter:
         query = {"_id": object_id}
         result = collection.find_one(query)
 
-        if property:
+        if property and result is not None:
             # if result[property].
             return result[property]
         else:
