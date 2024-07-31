@@ -33,7 +33,14 @@ class OperationDbModel(ABC):
     db_name: str = "ochra_test_db"
 
     def to_json(self):
-        return json_util.dumps(asdict(self), indent=4)
+        dict = self.__dict__
+        arguments = {}
+        dbEntry = asdict(self)
+        for key in dict:
+            if not str(key).startswith("_") and key not in dbEntry.keys():
+                arguments[key] = dict[key]
+        dbEntry["arguments"] = arguments
+        return json_util.dumps(dbEntry, indent=4)
 
 
 if __name__ == "__main__":
