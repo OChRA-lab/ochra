@@ -64,10 +64,8 @@ def frontend_db(cls):
             **kwargs
         )
         for field in fields(cls):
-            # skip over id and collection_name
-            if field.name == "id":
-                continue
-            if field.name == "collection_name":
+            # skip over db stuff
+            if field.name in ["db_data"]:
                 continue
 
             # Create custom getter
@@ -79,7 +77,8 @@ def frontend_db(cls):
 
             # Create custom setter
             def setter(self, value, name=field.name):
-                print(f"Setting {name} to {value} not allowed")
+                raise AttributeError(
+                    f"Attribute {name} is read-only")
 
             # Set the property on the class with the custom getter and setter
             setattr(cls, field.name, property(getter, setter))
