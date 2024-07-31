@@ -1,20 +1,15 @@
-from mongoengine import Document, fields
 from bson import ObjectId, json_util
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields, asdict
 from datetime import datetime
+from abc import ABC, abstractmethod
 import json
 
-
-class OperationResultDocument(Document):
-    type = fields.StringField()
-    dataSource = fields.ObjectIdField()
-    data = fields.FileField("ochra_test_db")
-
-    meta = {
-        "collection": "operations_results",
-        "db_alias": "ochra_test_db",
-        "allow_inheritance": False,
-    }
+OPERATIONDBDEFAULTS = {
+    "_cls": "OperationDbModel",
+    "id": None,
+    "collection_name": "operations",
+    "db_name": "ochra_test_db"
+}
 
 
 @dataclass
@@ -31,43 +26,35 @@ class OperationResultDbModel():
                                default=lambda x: x.__dict__, indent=4)
 
 
-@dataclass
-class OperationDbModel():
+@dataclass(kw_only=True)
+class Operation():
     name: str
-    _cls: str = "OperationDbModel"
-    id: ObjectId = None
     start_timestamp: datetime = None
     end_timestamp: datetime = None
     status: str = None
-    arguments: dict = None
     data: list[OperationResultDbModel] = field(default_factory=list)
-    collection_name: str = "operations"
-    db_name: str = "ochra_test_db"
+    db_data = OPERATIONDBDEFAULTS
 
     def to_json(self):
-        return json_util.dumps(self.__dict__,
-                               default=lambda x: x.__dict__, indent=4)
+        dict = self.__dict__
+        dbEntry = asdict(self)
+        for key in dict:
+            if not str(key).startswith("_") and key not in dbEntry.keys():
+                dbEntry[key] = dict[key]
+        return json_util.dumps(asdict(self), indent=4)
 
-
-class OperationDocument(Document):
-    """Operation mongo Document for db model
-    """
-    name = fields.StringField()
-    start_timestamp = fields.DateTimeField()
-    end_timestamp = fields.DateTimeField()
-    status = fields.StringField(default="idle")
-    arguments = fields.DictField()
-    data = fields.ListField(fields.ReferenceField(
-        OperationResultDocument), default=[])
-
-    meta = {
-        "collection": "operations",
-        "db_alias": "ochra_test_db",
-        "allow_inheritance": False,
-    }
+    def get_args(self):
+        dict = self.__dict__
+        dbEntry = asdict(self)
+        args = {}
+        for key in dict:
+            if not str(key).startswith("_") and key not in dbEntry.keys():
+                args[key] = dict[key]
+        return args
 
 
 if __name__ == "__main__":
+    OperationModel
     print(OperationResultDbModel(type="test", dataSource=ObjectId()).to_json())
     print(OperationDbModel(name="test", start_timestamp=datetime.now(),
                            end_timestamp=datetime.now(),

@@ -23,20 +23,19 @@ class DbConnection(metaclass=SingletonMeta):
         """
         self.db_adapter: MongoAdapter = MongoAdapter(hostname, db_name, logger)
 
-    def create(self, collection_name, document):
+    def create(self, db_data, doc):
         """Create a new document in the specified collection."""
-        return self.db_adapter.create(collection_name, document)
+        return self.db_adapter.create(db_data, doc)
 
-    def read(self, collection_name, object_id, property=None, file=False):
+    def read(self, db_data, property=None, file=False):
         """Read documents from the specified collection that match the query."""
 
-        return self.db_adapter.read(collection_name,
-                                    object_id, property, file=file)
+        return self.db_adapter.read(db_data, property, file=file)
 
-    def update(self, collection_name, object_id, update):
+    def update(self, db_data, update):
         """Update documents in the specified collection that match the query."""
-        return self.db_adapter.update(collection_name, object_id, update)
+        return self.db_adapter.update(db_data, update)
 
-    def delete(self, collection_name, object_id):
+    def delete(self, db_data):
         """Delete documents from the specified collection that match the query."""
-        return self.db_adapter.delete(collection_name, object_id)
+        return self.db_adapter.delete(db_data)

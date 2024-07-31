@@ -73,13 +73,16 @@ class MongoAdapter:
         """
         return self._db_name in self._db_client.list_database_names()
 
-    def create(self, collection: str, document: Document):
+    def create(self, db_data, document: Document):
         """Create a new document in the specified collection."""
+        collection = db_data["collection_name"]
         collection = self._db_client[self._db_name][collection]
         return collection.insert_one(json.loads(document.to_json())).inserted_id
 
-    def read(self, collection: str, object_id, property, file=False):
+    def read(self, db_data, property, file=False):
         """Read documents from the specified collection that match the query."""
+        object_id = db_data["id"]
+        collection = db_data["collection_name"]
         if file:
             return self.fs.get(object_id).read()
 
@@ -89,14 +92,16 @@ class MongoAdapter:
         query = {"_id": object_id}
         result = collection.find_one(query)
 
-        if property:
+        if property and result is not None:
             # if result[property].
             return result[property]
         else:
             return result
 
-    def update(self, collection: str, object_id, update: dict):
+    def update(self, db_data, update: dict):
         """Update documents in the specified collection that match the query."""
+        collection = db_data["collection_name"]
+        object_id = db_data["id"]
         collection = self._db_client[self._db_name][collection]
         update = {"$set": update}
         query = {"_id": object_id}
