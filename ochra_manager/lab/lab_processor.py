@@ -10,6 +10,7 @@ from bson import ObjectId
 from bson.errors import InvalidId
 from ochra_manager.lab.lab_request_models import ObjectSet, ObjectConstructionModel, ObjectCallModel
 from mongoengine import ValidationError
+from ochra_common.connections.db_connection import DbConnection
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 class LabProcessor():
     def __init__(self) -> None:
         self.objects_dict = {}
+        self.db_conn: DbConnection = DbConnection(logger=logger)
 
     def _import_class_from_module(self, cls_name: str,
                                   module_path: str) -> Any:
