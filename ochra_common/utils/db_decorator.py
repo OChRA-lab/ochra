@@ -1,7 +1,7 @@
 from dataclasses import fields
 from OChRA_Common.ochra_common.connections.db_connection import DbConnection
 from OChRA_Common.ochra_common.connections.lab_connection import LabConnection
-from OChRA_Common.ochra_common.operations.operationModels import OperationDbModel
+from OChRA_Common.ochra_common.operations.operationModels import Operation
 
 
 def backend_db(cls):
@@ -13,25 +13,25 @@ def backend_db(cls):
         print("run pre init")
 
     def post_init(self, **kwargs):
-        self.id = self._db_conn.create(self.collection_name, self)
+        self.id = self._db_conn.create(self.db_data, self)
         print("run post init")
         for field in fields(self):
             # skip over db stuff
-            if field.name in ["id", "collection_name", "name", "_cls", "db_name"]:
+            if field.name in ["db_data"]:
                 continue
             # Create custom getter
 
             def getter(self, name=field.name):
                 value = self._db_conn.read(
-                    self.collection_name, self.id, name)
+                    self.db_data, name)
                 print(f"Getting {name}: {value}")
                 return value
 
             # Create custom setter
             def setter(self, value, name=field.name):
-                print(self.id, self.collection_name)
+                print(self.id, self.db_data)
                 value = self._db_conn.update(
-                    self.collection_name, self.id, {str(name): value})
+                    self.db_data, {str(name): value})
                 print(f"Setting {name} to: {value}")
 
             # Set the property on the class with the custom getter and setter
