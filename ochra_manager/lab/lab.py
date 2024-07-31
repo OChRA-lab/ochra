@@ -1,4 +1,5 @@
+from OChRA_Manager.ochra_manager.lab.lab_communication import LabCommunication
 
 
-class lab(lab_communication):
+class lab(LabCommunication):
     pass
