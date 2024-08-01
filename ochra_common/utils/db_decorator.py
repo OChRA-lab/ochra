@@ -77,8 +77,7 @@ def frontend_db(cls):
 
             # Create custom setter
             def setter(self, value, name=field.name):
-                raise AttributeError(
-                    f"Attribute {name} is read-only")
+                print(f"Attribute {name} is read-only")
 
             # Set the property on the class with the custom getter and setter
             setattr(cls, field.name, property(getter, setter))
