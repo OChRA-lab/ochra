@@ -3,21 +3,18 @@ from fastapi import FastAPI, APIRouter, HTTPException, Request
 import uvicorn
 import logging
 
-from ochra_manager.lab.lab_processor import LabProcessor
+from OChRA_Manager.ochra_manager.lab.lab_processor import LabProcessor
 
 logger = logging.getLogger(__name__)
 
 
 class LabCommunication(LabProcessor):
-    def __init__(self) -> None:
+    def __init__(self, host: str, port: int) -> None:
+        self.host = host
+        self.port = port
         super().__init__()
         self.app = FastAPI()
         self.router = APIRouter()
-        logging.basicConfig(filename="labServer.log",
-                            level=logging.DEBUG,
-                            format='%(asctime)s %(message)s',
-                            datefmt='%m/%d/%Y %I:%M:%S %p')
-
         self.router.add_api_route(
             "/object/set/{object_id}",
             self.patch_object,
@@ -46,7 +43,7 @@ class LabCommunication(LabProcessor):
 
     def run(self):
         logger.info("started server")
-        uvicorn.run(self.app, host="0.0.0.0")
+        uvicorn.run(self.app, host=self.host, port=self.port)
 
 
 if __name__ == "__main__":
