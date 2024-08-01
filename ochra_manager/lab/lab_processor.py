@@ -1,4 +1,5 @@
 
+from dataclasses import asdict
 from datetime import datetime
 import importlib
 import logging
@@ -19,6 +20,10 @@ class LabProcessor():
     def __init__(self) -> None:
         self.objects_dict = {}
         self.db_conn: DbConnection = DbConnection(logger=logger)
+        logging.basicConfig(filename="labServer.log",
+                            level=logging.DEBUG,
+                            format='%(asctime)s %(message)s',
+                            datefmt='%m/%d/%Y %I:%M:%S %p')
 
     def _import_class_from_module(self, cls_name: str,
                                   module_path: str) -> Any:
@@ -54,7 +59,7 @@ class LabProcessor():
                              "operations"]:
             raise NameError(f"Catalogue {catalogue} is not defined")
         if catalogue == "operations":
-            lib = "ochra_manager"
+            lib = "OChRA_Manager.ochra_manager"
         elif catalogue == "robots":
             lib = "ochra_devices_front"
         elif catalogue == "devices":
@@ -191,7 +196,7 @@ class LabProcessor():
                 operation.status = "running"
                 operation.start_timestamp = datetime.datetime.now()
                 # attempt to run the operation
-                result = method(operation.name, **operation.get_args())
+                result = method(operation.name, **asdict(operation))
                 # update the operation status and end time
                 operation.end_timestamp = datetime.datetime.now()
                 operation.status = "completed"
