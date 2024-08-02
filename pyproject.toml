@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "OChRA_Discovery"
+name = "ochra_discovery"
 version = "0.0.0" #can switch to dynamic versioning and take from git tag later
 authors = [ #add authors here
     #{name = "placeholder", email = "place@holder"},
