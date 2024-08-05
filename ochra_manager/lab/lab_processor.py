@@ -196,7 +196,7 @@ class LabProcessor():
                 operation.status = "running"
                 operation.start_timestamp = datetime.datetime.now()
                 # attempt to run the operation
-                result = method(operation.name, **asdict(operation))
+                result = method(operation.name, operation.get_args())
                 # update the operation status and end time
                 operation.end_timestamp = datetime.datetime.now()
                 operation.status = "completed"
