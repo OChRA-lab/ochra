@@ -6,7 +6,6 @@ from enum import Enum
 from datetime import datetime
 
 
-
 @dataclass
 class Task(DataModel, ABC):
     asignee: Agent
