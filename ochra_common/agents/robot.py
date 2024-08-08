@@ -12,6 +12,6 @@ class Robot(DataModel, Agent, ABC):
     location: Location
     
     @abstractmethod
-    def execute(RobotTask) -> bool:
+    def execute(RobotTask: RobotTask) -> bool:
         pass
     

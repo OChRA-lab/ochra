@@ -9,6 +9,6 @@ class Manipulator(DataModel, Robot, ABC):
     tasks: list[RobotTask]
     
     @abstractmethod
-    def execute(RobotTask) -> bool:
+    def execute(RobotTask: RobotTask) -> bool:
         pass
     
