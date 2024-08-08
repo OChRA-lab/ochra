@@ -10,6 +10,6 @@ class Scientist(DataModel, Agent, ABC):
     _privilege: Enum
     
     @abstractmethod
-    def complete_assigned_task() -> bool:
+    def complete_assigned_task(self) -> bool:
         pass
         

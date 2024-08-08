@@ -14,6 +14,6 @@ class Agent(DataModel,ABC):
     tasks_history: list[Task]
     
     @abstractmethod
-    def assign(Task) -> bool:
+    def assign(self, task: Task) -> bool:
         pass
         

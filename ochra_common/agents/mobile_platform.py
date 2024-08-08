@@ -9,6 +9,6 @@ class MobilePlatform(DataModel, Robot, ABC):
     conditions: dict
     
     @abstractmethod
-    def got_to(Location: Location) -> bool:
+    def go_to(self, location: Location) -> bool:
         pass
     
