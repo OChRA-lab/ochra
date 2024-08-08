@@ -1,6 +1,6 @@
 from abc import ABC
 from dataclasses import dataclass, asdict
-from ocrha_common.base import DataModel
+from ochra_common.base import DataModel
 
 @dataclass
 class Location(DataModel,ABC):
