@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from ochra_common.base import DataModel
 from ochra_common.spaces.station import Station
 from ochra_common.agents.agent import Agents

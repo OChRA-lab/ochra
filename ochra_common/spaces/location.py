@@ -1,5 +1,5 @@
 from abc import ABC
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from ochra_common.base import DataModel
 
 @dataclass
