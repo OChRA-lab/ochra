@@ -5,5 +5,5 @@ from ochra_common.agents.task import Task
 
 
 @dataclass
-class ScientistTask(DataModel, ABC, Task):
+class ScientistTask(Task, ABC):
     pass

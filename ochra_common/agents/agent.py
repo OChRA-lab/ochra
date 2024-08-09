@@ -6,14 +6,13 @@ from enum import Enum
 
 
 @dataclass
-class Agent(DataModel,ABC):
+class Agent(DataModel, ABC):
     name: str
     status: Enum
     assigned_task: Task
     task_status: Enum
     tasks_history: list[Task]
-    
+
     @abstractmethod
     def assign(self, task: Task) -> bool:
         pass
-        

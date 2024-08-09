@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class TemperatureControls(ABC):
     @abstractmethod
     def set_temperature(self, temperature: int) -> bool:

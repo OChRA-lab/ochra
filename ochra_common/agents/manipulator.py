@@ -5,7 +5,7 @@ from ochra_common.agents.robot import Robot, RobotTask
 
 
 @dataclass
-class Manipulator(DataModel, Robot, ABC):
+class Manipulator(Robot, ABC):
     tasks: list[RobotTask]
     
     @abstractmethod

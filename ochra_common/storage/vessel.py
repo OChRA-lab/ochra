@@ -4,8 +4,9 @@ from ochra_common.base import DataModel
 from ochra_common.storage.container import Container
 from ochra_common.storage.reagent import Reagent
 
+
 @dataclass
-class Vessel(DataModel,ABC,Container):
+class Vessel(Container, ABC):
     capacity_unit: str
     reagents: list[Reagent]
 

@@ -6,5 +6,5 @@ from ochra_common.agents.mobile_platform import MobilePlatform
 
 
 @dataclass
-class MobileManipulator(DataModel, Manipulator, MobilePlatform, ABC):
+class MobileManipulator(Manipulator, MobilePlatform, ABC):
     pass

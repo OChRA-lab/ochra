@@ -5,6 +5,7 @@ from ochra_common.equipment.operation import Operation
 from ochra_common.storage.inventory import Inventory
 from enum import Enum
 
+
 @dataclass
 class Device(DataModel, ABC):
     name: str
@@ -13,5 +14,5 @@ class Device(DataModel, ABC):
     inventory: Inventory
 
     @abstractmethod
-    def __init__(self,**kwargs)->None:
+    def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)

@@ -5,9 +5,9 @@ from ochra_common.storage.container import Container
 
 
 @dataclass
-class Holder(DataModel, ABC, Container):
+class Holder(Container, ABC):
     containers: list[Container]
-    
+
     @abstractmethod
     def add_container(self, container: Container) -> None:
         pass

@@ -5,6 +5,7 @@ from ochra_common.spaces.location import Location
 from ochra_common.spaces.station import Station
 from ochra_common.equipment.device import Device
 
+
 @dataclass
-class StorageStation(ABC,Station,DataModel):
+class StorageStation(Station, ABC):
     pass

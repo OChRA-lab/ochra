@@ -6,7 +6,7 @@ from ochra_common.equipment.device import Device
 
 
 @dataclass
-class WorkStation(DataModel, ABC, Station):
+class WorkStation(Station, ABC):
     devices: list[Device]
 
     @abstractmethod

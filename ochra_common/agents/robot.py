@@ -7,7 +7,7 @@ from ochra_common.agents.robot_task import RobotTask
 
 
 @dataclass
-class Robot(DataModel, Agent, ABC):
+class Robot(Agent, ABC):
     type: str
     location: Location
     
