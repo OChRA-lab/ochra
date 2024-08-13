@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from ochra_common.spaces.location import Location
-from ochra_common.agents.agent import Agent
+from ..spaces.location import Location
+from .agent import Agent
 
 
 @dataclass

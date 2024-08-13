@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ochra_common.agents.task import Task
+from .task import Task
 
 
 @dataclass

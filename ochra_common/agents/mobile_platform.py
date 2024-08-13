@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-from ochra_common.agents.robot import Robot, Location
+from .robot import Robot
+from ..spaces.location import Location
 
 
 @dataclass

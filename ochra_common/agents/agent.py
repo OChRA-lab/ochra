@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-from ochra_common.base import DataModel
-from ochra_common.agents.task import Task
+from ..base import DataModel
+from .task import Task
 from enum import Enum
 
 

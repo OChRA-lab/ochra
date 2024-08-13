@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-from ochra_common.agents.robot import Robot, RobotTask
+from .robot import Robot
+from .robot_task import RobotTask
 
 
 @dataclass

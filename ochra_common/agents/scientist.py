@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-from ochra_common.agents.agent import Agent
+from .agent import Agent
 from enum import Enum
 
 

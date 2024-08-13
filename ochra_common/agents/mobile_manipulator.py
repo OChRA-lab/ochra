@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from ochra_common.agents.manipulator import Manipulator
-from ochra_common.agents.mobile_platform import MobilePlatform
+from .manipulator import Manipulator
+from .mobile_platform import MobilePlatform
 
 
 @dataclass
