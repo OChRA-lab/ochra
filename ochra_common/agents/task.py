@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ochra_common.base import DataModel
+from ..base import DataModel
 from uuid import UUID
 from enum import Enum
 from datetime import datetime
