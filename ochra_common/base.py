@@ -2,6 +2,7 @@ import uuid
 from abc import ABC
 from dataclasses import dataclass, asdict
 
+
 @dataclass
 class DataModel(ABC):
     id: uuid = uuid.uuid4()
