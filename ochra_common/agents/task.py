@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 from ochra_common.base import DataModel
-from ochra_common.agents.agent import Agent
+from uuid import UUID
 from enum import Enum
 from datetime import datetime
 
 
 @dataclass
 class Task(DataModel):
-    asignee: Agent
+    asignee_id: UUID
     name: str
     _args: dict
     status: Enum

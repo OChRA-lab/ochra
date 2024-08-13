@@ -1,14 +1,14 @@
 from abc import abstractmethod
 from dataclasses import dataclass
 from ochra_common.base import DataModel
-from ochra_common.spaces.station import Station
+from uuid import UUID
 from ochra_common.storage.inventory import Inventory
 from typing import Any
 
 
 @dataclass
 class Stock(DataModel):
-    station: Station
+    station_id: UUID
     inventories = list[Inventory]
 
     @abstractmethod

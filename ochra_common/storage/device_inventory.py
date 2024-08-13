@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from ochra_common.storage.inventory import Inventory
-from OChRA_Common.ochra_common.equipment.device import Device
+from uuid import UUID
 
 
 @dataclass
 class DeviceInventory(Inventory):
-    device: Device
+    device_id: UUID
