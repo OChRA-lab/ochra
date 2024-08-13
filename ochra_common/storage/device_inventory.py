@@ -6,5 +6,5 @@ from OChRA_Common.ochra_common.equipment.device import Device
 
 
 @dataclass
-class DeviceInventory(Inventory, ABC):
+class DeviceInventory(Inventory):
     device: Device

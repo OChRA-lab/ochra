@@ -6,7 +6,7 @@ from enum import Enum
 
 
 @dataclass
-class Scientist(Agent, ABC):
+class Scientist(Agent):
     _privilege: Enum
     
     @abstractmethod

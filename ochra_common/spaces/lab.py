@@ -8,7 +8,7 @@ from ochra_common.agents.scientist import Scientist
 
 
 @dataclass
-class Lab(DataModel, ABC):
+class Lab(DataModel):
     stations: list[Station]
     agents: list[Agents]
 

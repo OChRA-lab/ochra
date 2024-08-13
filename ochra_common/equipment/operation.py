@@ -7,7 +7,7 @@ from datetime import datetime
 from ochra_common.equipment.operation_result import OperationResult
 
 @dataclass
-class Operation(DataModel, ABC):
+class Operation(DataModel):
     _caller: uuid
     _method: str
     _args: dict

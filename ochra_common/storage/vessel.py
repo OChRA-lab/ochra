@@ -6,7 +6,7 @@ from ochra_common.storage.reagent import Reagent
 
 
 @dataclass
-class Vessel(Container, ABC):
+class Vessel(Container):
     capacity_unit: str
     reagents: list[Reagent]
 

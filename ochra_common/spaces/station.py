@@ -6,7 +6,7 @@ from ochra_common.storage.stock import Stock
 
 
 @dataclass
-class Station(DataModel, ABC):
+class Station(DataModel):
     name: str
     location: Location
     stock: Stock

@@ -5,7 +5,7 @@ from ochra_common.agents.robot import Robot, Location
 
 
 @dataclass
-class MobilePlatform(Robot, ABC):
+class MobilePlatform(Robot):
     conditions: dict
     
     @abstractmethod

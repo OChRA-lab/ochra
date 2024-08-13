@@ -5,7 +5,7 @@ from typing import BinaryIO, Any
 
 
 @dataclass
-class OperationResult(DataModel, ABC):
+class OperationResult(DataModel):
     type: str
     data: BinaryIO
 

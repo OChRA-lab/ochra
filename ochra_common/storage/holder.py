@@ -5,7 +5,7 @@ from ochra_common.storage.container import Container
 
 
 @dataclass
-class Holder(Container, ABC):
+class Holder(Container):
     containers: list[Container]
 
     @abstractmethod

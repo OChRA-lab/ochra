@@ -6,7 +6,7 @@ from ochra_common.storage.inventory import Inventory
 from typing import Any
 
 @dataclass
-class Stock(DataModel, ABC):
+class Stock(DataModel):
     station: Station
     inventories = list[Inventory]
 

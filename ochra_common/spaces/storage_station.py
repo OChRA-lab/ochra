@@ -7,5 +7,5 @@ from ochra_common.equipment.device import Device
 
 
 @dataclass
-class StorageStation(Station, ABC):
+class StorageStation(Station):
     pass

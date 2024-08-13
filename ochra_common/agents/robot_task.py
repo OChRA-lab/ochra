@@ -6,5 +6,5 @@ from enum import Enum
 
 
 @dataclass
-class RobotTask(DataModel, ABC, Task):
+class RobotTask(DataModel, Task):
     priority: Enum

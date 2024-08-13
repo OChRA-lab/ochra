@@ -5,7 +5,7 @@ from ochra_common.storage.consumable import Consumable
 from ochra_common.storage.container import Container
 
 @dataclass
-class Inventory(DataModel,ABC):
+class Inventory(DataModel):
     containers: list[Container]
     consumables: list[Consumable]
     containers_max_capacity: int

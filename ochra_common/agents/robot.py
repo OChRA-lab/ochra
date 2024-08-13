@@ -7,11 +7,10 @@ from ochra_common.agents.robot_task import RobotTask
 
 
 @dataclass
-class Robot(Agent, ABC):
+class Robot(Agent):
     type: str
     location: Location
-    
+
     @abstractmethod
     def execute(self, robot_task: RobotTask) -> bool:
         pass
-    

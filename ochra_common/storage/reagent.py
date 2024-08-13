@@ -6,7 +6,7 @@ from typing import Any
 
 
 @dataclass
-class Reagent(DataModel, ABC):
+class Reagent(DataModel):
     name: str
     amount: float
     unit: str

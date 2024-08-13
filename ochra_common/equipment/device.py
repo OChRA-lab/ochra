@@ -7,12 +7,14 @@ from enum import Enum
 
 
 @dataclass
-class Device(DataModel, ABC):
+class Device(DataModel):
     name: str
     status: Enum
     operation_history: list[Operation]
     inventory: Inventory
 
     @abstractmethod
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
+    def setup(self, **kwargs) -> None:
+        pass
+
+    

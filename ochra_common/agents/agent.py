@@ -6,7 +6,7 @@ from enum import Enum
 
 
 @dataclass
-class Agent(DataModel, ABC):
+class Agent(DataModel):
     name: str
     status: Enum
     assigned_task: Task

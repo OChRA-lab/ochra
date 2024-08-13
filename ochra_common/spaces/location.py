@@ -4,7 +4,7 @@ from ochra_common.base import DataModel
 
 
 @dataclass
-class Location(DataModel, ABC):
+class Location(DataModel):
     name: str
     map: str
     map_id: int

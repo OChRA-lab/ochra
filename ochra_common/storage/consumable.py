@@ -4,7 +4,7 @@ from ochra_common.base import DataModel
 
 
 @dataclass
-class Consumable(DataModel, ABC):
+class Consumable(DataModel):
     type: str
     quantity: int
 

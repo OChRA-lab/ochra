@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 @dataclass
-class Task(DataModel, ABC):
+class Task(DataModel):
     asignee: Agent
     name: str
     _args: dict
