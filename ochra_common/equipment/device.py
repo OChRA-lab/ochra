@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from dataclasses import dataclass
 from ochra_common.base import DataModel
 from ochra_common.equipment.operation import Operation
@@ -12,7 +11,3 @@ class Device(DataModel):
     status: Enum
     operation_history: list[Operation]
     inventory: Inventory
-
-    @abstractmethod
-    def setup(self, **kwargs) -> None:
-        pass
