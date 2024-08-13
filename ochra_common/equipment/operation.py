@@ -3,7 +3,7 @@ from ochra_common.base import DataModel
 import uuid
 from enum import Enum
 from datetime import datetime
-from ochra_common.equipment.operation_result import OperationResult
+from .operation_result import OperationResult
 
 
 @dataclass

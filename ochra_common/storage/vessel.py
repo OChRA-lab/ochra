@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-from ochra_common.storage.container import Container
-from ochra_common.storage.reagent import Reagent
+from .container import Container
+from .reagent import Reagent
 
 
 @dataclass

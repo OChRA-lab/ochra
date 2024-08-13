@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-from ochra_common.storage.container import Container
+from .container import Container
 
 
 @dataclass

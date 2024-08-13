@@ -1,10 +1,10 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-from ochra_common.base import DataModel
-from ochra_common.spaces.station import Station
-from ochra_common.agents.agent import Agent
-from ochra_common.agents.robot import Robot
-from ochra_common.agents.scientist import Scientist
+from ..base import DataModel
+from .station import Station
+from ..agents.agent import Agent
+from ..agents.robot import Robot
+from ..agents.scientist import Scientist
 from uuid import UUID
 
 

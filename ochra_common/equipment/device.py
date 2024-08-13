@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from ochra_common.base import DataModel
-from ochra_common.equipment.operation import Operation
-from ochra_common.storage.inventory import Inventory
+from ..base import DataModel
+from .operation import Operation
+from ..storage.inventory import Inventory
 from enum import Enum
 
 

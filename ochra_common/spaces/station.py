@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from ochra_common.base import DataModel
-from ochra_common.spaces.location import Location
-from ochra_common.storage.stock import Stock
+from ..base import DataModel
+from .location import Location
+from ..storage.stock import Stock
 
 
 @dataclass

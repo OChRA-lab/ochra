@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ochra_common.storage.inventory import Inventory
+from .inventory import Inventory
 from uuid import UUID
 
 

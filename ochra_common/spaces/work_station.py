@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-from ochra_common.spaces.station import Station
-from ochra_common.equipment.device import Device
+from .station import Station
+from ..equipment.device import Device
 from uuid import UUID
 
 

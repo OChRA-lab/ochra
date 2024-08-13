@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from ochra_common.base import DataModel
+from ..base import DataModel
 
 
 @dataclass

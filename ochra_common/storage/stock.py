@@ -2,7 +2,7 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from ochra_common.base import DataModel
 from uuid import UUID
-from ochra_common.storage.inventory import Inventory
+from .inventory import Inventory
 from typing import Any
 
 

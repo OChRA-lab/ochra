@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-from ochra_common.base import DataModel
+from ..base import DataModel
 from enum import Enum
 from typing import Any
 
