@@ -12,7 +12,7 @@ class Stock(DataModel):
     inventories = list[Inventory]
 
     @abstractmethod
-    def get_by_type(self, type: str | type) -> list[Any]:
+    def get_from_inventory_by_type(self, type: str | type) -> list[Any]:
         pass
 
     @abstractmethod
