@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from dataclasses import dataclass
 from ochra_common.base import DataModel
 from ochra_common.equipment.operation import Operation
@@ -16,5 +16,3 @@ class Device(DataModel):
     @abstractmethod
     def setup(self, **kwargs) -> None:
         pass
-
-    

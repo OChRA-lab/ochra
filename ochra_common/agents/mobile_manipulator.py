@@ -1,10 +1,8 @@
-from abc import ABC
 from dataclasses import dataclass
-from ochra_common.base import DataModel
 from ochra_common.agents.manipulator import Manipulator
 from ochra_common.agents.mobile_platform import MobilePlatform
 
 
 @dataclass
-class MobileManipulator(Manipulator, MobilePlatform, ABC):
+class MobileManipulator(Manipulator, MobilePlatform):
     pass

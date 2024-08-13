@@ -1,6 +1,5 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from dataclasses import dataclass
-from ochra_common.base import DataModel
 from ochra_common.storage.container import Container
 
 
