@@ -14,11 +14,11 @@ class Reagent(DataModel):
     properties: dict
 
     @abstractmethod
-    def add_property(self, property: str | Any) -> bool:
+    def add_property(self, property_name: str, property_value: Any) -> bool:
         pass
 
     @abstractmethod
-    def remove_property(self, property: str | Any) -> bool:
+    def remove_property(self, property: str) -> bool:
         pass
 
     @abstractmethod
