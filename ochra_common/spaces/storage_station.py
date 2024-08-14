@@ -4,5 +4,7 @@ from .station import Station
 
 @dataclass
 class StorageStation(Station):
-    """Station abstract purely for storage"""
+    """
+    StorageStation abstract class that represents a station purely for storage purposes.
+    """
     pass
