@@ -5,6 +5,7 @@ from .container import Container
 
 @dataclass
 class Holder(Container):
+    """Abstract holder class, any container that can hold other containers"""
     containers: list[Container]
 
     @abstractmethod

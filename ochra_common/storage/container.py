@@ -5,6 +5,7 @@ from ..base import DataModel
 
 @dataclass
 class Container(DataModel):
+    """Abstract class for containers, anything that can hold something"""
     type: str
     is_used: bool
     physical_id: int

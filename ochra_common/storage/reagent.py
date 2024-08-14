@@ -7,6 +7,7 @@ from typing import Any
 
 @dataclass
 class Reagent(DataModel):
+    """Abstract Reagent class to represent any chemicals used"""
     name: str
     amount: float
     unit: str

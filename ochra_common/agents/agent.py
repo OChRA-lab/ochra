@@ -7,6 +7,8 @@ from enum import Enum
 
 @dataclass
 class Agent(DataModel):
+    """Agent abstract class to represent a generic task executor
+    """
     name: str
     status: Enum
     assigned_task: Task

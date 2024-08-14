@@ -6,6 +6,7 @@ from enum import Enum
 
 @dataclass
 class Scientist(Agent):
+    """Abstract human scientist agent so we can have humans do tasks"""
     _privilege: Enum
 
     @abstractmethod

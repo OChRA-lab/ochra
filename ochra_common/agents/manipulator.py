@@ -6,6 +6,7 @@ from .robot_task import RobotTask
 
 @dataclass
 class Manipulator(Robot):
+    """Abstract manipulator robot that can execute tasks"""
     tasks: list[RobotTask]
 
     @abstractmethod

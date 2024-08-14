@@ -10,6 +10,7 @@ from uuid import UUID
 
 @dataclass
 class Lab(DataModel):
+    """Lab abstract class """
     stations: list[Station]
     agents: list[Agent]
 

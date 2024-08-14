@@ -7,6 +7,7 @@ from datetime import datetime
 
 @dataclass
 class Task(DataModel):
+    """Abstract task class to hold all information about a task"""
     asignee_id: UUID
     name: str
     _args: dict

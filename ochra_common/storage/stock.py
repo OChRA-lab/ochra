@@ -8,6 +8,7 @@ from typing import Any
 
 @dataclass
 class Stock(DataModel):
+    """Abstract class for stock, which is a collection of inventories and belongs to a particular station"""
     station_id: UUID
     inventories = list[Inventory]
 

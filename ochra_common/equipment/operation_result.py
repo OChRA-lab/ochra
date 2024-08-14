@@ -6,6 +6,7 @@ from typing import BinaryIO, Any
 
 @dataclass
 class OperationResult(DataModel):
+    """Abstract result class to keep results formatted and structured"""
     type: str
     data: BinaryIO
 

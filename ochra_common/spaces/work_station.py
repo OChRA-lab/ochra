@@ -7,6 +7,7 @@ from uuid import UUID
 
 @dataclass
 class WorkStation(Station):
+    """Station abstract for station with devices"""
     devices: list[Device]
 
     @abstractmethod

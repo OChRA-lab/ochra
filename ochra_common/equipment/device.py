@@ -7,6 +7,7 @@ from enum import Enum
 
 @dataclass
 class Device(DataModel):
+    """Abstract device class that contains information all devices will have"""
     name: str
     status: Enum
     operation_history: list[Operation]

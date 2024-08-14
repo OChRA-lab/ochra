@@ -7,6 +7,7 @@ from .container import Container
 
 @dataclass
 class Inventory(DataModel):
+    """Abstract class for inventory, contains containers and consumables"""
     containers: list[Container]
     consumables: list[Consumable]
     containers_max_capacity: int

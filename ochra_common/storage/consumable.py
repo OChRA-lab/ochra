@@ -5,6 +5,7 @@ from ..base import DataModel
 
 @dataclass
 class Consumable(DataModel):
+    """Abstract for lab consumables, (caps, needles, etc)"""
     type: str
     quantity: int
 

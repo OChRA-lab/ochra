@@ -6,6 +6,7 @@ from .reagent import Reagent
 
 @dataclass
 class Vessel(Container):
+    """Vessel Abstract class, any container that can hold reagents"""
     capacity_unit: str
     reagents: list[Reagent]
 

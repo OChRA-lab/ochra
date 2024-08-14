@@ -5,4 +5,5 @@ from enum import Enum
 
 @dataclass
 class RobotTask(Task):
+    """Abstract task specifically for robots"""
     priority: Enum

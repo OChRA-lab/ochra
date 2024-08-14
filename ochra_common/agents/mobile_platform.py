@@ -6,6 +6,7 @@ from ..spaces.location import Location
 
 @dataclass
 class MobilePlatform(Robot):
+    """Abstract mobile platform robot that can move"""
     conditions: dict
 
     @abstractmethod
