@@ -1,0 +1,15 @@
+from ochra_common.equipment.device import Device as AbstractDevice
+from ochra_common.utils.db_decorator import backend_db
+
+
+@backend_db
+class Device(AbstractDevice):
+    def __init__(self, **kwargs):
+        super().__init__(
+            name=kwargs["name"],
+            status=kwargs["status"],
+            _cls=kwargs["_cls"],
+            _collection=kwargs["_cls"],
+            inventory=kwargs["inventory"],
+            operation_history=kwargs["operation_history"])
+        self.station_id = kwargs["station_conn"]
