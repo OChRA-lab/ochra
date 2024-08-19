@@ -75,21 +75,22 @@ class MongoAdapter:
 
     def create(self, db_data, document: Document):
         """Create a new document in the specified collection."""
-        collection = db_data["collection_name"]
+        collection = db_data["_collection"]
         collection = self._db_client[self._db_name][collection]
-        return collection.insert_one(json.loads(document.to_json())).inserted_id
+        if hasattr(document, "to_json"):
+            return collection.insert_one(json.loads(document.to_json())).inserted_id
+        else:
+            return collection.insert_one(document).inserted_id
 
     def read(self, db_data, property, file=False):
         """Read documents from the specified collection that match the query."""
         object_id = db_data["id"]
-        collection = db_data["collection_name"]
+        collection = db_data["_collection"]
         if file:
             return self.fs.get(object_id).read()
 
         collection = self._db_client[self._db_name][collection]
-        if type(object_id) is str:
-            object_id = ObjectId(object_id)
-        query = {"_id": object_id}
+        query = {"id": object_id}
         result = collection.find_one(query)
 
         if property and result is not None:
@@ -100,11 +101,11 @@ class MongoAdapter:
 
     def update(self, db_data, update: dict):
         """Update documents in the specified collection that match the query."""
-        collection = db_data["collection_name"]
+        collection = db_data["_collection"]
         object_id = db_data["id"]
         collection = self._db_client[self._db_name][collection]
         update = {"$set": update}
-        query = {"_id": object_id}
+        query = {"id": object_id}
 
         return collection.update_many(query, update)
 
