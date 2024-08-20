@@ -1,8 +1,8 @@
 from ochra_common.equipment.device import Device as AbstractDevice
-from OChRA_Common.ochra_common.utils.db_decorator import backend_db
+from OChRA_Common.ochra_common.utils.db_decorator import middle_db
 
 
-@backend_db
+@middle_db
 class Device(AbstractDevice):
     def __init__(self, **kwargs):
         super().__init__(
@@ -11,5 +11,5 @@ class Device(AbstractDevice):
             _cls=kwargs["_cls"],
             _collection=kwargs["_collection"],
             inventory=kwargs["inventory"],
-            operation_history=kwargs["operation_history"])
-        self.station_id = kwargs.get("station_id", None)
+            operation_history=kwargs["operation_history"],
+            station_id=kwargs.get("station_id", None))
