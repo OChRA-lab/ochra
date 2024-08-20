@@ -20,3 +20,4 @@ class Device(DataModel):
     status: Enum
     operation_history: list[Operation]
     inventory: Inventory
+    station_id: str
