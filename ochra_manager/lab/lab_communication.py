@@ -39,13 +39,17 @@ class LabCommunication(LabProcessor):
             self.create_station,
             methods=["POST"])
 
+        self.router.add_api_route(
+            "/object/get_property/{id}/{property}",
+            self.get_object_property,
+            methods=["GET"])
+
         self.app.include_router(self.router)
 
     def run(self):
         logger.info("started server")
         uvicorn.run(self.app, host=self.host, port=self.port)
 
-
-if __name__ == "__main__":
-    aa = LabBase()
-    aa.run(True)
+    if __name__ == "__main__":
+        aa = LabBase()
+        aa.run(True)
