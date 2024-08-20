@@ -1,5 +1,5 @@
 from ochra_common.utils.singleton_meta import SingletonMeta
-from ochra_common.connections.rest_adapter import RestAdapter, Result, LabEngineException
+from OChRA_Common.ochra_common.connections.rest_adapter import RestAdapter, Result, LabEngineException
 import logging
 
 
@@ -26,7 +26,8 @@ class LabConnection(metaclass=SingletonMeta):
             logger (logging.Logger, optional): logger if you have one.
                 Defaults to None.
         """
-        self.rest_adapter: RestAdapter = RestAdapter(hostname, api_key, ssl_verify, logger)
+        self.rest_adapter: RestAdapter = RestAdapter(
+            hostname, api_key, ssl_verify, logger)
 
     def construct_object(self, object_type, catalogue_module, **kwargs) -> Result:
         """create data structure for object construct api and
@@ -87,6 +88,7 @@ class LabConnection(metaclass=SingletonMeta):
         data["properties"] = kwargs
         result = self.rest_adapter.patch(
             endpoint=f"object/set/{object_id}", data=data)
+        print(result)
         return result
 
     def create_station(self) -> Result:
@@ -96,4 +98,18 @@ class LabConnection(metaclass=SingletonMeta):
             Result: api response
         """
         result = self.rest_adapter.post(endpoint="station/create")
+        return result.data
+
+    def get_property(self, id, property) -> Result:
+        """get property of object using api endpoint object/get_property
+
+        Args:
+            id (_type_): id of object to get property from
+            property (_type_): property to get
+
+        Returns:
+            Result: api response
+        """
+        result = self.rest_adapter.get(
+            endpoint=f"object/get_property/{id}/{property}")
         return result.data
