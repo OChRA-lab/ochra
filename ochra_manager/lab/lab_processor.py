@@ -9,9 +9,13 @@ from ochra_common.connections.station_connection import StationConnection
 from fastapi import HTTPException, Request
 from bson import ObjectId
 from bson.errors import InvalidId
-from ochra_manager.lab.lab_request_models import ObjectSet, ObjectConstructionModel, ObjectCallModel
+from ochra_manager.lab.models.lab_request_models import ObjectSet, ObjectConstructionModel, ObjectCallModel
+from OChRA_Manager.ochra_manager.lab.models.operation import Operation
+from OChRA_Manager.ochra_manager.lab.models.device import Device
 from mongoengine import ValidationError
 from ochra_common.connections.db_connection import DbConnection
+import uuid
+
 
 logger = logging.getLogger(__name__)
 
@@ -96,8 +100,8 @@ class LabProcessor():
         """
 
         try:
-
-            obj = self.objects_dict[object_id]
+            uuId = uuid.UUID(object_id)
+            obj = self.objects_dict[uuId]
             logger.debug(f"got Object {object_id}")
         except Exception as e:
             logger.info(f"{object_id} does not exist")
@@ -105,7 +109,7 @@ class LabProcessor():
         try:
             for arg in args.properties.keys():
 
-                logger.debug(f"attempting {arg} to {arg.properties[arg]}")
+                logger.debug(f"attempting {arg} to {args.properties[arg]}")
 
                 setattr(obj, arg, args.properties[arg])
 
@@ -114,7 +118,7 @@ class LabProcessor():
         except Exception as e:
             logger.error(e)
             raise HTTPException(status_code=500, detail=e)
-        return object_id
+        return True
 
     def construct_object(self, args: ObjectConstructionModel):
         """construct object of given type in db and instance
@@ -128,7 +132,12 @@ class LabProcessor():
         string = "created object of type {} with params {} from category {}"
         string = string.format(args.object_type, args.contstructor_params,
                                args.catalogue_module)
-
+        match(args.object_type):
+            case "Device":
+                device = Device(**args.contstructor_params)
+                device.id = uuid.UUID(args.contstructor_params["id"])
+        self.objects_dict[device.id] = device
+        return device.id
         # placeholder for unimplemented catalogues
         if args.catalogue_module not in ["robots", "devices",
                                          "containers", "reagents",
@@ -185,44 +194,46 @@ class LabProcessor():
             str: object id of object post call
         """
 
-        obj = self.objects_dict[object_id]
-
-        method = getattr(obj, call.object_function)
+        obj = self.objects_dict[uuid.UUID(object_id)]
         try:
-            if "operation" in call.args:
-                # get the op from the objects dict
-                operation = self.objects_dict[call.args["operation"]]
+            # get station
+            station: StationConnection = self.objects_dict[obj.station_id]
+            # create operation with call args
+            # operation = Operation(obj.id, call.object_function, call.args)
+            # self.db_conn.create(operation)
+            # call operation on station
+            result = station.execute_op(
+                call.object_function, obj.name, **call.args)
+            # return
 
-                operation.status = "running"
-                operation.start_timestamp = datetime.datetime.now()
-                # attempt to run the operation
-                result = method(operation.name, operation.get_args())
-                # update the operation status and end time
-                operation.end_timestamp = datetime.datetime.now()
-                operation.status = "completed"
-                # if object id, add to results list
-                objectid = ObjectId(result.data)
-                # resultDoc = self.db_conn.read(
-                #    OperationResultDbModel.collection_name, objectid)
-                operation.add_data(objectid)
-            else:
-                result = method(**call.args)
         except (InvalidId, TypeError) as e:
             logger.warn(e)
         except Exception as e:
-            operation.status = "failed"
+            # operation.status = "failed"
             logger.error(e)
             raise HTTPException(status_code=500, detail=str(e))
 
-        logger.info(f"called {call.object_function} on {obj.object_id}")
+        logger.info(f"called {call.object_function} on {obj.id}")
 
         return result
 
     def get_object(self, objectName):
         for object in self.objects_dict:
-            if objectName == self.objects_dict[object].name:
+            if hasattr(self.objects_dict[object], "name") and \
+                    objectName == self.objects_dict[object].name:
                 logger.info(f"got object {objectName}")
                 return str(object)
         detail = f"could not find object with name {objectName}"
         logger.info(detail)
         raise HTTPException(status_code=404, detail=detail)
+
+    def get_object_property(self, id, property):
+        try:
+            uuId = uuid.UUID(id)
+            obj = self.objects_dict[uuId]
+            logger.debug(f"got Object {id}")
+            return self.db_conn.read({"id": obj.id.hex,
+                                      "_collection": obj._collection},
+                                     property)
+        except Exception as e:
+            raise HTTPException(status_code=404, detail=str(e))
