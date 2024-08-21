@@ -1,17 +1,18 @@
 from abc import abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List
 from .container import Container
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Holder(Container):
     """
     Abstract holder class, any container that can hold other containers.
 
     Attributes:
-        containers (list[Container]): A list of containers held by this holder.
+        containers (List[Container]): A list of containers held by this holder. Defaults to an empty list.
     """
-    containers: list[Container]
+    containers: List[Container] = field(default_factory=list)
 
     @abstractmethod
     def add_container(self, container: Container) -> None:

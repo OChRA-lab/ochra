@@ -1,8 +1,6 @@
 import uuid
-from abc import ABC
 from dataclasses import dataclass, asdict, field
 import json
-
 
 def is_jsonable(x):
     try:
@@ -13,7 +11,7 @@ def is_jsonable(x):
 
 
 @dataclass(kw_only=True)
-class DataModel(ABC):
+class DataModel:
     """
     DataModel class that serves as a base for all dataclasses that are to be stored in the database.
 
@@ -22,11 +20,16 @@ class DataModel(ABC):
         _collection (str): The name of the collection where the data model will be stored.
         _cls (str): The class name of the data model.
     """
-    id: uuid.UUID = field(default_factory=uuid.uuid4)
-    _collection: str
-    _cls: str
+    id: uuid.UUID = field(init=False, default_factory=uuid.uuid4)
+    _collection: str = field(init=False, default="")
+    _cls: str = field(init=False)
 
-    def to_json(self):
+    def __post_init__(self):
+        self._cls = self.__class__.__name__
+
+        
+
+    def to_json(self) -> str:
         """Convert the data model instance to a JSON string.
 
         Returns:
@@ -36,7 +39,7 @@ class DataModel(ABC):
         selfdict = self.to_dict()
         return json.dumps(selfdict)
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """
         Convert the data model instance to a JSON-serializable dictionary.
 

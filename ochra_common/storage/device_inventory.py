@@ -3,7 +3,7 @@ from .inventory import Inventory
 from uuid import UUID
 
 
-@dataclass
+@dataclass(kw_only=True)
 class DeviceInventory(Inventory):
     """
     Abstract class for inventory specific to a device.

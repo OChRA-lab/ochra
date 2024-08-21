@@ -1,11 +1,13 @@
 from abc import abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from ..base import DataModel
 from enum import Enum
-from typing import Any
+from typing import Any, Dict
+
+_COLLECTION = "reagents"
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Reagent(DataModel):
     """
     Abstract Reagent class to represent any chemicals used.
@@ -15,13 +17,17 @@ class Reagent(DataModel):
         amount (float): The amount of the reagent.
         unit (str): The unit of measurement for the amount.
         physical_state (Enum): The physical state of the reagent (e.g., solid, liquid, gas).
-        properties (dict): A dictionary of additional properties of the reagent.
+        properties (Dict[str, Any]): A dictionary of additional properties of the reagent.
     """
     name: str
     amount: float
     unit: str
-    physical_state: Enum
-    properties: dict
+    physical_state: Enum = -1  # TODO: Define PhysicalState Enum
+    properties: Dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self):
+        self._collection = _COLLECTION
+        return super().__post_init__()
 
     @abstractmethod
     def add_property(self, property_name: str, property_value: Any) -> bool:
