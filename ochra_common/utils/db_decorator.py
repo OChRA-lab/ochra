@@ -1,7 +1,7 @@
 from dataclasses import fields
 from typing import Any
 from OChRA_Common.ochra_common.connections.db_connection import DbConnection
-from OChRA_Common.ochra_common.connections.lab_connection import LabConnection
+from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.operations.operationModels import Operation
 from ochra_common.equipment.device import Device
 from dataclasses import asdict
@@ -190,7 +190,7 @@ def backend_db(cls):
     def new_init(self, *args, **kwargs):
         offline = Offline()
         if offline.offline:
-            original_init(self,*args,**kwargs)
+            original_init(self, *args, **kwargs)
         else:
             pre_init(self, **kwargs)
             original_init(self, *args, **kwargs)
