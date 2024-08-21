@@ -6,6 +6,8 @@ from typing import Dict, Any, Optional
 from ochra_common.connections.db_connection import DbConnection
 from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.operations import *
+from abc import ABC, abstractmethod
+from ochra_common.utils.db_decorator import Offline
 
 
 class operationExecute(BaseModel):
@@ -14,13 +16,14 @@ class operationExecute(BaseModel):
     args: Optional[Dict] = None
 
 
-class Communicator:
+class Communicator(ABC):
     def __init__(self,
                  dbip="138.253.124.144:27017",
                  host_ip="0.0.0.0",
                  port=8000,
                  lab_ip="10.24.169.42") -> None:
-        self.lab_conn: LabConnection = LabConnection(lab_ip)
+        self.lab_ip = lab_ip
+        self.db_ip = dbip
         self.app = FastAPI()
         self.router = APIRouter()
         self.host_ip = host_ip
@@ -30,10 +33,10 @@ class Communicator:
             "/process_op", self.process_operation, methods=["POST"])
         self.router.add_api_route("/ping", self.ping, methods=["GET"])
         self.app.include_router(self.router)
-        self.db_conn = DbConnection(dbip)
 
-    def run(self):
-        self.start_up()
+    def run(self, offline=False):
+        self._start_up(offline)
+        self.setup()
         uvicorn.run(self.app, host=self.host_ip, port=self.port)
 
     def ping(self, request: Request):
@@ -41,24 +44,24 @@ class Communicator:
         print(clientHost)
         return
 
-    def start_up(self):
-        station_id = self.lab_conn.create_station()
-        for device in self.devices:
-            device_dict: dict = device.__dict__.copy()
-            keys_to_pop = []
-            for key in device_dict.keys():
-                if key[0] =="_":
-                    keys_to_pop.append(key)
-            [device_dict.pop(key) for key in keys_to_pop]
-            self.lab_conn.construct_object(
-                device.__class__, "devices",
-                station_conn=station_id, **device_dict)
+    @abstractmethod
+    def setup(self):
+        pass
+
+    def _start_up(self, offline):
+        if not offline:
+            self.lab_conn = LabConnection(self.lab_ip)
+            self.db_conn = DbConnection(self.db_ip)
+            self.station_id = self.lab_conn.create_station()
+        else:
+            self.offline = Offline(True)
+            self.station_id = None
 
     def process_operation(self, args: operationExecute):
         try:
             for i in self.devices:
                 if i.name == args.deviceName:
-                    #op = eval(f"{args.operation}()")
-                    return i.execute(args.operation, **args.args)
+                    method = getattr(i,args.operation)
+                    return method(**args.args)
         except Exception as e:
             raise HTTPException(500, detail=str(e))
