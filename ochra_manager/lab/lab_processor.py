@@ -84,7 +84,7 @@ class LabProcessor():
 
     def create_station(self, request: Request):
         clientHost = request.client.host
-        self.objects_dict[clientHost] = StationConnection(clientHost)
+        self.objects_dict[clientHost] = StationConnection(clientHost + ":8000")
         return clientHost
 
     def patch_object(self, object_id, args: ObjectSet):
