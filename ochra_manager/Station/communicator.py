@@ -5,7 +5,6 @@ import uvicorn
 from typing import Dict, Any, Optional
 from ochra_common.connections.db_connection import DbConnection
 from ochra_common.connections.lab_connection import LabConnection
-from ochra_common.operations import *
 from abc import ABC, abstractmethod
 from ochra_common.utils.db_decorator import Offline
 
@@ -61,7 +60,7 @@ class Communicator(ABC):
         try:
             for i in self.devices:
                 if i.name == args.deviceName:
-                    method = getattr(i,args.operation)
+                    method = getattr(i, args.operation)
                     return method(**args.args)
         except Exception as e:
             raise HTTPException(500, detail=str(e))
