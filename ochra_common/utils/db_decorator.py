@@ -1,10 +1,20 @@
 from dataclasses import fields
+from typing import Any
 from OChRA_Common.ochra_common.connections.db_connection import DbConnection
 from OChRA_Common.ochra_common.connections.lab_connection import LabConnection
 from ochra_common.operations.operationModels import Operation
 from ochra_common.equipment.device import Device
 from dataclasses import asdict
+from ochra_common.utils.singleton_meta import SingletonMeta
 import uuid
+
+
+class Offline(metaclass=SingletonMeta):
+    def __init__(self, offline=False):
+        self.offline = offline
+
+    def __call__(self, *args: Any, **kwds: Any) -> Any:
+        return self.offline
 
 
 def middle_db(cls):
@@ -90,8 +100,8 @@ def frontend_db(isDevice=False):
                 def getter(self, name=field.name):
                     value = self._db_conn.read(
                         {"id": self.id.hex,
-                        "_cls": self._cls,
-                        "_collection": self._collection}, name)
+                         "_cls": self._cls,
+                         "_collection": self._collection}, name)
                     print(f"Getting {name}: {value}")
                     return value
 
@@ -105,7 +115,8 @@ def frontend_db(isDevice=False):
             for func in cls.__dict__:
                 if callable(cls.__dict__[func]):
                     if not hasattr(func, "change"):
-                        setattr(cls, func, frontend_function(cls.__dict__[func]))
+                        setattr(cls, func, frontend_function(
+                            cls.__dict__[func]))
 
         orig_init = cls.__init__
 
@@ -177,9 +188,13 @@ def backend_db(cls):
     original_init = cls.__init__
 
     def new_init(self, *args, **kwargs):
-        pre_init(self, **kwargs)
-        original_init(self, *args, **kwargs)
-        post_init(self, **kwargs)
+        offline = Offline()
+        if offline.offline:
+            original_init(self,*args,**kwargs)
+        else:
+            pre_init(self, **kwargs)
+            original_init(self, *args, **kwargs)
+            post_init(self, **kwargs)
 
     cls.__init__ = new_init
 
