@@ -3,8 +3,10 @@ from dataclasses import dataclass
 from ..base import DataModel
 from typing import BinaryIO, Any
 
+_COLLECTION = "operation_results"
 
-@dataclass
+
+@dataclass(kw_only=True)
 class OperationResult(DataModel):
     """
     Abstract result class to keep results formatted and structured.
@@ -16,8 +18,12 @@ class OperationResult(DataModel):
     type: str
     data: BinaryIO
 
+    def __post_init__(self):
+        self._collection = _COLLECTION
+        return super().__post_init__()
+
     @abstractmethod
-    def retrieve_processed_data() -> Any:
+    def retrieve_processed_data(self) -> Any:
         """
         Retrieve the processed data from the result.
 

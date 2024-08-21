@@ -1,6 +1,8 @@
 import uuid
+from datetime import datetime, date
 from dataclasses import dataclass, asdict, field
 import json
+
 
 def is_jsonable(x):
     try:
@@ -27,8 +29,6 @@ class DataModel:
     def __post_init__(self):
         self._cls = self.__class__.__name__
 
-        
-
     def to_json(self) -> str:
         """Convert the data model instance to a JSON string.
 
@@ -36,8 +36,8 @@ class DataModel:
             str: json string representation of the data model instance.
         """
 
-        selfdict = self.to_dict()
-        return json.dumps(selfdict)
+        out_dict = self.to_dict()
+        return json.dumps(out_dict)
 
     def to_dict(self) -> dict:
         """
@@ -46,10 +46,15 @@ class DataModel:
         Returns:
             dict: A dictionary representation of the data model instance.
         """
-        selfdict = asdict(self)
-        for key, value in selfdict.items():
+        out_dict = asdict(self)
+        for key, value in out_dict.items():
             if isinstance(value, uuid.UUID):
-                selfdict[key] = value.hex
+                out_dict[key] = value.hex
+            elif isinstance(value, (datetime, date)):
+                out_dict[key] = value.isoformat()
+            elif isinstance(value, bytes):
+                # TODO: Check if this is the correct way to handle bytes with json
+                out_dict[key] = value.hex()
             elif not is_jsonable({key: value}):
-                selfdict[key] = value.to_json()
-        return selfdict
+                out_dict[key] = value.to_json()
+        return out_dict
