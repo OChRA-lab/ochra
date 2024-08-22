@@ -1,6 +1,6 @@
 from dataclasses import fields
 from typing import Any
-from OChRA_Common.ochra_common.connections.db_connection import DbConnection
+from ochra_common.connections.db_connection import DbConnection
 from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.operations.operationModels import Operation
 from ochra_common.equipment.device import Device
