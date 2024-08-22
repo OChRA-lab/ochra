@@ -2,6 +2,7 @@ import uuid
 from datetime import datetime, date
 from dataclasses import dataclass, asdict, field
 import json
+from .utils.json_helpers import CustomJSONEncoder
 
 
 def is_jsonable(x):
@@ -36,8 +37,8 @@ class DataModel:
             str: json string representation of the data model instance.
         """
 
-        out_dict = self.to_dict()
-        return json.dumps(out_dict)
+        out_dict = asdict(self)
+        return json.dumps(out_dict, cls=CustomJSONEncoder)
 
     def to_dict(self) -> dict:
         """
