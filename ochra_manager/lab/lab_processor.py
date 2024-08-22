@@ -111,7 +111,9 @@ class LabProcessor():
 
                 logger.debug(f"attempting {arg} to {args.properties[arg]}")
 
-                setattr(obj, arg, args.properties[arg])
+                self.db_conn.update({"id": obj.id.hex,
+                                     "_collection": obj._collection},
+                                    {arg: args.properties[arg]})
 
                 logger.info(f"changed {arg} to {args.properties[arg]}")
 
