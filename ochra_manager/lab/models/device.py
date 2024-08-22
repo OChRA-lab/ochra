@@ -1,5 +1,5 @@
 from ochra_common.equipment.device import Device as AbstractDevice
-from OChRA_Common.ochra_common.utils.db_decorator import middle_db
+from ochra_common.utils.db_decorator import middle_db
 
 
 @middle_db

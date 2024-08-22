@@ -3,7 +3,7 @@ from fastapi import FastAPI, APIRouter, HTTPException, Request
 import uvicorn
 import logging
 
-from OChRA_Manager.ochra_manager.lab.lab_processor import LabProcessor
+from ochra_manager.lab.lab_processor import LabProcessor
 
 logger = logging.getLogger(__name__)
 

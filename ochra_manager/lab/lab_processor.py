@@ -10,8 +10,8 @@ from fastapi import HTTPException, Request
 from bson import ObjectId
 from bson.errors import InvalidId
 from ochra_manager.lab.models.lab_request_models import ObjectSet, ObjectConstructionModel, ObjectCallModel
-from OChRA_Manager.ochra_manager.lab.models.operation import Operation
-from OChRA_Manager.ochra_manager.lab.models.device import Device
+from ochra_manager.lab.models.operation import Operation
+from ochra_manager.lab.models.device import Device
 from mongoengine import ValidationError
 from ochra_common.connections.db_connection import DbConnection
 import uuid
