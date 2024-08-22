@@ -69,7 +69,7 @@ def test_operation_result():
                                 "data": b"test".hex()}
 
     assert result.to_json() == '{"id": "' + result.id.hex + \
-        '", "_collection": "operation_results", "_cls": "OperationResult", "type": "test", "data": "74657374"}'
+        '", "_collection": "operation_results", "_cls": "OperationResult", "type": "test", "data": "dGVzdA=="}'
 
 
 def test_device():

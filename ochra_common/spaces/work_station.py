@@ -1,5 +1,6 @@
 from abc import abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import List
 from .station import Station
 from ..equipment.device import Device
 from uuid import UUID
@@ -11,22 +12,9 @@ class WorkStation(Station):
     WorkStation class that represents a station with devices.
 
     Attributes:
-        devices (list[Device]): A list of devices associated with the workstation.
+        devices (List[Device]): A list of devices associated with the workstation.
     """
-    devices: list[Device]
-
-    @abstractmethod
-    def add_device(self, device: Device) -> bool:
-        """
-        Add a device to the workstation.
-
-        Args:
-            device (Device): The device to be added.
-
-        Returns:
-            bool: True if the device was added successfully
-        """
-        pass
+    devices: List[Device] = field(default_factory=list)
 
     @abstractmethod
     def get_device(self, device: Device | str | UUID) -> Device:
@@ -38,18 +26,5 @@ class WorkStation(Station):
 
         Returns:
             Device: The retrieved device.
-        """
-        pass
-
-    @abstractmethod
-    def remove_device(self, device: Device) -> bool:
-        """
-        Remove a device from the workstation.
-
-        Args:
-            device (Device): The device to be removed.
-
-        Returns:
-            bool: True if the device was removed successfully
         """
         pass
