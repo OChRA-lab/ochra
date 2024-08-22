@@ -25,7 +25,8 @@ class Device(DataModel):
     status: Enum = -1  # TODO: Define DeviceStatus Enum
     operation_history: List[Operation] = field(
         init=False, default_factory=list)
-    station_id: str = field(init=False, default="")  # TODO: use uuid.UUID
+    station_id: str = field(default="")  # TODO: use uuid.UUID
+    # station_id: str = field(init=False, default="")  # TODO: use uuid.UUID
 
     def __post_init__(self):
         self._collection = _COLLECTION
