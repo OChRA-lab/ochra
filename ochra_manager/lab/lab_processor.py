@@ -93,6 +93,7 @@ class LabProcessor():
                 self.db_conn.create(device.db_data,
                                     args.contstructor_params)
                 device.id = uuid.UUID(args.contstructor_params["id"])
+        #TODO add more cases for different object types/ remove match, unsure which we wanna go with
         self.objects_dict[device.id] = device
         return device.id
 
@@ -113,7 +114,7 @@ class LabProcessor():
             station: StationConnection = self.objects_dict[obj.get_property(
                 "station_id")]
             #TODO create an operation object and save to db
-            
+
             # call operation on station
             result = station.execute_op(
                 call.object_function, obj.get_property("name"), **call.args)
