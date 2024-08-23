@@ -11,7 +11,7 @@ from bson import ObjectId
 from bson.errors import InvalidId
 from ochra_manager.lab.models.lab_request_models import ObjectSet, ObjectConstructionModel, ObjectCallModel
 from ochra_manager.lab.models.operation import Operation
-from ochra_manager.lab.models.device import Device
+from ochra_manager.lab.models.device import DbObject
 from mongoengine import ValidationError
 from ochra_common.connections.db_connection import DbConnection
 import uuid
@@ -136,7 +136,10 @@ class LabProcessor():
                                args.catalogue_module)
         match(args.object_type):
             case "Device":
-                device = Device(**args.contstructor_params)
+                device = DbObject()
+                device._collection = args.contstructor_params["_collection"]
+                self.db_conn.create(device.db_data,
+                                    args.contstructor_params)
                 device.id = uuid.UUID(args.contstructor_params["id"])
         self.objects_dict[device.id] = device
         return device.id
@@ -196,7 +199,7 @@ class LabProcessor():
             str: object id of object post call
         """
 
-        obj = self.objects_dict[uuid.UUID(object_id)]
+        obj: DbObject = self.objects_dict[uuid.UUID(object_id)]
         try:
             # get station
             station: StationConnection = self.objects_dict[obj.station_id]
@@ -205,7 +208,7 @@ class LabProcessor():
             # self.db_conn.create(operation)
             # call operation on station
             result = station.execute_op(
-                call.object_function, obj.name, **call.args)
+                call.object_function, obj.get_property("name"), **call.args)
             # return
 
         except (InvalidId, TypeError) as e:
@@ -221,8 +224,8 @@ class LabProcessor():
 
     def get_object(self, objectName):
         for object in self.objects_dict:
-            if hasattr(self.objects_dict[object], "name") and \
-                    objectName == self.objects_dict[object].name:
+            if hasattr(self.objects_dict[object], "get_property") and \
+                    objectName == self.objects_dict[object].get_property("name"):
                 logger.info(f"got object {objectName}")
                 return str(object)
         detail = f"could not find object with name {objectName}"

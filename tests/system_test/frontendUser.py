@@ -6,5 +6,5 @@ myIkaplate = frontendIkaPlate(name="amyIka")
 myIkaplate.status = "idle"
 print(myIkaplate.status)
 print(myIkaplate.temperature)
-print(myIkaplate.set_temperature(temperature=100))
+print(myIkaplate.start_stir())
 print(myIkaplate.temperature)

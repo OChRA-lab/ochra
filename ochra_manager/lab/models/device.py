@@ -1,11 +1,15 @@
-from ochra_common.equipment.device import Device as AbstractDevice
-from ochra_common.utils.db_decorator import middle_db
+from ochra_common.base import DataModel
+from ochra_common.connections.db_connection import DbConnection
 
 
-@middle_db
-class Device(AbstractDevice):
-    def __init__(self, **kwargs):
-        super().__init__(
-            name=kwargs["name"],
-            status=kwargs["status"],
-            station_id=kwargs.get("station_id", None))
+class DbObject(DataModel):
+    _collection: str = None
+
+    def get_property(self, property_name):
+        self.db_conn: DbConnection = DbConnection()
+        return self.db_conn.read(self.db_data,
+                                 property=property_name)
+
+    @property
+    def db_data(self):
+        return {"id": self.id, "_collection": self._collection}
