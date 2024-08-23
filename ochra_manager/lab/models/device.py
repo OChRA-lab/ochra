@@ -12,4 +12,4 @@ class DbObject(DataModel):
 
     @property
     def db_data(self):
-        return {"id": self.id, "_collection": self._collection}
+        return {"id": self.id.hex, "_collection": self._collection}

@@ -202,7 +202,8 @@ class LabProcessor():
         obj: DbObject = self.objects_dict[uuid.UUID(object_id)]
         try:
             # get station
-            station: StationConnection = self.objects_dict[obj.station_id]
+            station: StationConnection = self.objects_dict[obj.get_property(
+                "station_id")]
             # create operation with call args
             # operation = Operation(obj.id, call.object_function, call.args)
             # self.db_conn.create(operation)
