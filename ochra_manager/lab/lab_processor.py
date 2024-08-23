@@ -11,7 +11,7 @@ from bson import ObjectId
 from bson.errors import InvalidId
 from ochra_manager.lab.models.lab_request_models import ObjectSet, ObjectConstructionModel, ObjectCallModel
 from ochra_manager.lab.models.operation import Operation
-from ochra_manager.lab.models.device import DbObject
+from ochra_manager.lab.models.DbObject import DbObject
 from mongoengine import ValidationError
 from ochra_common.connections.db_connection import DbConnection
 import uuid
@@ -224,6 +224,17 @@ class LabProcessor():
         return result
 
     def get_object(self, objectName):
+        """Get object by name from the objects_dict
+
+        Args:
+            objectName (str): name of object to find
+
+        Raises:
+            HTTPException: if object not found
+
+        Returns:
+            str: objects id
+        """
         for object in self.objects_dict:
             if hasattr(self.objects_dict[object], "get_property") and \
                     objectName == self.objects_dict[object].get_property("name"):
@@ -234,12 +245,23 @@ class LabProcessor():
         raise HTTPException(status_code=404, detail=detail)
 
     def get_object_property(self, id, property):
+        """Get property of object with id
+
+        Args:
+            id (str): id of object
+            property (str): property of object to get
+
+        Raises:
+            HTTPException: if object not found or property not found
+
+        Returns:
+            Any: value of property
+        """
         try:
             uuId = uuid.UUID(id)
             obj = self.objects_dict[uuId]
             logger.debug(f"got Object {id}")
-            return self.db_conn.read({"id": obj.id.hex,
-                                      "_collection": obj._collection},
+            return self.db_conn.read(obj.db_data,
                                      property)
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
