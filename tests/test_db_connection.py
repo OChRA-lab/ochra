@@ -13,3 +13,8 @@ def db_connection():
     db_conn.db_adapter.delete_database()
     disconnect(alias="test_db")
     
+def test_create(db_connection):
+    doc = TestDocument(name="test_create_doc")
+    inserted_id = db_connection.create({"collection_name": "test_collection"}, document=doc)
+    assert isinstance(inserted_id, ObjectId), "The document was not created properly."
+    
