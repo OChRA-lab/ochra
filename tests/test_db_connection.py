@@ -3,8 +3,10 @@ from bson import ObjectId
 from mongoengine import Document, StringField, disconnect
 from ochra_common.connections.db_connection import DbConnection
 
+
 class TestDocument(Document):
     name = StringField(required=True)
+    
     
 @pytest.fixture(scope="module")
 def db_connection():
@@ -18,3 +20,8 @@ def test_create(db_connection):
     inserted_id = db_connection.create({"collection_name": "test_collection"}, document=doc)
     assert isinstance(inserted_id, ObjectId), "The document was not created properly."
     
+def test_read(db_connection):
+    doc = TestDocument(name="test_read_doc")
+    inserted_id = db_connection.create({"collection_name": "test_collection"}, document=doc)
+    read_doc = db_connection.read({"collection_name": "test_collection", "id": str(inserted_id)}, "name")
+    assert read_doc == "test_read_doc", "The document was not read properly."
