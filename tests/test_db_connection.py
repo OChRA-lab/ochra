@@ -24,8 +24,8 @@ def test_data():
 
 def test_create(db_connection, test_data):
     # Test creating a document
-    created_doc = db_connection.create(test_data[0], test_data[1])
-    assert isinstance(created_doc, ObjectId), "The document was not created properly."
+    doc_to_create = db_connection.create(test_data[0], test_data[1])
+    assert isinstance(doc_to_create, ObjectId), "The document was not created properly."
     
 def test_read(db_connection, test_data):
     # Test reading a document
