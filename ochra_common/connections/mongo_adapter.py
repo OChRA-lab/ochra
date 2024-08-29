@@ -102,6 +102,7 @@ class MongoAdapter:
         """Update documents in the specified collection that match the query."""
         collection = db_data["collection_name"]
         object_id = db_data["id"]
+        object_id = ObjectId(object_id)
         collection = self._db_client[self._db_name][collection]
         update = {"$set": update}
         query = {"_id": object_id}
