@@ -18,8 +18,8 @@ def db_connection():
     
 @pytest.fixture(scope="module")
 def test_data():
-    test_doc = TestDocument(name="test_doc")
     test_coll = {"collection_name": "test_collection"}
+    test_doc = TestDocument(name="test_doc")
     return test_coll, test_doc 
 
 def test_create(db_connection, test_data):
