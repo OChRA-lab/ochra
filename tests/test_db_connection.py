@@ -12,7 +12,7 @@ def db_connection():
     # Create and connect to local test database
     db_conn = DbConnection(hostname = "localhost", db_name = "test_db")
     yield db_conn.db_adapter
-    # Cleanup and disconnect from test database
+    # Delete and disconnect from test database
     db_conn.db_adapter.delete_database()
     disconnect(alias="test_db")
     
