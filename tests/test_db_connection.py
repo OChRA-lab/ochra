@@ -18,6 +18,7 @@ def db_connection():
     
 @pytest.fixture(scope="module")
 def test_data():
+    # Collection and document to be used in tests
     test_coll = {"collection_name": "test_collection"}
     test_doc = TestDocument(name="test_doc")
     return test_coll, test_doc 
