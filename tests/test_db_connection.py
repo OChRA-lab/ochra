@@ -16,31 +16,34 @@ def db_connection():
     db_conn.db_adapter.delete_database()
     disconnect(alias="test_db")
     
-def test_create(db_connection):
+@pytest.fixture(scope="module")
+def test_data():
+    test_doc = TestDocument(name="test_doc")
+    test_coll = {"collection_name": "test_collection"}
+    return test_coll, test_doc 
+
+def test_create(db_connection, test_data):
     # Test creating a document
-    doc = TestDocument(name="test_create_doc")
-    inserted_id = db_connection.create({"collection_name": "test_collection"}, document=doc)
-    assert isinstance(inserted_id, ObjectId), "The document was not created properly."
+    created_doc = db_connection.create(test_data[0], test_data[1])
+    assert isinstance(created_doc, ObjectId), "The document was not created properly."
     
-def test_read(db_connection):
+def test_read(db_connection, test_data):
     # Test reading a document
-    doc = TestDocument(name="test_read_doc")
-    inserted_id = db_connection.create({"collection_name": "test_collection"}, document=doc)
-    read_doc = db_connection.read({"collection_name": "test_collection", "id": str(inserted_id)}, "name")
-    assert read_doc == "test_read_doc", "The document was not read properly."
+    doc_to_read = db_connection.create(test_data[0], test_data[1])
+    read_doc = db_connection.read({"collection_name": "test_collection", "id": str(doc_to_read)}, "name")
+    assert read_doc == "test_doc", "The document was not read properly."
     
-def test_update(db_connection):
-    doc = TestDocument(name="test_update_doc")
-    inserted_id = db_connection.create({"collection_name": "test_collection"}, document=doc)
-    db_connection.update({"collection_name": "test_collection", "id": str(inserted_id)},
+def test_update(db_connection, test_data):
+    # Test updating a document
+    doc_to_update = db_connection.create(test_data[0], test_data[1])
+    db_connection.update({"collection_name": "test_collection", "id": str(doc_to_update)},
                          {"name": "updated_name"},)
-    updated_doc = db_connection.read({"collection_name": "test_collection", "id": str(inserted_id)}, "name")
+    updated_doc = db_connection.read({"collection_name": "test_collection", "id": str(doc_to_update)}, "name")
     assert updated_doc == "updated_name", "The document was not updated properly."
     
-def test_delete(db_connection):
+def test_delete(db_connection, test_data):
     # Test deleting a document
-    doc = TestDocument(name="test_delete_doc")
-    inserted_id = db_connection.create({"collection_name": "test_collection"}, document=doc)
-    db_connection.delete("test_collection", {"_id": inserted_id})
-    deleted_doc = db_connection.read({"collection_name": "test_collection", "id": str(inserted_id)}, "name")
+    doc_to_delete = db_connection.create(test_data[0], test_data[1])
+    db_connection.delete("test_collection", {"_id": doc_to_delete})
+    deleted_doc = db_connection.read({"collection_name": "test_collection", "id": str(doc_to_delete)}, "name")
     assert deleted_doc is None, "The document was not deleted properly."
