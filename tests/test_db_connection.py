@@ -29,6 +29,14 @@ def test_read(db_connection):
     read_doc = db_connection.read({"collection_name": "test_collection", "id": str(inserted_id)}, "name")
     assert read_doc == "test_read_doc", "The document was not read properly."
     
+def test_update(db_connection):
+    doc = TestDocument(name="test_update_doc")
+    inserted_id = db_connection.create({"collection_name": "test_collection"}, document=doc)
+    db_connection.update({"collection_name": "test_collection", "id": str(inserted_id)},
+                         {"name": "updated_name"},)
+    updated_doc = db_connection.read({"collection_name": "test_collection", "id": str(inserted_id)}, "name")
+    assert updated_doc == "updated_name", "The document was not updated properly."
+    
 def test_delete(db_connection):
     # Test deleting a document
     doc = TestDocument(name="test_delete_doc")
