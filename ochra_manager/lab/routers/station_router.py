@@ -31,4 +31,4 @@ async def call_method(object_id: str, args: ObjectCallModel):
 
 @stations_router.get("/get")
 async def get_station(station_name: str):
-    return lab_service.get_object(station_name, COLLECTION)
+    return lab_service.get_object_by_name(station_name, COLLECTION)
