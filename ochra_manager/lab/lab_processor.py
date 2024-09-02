@@ -22,20 +22,20 @@ logger = logging.getLogger(__name__)
 
 class lab_service():
 
-    @staticmethod
-    def add_device(self, device):
-        logger.info(f"added {device.object_id} to lab")
-        self.objects_dict[str(device.object_id)] = device
+    # @staticmethod
+    # def add_device(device):
+    #     logger.info(f"added {device.object_id} to lab")
+    #     .objects_dict[str(device.object_id)] = device
+
+    # @staticmethod
+    # def create_station(request: Request):
+    #     clientHost = request.client.host
+    #     # TODO: create station objects here
+    #     .objects_dict[clientHost] = StationConnection(clientHost + ":8000")
+    #     return clientHost
 
     @staticmethod
-    def create_station(self, request: Request):
-        clientHost = request.client.host
-        # TODO: create station objects here
-        self.objects_dict[clientHost] = StationConnection(clientHost + ":8000")
-        return clientHost
-
-    @staticmethod
-    def patch_object(self, object_id, args: ObjectSet):
+    def patch_object(object_id, collection, args: ObjectSet):
         """patch properties of object_id using args key-value pairs
 
         Args:
@@ -46,10 +46,9 @@ class lab_service():
         Returns:
             str: object id
         """
-
+        db_conn: DbConnection = DbConnection()
         try:
-            uuId = uuid.UUID(object_id)
-            obj = self.objects_dict[uuId]
+            db_conn.read({"id": object_id, "_collection": collection})
             logger.debug(f"got Object {object_id}")
         except Exception as e:
             logger.info(f"{object_id} does not exist")
@@ -59,9 +58,9 @@ class lab_service():
 
                 logger.debug(f"attempting {arg} to {args.properties[arg]}")
 
-                self.db_conn.update({"id": obj.id.hex,
-                                    "_collection": obj._collection},
-                                    {arg: args.properties[arg]})
+                db_conn.update({"id": object_id,
+                                "_collection": collection},
+                               {arg: args.properties[arg]})
 
                 logger.info(f"changed {arg} to {args.properties[arg]}")
 
@@ -71,7 +70,7 @@ class lab_service():
         return True
 
     @staticmethod
-    def construct_object(args: ObjectConstructionModel):
+    def construct_object(args: ObjectConstructionModel, collection):
         """construct object of given type in db and instance
 
         Args:
@@ -83,12 +82,11 @@ class lab_service():
         db_conn: DbConnection = DbConnection()
         string = "created object of type {} with params {}"
         string = string.format(args.object_type, args.contstructor_params)
-        db_conn.create(args.object_type,
-                       args.contstructor_params)
+        db_conn.create({"_collection": collection}, args.contstructor_params)
         return uuid.UUID(args.contstructor_params["id"])
 
     @staticmethod
-    def call_on_object(self, object_id, call: ObjectCallModel):
+    def call_on_object(object_id, collection, call: ObjectCallModel):
         """call method of object on object
 
         Args:
@@ -98,17 +96,20 @@ class lab_service():
         Returns:
             str: object id of object post call
         """
+        db_conn: DbConnection = DbConnection()
 
-        obj: DbObject = self.objects_dict[uuid.UUID(object_id)]
         try:
             # get station
-            station: StationConnection = self.objects_dict[obj.get_property(
-                "station_id")]
+            station_id = db_conn.read({"id": object_id, "_collection": collection},
+                                      "station_id")
+
+            station: StationConnection = StationConnection(station_id)
             # TODO create an operation object and save to db
 
             # call operation on station
             result = station.execute_op(
-                call.object_function, obj.get_property("name"), **call.args)
+                call.object_function, db_conn.read({"id": object_id, "_collection": collection},
+                                                   "name"), **call.args)
             # return
 
         except (InvalidId, TypeError) as e:
@@ -118,34 +119,24 @@ class lab_service():
             logger.error(e)
             raise HTTPException(status_code=500, detail=str(e))
 
-        logger.info(f"called {call.object_function} on {obj.id}")
+        logger.info(f"called {call.object_function} on {object_id}")
 
         return result
 
     @staticmethod
-    def get_object(self, objectName):
-        """Get object by name from the objects_dict
-
-        Args:
-            objectName (str): name of object to find
-
-        Raises:
-            HTTPException: if object not found
-
-        Returns:
-            str: objects id
-        """
-        for object in self.objects_dict:
-            if hasattr(self.objects_dict[object], "get_property") and \
-                    objectName == self.objects_dict[object].get_property("name"):
-                logger.info(f"got object {objectName}")
-                return str(object)
-        detail = f"could not find object with name {objectName}"
-        logger.info(detail)
-        raise HTTPException(status_code=404, detail=detail)
+    def get_device(station_id, device_name):
+        db_conn: DbConnection = DbConnection()
+        devices = db_conn.read(
+            {"id": station_id, "_collection": "stations"}, "devices")
+        for device_id in devices:
+            device = db_conn.read(
+                {"id": device_id, "_collection": "devices"}, "name")
+            if device == device_name:
+                return device_id
+        raise HTTPException(status_code=404, detail="device not found")
 
     @staticmethod
-    def get_object_property(self, id, property):
+    def get_object_property(id, collection, property):
         """Get property of object with id
 
         Args:
@@ -159,10 +150,8 @@ class lab_service():
             Any: value of property
         """
         try:
-            uuId = uuid.UUID(id)
-            obj = self.objects_dict[uuId]
-            logger.debug(f"got Object {id}")
-            return self.db_conn.read(obj.db_data,
-                                     property)
+            db_conn: DbConnection = DbConnection()
+            return db_conn.read({"id": id, "_collection": collection},
+                                property)
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
