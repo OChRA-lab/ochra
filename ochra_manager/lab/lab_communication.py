@@ -4,7 +4,8 @@ from .models.lab_request_models import ObjectSet, ObjectConstructionModel, Objec
 import uvicorn
 import logging
 
-import lab_processor as lab_service
+from .lab_processor import lab_service
+from .routers.device_router import device_router
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +17,7 @@ class LabCommunication():
         super().__init__()
         self.app = FastAPI()
         self.router = APIRouter()
+
         self.router.add_api_route(
             "/object/set/{object_id}",
             self.patch_object,
@@ -46,6 +48,7 @@ class LabCommunication():
             methods=["GET"])
 
         self.app.include_router(self.router)
+        self.app.include_router(device_router)
 
     def patch_object(self, object_id: str, args: ObjectSet):
         return lab_service.patch_object(object_id, args)
