@@ -155,3 +155,8 @@ class lab_service():
                                 property)
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
+
+    @staticmethod
+    def get_object_by_name(name, collection):
+        # TODO: implement this
+        pass
