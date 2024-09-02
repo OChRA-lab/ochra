@@ -20,152 +20,149 @@ import uuid
 logger = logging.getLogger(__name__)
 
 
-def add_device(self, device):
-    logger.info(f"added {device.object_id} to lab")
-    self.objects_dict[str(device.object_id)] = device
+class lab_service():
 
+    @staticmethod
+    def add_device(self, device):
+        logger.info(f"added {device.object_id} to lab")
+        self.objects_dict[str(device.object_id)] = device
 
-def create_station(self, request: Request):
-    clientHost = request.client.host
-    # TODO: create station objects here
-    self.objects_dict[clientHost] = StationConnection(clientHost + ":8000")
-    return clientHost
+    @staticmethod
+    def create_station(self, request: Request):
+        clientHost = request.client.host
+        # TODO: create station objects here
+        self.objects_dict[clientHost] = StationConnection(clientHost + ":8000")
+        return clientHost
 
+    @staticmethod
+    def patch_object(self, object_id, args: ObjectSet):
+        """patch properties of object_id using args key-value pairs
 
-def patch_object(self, object_id, args: ObjectSet):
-    """patch properties of object_id using args key-value pairs
+        Args:
+            object_id (str): id of object to patch
+            args (ObjectSet): key-value pairs of property to change
+                                and value to change it to
 
-    Args:
-        object_id (str): id of object to patch
-        args (ObjectSet): key-value pairs of property to change
-                            and value to change it to
+        Returns:
+            str: object id
+        """
 
-    Returns:
-        str: object id
-    """
+        try:
+            uuId = uuid.UUID(object_id)
+            obj = self.objects_dict[uuId]
+            logger.debug(f"got Object {object_id}")
+        except Exception as e:
+            logger.info(f"{object_id} does not exist")
+            raise HTTPException(status_code=404, detail=str(e))
+        try:
+            for arg in args.properties.keys():
 
-    try:
-        uuId = uuid.UUID(object_id)
-        obj = self.objects_dict[uuId]
-        logger.debug(f"got Object {object_id}")
-    except Exception as e:
-        logger.info(f"{object_id} does not exist")
-        raise HTTPException(status_code=404, detail=str(e))
-    try:
-        for arg in args.properties.keys():
+                logger.debug(f"attempting {arg} to {args.properties[arg]}")
 
-            logger.debug(f"attempting {arg} to {args.properties[arg]}")
+                self.db_conn.update({"id": obj.id.hex,
+                                    "_collection": obj._collection},
+                                    {arg: args.properties[arg]})
 
-            self.db_conn.update({"id": obj.id.hex,
-                                 "_collection": obj._collection},
-                                {arg: args.properties[arg]})
+                logger.info(f"changed {arg} to {args.properties[arg]}")
 
-            logger.info(f"changed {arg} to {args.properties[arg]}")
+        except Exception as e:
+            logger.error(e)
+            raise HTTPException(status_code=500, detail=e)
+        return True
 
-    except Exception as e:
-        logger.error(e)
-        raise HTTPException(status_code=500, detail=e)
-    return True
+    @staticmethod
+    def construct_object(args: ObjectConstructionModel):
+        """construct object of given type in db and instance
 
+        Args:
+            args (ObjectConstructionModel): Object construction model message
 
-def construct_object(self, type, args: ObjectConstructionModel):
-    """construct object of given type in db and instance
+        Returns:
+            str: object id of constructed object
+        """
+        db_conn: DbConnection = DbConnection()
+        string = "created object of type {} with params {}"
+        string = string.format(args.object_type, args.contstructor_params)
+        db_conn.create(args.object_type,
+                       args.contstructor_params)
+        return uuid.UUID(args.contstructor_params["id"])
 
-    Args:
-        args (ObjectConstructionModel): Object construction model message
+    @staticmethod
+    def call_on_object(self, object_id, call: ObjectCallModel):
+        """call method of object on object
 
-    Returns:
-        str: object id of constructed object
-    """
-    string = "created object of type {} with params {}"
-    string = string.format(args.object_type, args.contstructor_params)
-    match(args.object_type):
-        case "Device":
-            device = DbObject()
-            device._collection = type
-            self.db_conn.create(device.db_data,
-                                args.contstructor_params)
-            device.id = uuid.UUID(args.contstructor_params["id"])
-    # TODO add more cases for different object types/ remove match, unsure which we wanna go with
-    self.objects_dict[device.id] = device
-    return device.id
+        Args:
+            object_id (str): Object id of object to call on
+            call (ObjectCallModel): object call model message
 
+        Returns:
+            str: object id of object post call
+        """
 
-def call_on_object(self, object_id, call: ObjectCallModel):
-    """call method of object on object
+        obj: DbObject = self.objects_dict[uuid.UUID(object_id)]
+        try:
+            # get station
+            station: StationConnection = self.objects_dict[obj.get_property(
+                "station_id")]
+            # TODO create an operation object and save to db
 
-    Args:
-        object_id (str): Object id of object to call on
-        call (ObjectCallModel): object call model message
+            # call operation on station
+            result = station.execute_op(
+                call.object_function, obj.get_property("name"), **call.args)
+            # return
 
-    Returns:
-        str: object id of object post call
-    """
+        except (InvalidId, TypeError) as e:
+            logger.warn(e)
+        except Exception as e:
+            # operation.status = "failed"
+            logger.error(e)
+            raise HTTPException(status_code=500, detail=str(e))
 
-    obj: DbObject = self.objects_dict[uuid.UUID(object_id)]
-    try:
-        # get station
-        station: StationConnection = self.objects_dict[obj.get_property(
-            "station_id")]
-        # TODO create an operation object and save to db
+        logger.info(f"called {call.object_function} on {obj.id}")
 
-        # call operation on station
-        result = station.execute_op(
-            call.object_function, obj.get_property("name"), **call.args)
-        # return
+        return result
 
-    except (InvalidId, TypeError) as e:
-        logger.warn(e)
-    except Exception as e:
-        # operation.status = "failed"
-        logger.error(e)
-        raise HTTPException(status_code=500, detail=str(e))
+    @staticmethod
+    def get_object(self, objectName):
+        """Get object by name from the objects_dict
 
-    logger.info(f"called {call.object_function} on {obj.id}")
+        Args:
+            objectName (str): name of object to find
 
-    return result
+        Raises:
+            HTTPException: if object not found
 
+        Returns:
+            str: objects id
+        """
+        for object in self.objects_dict:
+            if hasattr(self.objects_dict[object], "get_property") and \
+                    objectName == self.objects_dict[object].get_property("name"):
+                logger.info(f"got object {objectName}")
+                return str(object)
+        detail = f"could not find object with name {objectName}"
+        logger.info(detail)
+        raise HTTPException(status_code=404, detail=detail)
 
-def get_object(self, objectName):
-    """Get object by name from the objects_dict
+    @staticmethod
+    def get_object_property(self, id, property):
+        """Get property of object with id
 
-    Args:
-        objectName (str): name of object to find
+        Args:
+            id (str): id of object
+            property (str): property of object to get
 
-    Raises:
-        HTTPException: if object not found
+        Raises:
+            HTTPException: if object not found or property not found
 
-    Returns:
-        str: objects id
-    """
-    for object in self.objects_dict:
-        if hasattr(self.objects_dict[object], "get_property") and \
-                objectName == self.objects_dict[object].get_property("name"):
-            logger.info(f"got object {objectName}")
-            return str(object)
-    detail = f"could not find object with name {objectName}"
-    logger.info(detail)
-    raise HTTPException(status_code=404, detail=detail)
-
-
-def get_object_property(self, id, property):
-    """Get property of object with id
-
-    Args:
-        id (str): id of object
-        property (str): property of object to get
-
-    Raises:
-        HTTPException: if object not found or property not found
-
-    Returns:
-        Any: value of property
-    """
-    try:
-        uuId = uuid.UUID(id)
-        obj = self.objects_dict[uuId]
-        logger.debug(f"got Object {id}")
-        return self.db_conn.read(obj.db_data,
-                                 property)
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=str(e))
+        Returns:
+            Any: value of property
+        """
+        try:
+            uuId = uuid.UUID(id)
+            obj = self.objects_dict[uuId]
+            logger.debug(f"got Object {id}")
+            return self.db_conn.read(obj.db_data,
+                                     property)
+        except Exception as e:
+            raise HTTPException(status_code=404, detail=str(e))
