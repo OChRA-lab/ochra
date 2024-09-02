@@ -34,6 +34,11 @@ class Communicator(ABC):
         self.app.include_router(self.router)
 
     def run(self, offline=False):
+        """start the communicator server
+
+        Args:
+            offline (bool, optional): if true start the station in offline mode. Defaults to False.
+        """
         self._start_up(offline)
         self.setup()
         uvicorn.run(self.app, host=self.host_ip, port=self.port)
@@ -45,9 +50,16 @@ class Communicator(ABC):
 
     @abstractmethod
     def setup(self):
+        """To be filled in by child class to setup the communicator
+        """
         pass
 
     def _start_up(self, offline):
+        """Setups the lab and db connections
+
+        Args:
+            offline (bool): offline mode
+        """
         if not offline:
             self.lab_conn = LabConnection(self.lab_ip)
             self.db_conn = DbConnection(self.db_ip)
@@ -57,6 +69,17 @@ class Communicator(ABC):
             self.station_id = None
 
     def process_operation(self, args: operationExecute):
+        """search the devices for a device with the given name and execute the method provided in the args
+
+        Args:
+            args (operationExecute): args.operation is the method to execute, args.deviceName is the device to execute the method on, args.args are the arguments to pass to the method
+
+        Raises:
+            HTTPException: If the device is not found or the method is not found
+
+        Returns:
+            Any: return value of the method
+        """
         try:
             for i in self.devices:
                 if i.name == args.deviceName:

@@ -11,7 +11,7 @@ from bson import ObjectId
 from bson.errors import InvalidId
 from ochra_manager.lab.models.lab_request_models import ObjectSet, ObjectConstructionModel, ObjectCallModel
 from ochra_manager.lab.models.operation import Operation
-from ochra_manager.lab.models.device import Device
+from ochra_manager.lab.models.DbObject import DbObject
 from mongoengine import ValidationError
 from ochra_common.connections.db_connection import DbConnection
 import uuid
@@ -29,61 +29,13 @@ class LabProcessor():
                             format='%(asctime)s %(message)s',
                             datefmt='%m/%d/%Y %I:%M:%S %p')
 
-    def _import_class_from_module(self, cls_name: str,
-                                  module_path: str) -> Any:
-        """import class from module
-
-        Args:
-            cls_name (str): class name
-            module_path (str): path to module
-
-        Returns:
-            Any: None if error, otherwise attribute of given import
-        """
-        try:
-            module = importlib.import_module(module_path)
-            return getattr(module, cls_name, None)
-        except (ModuleNotFoundError, ImportError):
-            return None
-
-    def _find_module_in_lib(self, cls_name, catalogue):
-        """find module of a class in a given catalogue
-
-        Args:
-            cls_name (str): class name
-            catalogue (str): catalogue to search
-
-        Raises:
-            NameError: if class is not found
-
-        Returns:
-            str: path to module
-        """
-        if catalogue not in ["robots", "devices", "containers", "reagents",
-                             "operations"]:
-            raise NameError(f"Catalogue {catalogue} is not defined")
-        if catalogue == "operations":
-            lib = "OChRA_Manager.ochra_manager"
-        elif catalogue == "robots":
-            lib = "ochra_devices_front"
-        elif catalogue == "devices":
-            lib = "ochra_devices_front"
-        pkg = importlib.import_module(f"{lib}.{catalogue}")
-        for module_itr in pkgutil.iter_modules(
-            path=pkg.__path__, prefix=f"{pkg.__name__}."
-        ):
-            module_path = f"{module_itr.name}"
-            module = importlib.import_module(module_path)
-            if hasattr(module, cls_name):
-                return module_path
-        raise NameError(f"Class type {cls_name} is not defined")
-
     def add_device(self, device):
         logger.info(f"added {device.object_id} to lab")
         self.objects_dict[str(device.object_id)] = device
 
     def create_station(self, request: Request):
         clientHost = request.client.host
+        # TODO: create station objects here
         self.objects_dict[clientHost] = StationConnection(clientHost + ":8000")
         return clientHost
 
@@ -136,54 +88,14 @@ class LabProcessor():
                                args.catalogue_module)
         match(args.object_type):
             case "Device":
-                device = Device(**args.contstructor_params)
+                device = DbObject()
+                device._collection = args.contstructor_params["_collection"]
+                self.db_conn.create(device.db_data,
+                                    args.contstructor_params)
                 device.id = uuid.UUID(args.contstructor_params["id"])
+        #TODO add more cases for different object types/ remove match, unsure which we wanna go with
         self.objects_dict[device.id] = device
         return device.id
-        # placeholder for unimplemented catalogues
-        if args.catalogue_module not in ["robots", "devices",
-                                         "containers", "reagents",
-                                         "operations"]:
-            raise HTTPException(status_code=501, detail="Not implemented yet")
-        else:
-            try:
-                if "Handler" in args.object_type:
-                    logger.debug("removing handler tag")
-                    args.object_type = args.object_type.replace("Handler", "")
-                logstr = ("Trying to load module {} from {}")
-                logger.debug(logstr.format(
-                    args.object_type, args.catalogue_module))
-
-                module = self._find_module_in_lib(
-                    args.object_type, args.catalogue_module)
-            # get backend class and construct
-                logger.debug(f"attempting import of {args.object_type}")
-                cls = self._import_class_from_module(
-                    f"{args.object_type}", module)
-                obj = cls(**args.contstructor_params)
-
-            except ValidationError as e:
-
-                logger.info(f"could not load {args.object_type}")
-                raise HTTPException(status_code=500, detail=str(e))
-            except TypeError as e:
-                if "arguments" in str(e):
-                    detail = str(e)
-                else:
-                    logger.debug(e)
-                    detail = f"Type {args.object_type} does not \
-                                exist on lab, {e}"
-                logger.info(detail)
-                raise HTTPException(
-                    status_code=404, detail=detail)
-            except Exception as e:
-                logger.error(e)
-                raise HTTPException(status_code=500, detail=str(e))
-            # retrieve object_id and append to objects dict
-            object_id = str(obj.db_data["id"])
-            self.objects_dict[object_id] = obj
-        logger.info(string)
-        return object_id
 
     def call_on_object(self, object_id, call: ObjectCallModel):
         """call method of object on object
@@ -196,16 +108,16 @@ class LabProcessor():
             str: object id of object post call
         """
 
-        obj = self.objects_dict[uuid.UUID(object_id)]
+        obj: DbObject = self.objects_dict[uuid.UUID(object_id)]
         try:
             # get station
-            station: StationConnection = self.objects_dict[obj.station_id]
-            # create operation with call args
-            # operation = Operation(obj.id, call.object_function, call.args)
-            # self.db_conn.create(operation)
+            station: StationConnection = self.objects_dict[obj.get_property(
+                "station_id")]
+            #TODO create an operation object and save to db
+
             # call operation on station
             result = station.execute_op(
-                call.object_function, obj.name, **call.args)
+                call.object_function, obj.get_property("name"), **call.args)
             # return
 
         except (InvalidId, TypeError) as e:
@@ -220,9 +132,20 @@ class LabProcessor():
         return result
 
     def get_object(self, objectName):
+        """Get object by name from the objects_dict
+
+        Args:
+            objectName (str): name of object to find
+
+        Raises:
+            HTTPException: if object not found
+
+        Returns:
+            str: objects id
+        """
         for object in self.objects_dict:
-            if hasattr(self.objects_dict[object], "name") and \
-                    objectName == self.objects_dict[object].name:
+            if hasattr(self.objects_dict[object], "get_property") and \
+                    objectName == self.objects_dict[object].get_property("name"):
                 logger.info(f"got object {objectName}")
                 return str(object)
         detail = f"could not find object with name {objectName}"
@@ -230,12 +153,23 @@ class LabProcessor():
         raise HTTPException(status_code=404, detail=detail)
 
     def get_object_property(self, id, property):
+        """Get property of object with id
+
+        Args:
+            id (str): id of object
+            property (str): property of object to get
+
+        Raises:
+            HTTPException: if object not found or property not found
+
+        Returns:
+            Any: value of property
+        """
         try:
             uuId = uuid.UUID(id)
             obj = self.objects_dict[uuId]
             logger.debug(f"got Object {id}")
-            return self.db_conn.read({"id": obj.id.hex,
-                                      "_collection": obj._collection},
+            return self.db_conn.read(obj.db_data,
                                      property)
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
