@@ -1,14 +1,10 @@
-from abc import abstractmethod
-from dataclasses import dataclass, field
-from typing import List
+from pydantic import Field
+from typing import List, Type
 from ..base import DataModel
 from .consumable import Consumable
 from .container import Container
 
-_COLLECTION = "inventories"
 
-
-@dataclass(kw_only=True)
 class Inventory(DataModel):
     """
     Abstract class for inventory, contains containers and consumables.
@@ -19,34 +15,27 @@ class Inventory(DataModel):
         consumables (List[Consumable]): A list of consumables in the inventory. Defaults to an empty list.
     """
     containers_max_capacity: int
-    containers: List[Container] = field(default_factory=list)
-    consumables: List[Consumable] = field(default_factory=list)
+    containers: List[Type[Container]] = Field(default_factory=list)
+    consumables: List[Consumable] = Field(default_factory=list)
 
-    def __post_init__(self):
-        self._collection = _COLLECTION
-        return super().__post_init__()
-
-    @abstractmethod
-    def add_container(self, container: Container) -> None:
+    def add_container(self, container: Type[Container]) -> None:
         """
         Add a container to the inventory.
 
         Args:
             container (Container): The container to be added.
         """
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
-    def remove_container(self, container: Container) -> None:
+    def remove_container(self, container: Type[Container]) -> None:
         """
         Remove a container from the inventory.
 
         Args:
             container (Container): The container to be removed.
         """
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def add_consumable(self, consumable: Consumable) -> None:
         """
         Add a consumable to the inventory.
@@ -54,9 +43,8 @@ class Inventory(DataModel):
         Args:
             consumable (Consumable): The consumable to be added.
         """
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def remove_consumable(self, consumable: Consumable) -> None:
         """
         Remove a consumable from the inventory.
@@ -64,4 +52,4 @@ class Inventory(DataModel):
         Args:
             consumable (Consumable): The consumable to be removed.
         """
-        pass
+        raise NotImplementedError

@@ -1,13 +1,9 @@
-from abc import abstractmethod
-from dataclasses import dataclass, field
+from pydantic import Field
 from ..base import DataModel
 from enum import Enum
 from typing import Any, Dict
 
-_COLLECTION = "reagents"
 
-
-@dataclass(kw_only=True)
 class Reagent(DataModel):
     """
     Abstract Reagent class to represent any chemicals used.
@@ -23,13 +19,8 @@ class Reagent(DataModel):
     amount: float
     unit: str
     physical_state: Enum = -1  # TODO: Define PhysicalState Enum
-    properties: Dict[str, Any] = field(default_factory=dict)
+    properties: Dict[str, Any] = Field(default_factory=dict)
 
-    def __post_init__(self):
-        self._collection = _COLLECTION
-        return super().__post_init__()
-
-    @abstractmethod
     def add_property(self, property_name: str, property_value: Any) -> bool:
         """
         Add a property to the reagent.
@@ -41,9 +32,8 @@ class Reagent(DataModel):
         Returns:
             bool: True if the property was added successfully
         """
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def remove_property(self, property: str) -> bool:
         """
         Remove a property from the reagent.
@@ -54,9 +44,8 @@ class Reagent(DataModel):
         Returns:
             bool: True if the property was removed successfully
         """
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def change_amount(self, amount: float) -> bool:
         """
         Change the amount of the reagent.
@@ -67,4 +56,4 @@ class Reagent(DataModel):
         Returns:
             bool: True if the amount was changed successfully
         """
-        pass
+        raise NotImplementedError

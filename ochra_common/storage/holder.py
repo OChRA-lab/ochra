@@ -1,10 +1,8 @@
-from abc import abstractmethod
-from dataclasses import dataclass, field
-from typing import List
+from pydantic import Field
+from typing import List, Type
 from .container import Container
 
 
-@dataclass(kw_only=True)
 class Holder(Container):
     """
     Abstract holder class, any container that can hold other containers.
@@ -12,24 +10,22 @@ class Holder(Container):
     Attributes:
         containers (List[Container]): A list of containers held by this holder. Defaults to an empty list.
     """
-    containers: List[Container] = field(default_factory=list)
+    containers: List[Type[Container]] = Field(default_factory=list)
 
-    @abstractmethod
-    def add_container(self, container: Container) -> None:
+    def add_container(self, container: Type[Container]) -> None:
         """
         Add a container to the holder.
 
         Args:
             container (Container): The container to be added.
         """
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
-    def remove_container(self, container: Container) -> None:
+    def remove_container(self, container: Type[Container]) -> None:
         """
         Remove a container from the holder.
 
         Args:
             container (Container): The container to be removed.
         """
-        pass
+        raise NotImplementedError

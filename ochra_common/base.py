@@ -1,20 +1,9 @@
+from typing import Any
 import uuid
-from datetime import datetime, date
-from dataclasses import dataclass, asdict, field
-import json
-from .utils.json_helpers import CustomJSONEncoder
+from pydantic import BaseModel, Field
 
 
-def is_jsonable(x):
-    try:
-        json.dumps(x)
-        return True
-    except (TypeError, OverflowError):
-        return False
-
-
-@dataclass(kw_only=True)
-class DataModel:
+class DataModel(BaseModel):
     """
     DataModel class that serves as a base for all dataclasses that are to be stored in the database.
 
@@ -23,12 +12,12 @@ class DataModel:
         _collection (str): The name of the collection where the data model will be stored.
         _cls (str): The class name of the data model.
     """
-    id: uuid.UUID = field(init=False, default_factory=uuid.uuid4)
-    _collection: str = field(init=False, default="")
-    _cls: str = field(init=False)
+    id: uuid.UUID = Field(default_factory=uuid.uuid4)
+    cls: str = Field(default=None)
 
-    def __post_init__(self):
-        self._cls = self.__class__.__name__
+    def model_post_init(self, __context: Any) -> None:
+        self.cls = self.__class__.__name__
+        return super().model_post_init(__context)
 
     def to_json(self) -> str:
         """Convert the data model instance to a JSON string.
@@ -37,8 +26,7 @@ class DataModel:
             str: json string representation of the data model instance.
         """
 
-        out_dict = asdict(self)
-        return json.dumps(out_dict, cls=CustomJSONEncoder)
+        return self.model_dump_json()
 
     def to_dict(self) -> dict:
         """
@@ -47,15 +35,4 @@ class DataModel:
         Returns:
             dict: A dictionary representation of the data model instance.
         """
-        out_dict = asdict(self)
-        for key, value in out_dict.items():
-            if isinstance(value, uuid.UUID):
-                out_dict[key] = value.hex
-            elif isinstance(value, (datetime, date)):
-                out_dict[key] = value.isoformat()
-            elif isinstance(value, bytes):
-                # TODO: Check if this is the correct way to handle bytes with json
-                out_dict[key] = value.hex()
-            elif not is_jsonable({key: value}):
-                out_dict[key] = value.to_json()
-        return out_dict
+        return self.model_dump()

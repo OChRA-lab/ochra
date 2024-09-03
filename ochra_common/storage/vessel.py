@@ -1,11 +1,9 @@
-from abc import abstractmethod
-from dataclasses import dataclass, field
+from pydantic import Field
 from typing import List
 from .container import Container
 from .reagent import Reagent
 
 
-@dataclass(kw_only=True)
 class Vessel(Container):
     """
     Vessel Abstract class, any container that can hold reagents.
@@ -15,9 +13,8 @@ class Vessel(Container):
         reagents (List[Reagent]): A list of reagents contained in the vessel. Defaults to an empty list.
     """
     capacity_unit: str
-    reagents: List[Reagent] = field(default_factory=list)
+    reagents: List[Reagent] = Field(default_factory=list)
 
-    @abstractmethod
     def add_reagent(self, reagent: Reagent) -> None:
         """
         Add a reagent to the vessel.
@@ -25,9 +22,8 @@ class Vessel(Container):
         Args:
             reagent (Reagent): The reagent to be added.
         """
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def remove_reagent(self, reagent: Reagent) -> None:
         """
         Remove a reagent from the vessel.
@@ -35,4 +31,4 @@ class Vessel(Container):
         Args:
             reagent (Reagent): The reagent to be removed.
         """
-        pass
+        raise NotImplementedError

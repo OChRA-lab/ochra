@@ -20,14 +20,13 @@ def test_stock():
     assert stock.inventories == []
 
     # test stock methods
-    assert stock.to_json() == '{"id": "' + stock.id.hex + \
-        '", "_collection": "stocks", "_cls": "Stock", "station_id": "' + \
-        station_id.hex+'", "inventories": []}'
+    assert stock.to_json() == '{"id":"' + str(stock.id) + \
+        '","cls":"Stock","station_id":"' + \
+        str(station_id) + '","inventories":[]}'
 
-    assert stock.to_dict() == {"id": stock.id.hex,
-                               "_collection": "stocks",
-                               "_cls": "Stock",
-                               "station_id": station_id.hex,
+    assert stock.to_dict() == {"id": stock.id,
+                               "cls": "Stock",
+                               "station_id": station_id,
                                "inventories": []}
 
 
@@ -41,13 +40,12 @@ def test_inventory():
     assert inventory.containers_max_capacity == 100
 
     # test inventory methods
-    assert inventory.to_json() == '{"id": "' + inventory.id.hex + \
-        '", "_collection": "inventories", "_cls": "Inventory", "containers_max_capacity": 100' + \
-        ', "containers": [], "consumables": []}'
+    assert inventory.to_json() == '{"id":"' + str(inventory.id) + \
+        '","cls":"Inventory","containers_max_capacity":100' + \
+        ',"containers":[],"consumables":[]}'
 
-    assert inventory.to_dict() == {"id": inventory.id.hex,
-                                   "_collection": "inventories",
-                                   "_cls": "Inventory",
+    assert inventory.to_dict() == {"id": inventory.id,
+                                   "cls": "Inventory",
                                    "containers": [],
                                    "consumables": [],
                                    "containers_max_capacity": 100}
@@ -66,17 +64,17 @@ def test_device_inventory():
     assert inventory.device_id == device_id
 
     # test device inventory methods
-    assert inventory.to_json() == '{"id": "' + inventory.id.hex + \
-        '", "_collection": "inventories", "_cls": "DeviceInventory", "containers_max_capacity": 100' + \
-        ', "containers": [], "consumables": [], "device_id": "' + device_id.hex + '"}'
+    assert inventory.to_json() == '{"id":"' + str(inventory.id) + \
+        '","cls":"DeviceInventory","containers_max_capacity":100' + \
+        ',"containers":[],"consumables":[],"device_id":"' + \
+        str(device_id) + '"}'
 
-    assert inventory.to_dict() == {"id": inventory.id.hex,
-                                   "_collection": "inventories",
-                                   "_cls": "DeviceInventory",
+    assert inventory.to_dict() == {"id": inventory.id,
+                                   "cls": "DeviceInventory",
                                    "containers": [],
                                    "consumables": [],
                                    "containers_max_capacity": 100,
-                                   "device_id": device_id.hex}
+                                   "device_id": device_id}
 
 
 def test_consumables():
@@ -88,12 +86,11 @@ def test_consumables():
     assert consumable.quantity == 10
 
     # test consumable methods
-    assert consumable.to_json() == '{"id": "' + consumable.id.hex + \
-        '", "_collection": "consumables", "_cls": "Consumable", "type": "cap", "quantity": 10}'
+    assert consumable.to_json() == '{"id":"' + str(consumable.id) + \
+        '","cls":"Consumable","type":"cap","quantity":10}'
 
-    assert consumable.to_dict() == {"id": consumable.id.hex,
-                                    "_collection": "consumables",
-                                    "_cls": "Consumable",
+    assert consumable.to_dict() == {"id": consumable.id,
+                                    "cls": "Consumable",
                                     "type": "cap",
                                     "quantity": 10}
 
@@ -109,13 +106,12 @@ def test_container():
     assert container.is_used == False
 
     # test container methods
-    assert container.to_json() == '{"id": "' + container.id.hex + \
-        '", "_collection": "containers", "_cls": "Container", "type": "box"' + \
-        ', "max_capacity": 100, "physical_id": 1, "is_used": false}'
+    assert container.to_json() == '{"id":"' + str(container.id) + \
+        '","cls":"Container","type":"box"' + \
+        ',"max_capacity":100,"physical_id":1,"is_used":false}'
 
-    assert container.to_dict() == {"id": container.id.hex,
-                                   "_collection": "containers",
-                                   "_cls": "Container",
+    assert container.to_dict() == {"id": container.id,
+                                   "cls": "Container",
                                    "type": "box",
                                    "physical_id": 1,
                                    "max_capacity": 100,
@@ -133,13 +129,12 @@ def test_holder():
     assert holder.is_used == False
 
     # test holder methods
-    assert holder.to_json() == '{"id": "' + holder.id.hex + \
-        '", "_collection": "containers", "_cls": "Holder", "type": "rack"' + \
-        ', "max_capacity": 16, "physical_id": 1, "is_used": false, "containers": []}'
+    assert holder.to_json() == '{"id":"' + str(holder.id) + \
+        '","cls":"Holder","type":"rack"' + \
+        ',"max_capacity":16,"physical_id":1,"is_used":false,"containers":[]}'
 
-    assert holder.to_dict() == {"id": holder.id.hex,
-                                "_collection": "containers",
-                                "_cls": "Holder",
+    assert holder.to_dict() == {"id": holder.id,
+                                "cls": "Holder",
                                 "type": "rack",
                                 "physical_id": 1,
                                 "max_capacity": 16,
@@ -159,14 +154,13 @@ def test_vessel():
     assert vessel.is_used == False
 
     # test vessel methods
-    assert vessel.to_json() == '{"id": "' + vessel.id.hex + \
-        '", "_collection": "containers", "_cls": "Vessel", "type": "vial"' + \
-        ', "max_capacity": 5.0, "physical_id": 1, "is_used": false, "capacity_unit": "ml"' + \
-        ', "reagents": []}'
+    assert vessel.to_json() == '{"id":"' + str(vessel.id) + \
+        '","cls":"Vessel","type":"vial"' + \
+        ',"max_capacity":5.0,"physical_id":1,"is_used":false,"capacity_unit":"ml"' + \
+        ',"reagents":[]}'
 
-    assert vessel.to_dict() == {"id": vessel.id.hex,
-                                "_collection": "containers",
-                                "_cls": "Vessel",
+    assert vessel.to_dict() == {"id": vessel.id,
+                                "cls": "Vessel",
                                 "type": "vial",
                                 "physical_id": 1,
                                 "max_capacity": 5.0,
@@ -187,13 +181,12 @@ def test_reagent():
     assert reagent.properties == {}
 
     # test reagent methods
-    assert reagent.to_json() == '{"id": "' + reagent.id.hex + \
-        '", "_collection": "reagents", "_cls": "Reagent", "name": "water", "amount": 100.0' + \
-        ', "unit": "ml", "physical_state": -1, "properties": {}}'
+    assert reagent.to_json() == '{"id":"' + str(reagent.id) + \
+        '","cls":"Reagent","name":"water","amount":100.0' + \
+        ',"unit":"ml","physical_state":-1,"properties":{}}'
 
-    assert reagent.to_dict() == {"id": reagent.id.hex,
-                                 "_collection": "reagents",
-                                 "_cls": "Reagent",
+    assert reagent.to_dict() == {"id": reagent.id,
+                                 "cls": "Reagent",
                                  "name": "water",
                                  "amount": 100.0,
                                  "unit": "ml",
