@@ -5,30 +5,31 @@ from ..lab_processor import lab_service
 
 logger = logging.getLogger(__name__)
 COLLECTION = "stations"
-stations_router = APIRouter(prefix="/{COLLECTION}")
 
 
-@stations_router.post("/construct")
-async def construct_device(name: str, constructor_params: dict):
-    db_entry = {"name": name, **constructor_params}
-    return lab_service.construct_object(db_entry, COLLECTION)
+class StationRouter(APIRouter):
+    def __init__(self):
+        super().__init__(prefix=f"/{COLLECTION}")
 
+        self.post("/construct")(self.construct_station)
+        self.get(
+            "/{object_id}/get_property/{property}")(self.get_station_property)
+        self.patch("/{object_id}/modify_property")(self.modify_property)
+        self.post("/{object_id}/call_method")(self.call_method)
+        self.get("/get")(self.get_station)
 
-@stations_router.get("{object_id}/get_property/{property}")
-async def get_station_property(object_id: str, property: str):
-    return lab_service.get_object_property(object_id, COLLECTION, property)
+    async def construct_station(self, name: str, constructor_params: dict):
+        db_entry = {"name": name, **constructor_params}
+        return lab_service.construct_object(db_entry, COLLECTION)
 
+    async def get_station_property(self, object_id: str, property: str):
+        return lab_service.get_object_property(object_id, COLLECTION, property)
 
-@stations_router.patch("{object_id}/modify_property")
-async def modify_property(object_id: str, args: ObjectSet):
-    return lab_service.patch_object(object_id, COLLECTION, args)
+    async def modify_property(self, object_id: str, args: ObjectSet):
+        return lab_service.patch_object(object_id, COLLECTION, args)
 
+    async def call_method(self, object_id: str, args: ObjectCallModel):
+        return lab_service.call_on_object(object_id, COLLECTION, args)
 
-@stations_router.post("/{object_id}/call_method")
-async def call_method(object_id: str, args: ObjectCallModel):
-    return lab_service.call_on_object(object_id, COLLECTION, args)
-
-
-@stations_router.get("/get")
-async def get_station(station_name: str):
-    return lab_service.get_object_by_name(station_name, COLLECTION)
+    async def get_station(self, station_name: str):
+        return lab_service.get_object_by_name(station_name, COLLECTION)

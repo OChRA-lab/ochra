@@ -5,32 +5,31 @@ from ..lab_processor import lab_service
 
 logger = logging.getLogger(__name__)
 COLLECTION = "devices"
-devices_router = APIRouter(prefix="/{COLLECTION}")
+class DeviceRouter(APIRouter):
+    def __init__(self):
+        prefix = f"/{COLLECTION}"
+        super().__init__(prefix=prefix)
+        
+        self.post("/{station_id}/construct")(self.construct_device)
+        self.get("/{object_id}/get_property/{property}")(self.get_device_property)
+        self.patch("/{object_id}/modify_property")(self.modify_device_property)
+        self.post("/{station_id}/{object_id}/call_method")(self.call_device)
+        self.get("/{station_id}/get")(self.get_device)
 
+    async def construct_device(self, station_id: str, args: ObjectConstructionModel):
+        db_entry = args.constructor_params
+        db_entry["station_id"] = station_id
+        db_entry["_type"] = args.object_type
+        return lab_service.construct_object(db_entry, COLLECTION)
 
-@devices_router.post("{station_id}/construct")
-async def construct_device(station_id: str, args: ObjectConstructionModel):
-    db_entry = args.constructor_params
-    db_entry["station_id"] = station_id
-    db_entry["_type"] = args.object_type
-    return lab_service.construct_object(db_entry, COLLECTION)
+    async def get_device_property(self, object_id: str, property: str):
+        return lab_service.get_object_property(object_id, COLLECTION, property)
 
+    async def modify_device_property(self, object_id: str, args: ObjectSet):
+        return lab_service.patch_object(object_id, COLLECTION, args)
 
-@devices_router.get("{object_id}/get_property/{property}")
-async def get_device_property(object_id: str, property: str):
-    return lab_service.get_object_property(object_id, COLLECTION, property)
+    async def call_device(self, object_id: str, args: ObjectCallModel):
+        return lab_service.call_on_object(object_id, COLLECTION, args)
 
-
-@devices_router.patch("{object_id}/modify_property")
-async def modify_device_property(object_id: str, args: ObjectSet):
-    return lab_service.patch_object(object_id, COLLECTION, args)
-
-
-@devices_router.post("{station_id}/{object_id}/call_method")
-async def call_device(object_id: str, args: ObjectCallModel):
-    return lab_service.call_on_object(object_id, COLLECTION, args)
-
-
-@devices_router.get("{station_id}/get")
-async def get_device(station_id: str, device_name: str):
-    return lab_service.get_device(station_id, device_name)
+    async def get_device(self, station_id: str, device_name: str):
+        return lab_service.get_device(station_id, device_name)
