@@ -1,0 +1,34 @@
+import logging
+from fastapi import APIRouter
+from ..models.lab_request_models import ObjectSet, ObjectConstructionModel, ObjectCallModel
+from ..lab_processor import lab_service
+
+logger = logging.getLogger(__name__)
+COLLECTION = "robots"
+class DeviceRouter(APIRouter):
+    def __init__(self):
+        prefix = f"/{COLLECTION}"
+        super().__init__(prefix=prefix)
+        
+        self.post("/construct")(self.construct_robot)
+        self.get("/{object_id}/get_property/{property}")(self.get_property)
+        self.patch("/{object_id}/modify_property")(self.modify_property)
+        self.post("/{object_id}/call_method")(self.call_robot)
+        self.get("/get")(self.get_robot)
+
+    async def construct_robot(self, args: ObjectConstructionModel):
+        db_entry = args.constructor_params
+        db_entry["_type"] = args.object_type
+        return lab_service.construct_object(db_entry, COLLECTION)
+
+    async def get_property(self, object_id: str, property: str):
+        return lab_service.get_object_property(object_id, COLLECTION, property)
+
+    async def modify_property(self, object_id: str, args: ObjectSet):
+        return lab_service.patch_object(object_id, COLLECTION, args)
+
+    async def call_robot(self, object_id: str, args: ObjectCallModel):
+        return lab_service.call_on_object(object_id, COLLECTION, args)
+
+    async def get_robot(self, robot_name: str):
+        return lab_service.get_object_by_name(robot_name, COLLECTION)
