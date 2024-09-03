@@ -28,48 +28,47 @@ def test_operation():
     # test operation methods
     start_timestamp = datetime.now()
     end_timestamp = datetime.now() + timedelta(minutes=1)
-    operation.add_start_timestamp(start_timestamp)
-    operation.add_end_timestamp(end_timestamp)
+    operation.start_timestamp = start_timestamp
+    operation.end_timestamp = end_timestamp
 
-    assert operation.to_dict() == {"id": operation.id.hex,
-                                   "_collection": "operations",
-                                   "_cls": "Operation",
-                                   "caller_id": caller_id.hex,
+    assert operation.to_dict() == {"id": operation.id,
+                                   "cls": "Operation",
+                                   "caller_id": caller_id,
                                    "method": "test_method",
                                    "args": {"arg": 1},
                                    "status": -1,
-                                   "start_timestamp": start_timestamp.isoformat(),
-                                   "end_timestamp": end_timestamp.isoformat(),
+                                   "start_timestamp": start_timestamp,
+                                   "end_timestamp": end_timestamp,
                                    "result": []}
 
-    assert operation.to_json() == '{"id": "' + operation.id.hex + \
-        '", "_collection": "operations", "_cls": "Operation", "caller_id": "' + \
-        caller_id.hex + '", "method": "test_method", "args": {"arg": 1}, "status": -1, ' + \
-        '"start_timestamp": "' + start_timestamp.isoformat() + '", "end_timestamp": "' + \
-        end_timestamp.isoformat() + '", "result": []}'
+    assert operation.to_json() == '{"id":"' + str(operation.id) + \
+        '","cls":"Operation","caller_id":"' + \
+        str(caller_id) + '","method":"test_method","args":{"arg":1},"status":-1,' + \
+        '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
+        end_timestamp.isoformat() + '","result":[]}'
 
 
 def test_operation_result():
     # test construction of the operation result
-    result = OperationResult(type="test", data=bytes(b"test"))
+    entry_id = uuid.uuid4()
+    result = OperationResult(type="test", data_entry_id=entry_id)
 
     # test operation result attributes
     assert result.id is not None
     assert result.type == "test"
     assert result.id is not None
-    assert result._cls == "OperationResult"
-    assert result._collection == "operation_results"
-    assert result.data == bytes(b"test")
+    assert result.cls == "OperationResult"
+    assert result.data_entry_id == entry_id
 
     # test operation result methods
-    assert result.to_dict() == {"id": result.id.hex,
-                                "_collection": "operation_results",
-                                "_cls": "OperationResult",
+    assert result.to_dict() == {"id": result.id,
+                                "cls": "OperationResult",
                                 "type": "test",
-                                "data": b"test".hex()}
+                                "data_entry_id": entry_id}
 
-    assert result.to_json() == '{"id": "' + result.id.hex + \
-        '", "_collection": "operation_results", "_cls": "OperationResult", "type": "test", "data": "dGVzdA=="}'
+    assert result.to_json() == '{"id":"' + str(result.id) + \
+        '","cls":"OperationResult","type":"test","data_entry_id":"' + \
+        str(entry_id) + '"}'
 
 
 def test_device():
@@ -81,19 +80,18 @@ def test_device():
     assert device.name == "test_device"
     assert device.inventory == None
     assert device.status == -1
-    assert device.station_id == ""
+    assert device.station_id == None
     assert device.operation_history == []
 
     # test device methods
-    assert device.to_dict() == {"id": device.id.hex,
-                                "_collection": "devices",
-                                "_cls": "Device",
+    assert device.to_dict() == {"id": device.id,
+                                "cls": "Device",
                                 "name": "test_device",
                                 "inventory": None,
                                 "status": -1,
-                                "station_id": "",
+                                "station_id": None,
                                 "operation_history": []}
 
-    assert device.to_json() == '{"id": "' + device.id.hex + \
-        '", "_collection": "devices", "_cls": "Device", "name": "test_device", "inventory": null,' + \
-        ' "status": -1, "operation_history": [], "station_id": ""}'
+    assert device.to_json() == '{"id":"' + str(device.id) + \
+        '","cls":"Device","name":"test_device","inventory":null,' + \
+        '"status":-1,"operation_history":[],"station_id":null}'

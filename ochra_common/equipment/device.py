@@ -1,14 +1,12 @@
-from dataclasses import dataclass, field
+from pydantic import Field
+from enum import Enum
 from typing import List
+from uuid import UUID
 from ..base import DataModel
 from .operation import Operation
 from ..storage.device_inventory import DeviceInventory
-from enum import Enum
-
-_COLLECTION = "devices"
 
 
-@dataclass(kw_only=True)
 class Device(DataModel):
     """
     Abstract device class that contains information all devices will have.
@@ -21,13 +19,7 @@ class Device(DataModel):
         station_id (str): ID of the station which the device belongs to.
     """
     name: str
-    inventory: DeviceInventory = None
+    inventory: DeviceInventory = Field(default=None)
     status: Enum = -1  # TODO: Define DeviceStatus Enum
-    operation_history: List[Operation] = field(
-        init=False, default_factory=list)
-    station_id: str = field(default="")  # TODO: use uuid.UUID
-    # station_id: str = field(init=False, default="")  # TODO: use uuid.UUID
-
-    def __post_init__(self):
-        self._collection = _COLLECTION
-        return super().__post_init__()
+    operation_history: List[Operation] = Field(default_factory=list)
+    station_id: UUID = Field(default=None)
