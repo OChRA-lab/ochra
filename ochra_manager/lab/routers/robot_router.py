@@ -5,7 +5,7 @@ from ..lab_processor import lab_service
 
 logger = logging.getLogger(__name__)
 COLLECTION = "robots"
-class DeviceRouter(APIRouter):
+class RobotRouter(APIRouter):
     def __init__(self):
         prefix = f"/{COLLECTION}"
         super().__init__(prefix=prefix)
