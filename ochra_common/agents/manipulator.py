@@ -1,20 +1,17 @@
-from abc import abstractmethod
-from dataclasses import dataclass
+from typing import List
 from .robot import Robot
 from .robot_task import RobotTask
 
 
-@dataclass
 class Manipulator(Robot):
     """
     Abstract manipulator robot that can execute tasks.
 
     Attributes:
-        tasks (list[RobotTask]): A list of tasks assigned to the manipulator.
+        tasks (List[RobotTask]): A list of tasks assigned to the manipulator.
     """
-    tasks: list[RobotTask]
+    available_tasks: List[str]
 
-    @abstractmethod
     def execute(self, robot_task: RobotTask) -> bool:
         """
         Execute a given robot task.
@@ -25,4 +22,4 @@ class Manipulator(Robot):
         Returns:
             bool: True if the task was executed successfully
         """
-        pass
+        raise NotImplementedError

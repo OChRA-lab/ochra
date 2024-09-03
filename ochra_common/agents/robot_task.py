@@ -1,9 +1,7 @@
-from dataclasses import dataclass
 from .task import Task
 from enum import Enum
 
 
-@dataclass
 class RobotTask(Task):
     """
     Abstract task specifically for robots.
@@ -11,4 +9,4 @@ class RobotTask(Task):
     Attributes:
         priority (Enum): The priority level of the task.
     """
-    priority: Enum
+    priority: Enum = -1  # TODO: Define Enum for robot task priority

@@ -1,10 +1,9 @@
-from abc import abstractmethod
-from dataclasses import dataclass
+from pydantic import Field
+from typing import Dict, Any
 from .robot import Robot
 from ..spaces.location import Location
 
 
-@dataclass
 class MobilePlatform(Robot):
     """
     Abstract mobile platform robot that can move.
@@ -12,9 +11,8 @@ class MobilePlatform(Robot):
     Attributes:
         conditions (dict): A dictionary of conditions related to the mobile platform.
     """
-    conditions: dict
+    conditions: Dict[str, Any] = Field(default_factory=dict)
 
-    @abstractmethod
     def go_to(self, location: Location) -> bool:
         """
         Move the mobile platform to a specified location.
@@ -25,4 +23,4 @@ class MobilePlatform(Robot):
         Returns:
             bool: True if the platform successfully moved to the location
         """
-        pass
+        raise NotImplementedError
