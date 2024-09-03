@@ -1,10 +1,6 @@
-from dataclasses import dataclass
 from ..base import DataModel
 
-_COllECTION = "locations"
 
-
-@dataclass(kw_only=True)
 class Location(DataModel):
     """
     Abstract location to correspond to a physical location.
@@ -17,10 +13,6 @@ class Location(DataModel):
     name: str
     map: str
     map_id: int
-
-    def __post_init__(self):
-        self._collection = _COllECTION
-        return super().__post_init__()
 
     def __eq__(self, value: "Location") -> bool:
         return value.name == self.name and value.map == self.map and value.map_id == self.map_id

@@ -20,9 +20,9 @@ def test_location():
     assert location.map_id == 1
 
     # test location methods
-    assert location.to_json() == '{"id": "' + location.id.hex + \
-        '", "_collection": "locations", "_cls": "Location", "name": "test_location", ' + \
-        '"map": "test_map", "map_id": 1}'
+    assert location.to_json() == '{"id":"' + str(location.id) + \
+        '","cls":"Location","name":"test_location",' + \
+        '"map":"test_map","map_id":1}'
 
     # test location equality
     assert location == Location(
@@ -52,10 +52,24 @@ def test_station():
     assert station.stock == None
 
     # test station methods
-    assert station.to_json() == '{"id": "' + station.id.hex + \
-        '", "_collection": "stations", "_cls": "Station", "name": "test_station", ' + \
-        '"location": {"id": "' + station.location.id.hex + '", "_collection": "locations", "_cls": "Location", ' + \
-        '"name": "test_location", "map": "test_map", "map_id": 1}, "stock": null}'
+    assert station.to_json() == '{"id":"' + str(station.id) + \
+        '","cls":"Station","name":"test_station",' + \
+        '"location":{"id":"' + str(station.location.id) + '","cls":"Location",' + \
+        '"name":"test_location","map":"test_map","map_id":1},"stock":null}'
+
+    assert station.to_dict() == {
+        "id": station.id,
+        "cls": "Station",
+        "name": "test_station",
+        "location": {
+            "id": station.location.id,
+            "cls": "Location",
+            "name": "test_location",
+            "map": "test_map",
+            "map_id": 1,
+        },
+        "stock": None,
+    }
 
 
 def test_work_station():
@@ -79,10 +93,25 @@ def test_work_station():
     assert work_station.devices == []
 
     # test work station methods
-    assert work_station.to_json() == '{"id": "' + work_station.id.hex + \
-        '", "_collection": "stations", "_cls": "WorkStation", "name": "test_work_station", ' + \
-        '"location": {"id": "' + work_station.location.id.hex + '", "_collection": "locations", "_cls": "Location", ' + \
-        '"name": "test_location", "map": "test_map", "map_id": 1}, "stock": null, "devices": []}'
+    assert work_station.to_dict() == {
+        "id": work_station.id,
+        "cls": "WorkStation",
+        "name": "test_work_station",
+        "location": {
+            "id": work_station.location.id,
+            "cls": "Location",
+            "name": "test_location",
+            "map": "test_map",
+            "map_id": 1,
+        },
+        "stock": None,
+        "devices": [],
+    }
+
+    assert work_station.to_json() == '{"id":"' + str(work_station.id) + \
+        '","cls":"WorkStation","name":"test_work_station",' + \
+        '"location":{"id":"' + str(work_station.location.id) + '","cls":"Location",' + \
+        '"name":"test_location","map":"test_map","map_id":1},"stock":null,"devices":[]}'
 
 
 def test_storage_station():
@@ -105,10 +134,24 @@ def test_storage_station():
     assert storage_station.stock == None
 
     # test storage station methods
-    assert storage_station.to_json() == '{"id": "' + storage_station.id.hex + \
-        '", "_collection": "stations", "_cls": "StorageStation", "name": "test_storage_station", ' + \
-        '"location": {"id": "' + storage_station.location.id.hex + '", "_collection": "locations", "_cls": "Location", ' + \
-        '"name": "test_location", "map": "test_map", "map_id": 1}, "stock": null}'
+    assert storage_station.to_dict() == {
+        "id": storage_station.id,
+        "cls": "StorageStation",
+        "name": "test_storage_station",
+        "location": {
+            "id": storage_station.location.id,
+            "cls": "Location",
+            "name": "test_location",
+            "map": "test_map",
+            "map_id": 1,
+        },
+        "stock": None,
+    }
+
+    assert storage_station.to_json() == '{"id":"' + str(storage_station.id) + \
+        '","cls":"StorageStation","name":"test_storage_station",' + \
+        '"location":{"id":"' + str(storage_station.location.id) + '","cls":"Location",' + \
+        '"name":"test_location","map":"test_map","map_id":1},"stock":null}'
 
 
 def test_lab():
@@ -120,5 +163,12 @@ def test_lab():
     assert lab.agents == []
 
     # test lab methods
-    assert lab.to_json() == '{"id": "' + lab.id.hex + \
-        '", "_collection": "labs", "_cls": "Lab", "stations": [], "agents": []}'
+    assert lab.to_dict() == {
+        "id": lab.id,
+        "cls": "Lab",
+        "stations": [],
+        "agents": [],
+    }
+
+    assert lab.to_json() == '{"id":"' + str(lab.id) + \
+        '","cls":"Lab","stations":[],"agents":[]}'

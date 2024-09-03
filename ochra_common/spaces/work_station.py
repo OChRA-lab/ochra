@@ -1,12 +1,10 @@
-from abc import abstractmethod
-from dataclasses import dataclass, field
-from typing import List
+from pydantic import Field
+from typing import List, Union, Type
+from uuid import UUID
 from .station import Station
 from ..equipment.device import Device
-from uuid import UUID
 
 
-@dataclass
 class WorkStation(Station):
     """
     WorkStation class that represents a station with devices.
@@ -14,10 +12,9 @@ class WorkStation(Station):
     Attributes:
         devices (List[Device]): A list of devices associated with the workstation.
     """
-    devices: List[Device] = field(default_factory=list)
+    devices: List[Type[Device]] = Field(default_factory=list)
 
-    @abstractmethod
-    def get_device(self, device: Device | str | UUID) -> Device:
+    def get_device(self, device: Union[Type[Device], str, UUID]) -> Type[Device]:
         """
         Retrieve a device from the workstation.
 
@@ -27,4 +24,4 @@ class WorkStation(Station):
         Returns:
             Device: The retrieved device.
         """
-        pass
+        raise NotImplementedError
