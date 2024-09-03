@@ -5,8 +5,8 @@ import uvicorn
 import logging
 
 from .lab_processor import lab_service
-from .routers.device_router import devices_router
-from .routers.station_router import stations_router
+from .routers.device_router import DeviceRouter
+from .routers.station_router import StationRouter
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +17,8 @@ class LabCommunication():
         self.port = port
         self.app = FastAPI()
 
-        self.app.include_router(devices_router)
-        self.app.include_router(stations_router)
+        self.app.include_router(DeviceRouter())
+        self.app.include_router(StationRouter())
 
     def run(self):
         logger.info("started server")
