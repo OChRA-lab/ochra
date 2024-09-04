@@ -93,6 +93,7 @@ class MongoAdapter:
         if query is not None:
             result = collection.find(query)
         else:
+            object_id = db_data["id"]
             query = {"id": object_id}
             result = collection.find_one(query)
 
