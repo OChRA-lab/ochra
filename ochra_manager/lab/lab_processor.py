@@ -56,8 +56,7 @@ class lab_service():
             raise HTTPException(status_code=404, detail=str(e))
         try:
 
-            logger.debug(f"attempting {args.property} to {
-                         args.property_value}")
+            logger.debug(f"attempting {args.property} to {args.property_value}")  # noqa
 
             db_conn.update({"id": object_id,
                             "_collection": collection},
@@ -87,7 +86,7 @@ class lab_service():
         return id
 
     @staticmethod
-    def call_on_object(object_id, collection, call: ObjectCallModel):
+    def call_on_object(object_id, collection, call: ObjectCallRequest):
         """call method of object on object
 
         Args:
@@ -109,8 +108,8 @@ class lab_service():
 
             # call operation on station
             result = station.execute_op(
-                call.object_function, db_conn.read({"id": object_id, "_collection": collection},
-                                                   "name"), **call.args)
+                call.method, db_conn.read({"id": object_id, "_collection": collection},
+                                          "name"), **call.args)
             # return
 
         except (InvalidId, TypeError) as e:
@@ -120,7 +119,7 @@ class lab_service():
             logger.error(e)
             raise HTTPException(status_code=500, detail=str(e))
 
-        logger.info(f"called {call.object_function} on {object_id}")
+        logger.info(f"called {call.method} on {object_id}")
 
         return result
 
