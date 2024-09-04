@@ -14,7 +14,7 @@ from ochra_manager.lab.models.lab_api_models import ObjectCallResponse, ObjectCo
 from ochra_manager.lab.models.operation import Operation
 from ochra_manager.lab.models.DbObject import DbObject
 from mongoengine import ValidationError
-from ochra_common.connections.db_connection import DbConnection
+from ..connections.db_connection import DbConnection
 import uuid
 
 
@@ -158,5 +158,6 @@ class lab_service():
 
     @staticmethod
     def get_object_by_name(name, collection):
-        # TODO: implement this
-        pass
+        # I DONT LIKE THIS I NEED TO COME UP WITH A BETTER SOLUTION
+        db_conn: DbConnection = DbConnection()
+        return db_conn.read({"_collection": collection}, query={"name": name})
