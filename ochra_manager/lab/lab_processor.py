@@ -153,6 +153,5 @@ class lab_service():
             raise HTTPException(status_code=404, detail=str(e))
 
     def get_object_by_name(self, name, collection):
-        # I DONT LIKE THIS I NEED TO COME UP WITH A BETTER SOLUTION
 
-        return self.db_conn.read({"_collection": collection}, query={"name": name})
+        return self.db_conn.find({"_collection": collection}, {"name": name})
