@@ -1,6 +1,6 @@
 import logging
 from fastapi import APIRouter
-from ..models.lab_api_models import ObjectCallRequest, ObjectPropertySetRequest, ObjectConstructionRequest, ObjectQueryResponse
+from ochra_common.connections.api_models import ObjectCallRequest, ObjectPropertySetRequest, ObjectConstructionRequest, ObjectQueryResponse
 from ..lab_processor import lab_service
 from typing import Any
 
