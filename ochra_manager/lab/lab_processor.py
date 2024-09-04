@@ -56,7 +56,8 @@ class lab_service():
             raise HTTPException(status_code=404, detail=str(e))
         try:
 
-            logger.debug(f"attempting {args.property} to {args.property_value}")
+            logger.debug(f"attempting {args.property} to {
+                         args.property_value}")
 
             db_conn.update({"id": object_id,
                             "_collection": collection},
@@ -70,20 +71,20 @@ class lab_service():
         return True
 
     @staticmethod
-    def construct_object(args: ObjectConstructionModel, collection):
+    def construct_object(args: ObjectConstructionRequest, collection):
         """construct object of given type in db and instance
 
         Args:
-            args (ObjectConstructionModel): Object construction model message
+            args (ObjectConstructionRequest): Object construction model message
 
         Returns:
             str: object id of constructed object
         """
         db_conn: DbConnection = DbConnection()
-        string = "created object of type {} with params {}"
-        string = string.format(args.object_type, args.contstructor_params)
-        db_conn.create({"_collection": collection}, args.contstructor_params)
-        return uuid.UUID(args.contstructor_params["id"])
+        string = "created object of type {}}"
+        string = string.format(args.object._cls)
+        id = db_conn.create({"_collection": collection}, args.object)
+        return id
 
     @staticmethod
     def call_on_object(object_id, collection, call: ObjectCallModel):
