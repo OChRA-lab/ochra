@@ -39,3 +39,7 @@ class DbConnection(metaclass=SingletonMeta):
     def delete(self, db_data):
         """Delete documents from the specified collection that match the query."""
         return self.db_adapter.delete(db_data)
+
+    def find(self, db_data, search_params: dict):
+        """Find documents from the specified collection that match the query."""
+        return self.db_adapter.find(db_data, search_params)

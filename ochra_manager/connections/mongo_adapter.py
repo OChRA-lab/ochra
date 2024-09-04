@@ -82,20 +82,16 @@ class MongoAdapter:
         else:
             return collection.insert_one(document).inserted_id
 
-    def read(self, db_data, property, file=False, query=None):
+    def read(self, db_data, property, file=False):
         """Read documents from the specified collection that match the query."""
+        object_id = db_data["id"]
         collection = db_data["_collection"]
         if file:
-            object_id = db_data["id"]
             return self.fs.get(object_id).read()
 
         collection = self._db_client[self._db_name][collection]
-        if query is not None:
-            result = collection.find(query)
-        else:
-            object_id = db_data["id"]
-            query = {"id": object_id}
-            result = collection.find_one(query)
+        query = {"id": object_id}
+        result = collection.find_one(query)
 
         if property and result is not None:
             return result[property]
@@ -116,3 +112,9 @@ class MongoAdapter:
         """Delete documents from the specified collection that match the query."""
         collection = self._db_client[self._db_name][collection]
         return collection.delete_many(query)
+
+    def find(self, db_data, search_params):
+        """Find documents from the specified collection that match the query."""
+        collection = db_data["_collection"]
+        collection = self._db_client[self._db_name][collection]
+        return collection.find(search_params)
