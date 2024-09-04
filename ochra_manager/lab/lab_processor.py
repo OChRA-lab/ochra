@@ -5,14 +5,14 @@ import importlib
 import logging
 import pkgutil
 from typing import Any
-from ochra_common.connections.station_connection import StationConnection
+from ..connections.station_connection import StationConnection
 from fastapi import HTTPException, Request
 from bson import ObjectId
 from bson.errors import InvalidId
-from ochra_manager.lab.models.lab_api_models import ObjectCallRequest, ObjectPropertySetRequest
-from ochra_manager.lab.models.lab_api_models import ObjectCallResponse, ObjectConstructionRequest
-from ochra_manager.lab.models.operation import Operation
-from ochra_manager.lab.models.DbObject import DbObject
+from ochra_common.connections.api_models import ObjectCallRequest, ObjectPropertySetRequest
+from ochra_common.connections.api_models import ObjectCallResponse, ObjectConstructionRequest
+from .models.operation import Operation
+from .models.DbObject import DbObject
 from mongoengine import ValidationError
 from ..connections.db_connection import DbConnection
 import uuid
