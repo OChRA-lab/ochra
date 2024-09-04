@@ -29,3 +29,24 @@ class LabConnection(metaclass=SingletonMeta):
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger)
 
+    def construct_object():
+        pass
+    
+    def get_object_by_name():
+        pass
+    
+    def get_object_by_uuid():
+        pass
+    
+    def delete_object():
+        pass
+    
+    def call_on_object():
+        pass
+    
+    def get_property():
+        pass
+    
+    def set_property():
+        pass
+    
