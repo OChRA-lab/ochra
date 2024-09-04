@@ -2,8 +2,6 @@
 
 from typing import Dict, Any
 from pydantic import BaseModel
-from ochra_common.base import DataModel
-from dataclasses import dataclass
 from uuid import UUID
 
 
