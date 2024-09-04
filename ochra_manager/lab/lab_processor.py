@@ -9,7 +9,8 @@ from ochra_common.connections.station_connection import StationConnection
 from fastapi import HTTPException, Request
 from bson import ObjectId
 from bson.errors import InvalidId
-from ochra_manager.lab.models.lab_request_models import ObjectSet, ObjectConstructionModel, ObjectCallModel
+from ochra_manager.lab.models.lab_api_models import ObjectCallRequest, ObjectPropertySetRequest
+from ochra_manager.lab.models.lab_api_models import ObjectCallResponse, ObjectConstructionRequest
 from ochra_manager.lab.models.operation import Operation
 from ochra_manager.lab.models.DbObject import DbObject
 from mongoengine import ValidationError
@@ -35,7 +36,7 @@ class lab_service():
     #     return clientHost
 
     @staticmethod
-    def patch_object(object_id, collection, args: ObjectSet):
+    def patch_object(object_id, collection, args: ObjectPropertySetRequest):
         """patch properties of object_id using args key-value pairs
 
         Args:
@@ -54,15 +55,14 @@ class lab_service():
             logger.info(f"{object_id} does not exist")
             raise HTTPException(status_code=404, detail=str(e))
         try:
-            for arg in args.properties.keys():
 
-                logger.debug(f"attempting {arg} to {args.properties[arg]}")
+            logger.debug(f"attempting {args.property} to {args.property_value}")
 
-                db_conn.update({"id": object_id,
-                                "_collection": collection},
-                               {arg: args.properties[arg]})
+            db_conn.update({"id": object_id,
+                            "_collection": collection},
+                           {args.property: args.property_value})
 
-                logger.info(f"changed {arg} to {args.properties[arg]}")
+            logger.info(f"changed {args.property} to {args.property_value}")
 
         except Exception as e:
             logger.error(e)
