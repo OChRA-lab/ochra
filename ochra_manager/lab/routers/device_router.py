@@ -1,6 +1,6 @@
 import logging
 from fastapi import APIRouter
-from ..models.lab_api_models import ObjectCallRequest, ObjectCallResponse, ObjectPropertySetRequest, ObjectConstructionRequest, ObjectQueryResponse
+from ..models.lab_api_models import ObjectCallRequest, ObjectPropertySetRequest, ObjectConstructionRequest, ObjectQueryResponse
 from ..lab_processor import lab_service
 from typing import Any
 
@@ -28,8 +28,8 @@ class DeviceRouter(APIRouter):
     async def modify_device_property(self, object_id: str, args: ObjectPropertySetRequest):
         return lab_service.patch_object(object_id, COLLECTION, args)
 
-    async def call_device(self, object_id: str, args: ObjectCallRequest) -> ObjectCallResponse:
+    async def call_device(self, object_id: str, args: ObjectCallRequest):
         return lab_service.call_on_object(object_id, COLLECTION, args)
 
-    async def get_device(self, station_id: str, device_name: str) -> Any | ObjectQueryResponse:
+    async def get_device(self, station_id: str, device_name: str):
         return lab_service.get_device(station_id, device_name)
