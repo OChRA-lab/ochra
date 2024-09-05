@@ -19,6 +19,10 @@ class RestProxyMixin:
             # Set the property on the class with the custom getter and setter
             setattr(self.__class__, field, property(getter, setter))
 
+    def _lab_init(self, endpoint: str) -> None:
+        lab_conn: LabConnection = LabConnection()
+        lab_conn.construct_object(endpoint, self)
+
 
 class RestProxyMixinReadOnly:
 
@@ -34,3 +38,7 @@ class RestProxyMixinReadOnly:
 
             # Set the property on the class with the custom getter and setter
             setattr(self.__class__, field, property(getter, setter))
+
+    def _lab_init(self, endpoint: str, name: str) -> None:
+        lab_conn: LabConnection = LabConnection()
+        lab_conn.get_object_by_name(endpoint, name)
