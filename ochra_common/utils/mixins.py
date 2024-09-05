@@ -1,4 +1,5 @@
 from uuid import UUID
+from ..connections.lab_connection import LabConnection
 
 
 class RestProxyMixin:
@@ -7,11 +8,16 @@ class RestProxyMixin:
         for field in self.model_fields.keys():
 
             def getter(self, name=field):
-                value = f"GET {endpoint}/{id}/get_property/{name}"
-                return value
+                lab_conn: LabConnection = LabConnection()
+                return lab_conn.get_property(endpoint, id, name)
 
             def setter(self, value, name=field):
-                print(f"PATCH {endpoint}/{id}/set_property/{name} -> {value}")
+                lab_conn: LabConnection = LabConnection()
+                print(f"set {name} to {value}")
+                return lab_conn.set_property(endpoint, id, name, value)
 
             # Set the property on the class with the custom getter and setter
             setattr(self.__class__, field, property(getter, setter))
+
+
+
