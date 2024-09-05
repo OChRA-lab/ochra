@@ -1,9 +1,11 @@
 from ika_plate.abstract import IkaPlateAbstract
-from ochra_common.utils.db_decorator import frontend_db
+from ochra_common.utils.mixins import RestProxyMixin
 
 
-@frontend_db(isDevice=True)
-class IkaPlate(IkaPlateAbstract):
+class IkaPlate(IkaPlateAbstract, RestProxyMixin):
+    def __init__(self):
+        self._mixin_hook("devices", self.id)
+        self._lab_init("devices")
 
     def set_temperature(self, temperature: int) -> bool:
         print("do the thing")
