@@ -1,5 +1,7 @@
 from ochra_common.utils.singleton_meta import SingletonMeta
 from ochra_common.connections.rest_adapter import RestAdapter, Result, LabEngineException
+from .api_models import ObjectConstructionRequest
+from uuid import UUID
 import logging
 
 
@@ -29,24 +31,31 @@ class LabConnection(metaclass=SingletonMeta):
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger)
 
-    def construct_object():
-        pass
-    
+    def construct_object(self, type: str, object) -> UUID:
+        req = ObjectConstructionRequest(object=object)
+        result: Result = self.rest_adapter.put(
+            f"/{type}/construct", req)
+        try:
+            id = UUID(result.data)
+            return id
+        except ValueError:
+            raise LabEngineException(
+                f"Expected UUID, got {result.data}")
+
     def get_object_by_name():
         pass
-    
+
     def get_object_by_uuid():
         pass
-    
+
     def delete_object():
         pass
-    
+
     def call_on_object():
         pass
-    
+
     def get_property():
         pass
-    
+
     def set_property():
         pass
-    
