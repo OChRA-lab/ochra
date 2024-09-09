@@ -79,7 +79,7 @@ class LabConnection(metaclass=SingletonMeta):
 
     def get_property(self, type: str, id: UUID, property: str) -> Any | ObjectQueryResponse:
         result: Result = self.rest_adapter.get(
-            f"/{type}/{id.hex}/get_property", {"id": id.hex, "property": property})
+            f"/{type}/{id.hex}/get_property/{property}")
         try:
             return ObjectQueryResponse(**result.data)
         except ValueError:
@@ -88,5 +88,8 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(
                 f"Unexpected error: {e}")
 
-    def set_property():
-        pass
+    def set_property(self, type: str, id: UUID, property: str, value: Any):
+        req = ObjectPropertySetRequest(property=property, value=value)
+        result: Result = self.rest_adapter.post(
+            f"/{type}/{id.hex}/modify_property", req.model_dump_json())
+        return result.data
