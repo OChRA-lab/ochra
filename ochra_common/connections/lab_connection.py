@@ -83,8 +83,7 @@ class LabConnection(metaclass=SingletonMeta):
         try:
             return ObjectQueryResponse(**result.data)
         except ValueError:
-            raise LabEngineException(
-                f"Expected ObjectQueryResponse, got {result.data}")
+            return result.data
         except Exception as e:
             raise LabEngineException(
                 f"Unexpected error: {e}")
