@@ -58,11 +58,20 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(
                 f"Unexpected error: {e}")
 
-    def get_object_by_uuid():
-        pass
+    def get_object_by_uuid(self, type: str, id: UUID) -> ObjectQueryResponse:
+        result: Result = self.rest_adapter.get(f"/{type}/get_by_id/{id.hex}")
+        try:
+            return ObjectQueryResponse(**result.data)
+        except ValueError:
+            raise LabEngineException(
+                f"Expected ObjectQueryResponse, got {result.data}")
+        except Exception as e:
+            raise LabEngineException(
+                f"Unexpected error: {e}")
 
-    def delete_object():
-        pass
+    def delete_object(self, type: str, id: UUID):
+        result: Result = self.rest_adapter.delete(f"/{type}/delete/{id.hex}")
+        return result.data
 
     def call_on_object(self, type: str, id: UUID, method: str, args: dict) -> ObjectCallResponse:
         req = ObjectCallRequest(method=method, args=args)
