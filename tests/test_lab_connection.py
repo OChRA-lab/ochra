@@ -1,7 +1,10 @@
 import pytest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, create_autospec
 from ochra_common.connections.lab_connection import LabConnection
-from ochra_common.connections.rest_adapter import LabEngineException
+from ochra_common.connections.rest_adapter import LabEngineException, RestAdapter
+from uuid import UUID, uuid4
+import json
+from pydantic import BaseModel, Field, ValidationError
 
 
 @pytest.fixture
@@ -9,77 +12,152 @@ def lab_connection():
     with pytest.MonkeyPatch.context() as mocker:
         mock_rest = MagicMock()
         mocker.setattr("ochra_common.connections.rest_adapter.RestAdapter",
-                  lambda *args, **kwargs: mock_rest)
-        lab_conn = LabConnection(hostname="test_host", api_key="test_key", ssl_verify=False)
+                       lambda *args, **kwargs: mock_rest)
+        lab_conn = LabConnection(hostname="test_host",
+                                 api_key="test_key", ssl_verify=False)
+        lab_conn.rest_adapter = mock_rest
     return lab_conn, mock_rest
+
+
+class TestDataModel(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
+    cls: str = Field(default=None)
+    params: dict = Field(default=None)
 
 
 def test_construct_object(lab_connection):
     lab_conn, mock_rest = lab_connection
+
+    test_data = TestDataModel(cls="test_type", params={"param": "value"})
+    mock_result = MagicMock(data=test_data.id.hex)
+    mock_result.json.return_value = {
+        "data": test_data.id.hex}
+    mock_rest.put.return_value = mock_result
+
+    result = lab_conn.construct_object("test_type", test_data)
+    mock_rest.put.assert_called_once_with(
+        "/test_type/construct",
+        '{"object":{"id":"' + str(test_data.id) +
+        '","cls":"test_type","params":{"param":"value"}}}'
+    )
+    assert result == UUID(test_data.id.hex)
+
+    mock_rest.put.return_value = MagicMock(data="invalid_data")
     with pytest.raises(LabEngineException):
-        mock_result = MagicMock(data={"id": "test_object_id"})
-        mock_rest.post.return_value = mock_result
-        result = lab_conn.construct_object(
-            object_type=str, catalogue_module="test_module", param1="value1")
-        mock_rest.post.assert_called_once_with(
-            endpoint="object/construct",
-            data={
-                "object_type": "str",
-                "catalogue_module": "test_module",
-                "contstructor_params": {"param1": "value1"}
-            }
-        )
-        assert result == {"id": "test_object_id"}
+        lab_conn.construct_object("test_type", test_data)
+
+
+def test_get_object_by_name(lab_connection):
+    lab_conn, mock_rest = lab_connection
+
+    id = uuid4()
+
+    mock_result = MagicMock(data={"id": id.hex, "cls": "test_cls"})
+    mock_rest.get.return_value = mock_result
+
+    result = lab_conn.get_object_by_name("test_type", "test_name")
+    mock_rest.get.assert_called_once_with(
+        "/test_type/get", {"name": "test_name"})
+    assert result.id == id
+    assert result.cls == "test_cls"
+
+    mock_rest.get.return_value = MagicMock(data="invalid_data")
+    with pytest.raises(LabEngineException):
+        lab_conn.get_object_by_name("test_type", "test_name")
+
+
+def test_get_object_by_uuid(lab_connection):
+    lab_conn, mock_rest = lab_connection
+    lab_conn.rest_adapter = mock_rest
+
+    id = UUID("123e4567-e89b-12d3-a456-426614174000")
+
+    mock_result = MagicMock(data={"id": id.hex, "cls": "test_cls"})
+    mock_rest.get.return_value = mock_result
+
+    result = lab_conn.get_object_by_uuid(
+        "test_type", UUID("123e4567-e89b-12d3-a456-426614174000"))
+    mock_rest.get.assert_called_once_with(
+        "/test_type/get_by_id/123e4567e89b12d3a456426614174000")
+    assert result.id == id
+    assert result.cls == "test_cls"
+
+    mock_rest.get.return_value = MagicMock(data="invalid_data")
+    with pytest.raises(LabEngineException):
+        lab_conn.get_object_by_uuid("test_type", UUID(
+            "123e4567-e89b-12d3-a456-426614174000"))
+
+
+def test_delete_object(lab_connection):
+    lab_conn, mock_rest = lab_connection
+
+    id = UUID("123e4567-e89b-12d3-a456-426614174000")
+
+    mock_result = MagicMock(data="deleted")
+    mock_rest.delete.return_value = mock_result
+
+    result = lab_conn.delete_object("test_type", id)
+    mock_rest.delete.assert_called_once_with(
+        "/test_type/delete/123e4567e89b12d3a456426614174000")
+    assert result == "deleted"
 
 
 def test_call_on_object(lab_connection):
     lab_conn, mock_rest = lab_connection
+
+    id = UUID("123e4567-e89b-12d3-a456-426614174000")
+
+    mock_result = MagicMock(
+        data={"return_data": "called", "status_code": 200, "msg": "success"})
+    mock_rest.post.return_value = mock_result
+
+    result = lab_conn.call_on_object(
+        "test_type", id, "test_method", {"arg": "value"})
+    mock_rest.post.assert_called_once_with(
+        "/test_type/123e4567e89b12d3a456426614174000/call_method", '{"method":"test_method","args":{"arg":"value"}}'
+    )
+    assert result.return_data == "called"
+    assert result.status_code == 200
+    assert result.msg == "success"
+
+    mock_rest.post.return_value = MagicMock(data="invalid_data")
     with pytest.raises(LabEngineException):
-        mock_result = MagicMock(data="function_called")
-        mock_rest.post.return_value = mock_result
-        result = lab_conn.call_on_object(
-            object_id="test_id", object_function="test_function", arg1="value1")
-        mock_rest.post.assert_called_once_with(
-            endpoint=f"object/call/test_id",
-            data={
-                "object_function": "test_function",
-                "args": {"arg1": "value1"}
-            }
-        )
-        assert result.data == "function_called"
-        
-        
-def test_get_object(lab_connection):
+        lab_conn.call_on_object("test_type", UUID(
+            "123e4567-e89b-12d3-a456-426614174000"), "test_method", {"arg": "value"})
+
+
+def test_get_property(lab_connection):
     lab_conn, mock_rest = lab_connection
+    id = UUID("123e4567-e89b-12d3-a456-426614174000")
+    mock_result = MagicMock(data={"id": id.hex, "cls": "test_cls"})
+    mock_rest.get.return_value = mock_result
+
+    result = lab_conn.get_property("test_type", id, "test_property")
+    mock_rest.get.assert_called_once_with(
+        "/test_type/123e4567e89b12d3a456426614174000/get_property/test_property")
+    assert result.id == id
+    assert result.cls == "test_cls"
+    # TODO: this currently doenst work but im unsure how the message gets returned anyway so ill come back to it
+    mock_rest.get.return_value = MagicMock(data="property_value")
+
+    result = lab_conn.get_property("test_type", id, "test_property")
+    assert result == "property_value"
+
+    mock_rest.get.return_value = MagicMock(data="invalid_data")
     with pytest.raises(LabEngineException):
-        mock_result = MagicMock(data={"id": "test_id", "name": "test_name"})
-        mock_rest.get.return_value = mock_result
-        result = lab_conn.get_object(object_id="test_id")
-        mock_rest.get.assert_called_once_with(endpoint=f"object/get/test_id")
-        assert result == {"id": "test_id", "name": "test_name"}
- 
- 
-def test_patch_object(lab_connection):
+        lab_conn.get_property("test_type", id, "test_property")
+
+
+def test_set_property(lab_connection):
     lab_conn, mock_rest = lab_connection
-    with pytest.raises(LabEngineException):
-        mock_result = MagicMock(data="object_patched")
-        mock_rest.patch.return_value = mock_result
-        result = lab_conn.patch_object(
-            object_id="test_id", property1="value1")
-        mock_rest.patch.assert_called_once_with(
-            endpoint=f"object/set/test_id",
-            data={"properties": {"property1": "value1"}}
-        )
-        assert result.data == "object_patched"
-        
-        
-def test_create_station(lab_connection):
-    lab_conn, mock_rest = lab_connection
-    with pytest.raises(LabEngineException):
-        mock_result = MagicMock(data={"id": "new_station_id"})
-        mock_result.data = {"id": "new_station_id"}
-        mock_rest.post.return_value = mock_result
-        result = lab_conn.create_station()
-        mock_rest.post.assert_called_once_with(endpoint="station/create")
-        assert result == {"id": "new_station_id"}
-        
+
+    id = UUID("123e4567-e89b-12d3-a456-426614174000")
+
+    mock_result = MagicMock(data="property_set")
+    mock_rest.post.return_value = mock_result
+
+    result = lab_conn.set_property("test_type", id, "test_property", "value")
+    mock_rest.post.assert_called_once_with(
+        "/test_type/123e4567e89b12d3a456426614174000/modify_property", '{"property":"test_property","property_value":"value"}'
+    )
+    assert result == "property_set"
