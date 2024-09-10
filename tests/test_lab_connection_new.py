@@ -137,7 +137,7 @@ def test_get_property(lab_connection):
         "/test_type/123e4567e89b12d3a456426614174000/get_property/test_property")
     assert result.id == id
     assert result.cls == "test_cls"
-
+    # TODO: this currently doenst work but im unsure how the message gets returned anyway so ill come back to it
     mock_rest.get.return_value = MagicMock(data="property_value")
 
     result = lab_conn.get_property("test_type", id, "test_property")
