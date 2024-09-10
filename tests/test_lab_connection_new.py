@@ -158,6 +158,6 @@ def test_set_property(lab_connection):
 
     result = lab_conn.set_property("test_type", id, "test_property", "value")
     mock_rest.post.assert_called_once_with(
-        "/test_type/123e4567e89b12d3a456426614174000/modify_property", '{"property":"test_property","property_value": "value"}'
+        "/test_type/123e4567e89b12d3a456426614174000/modify_property", '{"property":"test_property","property_value":"value"}'
     )
     assert result == "property_set"
