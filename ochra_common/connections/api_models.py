@@ -18,7 +18,7 @@ class ObjectCallResponse(BaseModel):
 
 class ObjectQueryResponse(BaseModel):
     id: UUID
-    _cls: str
+    cls: str
 
 
 class ObjectPropertySetRequest(BaseModel):
@@ -27,4 +27,4 @@ class ObjectPropertySetRequest(BaseModel):
 
 
 class ObjectConstructionRequest(BaseModel):
-    object: BaseModel
+    object: dict
