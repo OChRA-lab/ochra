@@ -98,7 +98,7 @@ class LabConnection(metaclass=SingletonMeta):
                 f"Unexpected error: {e}")
 
     def set_property(self, type: str, id: UUID, property: str, value: Any):
-        req = ObjectPropertySetRequest(property=property, value=value)
+        req = ObjectPropertySetRequest(property=property, property_value=value)
         result: Result = self.rest_adapter.post(
             f"/{type}/{id.hex}/modify_property", req.model_dump_json())
         return result.data
