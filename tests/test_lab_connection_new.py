@@ -34,7 +34,7 @@ def test_construct_object(lab_connection):
         "data": test_data.id.hex}
     mock_rest.put.return_value = mock_result
 
-    result = lab_conn.construct_object("test_type", test_data.model_dump())
+    result = lab_conn.construct_object("test_type", test_data)
     mock_rest.put.assert_called_once_with(
         "/test_type/construct",
         '{"object":{"id":"' + str(test_data.id) +
@@ -44,7 +44,7 @@ def test_construct_object(lab_connection):
 
     mock_rest.put.return_value = MagicMock(data="invalid_data")
     with pytest.raises(LabEngineException):
-        lab_conn.construct_object("test_type", test_data.model_dump())
+        lab_conn.construct_object("test_type", test_data)
 
 
 def test_get_object_by_name(lab_connection):
