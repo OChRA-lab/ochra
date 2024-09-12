@@ -27,10 +27,10 @@ class DbConnection(metaclass=SingletonMeta):
         """Create a new document in the specified collection."""
         return self.db_adapter.create(db_data, doc)
 
-    def read(self, db_data, property=None, file=False, query=None):
+    def read(self, db_data, property=None, file=False):
         """Read documents from the specified collection that match the query."""
 
-        return self.db_adapter.read(db_data, property, file=file, query=query)
+        return self.db_adapter.read(db_data, property, file=file)
 
     def update(self, db_data, update):
         """Update documents in the specified collection that match the query."""
