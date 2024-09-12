@@ -89,6 +89,9 @@ class LabConnection(metaclass=SingletonMeta):
     def get_property(self, type: str, id: UUID, property: str) -> Any | ObjectQueryResponse:
         result: Result = self.rest_adapter.get(
             f"/{type}/{id.hex}/get_property/{property}")
+        if result.status_code == 404:
+            raise LabEngineException(
+                f"Property {property} not found for {type} {id}")
         try:
             return ObjectQueryResponse(**result.data)
         except TypeError:
