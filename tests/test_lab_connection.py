@@ -143,7 +143,8 @@ def test_get_property(lab_connection):
     result = lab_conn.get_property("test_type", id, "test_property")
     assert result == "property_value"
 
-    mock_rest.get.return_value = MagicMock(data="invalid_data")
+    mock_rest.get.return_value = MagicMock(
+        data="invalid_data", status_code=404)
     with pytest.raises(LabEngineException):
         lab_conn.get_property("test_type", id, "test_property")
 
