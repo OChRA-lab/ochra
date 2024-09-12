@@ -91,7 +91,7 @@ class LabConnection(metaclass=SingletonMeta):
             f"/{type}/{id.hex}/get_property/{property}")
         try:
             return ObjectQueryResponse(**result.data)
-        except ValueError:
+        except TypeError:
             return result.data
         except Exception as e:
             raise LabEngineException(
