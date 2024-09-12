@@ -12,7 +12,6 @@ from bson.errors import InvalidId
 from ochra_common.connections.api_models import ObjectCallRequest, ObjectPropertySetRequest
 from ochra_common.connections.api_models import ObjectCallResponse, ObjectConstructionRequest
 from .models.operation import Operation
-from .models.DbObject import DbObject
 from mongoengine import ValidationError
 from ..connections.db_connection import DbConnection
 import uuid
