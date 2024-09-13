@@ -1,9 +1,10 @@
 from ochra_manager.Station.communicator import Communicator
 # create sample device
 from ika_plate.handler import IkaPlate as backendIkaPlate
+from ochra_common.spaces.work_station import WorkStation
+from ochra_common.spaces.location import Location
 
-
-class myStation(Communicator):
+class myStation(Communicator,WorkStation):
     # setup the station
     def setup(self):
         # create a device
@@ -12,6 +13,7 @@ class myStation(Communicator):
         self.devices.append(myika)
 
 #create station
-myStationInstance = myStation(lab_ip="localhost:8001")
-
+myLocation = Location(name="amyLocation",map="asd",map_id=123)
+myStationInstance = myStation(name="amyStation",location=myLocation)
+myStationInstance.setup_server(lab_ip="localhost:8001")
 myStationInstance.run()
