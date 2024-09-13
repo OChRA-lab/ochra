@@ -20,6 +20,7 @@ class DeviceRouter(APIRouter):
         self.get("/{station_id}/get")(self.get_device)
 
     async def construct_device(self, args: ObjectConstructionRequest):
+        #TODO: we need to assign the object to the station somehow
         return self.lab_service.construct_object(args, COLLECTION)
 
     async def get_device_property(self, object_id: str, property: str):
