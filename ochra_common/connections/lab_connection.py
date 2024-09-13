@@ -33,9 +33,9 @@ class LabConnection(metaclass=SingletonMeta):
             hostname, api_key, ssl_verify, logger)
 
     def construct_object(self, type: str, object) -> UUID:
-        req = ObjectConstructionRequest(object=object.model_dump())
+        req = ObjectConstructionRequest(object=object.model_dump_json())
         result: Result = self.rest_adapter.put(
-            f"/{type}/construct", req.model_dump_json())
+            f"/{type}/construct", data=req.model_dump())
         try:
             id = UUID(result.data)
             return id

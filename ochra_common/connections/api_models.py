@@ -27,4 +27,4 @@ class ObjectPropertySetRequest(BaseModel):
 
 
 class ObjectConstructionRequest(BaseModel):
-    object: dict
+    object: str
