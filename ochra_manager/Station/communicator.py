@@ -21,7 +21,7 @@ class Communicator():
                  port=8000,
                  lab_ip="10.24.169.42") -> None:
         self._lab_ip = lab_ip
-        self.db_ip = dbip
+        self._db_ip = dbip
         self._app = FastAPI()
         self._router = APIRouter()
         self._host_ip = host_ip
@@ -61,7 +61,7 @@ class Communicator():
         """
         if not offline:
             self._lab_conn = LabConnection(self._lab_ip)
-            self._db_conn = DbConnection(self.db_ip)
+            self._db_conn = DbConnection(self._db_ip)
             self._station_id = self._lab_conn.construct_object(type="stations",object=self)
         else:
             self._offline = True

@@ -14,7 +14,7 @@ from ochra_common.connections.api_models import ObjectCallResponse, ObjectConstr
 from mongoengine import ValidationError
 from ..connections.db_connection import DbConnection
 import uuid
-
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -78,10 +78,11 @@ class lab_service():
             str: object id of constructed object
         """
 
-        string = "created object of type {}}"
-        string = string.format(args.object._cls)
-        id = self.db_conn.create({"_collection": collection}, args.object)
-        return id
+        string = "created object of type {}"
+        object_loaded: dict = json.loads(args.object)
+        string = string.format(object_loaded.get("cls"))
+        id = self.db_conn.create({"_collection": collection}, object_loaded)
+        return object_loaded.get("id")
 
     def call_on_object(self, object_id, collection, call: ObjectCallRequest):
         """call method of object on object
