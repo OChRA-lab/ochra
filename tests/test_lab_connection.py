@@ -37,8 +37,7 @@ def test_construct_object(lab_connection):
     result = lab_conn.construct_object("test_type", test_data)
     mock_rest.put.assert_called_once_with(
         "/test_type/construct",
-        '{"object":{"id":"' + str(test_data.id) +
-        '","cls":"test_type","params":{"param":"value"}}}'
+        data={"object": '{"id":"'+str(test_data.id)+'","cls":"test_type","params":{"param":"value"}}'}
     )
     assert result == UUID(test_data.id.hex)
 
