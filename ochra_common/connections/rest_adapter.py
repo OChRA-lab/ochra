@@ -76,7 +76,8 @@ class RestAdapter():
         headers = {'x-api-key': self._api_key}
         # fix for when ep_params is empty
         log_line_pre = f"method={http_method}, " + \
-            f"url={full_url}, params={ep_params}"
+            f"url={full_url}, params={
+                str(ep_params).replace("{", "[").replace("}", "]")}"
         log_line_post = ', '.join(
             (log_line_pre, "success={}, status_code={}, message={}"))
 
@@ -106,7 +107,8 @@ class RestAdapter():
             self._logger.debug(msg=log_line)
             return Result(response.status_code, message=response.reason, data=data_out)
         self._logger.error(msg=log_line)
-        raise LabEngineException(f"{response.status_code}: {response.reason}, {response.text}")
+        raise LabEngineException(f"{response.status_code}: {
+                                 response.reason}, {response.text}")
 
     def get(self, endpoint: str, ep_params: Dict = None) -> Result:
         """ do a get request to endpoint using _do
@@ -120,9 +122,9 @@ class RestAdapter():
         """
         return self._do(http_method='GET', endpoint=endpoint,
                         ep_params=ep_params)
-    
+
     def put(self, endpoint: str, ep_params: Dict = None,
-             data: Dict = None) -> Result:
+            data: Dict = None) -> Result:
         """ Do a put request to endpoint using _do
 
         Args:
