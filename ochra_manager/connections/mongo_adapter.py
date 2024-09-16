@@ -117,4 +117,7 @@ class MongoAdapter:
         """Find documents from the specified collection that match the query."""
         collection = db_data["_collection"]
         collection = self._db_client[self._db_name][collection]
-        return collection.find(search_params)
+        result = collection.find_one(search_params)
+        if result is not None:
+            result.pop("_id")
+        return result
