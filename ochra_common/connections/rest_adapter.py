@@ -25,7 +25,7 @@ class Result:
         """
         self.status_code = int(status_code)
         self.message = str(message)
-        self.data = data if data else []
+        self.data = data if data is not None else []
 
 
 class RestAdapter():
