@@ -29,9 +29,9 @@ def test_construct_object(lab_connection):
     lab_conn, mock_rest = lab_connection
 
     test_data = TestDataModel(cls="test_type", params={"param": "value"})
-    mock_result = MagicMock(data=test_data.id.hex)
+    mock_result = MagicMock(data=test_data.str(id))
     mock_result.json.return_value = {
-        "data": test_data.id.hex}
+        "data": test_data.str(id)}
     mock_rest.put.return_value = mock_result
 
     result = lab_conn.construct_object("test_type", test_data)
@@ -39,7 +39,7 @@ def test_construct_object(lab_connection):
         "/test_type/construct",
         data={"object": '{"id":"'+str(test_data.id)+'","cls":"test_type","params":{"param":"value"}}'}
     )
-    assert result == UUID(test_data.id.hex)
+    assert result == UUID(test_data.str(id))
 
     mock_rest.put.return_value = MagicMock(data="invalid_data")
     with pytest.raises(LabEngineException):
@@ -51,7 +51,7 @@ def test_get_object_by_name(lab_connection):
 
     id = uuid4()
 
-    mock_result = MagicMock(data={"id": id.hex, "cls": "test_cls"})
+    mock_result = MagicMock(data={"id": str(id), "cls": "test_cls"})
     mock_rest.get.return_value = mock_result
 
     result = lab_conn.get_object_by_name("test_type", "test_name")
@@ -71,7 +71,7 @@ def test_get_object_by_uuid(lab_connection):
 
     id = UUID("123e4567-e89b-12d3-a456-426614174000")
 
-    mock_result = MagicMock(data={"id": id.hex, "cls": "test_cls"})
+    mock_result = MagicMock(data={"id": str(id), "cls": "test_cls"})
     mock_rest.get.return_value = mock_result
 
     result = lab_conn.get_object_by_uuid(
@@ -128,7 +128,7 @@ def test_call_on_object(lab_connection):
 def test_get_property(lab_connection):
     lab_conn, mock_rest = lab_connection
     id = UUID("123e4567-e89b-12d3-a456-426614174000")
-    mock_result = MagicMock(data={"id": id.hex, "cls": "test_cls"})
+    mock_result = MagicMock(data={"id": str(id), "cls": "test_cls"})
     mock_rest.get.return_value = mock_result
 
     result = lab_conn.get_property("test_type", id, "test_property")

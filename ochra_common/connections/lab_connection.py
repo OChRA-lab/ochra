@@ -59,7 +59,7 @@ class LabConnection(metaclass=SingletonMeta):
                 f"Unexpected error: {e}")
 
     def get_object_by_uuid(self, type: str, id: UUID) -> ObjectQueryResponse:
-        result: Result = self.rest_adapter.get(f"/{type}/get_by_id/{id.hex}")
+        result: Result = self.rest_adapter.get(f"/{type}/get_by_id/{str(id)}")
         try:
             return ObjectQueryResponse(**result.data)
         except ValueError:
@@ -70,13 +70,13 @@ class LabConnection(metaclass=SingletonMeta):
                 f"Unexpected error: {e}")
 
     def delete_object(self, type: str, id: UUID):
-        result: Result = self.rest_adapter.delete(f"/{type}/delete/{id.hex}")
+        result: Result = self.rest_adapter.delete(f"/{type}/delete/{str(id)}")
         return result.data
 
     def call_on_object(self, type: str, id: UUID, method: str, args: dict) -> ObjectCallResponse:
         req = ObjectCallRequest(method=method, args=args)
         result: Result = self.rest_adapter.post(
-            f"/{type}/{id.hex}/call_method", req.model_dump_json())
+            f"/{type}/{str(id)}/call_method", req.model_dump_json())
         try:
             return ObjectCallResponse(**result.data)
         except ValueError:
@@ -88,7 +88,7 @@ class LabConnection(metaclass=SingletonMeta):
 
     def get_property(self, type: str, id: UUID, property: str) -> Any | ObjectQueryResponse:
         result: Result = self.rest_adapter.get(
-            f"/{type}/{id.hex}/get_property/{property}")
+            f"/{type}/{str(id)}/get_property/{property}")
         if result.status_code == 404:
             raise LabEngineException(
                 f"Property {property} not found for {type} {id}")
@@ -103,5 +103,5 @@ class LabConnection(metaclass=SingletonMeta):
     def set_property(self, type: str, id: UUID, property: str, value: Any):
         req = ObjectPropertySetRequest(property=property, property_value=value)
         result: Result = self.rest_adapter.post(
-            f"/{type}/{id.hex}/modify_property", req.model_dump_json())
+            f"/{type}/{str(id)}/modify_property", req.model_dump_json())
         return result.data
