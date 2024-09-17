@@ -9,11 +9,11 @@ class RestProxyMixin:
         for field in self.model_fields.keys():
 
             def getter(self, name=field):
-                return self.lab_conn.get_property(endpoint, id, name)
+                return self._lab_conn.get_property(endpoint, id, name)
 
             def setter(self, value, name=field):
                 print(f"set {name} to {value}")
-                return self.lab_conn.set_property(endpoint, id, name, value)
+                return self._lab_conn.set_property(endpoint, id, name, value)
 
             # Set the property on the class with the custom getter and setter
             setattr(self.__class__, field, property(getter, setter))
@@ -30,7 +30,7 @@ class RestProxyMixinReadOnly:
         for field in self.model_fields.keys():
 
             def getter(self, name=field):
-                return self.lab_conn.get_property(endpoint, id, name)
+                return self._lab_conn.get_property(endpoint, id, name)
 
             def setter(self, value, name=field):
                 print("Read Only")

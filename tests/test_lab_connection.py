@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import MagicMock, create_autospec
+from unittest.mock import MagicMock
 from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.connections.rest_adapter import LabEngineException, RestAdapter
 from uuid import UUID, uuid4
