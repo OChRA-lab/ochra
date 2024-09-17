@@ -46,13 +46,13 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(
                 f"Unexpected error: {e}")
 
-    def get_object(self, type: str, identifier: str| UUID) -> ObjectQueryResponse:
+    def get_object(self, endpoint: str, identifier: str| UUID) -> ObjectQueryResponse:
         if type(identifier) == UUID:
             result: Result = self.rest_adapter.get(
-                f"/{type}/get_by_id/{str(identifier)}")
+                f"/{endpoint}/get_by_id/{str(identifier)}")
         else:
             result: Result = self.rest_adapter.get(
-                f"/{type}/get", {"name": identifier})
+                f"/{endpoint}/get", {"name": identifier})
         try:
             return ObjectQueryResponse(**result.data)
         except ValueError:
