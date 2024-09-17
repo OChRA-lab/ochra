@@ -37,9 +37,11 @@ def test_rest_proxy_mixin_read_only(MockLabConnection):
     mock_lab_conn = MockLabConnection.return_value
     mock_lab_conn.get_property.return_value = 'mock_value'
     
+    
     test_model = TestDataModelReadOnly(cls="test_cls", params={"param": "value"})
     id = test_model.id
-
+    mock_lab_conn.get_object_by_name.return_value.id = id
+    
     test_model._mixin_hook("test_type", "myName")
 
     #test getter
