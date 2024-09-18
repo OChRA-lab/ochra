@@ -95,6 +95,6 @@ class LabConnection(metaclass=SingletonMeta):
 
     def set_property(self, type: str, id: UUID, property: str, value: Any):
         req = ObjectPropertySetRequest(property=property, property_value=value)
-        result: Result = self.rest_adapter.post(
-            f"/{type}/{str(id)}/modify_property", req.model_dump_json())
+        result: Result = self.rest_adapter.patch(
+            f"/{type}/{str(id)}/modify_property", data=req.model_dump())
         return result.data
