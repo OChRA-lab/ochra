@@ -6,6 +6,7 @@ from typing import Dict, Any, Optional
 from ..connections.db_connection import DbConnection
 from ochra_common.connections.lab_connection import LabConnection
 from abc import ABC, abstractmethod
+import threading
 
 
 class operationExecute(BaseModel):
@@ -16,10 +17,10 @@ class operationExecute(BaseModel):
 
 class Communicator():
     def setup_server(self,
-                 dbip="138.253.124.144:27017",
-                 host_ip="0.0.0.0",
-                 port=8000,
-                 lab_ip="10.24.169.42") -> None:
+                     dbip="138.253.124.144:27017",
+                     host_ip="0.0.0.0",
+                     port=8000,
+                     lab_ip="10.24.169.42") -> None:
         self._lab_ip = lab_ip
         self._db_ip = dbip
         self._app = FastAPI()
@@ -38,34 +39,29 @@ class Communicator():
         Args:
             offline (bool, optional): if true start the station in offline mode. Defaults to False.
         """
-        self._start_up(offline)
-        self.setup()
-        uvicorn.run(self._app, host=self._host_ip, port=self._port)
+        self._offline = offline
+        threading.Thread(target=self._start_up).start()
 
     def ping(self, request: Request):
         clientHost = request.client.host
         print(clientHost)
         return
 
-    @abstractmethod
-    def setup(self):
-        """To be filled in by child class to setup the communicator
-        """
-        pass
-
-    def _start_up(self, offline):
+    def _start_up(self):
         """Setups the lab and db connections
 
         Args:
             offline (bool): offline mode
         """
-        if not offline:
+        if not self._offline:
             self._lab_conn = LabConnection(self._lab_ip)
             self._db_conn = DbConnection(self._db_ip)
-            self._station_id = self._lab_conn.construct_object(type="stations",object=self)
+            self._station_id = self._lab_conn.construct_object(
+                type="stations", object=self)
         else:
-            self._offline = True
             self._station_id = None
+
+        uvicorn.run(self._app, host=self._host_ip, port=self._port)
 
     def process_operation(self, args: operationExecute):
         """search the devices for a device with the given name and execute the method provided in the args
