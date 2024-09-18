@@ -40,4 +40,4 @@ class RestProxyMixinReadOnly:
 
     def _lab_init(self, endpoint: str, name: str) -> None:
         self._lab_conn: LabConnection = LabConnection()
-        return self._lab_conn.get_object_by_name(endpoint, name).id
+        return self._lab_conn.get_object(endpoint, name).id
