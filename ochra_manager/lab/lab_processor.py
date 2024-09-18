@@ -79,7 +79,7 @@ class lab_service():
         """
 
         string = "created object of type {}"
-        object_loaded: dict = json.loads(args.object)
+        object_loaded: dict = json.loads(args.object_json)
         string = string.format(object_loaded.get("cls"))
         id = self.db_conn.create({"_collection": collection}, object_loaded)
         return object_loaded.get("id")
