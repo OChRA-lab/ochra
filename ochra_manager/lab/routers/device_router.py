@@ -16,7 +16,7 @@ class DeviceRouter(APIRouter):
         self.put("/{station_id}/construct")(self.construct_device)
         self.get("/{object_id}/get_property/{property}")(self.get_device_property)
         self.patch("/{object_id}/modify_property")(self.modify_device_property)
-        self.post("/{station_id}/{object_id}/call_method")(self.call_device)
+        self.post("/{object_id}/call_method")(self.call_device)
         self.get("/{station_id}/get_by_station")(self.get_device_by_station)
         self.get("/get")(self.get_device)
 
