@@ -1,6 +1,7 @@
 from ika_plate.abstract import IkaPlateAbstract
 from ochra_common.utils.mixins import RestProxyMixinReadOnly
 import uuid
+from ochra_common.connections.lab_connection import LabConnection
 
 
 class IkaPlate(IkaPlateAbstract, RestProxyMixinReadOnly):
@@ -8,8 +9,8 @@ class IkaPlate(IkaPlateAbstract, RestProxyMixinReadOnly):
         self._mixin_hook("devices", name)
 
     def set_temperature(self, temperature: int) -> bool:
-        print("do the thing")
-        return True
+        lab_conn = LabConnection()
+        return lab_conn.call_on_object("devices", self.id, "set_temperature", {"temperature": temperature})
 
     def start_heat(self) -> bool:
         print("do the thing")
