@@ -26,11 +26,12 @@ class RestProxyMixin:
 class RestProxyMixinReadOnly:
 
     def _mixin_hook(self, endpoint: str, name) -> None:
-        id = self._lab_init(endpoint, name)
+        id = self._lab_init(endpoint,name)
         for field in self.model_fields.keys():
 
             def getter(self, name=field):
-                return self._lab_conn.get_property(endpoint, id, name)
+                lab_conn = LabConnection()
+                return lab_conn.get_property(endpoint, id, name)
 
             def setter(self, value, name=field):
                 print("Read Only")
@@ -39,5 +40,5 @@ class RestProxyMixinReadOnly:
             setattr(self.__class__, field, property(getter, setter))
 
     def _lab_init(self, endpoint: str, name: str) -> None:
-        self._lab_conn: LabConnection = LabConnection()
-        return self._lab_conn.get_object(endpoint, name).id
+        lab_conn: LabConnection = LabConnection()
+        return lab_conn.get_object(endpoint, name).id
