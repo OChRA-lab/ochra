@@ -46,7 +46,7 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(
                 f"Unexpected error: {e}")
 
-    def get_object(self, endpoint: str, identifier: str| UUID) -> ObjectQueryResponse:
+    def get_object(self, endpoint: str, identifier: str | UUID) -> ObjectQueryResponse:
         if type(identifier) == UUID:
             result: Result = self.rest_adapter.get(
                 f"/{endpoint}/get_by_id/{str(identifier)}")
@@ -69,7 +69,7 @@ class LabConnection(metaclass=SingletonMeta):
     def call_on_object(self, type: str, id: UUID, method: str, args: dict) -> ObjectCallResponse:
         req = ObjectCallRequest(method=method, args=args)
         result: Result = self.rest_adapter.post(
-            f"/{type}/{str(id)}/call_method", req.model_dump_json())
+            f"/{type}/{str(id)}/call_method", data=req.model_dump())
         try:
             return ObjectCallResponse(**result.data)
         except ValueError:
