@@ -99,8 +99,11 @@ class lab_service():
             # get station
             station_id = self.db_conn.read({"id": object_id, "_collection": collection},
                                            "station_id")
+            station_ip = self.db_conn.read({"id": station_id, "_collection": "stations"},
+                                           "station_ip")
 
-            station: StationConnection = StationConnection(station_id)
+            station: StationConnection = StationConnection(
+                station_ip + ":8000")
             # TODO create an operation object and save to db
 
             # call operation on station
@@ -117,8 +120,10 @@ class lab_service():
             raise HTTPException(status_code=500, detail=str(e))
 
         logger.info(f"called {call.method} on {object_id}")
+        responseObject = ObjectCallResponse(
+            return_data=result.data, status_code=result.status_code, msg=result.message)
 
-        return result
+        return responseObject
 
     def get_device(self, station_id, device_name):
 
