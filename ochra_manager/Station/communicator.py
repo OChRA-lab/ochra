@@ -3,17 +3,20 @@ from typing import Dict, Any
 from pydantic import BaseModel
 import uvicorn
 from typing import Dict, Any, Optional
+
+import uvicorn.config
 from ..connections.db_connection import DbConnection
 from ochra_common.connections.lab_connection import LabConnection
 from abc import ABC, abstractmethod
 import threading
+import time
+import contextlib
 
 
 class operationExecute(BaseModel):
     operation: str
     deviceName: str
     args: Optional[Dict] = None
-
 
 class Communicator():
     def setup_server(self,
@@ -32,15 +35,15 @@ class Communicator():
             "/process_op", self.process_operation, methods=["POST"])
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
         self._app.include_router(self._router)
+        self._start_up()
 
-    def run(self, offline=False):
+    def run(self):
         """start the communicator server
 
         Args:
             offline (bool, optional): if true start the station in offline mode. Defaults to False.
         """
-        self._offline = offline
-        threading.Thread(target=self._start_up).start()
+        uvicorn.run(self._app, host=self._host_ip, port=self._port)
 
     def ping(self, request: Request):
         clientHost = request.client.host
@@ -53,15 +56,10 @@ class Communicator():
         Args:
             offline (bool): offline mode
         """
-        if not self._offline:
-            self._lab_conn = LabConnection(self._lab_ip)
-            self._db_conn = DbConnection(self._db_ip)
-            self._station_id = self._lab_conn.construct_object(
-                type="stations", object=self)
-        else:
-            self._station_id = None
+        self._lab_conn = LabConnection(self._lab_ip)
+        self._station_id = self._lab_conn.construct_object(
+            type="stations", object=self)
 
-        uvicorn.run(self._app, host=self._host_ip, port=self._port)
 
     def process_operation(self, args: operationExecute):
         """search the devices for a device with the given name and execute the method provided in the args
