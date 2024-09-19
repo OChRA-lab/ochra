@@ -1,7 +1,8 @@
 import logging
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from ochra_common.connections.api_models import ObjectCallRequest, ObjectConstructionRequest, ObjectPropertySetRequest
 from ..lab_processor import lab_service
+import json
 
 logger = logging.getLogger(__name__)
 COLLECTION = "stations"
@@ -18,7 +19,11 @@ class StationRouter(APIRouter):
         self.post("/{object_id}/call_method")(self.call_method)
         self.get("/get")(self.get_station)
 
-    async def construct_station(self, args: ObjectConstructionRequest):
+    async def construct_station(self, args: ObjectConstructionRequest, request: Request):
+        print(request.client.host)
+        object = json.loads(args.object_json)
+        object["station_ip"] = request.client.host
+        args.object_json = json.dumps(object)
         return self.lab_service.construct_object(args, COLLECTION)
 
     async def get_station_property(self, object_id: str, property: str):
