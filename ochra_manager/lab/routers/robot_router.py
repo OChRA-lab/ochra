@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter
 from ochra_common.connections.api_models import ObjectCallRequest, ObjectPropertySetRequest, ObjectConstructionRequest
-from ..lab_processor import lab_service
+from ..lab_service import lab_service
 
 logger = logging.getLogger(__name__)
 COLLECTION = "robots"
