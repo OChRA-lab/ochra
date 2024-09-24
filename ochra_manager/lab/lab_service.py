@@ -117,8 +117,6 @@ class lab_service():
 
             return responseObject
 
-        except (InvalidId, TypeError) as e:
-            logger.warn(e)
         except Exception as e:
             # operation.status = "failed"
             logger.error(e)
