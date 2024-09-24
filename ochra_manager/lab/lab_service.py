@@ -102,6 +102,10 @@ class lab_service():
             station_ip = self.db_conn.read({"id": station_id, "_collection": "stations"},
                                            "station_ip")
 
+            if station_ip is None or station_id is None:
+                raise HTTPException(
+                    status_code=404, detail="station not found")
+
             station: StationConnection = StationConnection(
                 station_ip + ":8000")
             # TODO create an operation object and save to db
@@ -116,6 +120,9 @@ class lab_service():
                 return_data=result.data, status_code=result.status_code, msg=result.message)
 
             return responseObject
+
+        except HTTPException as e:
+            raise e
 
         except Exception as e:
             # operation.status = "failed"
