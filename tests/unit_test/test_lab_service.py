@@ -8,6 +8,8 @@ import json
 from json.decoder import JSONDecodeError
 from uuid import UUID
 from requests import Response
+from ochra_manager.connections.station_connection import StationConnection
+
 
 class ObjectCallRequest(BaseModel):
     method: str
@@ -93,7 +95,40 @@ def test_construct_object(service):
 
 
 def test_call_on_object(service):
-    pass
+    labservice: lab_service = service[0]
+    mock_db_conn: MagicMock = service[1]
+
+    mock_call = ObjectCallRequest(method="test_method", args={
+                                  "test_arg": "test_value"})
+    object_id = "test_id"
+    collection = "test_collection"
+
+    mock_db_conn.read.side_effect = [
+        "station123", "192.168.1.1", "test_object_name"]
+    res = Response()
+    res.status_code = 200
+    res.data = "test_result"
+    res.message = ""
+    with patch.object(StationConnection, "execute_op", return_value=res) as MockStationConnection:
+        returnVal = labservice.call_on_object(object_id, collection, mock_call)
+        MockStationConnection.assert_called_once_with("test_method", "test_object_name",
+                                                      test_arg="test_value")
+        assert returnVal.return_data == "test_result"
+        assert returnVal.status_code == 200
+        assert returnVal.msg == ""
+
+        # error in execute_op returns 500
+        MockStationConnection.side_effect = Exception("test_exception")
+        with pytest.raises(HTTPException) as e:
+            labservice.call_on_object(object_id, collection, mock_call)
+        assert e.value.status_code == 500
+        assert e.value.detail == "test_exception"
+
+        # error in read returns 404
+        mock_db_conn.read.side_effect = Exception("test_exception")
+        with pytest.raises(HTTPException) as e:
+            labservice.call_on_object(object_id, collection, mock_call)
+        assert e.value.status_code == 404
 
 
 def test_get_device():
