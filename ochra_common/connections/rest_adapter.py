@@ -90,14 +90,14 @@ class RestAdapter():
                                         json=data)
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=str(e))
-            raise LabEngineException("Request Failed") from e
+            raise LabEngineException(f"Request Failed: {e}")
 
         # Deserialize response into python object
         try:
             data_out = response.json()
         except (ValueError, JSONDecodeError) as e:
             self._logger.error(msg=log_line_post.format(False, None, e))
-            raise LabEngineException("Bad JSON in response") from e
+            raise LabEngineException(f"Bad JSON in response: {e}")
 
         # if sucess return result else raise exception
         is_success = 299 >= response.status_code >= 200
