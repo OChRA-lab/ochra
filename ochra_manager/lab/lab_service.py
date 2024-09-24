@@ -111,6 +111,11 @@ class lab_service():
                 call.method, self.db_conn.read({"id": object_id, "_collection": collection},
                                                "name"), **call.args)
             # return
+            logger.info(f"called {call.method} on {object_id}")
+            responseObject = ObjectCallResponse(
+                return_data=result.data, status_code=result.status_code, msg=result.message)
+
+            return responseObject
 
         except (InvalidId, TypeError) as e:
             logger.warn(e)
@@ -118,12 +123,6 @@ class lab_service():
             # operation.status = "failed"
             logger.error(e)
             raise HTTPException(status_code=500, detail=str(e))
-
-        logger.info(f"called {call.method} on {object_id}")
-        responseObject = ObjectCallResponse(
-            return_data=result.data, status_code=result.status_code, msg=result.message)
-
-        return responseObject
 
     def get_device(self, station_id, device_name):
 
