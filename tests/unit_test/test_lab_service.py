@@ -131,13 +131,37 @@ def test_call_on_object(service):
         assert e.value.status_code == 404
 
 
-def test_get_device():
-    pass
+def test_get_object_property(service):
+    labservice: lab_service = service[0]
+    mock_db_conn: MagicMock = service[1]
+
+    object_id = "test_id"
+    collection = "test_collection"
+    property = "test_property"
+
+    mock_db_conn.read.return_value = "test_value"
+    returnVal = labservice.get_object_property(object_id, collection, property)
+    assert returnVal == "test_value"
+    mock_db_conn.read.assert_called_once()
+
+    mock_db_conn.read.side_effect = Exception("test_exception")
+    with pytest.raises(HTTPException) as e:
+        labservice.get_object_property(object_id, collection, property)
+    assert e.value.status_code == 404
 
 
-def test_get_object_property():
-    pass
+def test_get_object_by_name(service):
+    labservice: lab_service = service[0]
+    mock_db_conn: MagicMock = service[1]
 
+    object_name = "test_name"
+    collection = "test_collection"
+    mock_db_conn.find.return_value = "test_id"
+    returnVal = labservice.get_object_by_name(object_name, collection)
+    assert returnVal == "test_id"
+    mock_db_conn.find.assert_called_once()
 
-def test_get_object_by_name():
-    pass
+    mock_db_conn.find.side_effect = Exception("test_exception")
+    with pytest.raises(HTTPException) as e:
+        labservice.get_object_by_name(object_name, collection)
+    assert e.value.status_code == 404
