@@ -167,8 +167,12 @@ class lab_service():
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
-    def get_object_by_station_and_type(self, station_id, collection, objtype):
+    def get_object_by_station_and_type(self, station_identifier, collection, objtype):
         try:
-            return self.db_conn.find({"_collection": collection}, {"station_id": station_id, "_cls": objtype})
+            uuid.UUID(station_identifier)
+            return self.db_conn.find({"_collection": collection}, {"station_id": station_identifier, "_cls": objtype})
+        except ValueError:
+            stationid = self.db_conn.find({"_collection": "stations"}, {"name": station_identifier})
+            return self.db_conn.find({"_collection": collection}, {"station_id": stationid, "_cls": objtype})
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
