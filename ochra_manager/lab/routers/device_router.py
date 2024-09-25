@@ -17,7 +17,7 @@ class DeviceRouter(APIRouter):
         self.get("/{object_id}/get_property/{property}")(self.get_device_property)
         self.patch("/{object_id}/modify_property")(self.modify_device_property)
         self.post("/{object_id}/call_method")(self.call_device)
-        self.get("/{station_id}/get_by_station")(self.get_device_by_station)
+        self.get("/{station_id}/get_by_station/{device_type}")(self.get_device_by_station)
         self.get("/get")(self.get_device)
 
     async def construct_device(self, args: ObjectConstructionRequest):
