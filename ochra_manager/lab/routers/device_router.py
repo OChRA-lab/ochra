@@ -33,8 +33,8 @@ class DeviceRouter(APIRouter):
     async def call_device(self, object_id: str, args: ObjectCallRequest):
         return self.lab_service.call_on_object(object_id, COLLECTION, args)
 
-    async def get_device_by_station(self, station_id: str, device_name: str):
-        return self.lab_service.get_device(station_id, device_name)
+    async def get_device_by_station(self, station_id: str, device_type: str):
+        return self.lab_service.get_object_by_station_and_type(station_id, COLLECTION, device_type)
 
     async def get_device(self, name: str):
-        return self.lab_service.get_object_by_name(name,COLLECTION)
+        return self.lab_service.get_object_by_name(name, COLLECTION)
