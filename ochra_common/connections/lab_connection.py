@@ -98,3 +98,16 @@ class LabConnection(metaclass=SingletonMeta):
         result: Result = self.rest_adapter.patch(
             f"/{type}/{str(id)}/modify_property", data=req.model_dump())
         return result.data
+
+    def get_by_station(self,station_identifier: str | UUID, endpoint: str, objectType: str) -> ObjectQueryResponse:
+        result: Result = self.rest_adapter.get(
+            f"/{endpoint}/{str(station_identifier)}/get_by_station/{objectType}")
+        try:
+            return ObjectQueryResponse(**result.data)
+        except ValueError:
+            raise LabEngineException(
+                f"Expected ObjectQueryResponse, got {result.data}")
+        except Exception as e:
+            raise LabEngineException(
+                f"Unexpected error: {e}")
+        
