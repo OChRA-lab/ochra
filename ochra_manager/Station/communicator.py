@@ -78,5 +78,6 @@ class Communicator():
                 if i.name == args.deviceName:
                     method = getattr(i, args.operation)
                     return method(**args.args)
+            raise Exception("Device not found")
         except Exception as e:
             raise HTTPException(500, detail=str(e))
