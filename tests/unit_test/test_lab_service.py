@@ -117,15 +117,18 @@ def test_call_on_object(service):
         assert returnVal.status_code == 200
         assert returnVal.msg == ""
 
+        mock_db_conn.read.side_effect = [
+            "station123", "192.168.1.1", "test_object_name"]
         # error in execute_op returns 500
-        MockStationConnection.side_effect = Exception("test_exception")
+        MockStationConnection.side_effect = [Exception(
+            "test_exception_mock_station")]
         with pytest.raises(HTTPException) as e:
             labservice.call_on_object(object_id, collection, mock_call)
         assert e.value.status_code == 500
-        assert e.value.detail == "test_exception"
+        assert e.value.detail == "test_exception_mock_station"
 
         # error in read returns 404
-        mock_db_conn.read.side_effect = Exception("test_exception")
+        mock_db_conn.read.side_effect = [None, None, None]
         with pytest.raises(HTTPException) as e:
             labservice.call_on_object(object_id, collection, mock_call)
         assert e.value.status_code == 404
