@@ -1,9 +1,10 @@
-from ochra_common.utils.singleton_meta import SingletonMeta
-from ochra_common.connections.rest_adapter import RestAdapter, Result, LabEngineException
+from ..utils.singleton_meta import SingletonMeta
+from .rest_adapter import RestAdapter, Result, LabEngineException
 from .api_models import ObjectConstructionRequest, ObjectQueryResponse, ObjectCallRequest, ObjectCallResponse, ObjectPropertySetRequest
+from pydantic import BaseModel
 from uuid import UUID
 import logging
-from typing import Any
+from typing import Any, Type, Union
 
 
 class LabConnection(metaclass=SingletonMeta):
@@ -32,7 +33,7 @@ class LabConnection(metaclass=SingletonMeta):
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger)
 
-    def construct_object(self, type: str, object) -> UUID:
+    def construct_object(self, type: str, object: Type[BaseModel]) -> UUID:
         req = ObjectConstructionRequest(object_json=object.model_dump_json())
         result: Result = self.rest_adapter.put(
             f"/{type}/construct", data=req.model_dump())
@@ -46,7 +47,7 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(
                 f"Unexpected error: {e}")
 
-    def get_object(self, endpoint: str, identifier: str | UUID) -> ObjectQueryResponse:
+    def get_object(self, endpoint: str, identifier: Union[str, UUID]) -> ObjectQueryResponse:
         if type(identifier) == UUID:
             result: Result = self.rest_adapter.get(
                 f"/{endpoint}/get_by_id/{str(identifier)}")
@@ -99,7 +100,7 @@ class LabConnection(metaclass=SingletonMeta):
             f"/{type}/{str(id)}/modify_property", data=req.model_dump())
         return result.data
 
-    def get_by_station(self,station_identifier: str | UUID, endpoint: str, objectType: str) -> ObjectQueryResponse:
+    def get_by_station(self, station_identifier: str | UUID, endpoint: str, objectType: str) -> ObjectQueryResponse:
         result: Result = self.rest_adapter.get(
             f"/{endpoint}/{str(station_identifier)}/get_by_station/{objectType}")
         try:
@@ -110,4 +111,3 @@ class LabConnection(metaclass=SingletonMeta):
         except Exception as e:
             raise LabEngineException(
                 f"Unexpected error: {e}")
-        
