@@ -41,15 +41,16 @@ def test_process_operation():
         response = communicator.process_operation(mock_call)
         assert response == {"test": "test"}
 
-        
+        # Test for invalid operation
         mock_call = operationExecute(
             operation="invalid operation", deviceName="test", args=None)
-        
+
         with pytest.raises(Exception):
             communicator.process_operation(mock_call)
 
+        # Test for invalid device
         mock_call = operationExecute(
             operation="mock_process", deviceName="invalid Device", args=None)
-        
+
         with pytest.raises(Exception):
             communicator.process_operation(mock_call)
