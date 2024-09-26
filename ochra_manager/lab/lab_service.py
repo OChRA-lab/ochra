@@ -121,8 +121,8 @@ class lab_service():
 
             return responseObject
 
-        except HTTPException as e:
-            raise e
+        except HTTPException:
+            raise
 
         except Exception as e:
             # operation.status = "failed"
@@ -172,7 +172,8 @@ class lab_service():
             uuid.UUID(station_identifier)
             return self.db_conn.find({"_collection": collection}, {"station_id": station_identifier, "_cls": objtype})
         except ValueError:
-            stationid = self.db_conn.find({"_collection": "stations"}, {"name": station_identifier})
+            stationid = self.db_conn.find({"_collection": "stations"}, {
+                                          "name": station_identifier})
             return self.db_conn.find({"_collection": collection}, {"station_id": stationid, "_cls": objtype})
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
