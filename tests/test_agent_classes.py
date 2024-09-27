@@ -15,7 +15,7 @@ def test_task():
     assignee_id = uuid.uuid4()
     task = Task(assignee_id=assignee_id, name="test_name")
     assert task.id != None
-    assert task.cls == "Task"
+    assert task.cls == "ochra_common.agents.task.Task"
     assert task.assignee_id == assignee_id
     assert task.name == "test_name"
     assert task.args == {}
@@ -31,7 +31,7 @@ def test_task():
     # test task methods
     assert task.to_dict() == {
         "id": task.id,
-        "cls": "Task",
+        "cls": "ochra_common.agents.task.Task",
         "assignee_id": assignee_id,
         "name": "test_name",
         "args": {},
@@ -40,7 +40,7 @@ def test_task():
         "end_timestamp": end_timestamp
     }
 
-    assert task.to_json() == '{"id":"' + str(task.id) + '","cls":"Task"' +\
+    assert task.to_json() == '{"id":"' + str(task.id) + '","cls":"ochra_common.agents.task.Task"' +\
         ',"assignee_id":"' + str(assignee_id) + '","name":"test_name","args":{},"status":-1,' + \
         '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
         end_timestamp.isoformat() + '"}'
@@ -50,7 +50,7 @@ def test_robot_task():
     assignee_id = uuid.uuid4()
     task = RobotTask(assignee_id=assignee_id, name="test_name")
     assert task.id != None
-    assert task.cls == "RobotTask"
+    assert task.cls == "ochra_common.agents.robot_task.RobotTask"
     assert task.assignee_id == assignee_id
     assert task.name == "test_name"
     assert task.args == {}
@@ -67,7 +67,7 @@ def test_robot_task():
     # test task methods
     assert task.to_dict() == {
         "id": task.id,
-        "cls": "RobotTask",
+        "cls": "ochra_common.agents.robot_task.RobotTask",
         "assignee_id": assignee_id,
         "name": "test_name",
         "args": {},
@@ -77,7 +77,7 @@ def test_robot_task():
         "priority": -1
     }
 
-    assert task.to_json() == '{"id":"' + str(task.id) + '","cls":"RobotTask"' +\
+    assert task.to_json() == '{"id":"' + str(task.id) + '","cls":"ochra_common.agents.robot_task.RobotTask"' +\
         ',"assignee_id":"' + str(assignee_id) + '","name":"test_name","args":{},"status":-1,' + \
         '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
         end_timestamp.isoformat() + '","priority":-1}'
@@ -87,7 +87,7 @@ def test_scientist_task():
     assignee_id = uuid.uuid4()
     task = ScientistTask(assignee_id=assignee_id, name="test_name")
     assert task.id != None
-    assert task.cls == "ScientistTask"
+    assert task.cls == "ochra_common.agents.scientist_task.ScientistTask"
     assert task.assignee_id == assignee_id
     assert task.name == "test_name"
     assert task.args == {}
@@ -103,7 +103,7 @@ def test_scientist_task():
     # test task methods
     assert task.to_dict() == {
         "id": task.id,
-        "cls": "ScientistTask",
+        "cls": "ochra_common.agents.scientist_task.ScientistTask",
         "assignee_id": assignee_id,
         "name": "test_name",
         "args": {},
@@ -112,7 +112,7 @@ def test_scientist_task():
         "end_timestamp": end_timestamp
     }
 
-    assert task.to_json() == '{"id":"' + str(task.id) + '","cls":"ScientistTask"' +\
+    assert task.to_json() == '{"id":"' + str(task.id) + '","cls":"ochra_common.agents.scientist_task.ScientistTask"' +\
         ',"assignee_id":"' + str(assignee_id) + '","name":"test_name","args":{},"status":-1,' + \
         '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
         end_timestamp.isoformat() + '"}'
@@ -121,7 +121,7 @@ def test_scientist_task():
 def test_agent():
     agent = Agent(name="test_name")
     assert agent.id != None
-    assert agent.cls == "Agent"
+    assert agent.cls == "ochra_common.agents.agent.Agent"
     assert agent.name == "test_name"
     assert agent.status == -1
     assert agent.assigned_task == None
@@ -130,14 +130,14 @@ def test_agent():
     # test agent methods
     assert agent.to_dict() == {
         "id": agent.id,
-        "cls": "Agent",
+        "cls": "ochra_common.agents.agent.Agent",
         "name": "test_name",
         "status": -1,
         "assigned_task": None,
         "tasks_history": []
     }
 
-    assert agent.to_json() == '{"id":"' + str(agent.id) + '","cls":"Agent",' + \
+    assert agent.to_json() == '{"id":"' + str(agent.id) + '","cls":"ochra_common.agents.agent.Agent",' + \
         '"name":"test_name","status":-1,"assigned_task":null' + \
         ',"tasks_history":[]}'
 
@@ -145,7 +145,7 @@ def test_agent():
 def test_scientist():
     scientist = Scientist(name="test_scientist")
     assert scientist.id != None
-    assert scientist.cls == "Scientist"
+    assert scientist.cls == "ochra_common.agents.scientist.Scientist"
     assert scientist.name == "test_scientist"
     assert scientist.privilege == -1
     assert scientist.assigned_task == None
@@ -154,7 +154,7 @@ def test_scientist():
     # test scientist methods
     assert scientist.to_dict() == {
         "id": scientist.id,
-        "cls": "Scientist",
+        "cls": "ochra_common.agents.scientist.Scientist",
         "name": "test_scientist",
         "privilege": -1,
         "status": -1,
@@ -162,14 +162,14 @@ def test_scientist():
         "tasks_history": []
     }
 
-    assert scientist.to_json() == '{"id":"' + str(scientist.id) + '","cls":"Scientist",' + \
+    assert scientist.to_json() == '{"id":"' + str(scientist.id) + '","cls":"ochra_common.agents.scientist.Scientist",' + \
         '"name":"test_scientist","status":-1,"assigned_task":null,"tasks_history":[],"privilege":-1}'
 
 
 def test_robot():
     robot = Robot(name="test_robot", type="test_type")
     assert robot.id != None
-    assert robot.cls == "Robot"
+    assert robot.cls == "ochra_common.agents.robot.Robot"
     assert robot.name == "test_robot"
     assert robot.type == "test_type"
     assert robot.location == None
@@ -180,7 +180,7 @@ def test_robot():
     # test robot methods
     assert robot.to_dict() == {
         "id": robot.id,
-        "cls": "Robot",
+        "cls": "ochra_common.agents.robot.Robot",
         "type": "test_type",
         "location": None,
         "name": "test_robot",
@@ -189,7 +189,7 @@ def test_robot():
         "tasks_history": []
     }
 
-    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"Robot",' + \
+    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.robot.Robot",' + \
         '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
         '"type":"test_type","location":null}'
 
@@ -198,7 +198,7 @@ def test_manipulator():
     robot = Manipulator(name="test_robot", type="test_type",
                         available_tasks=["task1", "task2"])
     assert robot.id != None
-    assert robot.cls == "Manipulator"
+    assert robot.cls == "ochra_common.agents.manipulator.Manipulator"
     assert robot.name == "test_robot"
     assert robot.type == "test_type"
     assert robot.location == None
@@ -210,7 +210,7 @@ def test_manipulator():
     # test robot methods
     assert robot.to_dict() == {
         "id": robot.id,
-        "cls": "Manipulator",
+        "cls": "ochra_common.agents.manipulator.Manipulator",
         "type": "test_type",
         "location": None,
         "name": "test_robot",
@@ -220,7 +220,7 @@ def test_manipulator():
         "available_tasks": ["task1", "task2"]
     }
 
-    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"Manipulator",' + \
+    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.manipulator.Manipulator",' + \
         '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
         '"type":"test_type","location":null,"available_tasks":["task1","task2"]}'
 
@@ -228,7 +228,7 @@ def test_manipulator():
 def test_mobile_platform():
     robot = MobilePlatform(name="test_robot", type="test_type")
     assert robot.id != None
-    assert robot.cls == "MobilePlatform"
+    assert robot.cls == "ochra_common.agents.mobile_platform.MobilePlatform"
     assert robot.name == "test_robot"
     assert robot.type == "test_type"
     assert robot.location == None
@@ -240,7 +240,7 @@ def test_mobile_platform():
     # test robot methods
     assert robot.to_dict() == {
         "id": robot.id,
-        "cls": "MobilePlatform",
+        "cls": "ochra_common.agents.mobile_platform.MobilePlatform",
         "type": "test_type",
         "location": None,
         "name": "test_robot",
@@ -250,7 +250,7 @@ def test_mobile_platform():
         "conditions": {}
     }
 
-    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"MobilePlatform",' + \
+    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.mobile_platform.MobilePlatform",' + \
         '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
         '"type":"test_type","location":null,"conditions":{}}'
 
@@ -259,7 +259,7 @@ def test_mobile_manipulator():
     robot = MobileManipulator(
         name="test_robot", type="test_type", available_tasks=["task1", "task2"])
     assert robot.id != None
-    assert robot.cls == "MobileManipulator"
+    assert robot.cls == "ochra_common.agents.mobile_manipulator.MobileManipulator"
     assert robot.name == "test_robot"
     assert robot.type == "test_type"
     assert robot.location == None
@@ -272,7 +272,7 @@ def test_mobile_manipulator():
     # test robot methods
     assert robot.to_dict() == {
         "id": robot.id,
-        "cls": "MobileManipulator",
+        "cls": "ochra_common.agents.mobile_manipulator.MobileManipulator",
         "type": "test_type",
         "location": None,
         "name": "test_robot",
@@ -283,6 +283,6 @@ def test_mobile_manipulator():
         "conditions": {}
     }
 
-    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"MobileManipulator",' + \
+    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.mobile_manipulator.MobileManipulator",' + \
         '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
         '"type":"test_type","location":null,"conditions":{},"available_tasks":["task1","task2"]}'

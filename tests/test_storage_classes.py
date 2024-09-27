@@ -21,11 +21,11 @@ def test_stock():
 
     # test stock methods
     assert stock.to_json() == '{"id":"' + str(stock.id) + \
-        '","cls":"Stock","station_id":"' + \
+        '","cls":"ochra_common.storage.stock.Stock","station_id":"' + \
         str(station_id) + '","inventories":[]}'
 
     assert stock.to_dict() == {"id": stock.id,
-                               "cls": "Stock",
+                               "cls": "ochra_common.storage.stock.Stock",
                                "station_id": station_id,
                                "inventories": []}
 
@@ -41,11 +41,11 @@ def test_inventory():
 
     # test inventory methods
     assert inventory.to_json() == '{"id":"' + str(inventory.id) + \
-        '","cls":"Inventory","containers_max_capacity":100' + \
+        '","cls":"ochra_common.storage.inventory.Inventory","containers_max_capacity":100' + \
         ',"containers":[],"consumables":[]}'
 
     assert inventory.to_dict() == {"id": inventory.id,
-                                   "cls": "Inventory",
+                                   "cls": "ochra_common.storage.inventory.Inventory",
                                    "containers": [],
                                    "consumables": [],
                                    "containers_max_capacity": 100}
@@ -65,12 +65,12 @@ def test_device_inventory():
 
     # test device inventory methods
     assert inventory.to_json() == '{"id":"' + str(inventory.id) + \
-        '","cls":"DeviceInventory","containers_max_capacity":100' + \
+        '","cls":"ochra_common.storage.device_inventory.DeviceInventory","containers_max_capacity":100' + \
         ',"containers":[],"consumables":[],"device_id":"' + \
         str(device_id) + '"}'
 
     assert inventory.to_dict() == {"id": inventory.id,
-                                   "cls": "DeviceInventory",
+                                   "cls": "ochra_common.storage.device_inventory.DeviceInventory",
                                    "containers": [],
                                    "consumables": [],
                                    "containers_max_capacity": 100,
@@ -87,10 +87,10 @@ def test_consumables():
 
     # test consumable methods
     assert consumable.to_json() == '{"id":"' + str(consumable.id) + \
-        '","cls":"Consumable","type":"cap","quantity":10}'
+        '","cls":"ochra_common.storage.consumable.Consumable","type":"cap","quantity":10}'
 
     assert consumable.to_dict() == {"id": consumable.id,
-                                    "cls": "Consumable",
+                                    "cls": "ochra_common.storage.consumable.Consumable",
                                     "type": "cap",
                                     "quantity": 10}
 
@@ -107,11 +107,11 @@ def test_container():
 
     # test container methods
     assert container.to_json() == '{"id":"' + str(container.id) + \
-        '","cls":"Container","type":"box"' + \
+        '","cls":"ochra_common.storage.container.Container","type":"box"' + \
         ',"max_capacity":100,"physical_id":1,"is_used":false}'
 
     assert container.to_dict() == {"id": container.id,
-                                   "cls": "Container",
+                                   "cls": "ochra_common.storage.container.Container",
                                    "type": "box",
                                    "physical_id": 1,
                                    "max_capacity": 100,
@@ -130,11 +130,11 @@ def test_holder():
 
     # test holder methods
     assert holder.to_json() == '{"id":"' + str(holder.id) + \
-        '","cls":"Holder","type":"rack"' + \
+        '","cls":"ochra_common.storage.holder.Holder","type":"rack"' + \
         ',"max_capacity":16,"physical_id":1,"is_used":false,"containers":[]}'
 
     assert holder.to_dict() == {"id": holder.id,
-                                "cls": "Holder",
+                                "cls": "ochra_common.storage.holder.Holder",
                                 "type": "rack",
                                 "physical_id": 1,
                                 "max_capacity": 16,
@@ -155,12 +155,12 @@ def test_vessel():
 
     # test vessel methods
     assert vessel.to_json() == '{"id":"' + str(vessel.id) + \
-        '","cls":"Vessel","type":"vial"' + \
+        '","cls":"ochra_common.storage.vessel.Vessel","type":"vial"' + \
         ',"max_capacity":5.0,"physical_id":1,"is_used":false,"capacity_unit":"ml"' + \
         ',"reagents":[]}'
 
     assert vessel.to_dict() == {"id": vessel.id,
-                                "cls": "Vessel",
+                                "cls": "ochra_common.storage.vessel.Vessel",
                                 "type": "vial",
                                 "physical_id": 1,
                                 "max_capacity": 5.0,
@@ -182,11 +182,11 @@ def test_reagent():
 
     # test reagent methods
     assert reagent.to_json() == '{"id":"' + str(reagent.id) + \
-        '","cls":"Reagent","name":"water","amount":100.0' + \
+        '","cls":"ochra_common.storage.reagent.Reagent","name":"water","amount":100.0' + \
         ',"unit":"ml","physical_state":-1,"properties":{}}'
 
     assert reagent.to_dict() == {"id": reagent.id,
-                                 "cls": "Reagent",
+                                 "cls": "ochra_common.storage.reagent.Reagent",
                                  "name": "water",
                                  "amount": 100.0,
                                  "unit": "ml",

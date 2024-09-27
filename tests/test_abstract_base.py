@@ -6,15 +6,15 @@ def test_base_model():
     model = DataModel()
 
     # test base model attributes
-    assert model.cls == "DataModel"
+    assert model.cls == "ochra_common.base.DataModel"
     assert model.id is not None
 
     # test base model methods
     assert (
         model.to_json()
-        == f'{{"id":"{model.id}","cls":"DataModel"}}'
+        == f'{{"id":"{model.id}","cls":"ochra_common.base.DataModel"}}'
     )
     assert model.to_dict() == {
         "id": model.id,
-        "cls": "DataModel",
+        "cls": "ochra_common.base.DataModel",
     }

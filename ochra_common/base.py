@@ -16,7 +16,8 @@ class DataModel(BaseModel):
     cls: str = Field(default=None)
 
     def model_post_init(self, __context: Any) -> None:
-        self.cls = self.__class__.__name__
+        # retrieve the class name in addition to its import path
+        self.cls = f"{self.__class__.__module__}.{self.__class__.__name__}"
         return super().model_post_init(__context)
 
     def to_json(self) -> str:

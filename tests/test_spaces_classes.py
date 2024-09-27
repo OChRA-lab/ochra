@@ -21,7 +21,7 @@ def test_location():
 
     # test location methods
     assert location.to_json() == '{"id":"' + str(location.id) + \
-        '","cls":"Location","name":"test_location",' + \
+        '","cls":"ochra_common.spaces.location.Location","name":"test_location",' + \
         '"map":"test_map","map_id":1}'
 
     # test location equality
@@ -53,17 +53,17 @@ def test_station():
 
     # test station methods
     assert station.to_json() == '{"id":"' + str(station.id) + \
-        '","cls":"Station","name":"test_station",' + \
-        '"location":{"id":"' + str(station.location.id) + '","cls":"Location",' + \
+        '","cls":"ochra_common.spaces.station.Station","name":"test_station",' + \
+        '"location":{"id":"' + str(station.location.id) + '","cls":"ochra_common.spaces.location.Location",' + \
         '"name":"test_location","map":"test_map","map_id":1},"stock":null}'
 
     assert station.to_dict() == {
         "id": station.id,
-        "cls": "Station",
+        "cls": "ochra_common.spaces.station.Station",
         "name": "test_station",
         "location": {
             "id": station.location.id,
-            "cls": "Location",
+            "cls": "ochra_common.spaces.location.Location",
             "name": "test_location",
             "map": "test_map",
             "map_id": 1,
@@ -95,11 +95,11 @@ def test_work_station():
     # test work station methods
     assert work_station.to_dict() == {
         "id": work_station.id,
-        "cls": "WorkStation",
+        "cls": "ochra_common.spaces.work_station.WorkStation",
         "name": "test_work_station",
         "location": {
             "id": work_station.location.id,
-            "cls": "Location",
+            "cls": "ochra_common.spaces.location.Location",
             "name": "test_location",
             "map": "test_map",
             "map_id": 1,
@@ -109,8 +109,8 @@ def test_work_station():
     }
 
     assert work_station.to_json() == '{"id":"' + str(work_station.id) + \
-        '","cls":"WorkStation","name":"test_work_station",' + \
-        '"location":{"id":"' + str(work_station.location.id) + '","cls":"Location",' + \
+        '","cls":"ochra_common.spaces.work_station.WorkStation","name":"test_work_station",' + \
+        '"location":{"id":"' + str(work_station.location.id) + '","cls":"ochra_common.spaces.location.Location",' + \
         '"name":"test_location","map":"test_map","map_id":1},"stock":null,"devices":[]}'
 
 
@@ -136,11 +136,11 @@ def test_storage_station():
     # test storage station methods
     assert storage_station.to_dict() == {
         "id": storage_station.id,
-        "cls": "StorageStation",
+        "cls": "ochra_common.spaces.storage_station.StorageStation",
         "name": "test_storage_station",
         "location": {
             "id": storage_station.location.id,
-            "cls": "Location",
+            "cls": "ochra_common.spaces.location.Location",
             "name": "test_location",
             "map": "test_map",
             "map_id": 1,
@@ -149,8 +149,8 @@ def test_storage_station():
     }
 
     assert storage_station.to_json() == '{"id":"' + str(storage_station.id) + \
-        '","cls":"StorageStation","name":"test_storage_station",' + \
-        '"location":{"id":"' + str(storage_station.location.id) + '","cls":"Location",' + \
+        '","cls":"ochra_common.spaces.storage_station.StorageStation","name":"test_storage_station",' + \
+        '"location":{"id":"' + str(storage_station.location.id) + '","cls":"ochra_common.spaces.location.Location",' + \
         '"name":"test_location","map":"test_map","map_id":1},"stock":null}'
 
 
@@ -165,10 +165,10 @@ def test_lab():
     # test lab methods
     assert lab.to_dict() == {
         "id": lab.id,
-        "cls": "Lab",
+        "cls": "ochra_common.spaces.lab.Lab",
         "stations": [],
         "agents": [],
     }
 
     assert lab.to_json() == '{"id":"' + str(lab.id) + \
-        '","cls":"Lab","stations":[],"agents":[]}'
+        '","cls":"ochra_common.spaces.lab.Lab","stations":[],"agents":[]}'

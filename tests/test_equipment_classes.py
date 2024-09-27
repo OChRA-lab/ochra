@@ -32,7 +32,7 @@ def test_operation():
     operation.end_timestamp = end_timestamp
 
     assert operation.to_dict() == {"id": operation.id,
-                                   "cls": "Operation",
+                                   "cls": "ochra_common.equipment.operation.Operation",
                                    "caller_id": caller_id,
                                    "method": "test_method",
                                    "args": {"arg": 1},
@@ -42,7 +42,7 @@ def test_operation():
                                    "result": []}
 
     assert operation.to_json() == '{"id":"' + str(operation.id) + \
-        '","cls":"Operation","caller_id":"' + \
+        '","cls":"ochra_common.equipment.operation.Operation","caller_id":"' + \
         str(caller_id) + '","method":"test_method","args":{"arg":1},"status":-1,' + \
         '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
         end_timestamp.isoformat() + '","result":[]}'
@@ -57,17 +57,17 @@ def test_operation_result():
     assert result.id is not None
     assert result.type == "test"
     assert result.id is not None
-    assert result.cls == "OperationResult"
+    assert result.cls == "ochra_common.equipment.operation_result.OperationResult"
     assert result.data_entry_id == entry_id
 
     # test operation result methods
     assert result.to_dict() == {"id": result.id,
-                                "cls": "OperationResult",
+                                "cls": "ochra_common.equipment.operation_result.OperationResult",
                                 "type": "test",
                                 "data_entry_id": entry_id}
 
     assert result.to_json() == '{"id":"' + str(result.id) + \
-        '","cls":"OperationResult","type":"test","data_entry_id":"' + \
+        '","cls":"ochra_common.equipment.operation_result.OperationResult","type":"test","data_entry_id":"' + \
         str(entry_id) + '"}'
 
 
@@ -85,7 +85,7 @@ def test_device():
 
     # test device methods
     assert device.to_dict() == {"id": device.id,
-                                "cls": "Device",
+                                "cls": "ochra_common.equipment.device.Device",
                                 "name": "test_device",
                                 "inventory": None,
                                 "status": -1,
@@ -93,5 +93,5 @@ def test_device():
                                 "operation_history": []}
 
     assert device.to_json() == '{"id":"' + str(device.id) + \
-        '","cls":"Device","name":"test_device","inventory":null,' + \
+        '","cls":"ochra_common.equipment.device.Device","name":"test_device","inventory":null,' + \
         '"status":-1,"operation_history":[],"station_id":null}'
