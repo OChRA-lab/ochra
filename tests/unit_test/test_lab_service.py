@@ -86,7 +86,8 @@ def test_construct_object(service):
     collection = "test_collection"
     returnValue = labservice.construct_object(mock_call, collection)
     mock_db_conn.create.assert_called_once_with(
-        {"_collection": collection}, {"id": "test", "otherValue": "otherValue"})
+        {"_collection": collection},
+        {"id": "test", "otherValue": "otherValue"})
     assert returnValue == "test"
 
     with pytest.raises(JSONDecodeError):
@@ -103,8 +104,7 @@ def test_call_on_object(service):
     object_id = "test_id"
     collection = "test_collection"
 
-    mock_db_conn.read.side_effect = [
-        "station123", "192.168.1.1", "test_object_name"]
+    mock_db_conn.read.return_value = "test_object_name"
     res = Response()
     res.status_code = 200
     res.data = "test_result"
@@ -117,8 +117,7 @@ def test_call_on_object(service):
         assert returnVal.status_code == 200
         assert returnVal.msg == ""
 
-        mock_db_conn.read.side_effect = [
-            "station123", "192.168.1.1", "test_object_name"]
+        mock_db_conn.read.return_value = "test_object_name"
         # error in execute_op returns 500
         MockStationConnection.side_effect = [Exception(
             "test_exception_mock_station")]
@@ -128,7 +127,7 @@ def test_call_on_object(service):
         assert e.value.detail == "test_exception_mock_station"
 
         # error in read returns 404
-        mock_db_conn.read.side_effect = [None, None, None]
+        mock_db_conn.read.return_value = None
         with pytest.raises(HTTPException) as e:
             labservice.call_on_object(object_id, collection, mock_call)
         assert e.value.status_code == 404
