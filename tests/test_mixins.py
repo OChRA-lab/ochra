@@ -8,13 +8,18 @@ from collections import namedtuple
 
 class TestDataModel(BaseModel):
     id: UUID = Field(default_factory=uuid4)
+    cls: str = Field(default=None)
     name: str = Field(default=None)
     params: dict = Field(default=None)
 
+    def model_post_init(self, __context) -> None:
+        self.cls = f"{self.__class__.__module__}.{self.__class__.__name__}"
+        return super().model_post_init(__context)
+
 
 class TestData(TestDataModel, RestProxyMixin):
-    def __init__(self, object_id, **params):
-        super().__init__(id=object_id, name=self.__class__.__name__, params=params)
+    def __init__(self, object_id, name, **params):
+        super().__init__(id=object_id, name=name, params=params)
         self._mixin_hook("/test/endpoint", object_id)
 
 
@@ -28,7 +33,8 @@ class TestDataReadOnly(TestDataModel, RestProxyMixinReadOnly):
 def test_rest_proxy_mixin(MockLabConnection):
 
     object_id = uuid4()
-    test_model = TestData(object_id, params={"param": "value"})
+    test_model = TestData(object_id, name="test_name",
+                          params={"param": "value"})
 
     # to get the instance of the used mock inside TestData
     mock_lab_connection = MockLabConnection.return_value
@@ -41,6 +47,15 @@ def test_rest_proxy_mixin(MockLabConnection):
     test_model.name
     mock_lab_connection.get_property.assert_called_with(
         "/test/endpoint", object_id, 'name')
+
+    # test ignored fields [id, cls]
+    mock_lab_connection.get_property.reset_mock()  # reset call count
+    assert object_id == test_model.id
+    mock_lab_connection.get_property.assert_not_called()
+
+    assert test_model.cls == f"{test_model.__class__.__module__}.{
+        test_model.__class__.__name__}"
+    mock_lab_connection.get_property.assert_not_called()
 
     # test setter
     test_model.name = 'new_value'
@@ -67,6 +82,15 @@ def test_rest_proxy_mixin_read_only(MockLabConnection):
     test_model.name
     mock_lab_connection.get_property.assert_called_with(
         "/test/endpoint", res.id, 'name')
+
+    # test ignored fields [id, cls]
+    mock_lab_connection.get_property.reset_mock()  # reset call count
+    assert test_model.id != None
+    mock_lab_connection.get_property.assert_not_called()
+
+    assert test_model.cls == f"{test_model.__class__.__module__}.{
+        test_model.__class__.__name__}"
+    mock_lab_connection.get_property.assert_not_called()
 
     # test setter
     test_model.name = 'new_value'

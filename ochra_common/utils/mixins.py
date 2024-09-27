@@ -11,16 +11,16 @@ class RestProxyMixin:
 
         # change the getter and setter for each field to work with endpoint
         for field in self.model_fields.keys():
+            if field not in ["id", "cls"]:
+                def getter(self, name=field):
+                    return self._lab_conn.get_property(endpoint, object_id, name)
 
-            def getter(self, name=field):
-                return self._lab_conn.get_property(endpoint, object_id, name)
+                def setter(self, value, name=field):
+                    print(f"set {name} to {value}")
+                    return self._lab_conn.set_property(endpoint, object_id, name, value)
 
-            def setter(self, value, name=field):
-                print(f"set {name} to {value}")
-                return self._lab_conn.set_property(endpoint, object_id, name, value)
-
-            # Set the property on the class with the custom getter and setter
-            setattr(self.__class__, field, property(getter, setter))
+                # Set the property on the class with the custom getter and setter
+                setattr(self.__class__, field, property(getter, setter))
 
 
 class RestProxyMixinReadOnly:
@@ -34,12 +34,12 @@ class RestProxyMixinReadOnly:
 
         # change the getter and setter for each field to work with endpoint
         for field in self.model_fields.keys():
+            if field not in ["id", "cls"]:
+                def getter(self, name=field):
+                    return self._lab_conn.get_property(endpoint, object_id, name)
 
-            def getter(self, name=field):
-                return self._lab_conn.get_property(endpoint, object_id, name)
+                def setter(self, value, name=field):
+                    print("Read Only")
 
-            def setter(self, value, name=field):
-                print("Read Only")
-
-            # Set the property on the class with the custom getter and setter
-            setattr(self.__class__, field, property(getter, setter))
+                # Set the property on the class with the custom getter and setter
+                setattr(self.__class__, field, property(getter, setter))
