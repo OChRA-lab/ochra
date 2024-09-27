@@ -1,7 +1,7 @@
 from ..utils.singleton_meta import SingletonMeta
 from .rest_adapter import RestAdapter, Result, LabEngineException
 from .api_models import ObjectConstructionRequest, ObjectQueryResponse, ObjectCallRequest, ObjectCallResponse, ObjectPropertySetRequest
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from uuid import UUID
 import logging
 from typing import Any, Type, Union
@@ -87,9 +87,12 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(
                 f"Property {property} not found for {type} {id}")
         try:
-            return ObjectQueryResponse(**result.data)
-        except TypeError:
-            return result.data
+            if isinstance(result.data, list):
+                return [self._convert_to_object_query_response_possibly(data) for data in result.data]
+            elif isinstance(result.data,dict):
+                return self._convert_to_object_query_response_possibly(result.data)
+            else:
+                return result.data
         except Exception as e:
             raise LabEngineException(
                 f"Unexpected error: {e}")
@@ -105,9 +108,15 @@ class LabConnection(metaclass=SingletonMeta):
             f"/{endpoint}/{str(station_identifier)}/get_by_station/{objectType}")
         try:
             return ObjectQueryResponse(**result.data)
-        except ValueError:
+        except ValidationError:
             raise LabEngineException(
                 f"Expected ObjectQueryResponse, got {result.data}")
         except Exception as e:
             raise LabEngineException(
                 f"Unexpected error: {e}")
+
+    def _convert_to_object_query_response_possibly(self, data: Any) -> Union[ObjectQueryResponse, Any]:
+        try:
+            return ObjectQueryResponse(**data)
+        except (ValidationError, TypeError):
+            return data
