@@ -101,7 +101,7 @@ def test_call_on_object(mock_connection):
 
     id = uuid4()
     fake_result = Result(status_code=200, message="success",
-                         data={"return_data": True, "status_code": 0, "msg": "called"})
+                         data={"return_data": True, "warnings": ""})
     mock_rest.post.return_value = fake_result
 
     result = lab_conn.call_on_object(
@@ -112,8 +112,7 @@ def test_call_on_object(mock_connection):
         data={"method": "test_method", "args": {"arg": "value"}},
     )
     assert result.return_data == True
-    assert result.status_code == 0
-    assert result.msg == "called"
+    assert result.warnings == ""
 
     mock_rest.post.return_value = MagicMock(data="invalid_data")
     with pytest.raises(LabEngineException):

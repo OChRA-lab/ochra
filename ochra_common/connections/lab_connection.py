@@ -80,7 +80,7 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(
                 f"Unexpected error: {e}")
 
-    def get_property(self, type: str, id: UUID, property: str) -> Any | ObjectQueryResponse:
+    def get_property(self, type: str, id: UUID, property: str) -> Union[Any, ObjectQueryResponse]:
         result: Result = self.rest_adapter.get(
             f"/{type}/{str(id)}/get_property/{property}")
         if result.status_code == 404:
@@ -100,7 +100,7 @@ class LabConnection(metaclass=SingletonMeta):
             f"/{type}/{str(id)}/modify_property", data=req.model_dump())
         return result.data
 
-    def get_by_station(self, station_identifier: str | UUID, endpoint: str, objectType: str) -> ObjectQueryResponse:
+    def get_by_station(self, station_identifier: Union[str, UUID], endpoint: str, objectType: str) -> ObjectQueryResponse:
         result: Result = self.rest_adapter.get(
             f"/{endpoint}/{str(station_identifier)}/get_by_station/{objectType}")
         try:

@@ -1,7 +1,5 @@
-
-
 from typing import Dict, Any
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from uuid import UUID
 
 
@@ -12,8 +10,7 @@ class ObjectCallRequest(BaseModel):
 
 class ObjectCallResponse(BaseModel):
     return_data: Any
-    status_code: int
-    msg: str
+    warnings: str = Field(default=None)
 
 
 class ObjectQueryResponse(BaseModel):
