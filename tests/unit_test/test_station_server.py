@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from ochra_manager.Station.communicator import Communicator
+from ochra_manager.station.station_server import StationServer
 from pydantic import BaseModel
 from ochra_common.connections.lab_connection import LabConnection
 from typing import Dict, Any, Optional
@@ -22,7 +22,7 @@ class operationExecute(BaseModel):
 
 
 def test_process_operation():
-    communicator = Communicator()
+    communicator = StationServer()
     with patch("ochra_common.connections.lab_connection.LabConnection") as mock:
         mock.return_value = MagicMock()
 

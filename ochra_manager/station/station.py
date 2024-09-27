@@ -1,9 +1,9 @@
-from .communicator import Communicator
+from .station_server import StationServer
 from ochra_common.spaces.work_station import WorkStation
 from ochra_common.utils.mixins import RestProxyMixin
 
 
-class Station(Communicator, WorkStation, RestProxyMixin):
+class Station(StationServer, WorkStation, RestProxyMixin):
     def __init__(self, name, location, offline=False):
         super().__init__(name=name, location=location)
         self._offline = offline

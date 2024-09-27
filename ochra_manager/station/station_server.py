@@ -18,7 +18,7 @@ class operationExecute(BaseModel):
     deviceName: str
     args: Optional[Dict] = None
 
-class Communicator():
+class StationServer():
     def setup_server(self,
                      dbip="138.253.124.144:27017",
                      host_ip="0.0.0.0",

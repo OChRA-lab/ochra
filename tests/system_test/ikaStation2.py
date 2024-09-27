@@ -1,4 +1,4 @@
-from ochra_manager.Station.station import Station
+from ochra_manager.station.station import Station
 from ochra_common.spaces.location import Location
 from ika_plate.handler import IkaPlate as backendIkaPlate
 
