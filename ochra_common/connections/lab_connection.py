@@ -89,7 +89,7 @@ class LabConnection(metaclass=SingletonMeta):
         try:
             if isinstance(result.data, list):
                 return [self._convert_to_object_query_response_possibly(data) for data in result.data]
-            elif isinstance(result.data,dict):
+            elif isinstance(result.data, dict):
                 return self._convert_to_object_query_response_possibly(result.data)
             else:
                 return result.data
@@ -120,3 +120,6 @@ class LabConnection(metaclass=SingletonMeta):
             return ObjectQueryResponse(**data)
         except (ValidationError, TypeError):
             return data
+
+    def load_from_response(obj: ObjectQueryResponse):
+        pass
