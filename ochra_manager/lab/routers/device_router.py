@@ -13,7 +13,7 @@ class DeviceRouter(APIRouter):
         prefix = f"/{COLLECTION}"
         super().__init__(prefix=prefix)
         self.lab_service = lab_service()
-        self.put("/{station_id}/construct")(self.construct_device)
+        self.put("/construct")(self.construct_device)
         self.get("/{object_id}/get_property/{property}")(self.get_device_property)
         self.patch("/{object_id}/modify_property")(self.modify_device_property)
         self.post("/{object_id}/call_method")(self.call_device)
