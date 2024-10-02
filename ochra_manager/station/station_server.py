@@ -1,16 +1,15 @@
 from fastapi import FastAPI, APIRouter, Request, HTTPException
-from typing import Dict, Any
 from pydantic import BaseModel
+from typing import Dict, Optional, Type
 import uvicorn
-from typing import Dict, Any, Optional
-
 import uvicorn.config
-from ..connections.db_connection import DbConnection
+
 from ochra_common.connections.lab_connection import LabConnection
-from abc import ABC, abstractmethod
-import threading
-import time
-import contextlib
+from ochra_common.spaces.location import Location
+from ochra_common.equipment.device import Device
+from ochra_common.equipment.operation import Operation
+from .work_station import WorkStation
+
 
 
 class operationExecute(BaseModel):
@@ -19,53 +18,67 @@ class operationExecute(BaseModel):
     args: Optional[Dict] = None
 
 class StationServer():
-    def setup_server(self,
-                     dbip="138.253.124.144:27017",
-                     host_ip="0.0.0.0",
-                     port=8000,
-                     lab_ip="10.24.169.42") -> None:
-        self._lab_ip = lab_ip
-        self._db_ip = dbip
+    def __init__(self, name: str, location: Location, station_ip: str="127.0.0.1", station_port: int = 8000):
+        self._name = name
+        self._location = location
+        self._ip = station_ip
+        self._port = station_port
+        self._devices = {}
+
+    def setup(self, lab_ip: str = None) -> None:
+        """
+        setup the station server and connect to the lab server if lab_ip is provided
+        
+        Args:
+            lab_ip (str, optional): ip of the lab server connection. Defaults to None.
+        """
+        
         self._app = FastAPI()
         self._router = APIRouter()
-        self._host_ip = host_ip
-        self._port = port
-        self._devices = []
+        
         self._router.add_api_route(
-            "/process_op", self.process_operation, methods=["POST"])
+            "/process_op", self.process_op, methods=["POST"])
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
         self._app.include_router(self._router)
-        self._start_up()
+        
+        self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
+
+    def add_device(self, device: Type[Device]):
+        """
+        add a device to the station dict
+        
+        Args:
+            device (Device): device to add to the station
+        """
+        self._devices[device.id] = device
+        if self._station_proxy:
+            print(f"/////////////adding device {device}")
+            self._station_proxy.add_device(device)
+        
 
     def run(self):
-        """start the communicator server
+        """
+        start the server
+        """
+        uvicorn.run(self._app, host=self._ip, port=self._port)
+
+    def _connect_to_lab(self, lab_ip: str):
+        """connects to the lab server and creates a station model on the db
 
         Args:
-            offline (bool, optional): if true start the station in offline mode. Defaults to False.
+            lab_ip (str): ip of the lab server connection.
         """
-        uvicorn.run(self._app, host=self._host_ip, port=self._port)
+        self._lab_conn = LabConnection(lab_ip)
+        return WorkStation(self._name, self._location)
 
     def ping(self, request: Request):
-        clientHost = request.client.host
-        print(clientHost)
-        return
+        print(f"ping from {request.client.host}")
 
-    def _start_up(self):
-        """Setups the lab and db connections
+    def process_op(self, op: Operation):
+        """retrieve the device from the device dict and execute the method
 
         Args:
-            offline (bool): offline mode
-        """
-        self._lab_conn = LabConnection(self._lab_ip)
-        self._station_id = self._lab_conn.construct_object(
-            type="stations", object=self)
-
-
-    def process_operation(self, args: operationExecute):
-        """search the devices for a device with the given name and execute the method provided in the args
-
-        Args:
-            args (operationExecute): args.operation is the method to execute, args.deviceName is the device to execute the method on, args.args are the arguments to pass to the method
+            op (Operation): operation details to be executed on the device
 
         Raises:
             HTTPException: If the device is not found or the method is not found
@@ -74,10 +87,9 @@ class StationServer():
             Any: return value of the method
         """
         try:
-            for i in self._devices:
-                if i.name == args.deviceName:
-                    method = getattr(i, args.operation)
-                    return method(**args.args)
-            raise Exception("Device not found")
+            # need to add star timestamp to the operation
+            device = self._devices[op.caller_id]
+            method = getattr(device, op.method)
+            return method(**op.args)
         except Exception as e:
             raise HTTPException(500, detail=str(e))
