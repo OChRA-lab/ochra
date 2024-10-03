@@ -4,12 +4,17 @@ import inspect
 
 
 class RestProxyMixin:
+    _new = True
+    _override_id = None
 
     def _mixin_hook(self, endpoint: str, object_id: UUID) -> None:
         # add lab connection and construct object on the endpoint
         self._lab_conn = LabConnection()
-        self._lab_conn.construct_object(
-            endpoint + "/" + str(self.station_id), self)
+        if self._new:
+            self._lab_conn.construct_object(
+                endpoint + "/" + str(self.station_id), self)
+        if self._override_id is not None:
+            object_id = self._override_id
 
         # change the getter and setter for each field to work with endpoint
         for field in self.model_fields.keys():
@@ -23,6 +28,22 @@ class RestProxyMixin:
 
                 # Set the property on the class with the custom getter and setter
                 setattr(self.__class__, field, property(getter, setter))
+
+    @classmethod
+    def from_id(cls, endpoint: str, object_id: UUID):
+        lab_conn: LabConnection = LabConnection()
+        constructer_args = inspect.signature(cls)
+        args = {}
+        for arg in constructer_args.parameters:
+            arg_value = lab_conn.get_property(endpoint, str(object_id), arg)
+            args[arg] = arg_value
+        cls._new = False
+        cls._override_id = object_id
+        instance = cls(**args)
+        instance.id = object_id
+        cls._override_id = None
+        cls._new = True
+        return instance
 
 
 class RestProxyMixinReadOnly:
@@ -52,7 +73,7 @@ class RestProxyMixinReadOnly:
         constructer_args = inspect.signature(cls)
         args = {}
         for arg in constructer_args.parameters:
-            arg_value = lab_conn.get_property(endpoint, object_id, arg)
+            arg_value = lab_conn.get_property(endpoint, str(object_id), arg)
             args[arg] = arg_value
 
         return cls(**args)
