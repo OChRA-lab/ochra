@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter
 from ochra_common.connections.api_models import ObjectCallRequest, ObjectPropertySetRequest, ObjectConstructionRequest
-from ..lab_service import lab_service
+from ..lab_service import LabService
 
 logger = logging.getLogger(__name__)
 COLLECTION = "robots"
@@ -11,7 +11,7 @@ class RobotRouter(APIRouter):
     def __init__(self):
         prefix = f"/{COLLECTION}"
         super().__init__(prefix=prefix)
-        self.lab_service = lab_service()
+        self.lab_service = LabService()
         self.put("/construct")(self.construct_robot)
         self.get("/{object_id}/get_property/{property}")(self.get_property)
         self.patch("/{object_id}/modify_property")(self.modify_property)

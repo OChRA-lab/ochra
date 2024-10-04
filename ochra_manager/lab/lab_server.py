@@ -4,13 +4,12 @@ import logging
 from .routers.device_router import DeviceRouter
 from .routers.station_router import StationRouter
 from .routers.robot_router import RobotRouter
-from pathlib import Path
 import inspect
 
 logger = logging.getLogger(__name__)
 
 
-class LabCommunication():
+class LabServer():
     def __init__(self, host: str, port: int) -> None:
         self.host = host
         self.port = port

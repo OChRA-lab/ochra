@@ -1,5 +1,5 @@
-from ochra_common.utils.singleton_meta import SingletonMeta
-from ochra_common.connections.rest_adapter import RestAdapter, Result, LabEngineException
+from ochra_common.connections.rest_adapter import RestAdapter
+from ochra_common.equipment.operation import Operation
 import logging
 
 
@@ -11,10 +11,12 @@ class StationConnection():
         ssl_verify: bool = False,
         logger: logging.Logger = None,
     ):
-        self.rest_adapter: RestAdapter = RestAdapter(hostname, api_key, ssl_verify, logger)
+        self.rest_adapter: RestAdapter = RestAdapter(
+            hostname, api_key, ssl_verify, logger)
 
-    def execute_op(self, op, deviceName, **kwargs):
-        data = {"operation": op,
-                "deviceName": deviceName,
-                "args": kwargs}
+    def execute_op(self, op: Operation):
+        data = {"id": str(op.id),
+                "caller_id": str(op.caller_id),
+                "method": op.method,
+                "args": op.args}
         return self.rest_adapter.post(endpoint="process_op", data=data)

@@ -1,31 +1,23 @@
 import pytest
-from unittest.mock import MagicMock
+from unittest.mock import patch
 from ochra_manager.connections.station_connection import StationConnection
-from ochra_common.connections.rest_adapter import LabEngineException
+from ochra_common.equipment.operation import Operation
+from ochra_common.connections.rest_adapter import Result
+from uuid import uuid4
 
+@patch("ochra_manager.connections.station_connection.RestAdapter")
+def test_execute_op(MockRestAdapter):
+    station_conn = StationConnection()
+    mock_rest = MockRestAdapter.return_value
+    fake_result = Result(status_code=200, message="",
+                         data="test_result")
+    mock_rest.post.return_value = fake_result
 
-@pytest.fixture
-def station_connection():
-    with pytest.MonkeyPatch.context() as mocker:
-        mock_rest = MagicMock()
-        mocker.setattr("ochra_common.connections.rest_adapter.RestAdapter",
-                  lambda *args, **kwargs: mock_rest)
-        station_conn = StationConnection(hostname="test_host", api_key="test_key", ssl_verify=False)
-    return station_conn, mock_rest
+    op = Operation(caller_id=uuid4(), method="test_op",
+                   args={"param1": "value1"})
+    result = station_conn.execute_op(op)
 
-
-def test_execute_op(station_connection):
-    station_conn, mock_rest = station_connection
-    with pytest.raises(LabEngineException):
-        mock_result = MagicMock(data="success")
-        mock_rest.post.return_value = mock_result
-        result = station_conn.execute_op(
-            op="start", deviceName="test_device", param1="value1")
-        mock_rest.return_value.post.assert_called_once_with(
-            endpoint="process_op",
-            data={"operation": "start",
-                "deviceName": "test_device",
-                "args": {"param1": "value1"}}
-        )
-        assert result == "success"
-
+    mock_rest.post.assert_called_once_with(endpoint="process_op", data={
+                                           "id": str(op.id), "caller_id": str(op.caller_id),
+                                           "method": op.method, "args": op.args})
+    assert result == fake_result

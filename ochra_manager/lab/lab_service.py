@@ -1,17 +1,11 @@
 
-from dataclasses import asdict
-from datetime import datetime
-import importlib
 import logging
-import pkgutil
 from typing import Any
 from ..connections.station_connection import StationConnection
-from fastapi import HTTPException, Request
-from bson import ObjectId
-from bson.errors import InvalidId
+from ochra_common.equipment.operation import Operation
+from fastapi import HTTPException
 from ochra_common.connections.api_models import ObjectCallRequest, ObjectPropertySetRequest
 from ochra_common.connections.api_models import ObjectCallResponse, ObjectConstructionRequest
-from mongoengine import ValidationError
 from ..connections.db_connection import DbConnection
 import uuid
 import json
@@ -19,7 +13,7 @@ import json
 logger = logging.getLogger(__name__)
 
 
-class lab_service():
+class LabService():
     def __init__(self) -> None:
         self.db_conn: DbConnection = DbConnection()
 
@@ -35,16 +29,19 @@ class lab_service():
     #     .objects_dict[clientHost] = StationConnection(clientHost + ":8000")
     #     return clientHost
 
-    def patch_object(self, object_id, collection, args: ObjectPropertySetRequest):
-        """patch properties of object_id using args key-value pairs
+    def patch_object(self, object_id: str, collection: str, set_req: ObjectPropertySetRequest) -> bool:
+        """patch properties of object_id using set_req key-value pairs
 
         Args:
             object_id (str): id of object to patch
-            args (ObjectSet): key-value pairs of property to change
-                                and value to change it to
+            collection (str): db collection where the object will be stored
+            set_req (ObjectPropertySetRequest): request for setting a property's value
 
         Returns:
-            str: object id
+            bool: True if successful
+
+        Raises:
+            HTTPException: if object not found or property not found
         """
 
         try:
@@ -55,96 +52,94 @@ class lab_service():
             raise HTTPException(status_code=404, detail=str(e))
         try:
 
-            logger.debug(f"attempting {args.property} to {args.property_value}")  # noqa
+            logger.debug(f"attempting to update {set_req.property} to {set_req.property_value}")  # noqa
 
             self.db_conn.update({"id": object_id,
                                  "_collection": collection},
-                                {args.property: args.property_value})
+                                {set_req.property: set_req.property_value})
 
-            logger.info(f"changed {args.property} to {args.property_value}")
+            logger.info(f"changed {set_req.property} to {
+                        set_req.property_value}")
 
         except Exception as e:
             logger.error(e)
             raise HTTPException(status_code=500, detail=e)
         return True
 
-    def construct_object(self, args: ObjectConstructionRequest, collection):
+    def construct_object(self, construct_req: ObjectConstructionRequest, collection: str) -> str:
         """construct object of given type in db and instance
 
         Args:
-            args (ObjectConstructionRequest): Object construction model message
+            construct_req (ObjectConstructionRequest): Object construction request
+            collection (str): db collection where the object will be stored
 
         Returns:
             str: object id of constructed object
         """
 
-        string = "created object of type {}"
-        object_loaded: dict = json.loads(args.object_json)
-        string = string.format(object_loaded.get("cls"))
-        id = self.db_conn.create({"_collection": collection}, object_loaded)
-        return object_loaded.get("id")
+        object_dict: dict = json.loads(construct_req.object_json)
+        self.db_conn.create({"_collection": collection}, object_dict)
+        logger.info(f"constructed object of type {object_dict.get('cls')}")
+        return object_dict.get("id")
 
-    def call_on_object(self, object_id, collection, call: ObjectCallRequest):
+    def call_on_object(self, object_id: str, collection: str, call_req: ObjectCallRequest) -> ObjectCallResponse:
         """call method of object on object
 
         Args:
             object_id (str): Object id of object to call on
-            call (ObjectCallModel): object call model message
+            collection (str): db collection where the object will be stored
+            call_req (ObjectCallModel): object call model message
 
         Returns:
             str: object id of object post call
         """
 
         try:
-            # get station
-            station_id = self.db_conn.read({"id": object_id, "_collection": collection},
-                                           "station_id")
-            station_ip = self.db_conn.read({"id": station_id, "_collection": "stations"},
-                                           "station_ip")
+            if collection == "devices":
+                # get station ip
+                station_id = self.db_conn.read(
+                    {"id": object_id, "_collection": collection}, "station_id")
 
-            if station_ip is None or station_id is None:
-                raise HTTPException(
-                    status_code=404, detail="station not found")
+                if station_id is None:
+                    raise HTTPException(
+                        status_code=404, detail="station not found")
+                        
+                station_ip = self.db_conn.read(
+                    {"id": station_id, "_collection": "stations"}, "station_ip")
 
-            station: StationConnection = StationConnection(
-                station_ip + ":8000")
-            # TODO create an operation object and save to db
+                # create station connection
+                station_client: StationConnection = StationConnection(
+                    station_ip + ":8000")
 
-            # call operation on station
-            result = station.execute_op(
-                call.method, self.db_conn.read({"id": object_id, "_collection": collection},
-                                               "name"), **call.args)
-            # return
-            logger.info(f"called {call.method} on {object_id}")
-            responseObject = ObjectCallResponse(
-                return_data=result.data, status_code=result.status_code, msg=result.message)
+                # create operation object
+                op = Operation(caller_id=object_id,
+                               method=call_req.method, args=call_req.args)
+                result = station_client.execute_op(op)
 
-            return responseObject
+                logger.info(f"called {call_req.method} on {object_id}")
+
+                return ObjectCallResponse(return_data=result.data)
+
+            elif collection == "stations":
+                # do station stuff
+                pass
+            elif collection == "robots":
+                # do robot stuff
+                pass
 
         except HTTPException:
             raise
 
         except Exception as e:
-            # operation.status = "failed"
             logger.error(e)
             raise HTTPException(status_code=500, detail=str(e))
 
-    def get_device(self, station_id, device_name):
-
-        devices = self.db_conn.read(
-            {"id": station_id, "_collection": "stations"}, "devices")
-        for device_id in devices:
-            device = self.db_conn.read(
-                {"id": device_id, "_collection": "devices"}, "name")
-            if device == device_name:
-                return device_id
-        raise HTTPException(status_code=404, detail="device not found")
-
-    def get_object_property(self, id, collection, property):
+    def get_object_property(self, object_id: str, collection: str, property: str) -> Any:
         """Get property of object with id
 
         Args:
-            id (str): id of object
+            object_id (str): id of object
+            collection (str): db collection where the object will be stored
             property (str): property of object to get
 
         Raises:
@@ -155,25 +150,69 @@ class lab_service():
         """
         try:
 
-            return self.db_conn.read({"id": id, "_collection": collection},
+            return self.db_conn.read({"id": object_id, "_collection": collection},
                                      property)
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
-    def get_object_by_name(self, name, collection):
+    def get_object_by_name(self, name: str, collection: str) -> str:
+        """Get object by name
+
+        Args:
+            name (str): name of object
+            collection (str): db collection where the object will be stored
+
+        Returns:
+            str: object json representation
+
+        Raises:
+            HTTPException: if object not found
+        """
         try:
 
             return self.db_conn.find({"_collection": collection}, {"name": name})
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
-    def get_object_by_station_and_type(self, station_identifier, collection, objtype):
+    def get_object_by_id(self, object_id: str, collection: str) -> str:
+        """Get object by id
+
+        Args:
+            object_id (str): id of object
+            collection (str): db collection where the object will be stored
+
+        Returns:
+            str: object json representation
+
+        Raises:
+            HTTPException: if object not found
+        """
+        try:
+
+            return self.db_conn.find({"_collection": collection}, {"id": object_id})
+        except Exception as e:
+            raise HTTPException(status_code=404, detail=str(e))
+
+    def get_object_by_station_and_type(self, station_identifier: str, collection: str, obj_type: str) -> str:
+        """Get object by station and type
+
+        Args:
+            station_identifier (str): station id or name
+            collection (str): db collection where the object will be stored
+            obj_type (str): object type
+
+        Returns:
+            str: object json representation
+
+        Raises:
+            HTTPException: if object not found
+        """
         try:
             uuid.UUID(station_identifier)
-            return self.db_conn.find({"_collection": collection}, {"station_id": station_identifier, "_cls": objtype})
+            return self.db_conn.find({"_collection": collection}, {"station_id": station_identifier, "_cls": obj_type})
         except ValueError:
-            stationid = self.db_conn.find({"_collection": "stations"}, {
-                                          "name": station_identifier})
-            return self.db_conn.find({"_collection": collection}, {"station_id": stationid, "_cls": objtype})
+            station_id = self.db_conn.find({"_collection": "stations"}, {
+                "name": station_identifier})
+            return self.db_conn.find({"_collection": collection}, {"station_id": station_id, "_cls": obj_type})
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
