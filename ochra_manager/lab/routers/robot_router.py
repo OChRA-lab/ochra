@@ -2,6 +2,7 @@ import logging
 from fastapi import APIRouter
 from ochra_common.connections.api_models import ObjectCallRequest, ObjectPropertySetRequest, ObjectConstructionRequest
 from ..lab_service import LabService
+from ochra_common.utils.misc import is_valid_uuid
 
 logger = logging.getLogger(__name__)
 COLLECTION = "robots"
@@ -30,5 +31,8 @@ class RobotRouter(APIRouter):
     async def call_robot(self, object_id: str, args: ObjectCallRequest):
         return self.lab_service.call_on_object(object_id, COLLECTION, args)
 
-    async def get_robot(self, robot_name: str):
-        return self.lab_service.get_object_by_name(robot_name, COLLECTION)
+    async def get_robot(self, identifier: str):
+        if is_valid_uuid(identifier):
+            return self.lab_service.get_object_by_id(identifier, COLLECTION)
+        else:
+            return self.lab_service.get_object_by_name(identifier, COLLECTION)

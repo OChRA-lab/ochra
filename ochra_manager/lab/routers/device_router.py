@@ -2,6 +2,7 @@ import logging
 from fastapi import APIRouter
 from ochra_common.connections.api_models import ObjectCallRequest, ObjectPropertySetRequest, ObjectConstructionRequest, ObjectQueryResponse
 from ..lab_service import LabService
+from ochra_common.utils.misc import is_valid_uuid
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -36,5 +37,8 @@ class DeviceRouter(APIRouter):
     async def get_device_by_station(self, station_id: str, device_type: str):
         return self.lab_service.get_object_by_station_and_type(station_id, COLLECTION, device_type)
 
-    async def get_device(self, name: str):
-        return self.lab_service.get_object_by_name(name, COLLECTION)
+    async def get_device(self, identifier: str):
+        if is_valid_uuid(identifier):
+            return self.lab_service.get_object_by_id(identifier, COLLECTION)
+        else:
+            return self.lab_service.get_object_by_name(identifier, COLLECTION)
