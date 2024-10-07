@@ -5,6 +5,7 @@ from pydantic import BaseModel, ValidationError
 from uuid import UUID
 import logging
 from typing import Any, Type, Union
+import importlib
 
 
 class LabConnection(metaclass=SingletonMeta):
@@ -33,6 +34,12 @@ class LabConnection(metaclass=SingletonMeta):
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger)
 
+    def load_from_response(obj: ObjectQueryResponse):
+        module = importlib.import_module(obj.cls)
+        class_to_instance = getattr(module, obj.cls.split(".")[-1])
+        instance = class_to_instance.from_id(obj.id)
+        return instance
+
     def construct_object(self, type: str, object: Type[BaseModel]) -> UUID:
         req = ObjectConstructionRequest(object_json=object.model_dump_json())
         result: Result = self.rest_adapter.put(
@@ -55,7 +62,8 @@ class LabConnection(metaclass=SingletonMeta):
             result: Result = self.rest_adapter.get(
                 f"/{endpoint}/get", {"name": identifier})
         try:
-            return ObjectQueryResponse(**result.data)
+            object = ObjectQueryResponse(**result.data)
+            return self.load_from_response(object)
         except ValueError:
             raise LabEngineException(
                 f"Expected ObjectQueryResponse, got {result.data}")
@@ -121,5 +129,14 @@ class LabConnection(metaclass=SingletonMeta):
         except (ValidationError, TypeError):
             return data
 
-    def load_from_response(obj: ObjectQueryResponse):
-        pass
+    def get_object_id(self, endpoint: str, name: str) -> UUID:
+        result: Result = self.rest_adapter.get(
+            f"/{endpoint}/get", {"name": name})
+        try:
+            return UUID(result.data["id"])
+        except ValueError:
+            raise LabEngineException(
+                f"Expected UUID, got {result.data}")
+        except Exception as e:
+            raise LabEngineException(
+                f"Unexpected error: {e}")
