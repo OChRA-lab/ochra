@@ -100,10 +100,11 @@ class LabConnection(metaclass=SingletonMeta):
             if isinstance(result.data, list):
                 listData = [self._convert_to_object_query_response_possibly(
                     data) for data in result.data]
-                return [self.load_from_response(data) if data is ObjectQueryResponse else data for data in listData]
+                return [self.load_from_response(data) if isinstance(data, ObjectQueryResponse) else data for data in listData]
             elif isinstance(result.data, dict):
-                possibleQueryResponse = self._convert_to_object_query_response_possibly(result.data)
-                if possibleQueryResponse is ObjectQueryResponse:
+                possibleQueryResponse = self._convert_to_object_query_response_possibly(
+                    result.data)
+                if isinstance(possibleQueryResponse, ObjectQueryResponse):
                     return self.load_from_response(possibleQueryResponse)
                 else:
                     return possibleQueryResponse
