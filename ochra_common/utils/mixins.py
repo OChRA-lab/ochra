@@ -12,7 +12,7 @@ class RestProxyMixin:
         self._lab_conn = LabConnection()
         if self._new:
             self._lab_conn.construct_object(
-                endpoint + "/" + str(self.station_id), self)
+                endpoint, self)
         if self._override_id is not None:
             object_id = self._override_id
 
