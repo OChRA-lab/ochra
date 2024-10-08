@@ -22,8 +22,8 @@ class TestDataModel(BaseModel):
 def mock_connection(MockRestAdapter):
     lab_conn = LabConnection(hostname="test_host",
                              api_key="test_key", ssl_verify=False)
-    mock_rest = MockRestAdapter.return_value
-    return lab_conn, mock_rest
+    lab_conn.rest_adapter = MockRestAdapter
+    return lab_conn, MockRestAdapter
 
 
 def test_construct_object(mock_connection):
