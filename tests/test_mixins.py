@@ -66,22 +66,21 @@ def test_rest_proxy_mixin(MockLabConnection):
 @ patch("ochra_common.utils.mixins.LabConnection")
 def test_rest_proxy_mixin_read_only(MockLabConnection):
     mock_lab_connection = MockLabConnection.return_value
-    Response = namedtuple('Response', ['id'])
-    res = Response(id=uuid4())
-    mock_lab_connection.get_object.return_value = res
+    id = uuid4()
+    mock_lab_connection.get_object_id.return_value = id
 
     name = "unique_name"
     test_model = TestDataReadOnly(
         name=name, params={"param": "value"})
 
     # test object retrieval
-    mock_lab_connection.get_object.assert_called_with(
+    mock_lab_connection.get_object_id.assert_called_with(
         "/test/endpoint", name)
 
     # test getter
     test_model.name
     mock_lab_connection.get_property.assert_called_with(
-        "/test/endpoint", res.id, 'name')
+        "/test/endpoint", id, 'name')
 
     # test ignored fields [id, cls]
     mock_lab_connection.get_property.reset_mock()  # reset call count
