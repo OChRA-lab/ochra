@@ -18,7 +18,7 @@ class TestDataModel(BaseModel):
 
 
 class TestData(TestDataModel, RestProxyMixin):
-    def __init__(self, object_id, name, **params):
+    def __init__(self, object_id, name, params):
         super().__init__(id=object_id, name=name, params=params)
         self._mixin_hook("/test/endpoint", object_id)
 
@@ -120,4 +120,29 @@ def test_read_only_from_id(MockLabConnection):
     test_instance.params = "some new params"
 
     assert test_instance.params != "some new params"
-    
+
+
+@patch("ochra_common.utils.mixins.LabConnection")
+def test_proxy_from_id(MockLabConnection):
+    mock_lab_connection = MockLabConnection.return_value
+    id = uuid4()
+
+    mock_lab_connection.get_property.side_effect = [
+        id, "name", {"params": "values"}, "name", {"params": "values"}]
+    test_instance = TestData.from_id("/test/endpoint", id)
+    assert isinstance(test_instance, TestData)
+    assert test_instance.name == "name"
+
+    mock_lab_connection.get_property.reset_mock()
+
+    a = test_instance.params
+
+    assert a == {"params": "values"}
+
+    mock_lab_connection.get_property.assert_called_with(
+        "/test/endpoint", id, 'params')
+
+    test_instance.params = "some new params"
+
+    mock_lab_connection.set_property.assert_called_with(
+        "/test/endpoint", id, "params", "some new params")
