@@ -72,19 +72,19 @@ def test_get_object_by_uuid(mock_connection):
 
     id = uuid4()
     fake_result = Result(status_code=200, message="success",
-                         data={"id": str(id), "cls": "test_cls"})
+                         data={"id": str(id), "cls": "ochra_common.equipment.device.Device"})
 
     mock_rest.get.return_value = fake_result
+    with patch("ochra_common.equipment.device.Device", TestDataModel()) as mock_device:
+        result = lab_conn.get_object("test_type", id)
 
-    result = lab_conn.get_object("test_type", id)
+        mock_rest.get.assert_called_once_with(f"/test_type/get/{id}")
+        assert result.id == id
+        assert isinstance(result, TestDataModel)
 
-    mock_rest.get.assert_called_once_with(f"/test_type/get_by_id/{id}")
-    assert result.id == id
-    assert result.cls == "test_cls"
-
-    mock_rest.get.return_value = MagicMock(data="invalid_data")
-    with pytest.raises(LabEngineException):
-        lab_conn.get_object("test_type", id)
+        mock_rest.get.return_value = MagicMock(data="invalid_data")
+        with pytest.raises(LabEngineException):
+            lab_conn.get_object("test_type", id)
 
 
 def test_delete_object(mock_connection):
