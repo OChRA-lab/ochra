@@ -62,7 +62,7 @@ class LabConnection(metaclass=SingletonMeta):
 
     def get_object(self, endpoint: str, identifier: Union[str, UUID]) -> ObjectQueryResponse:
         result: Result = self.rest_adapter.get(
-                f"/{endpoint}/get/{str(identifier)}")
+            f"/{endpoint}/get/{str(identifier)}")
         try:
             object = ObjectQueryResponse(**result.data)
             return self.load_from_response(object)
@@ -98,9 +98,15 @@ class LabConnection(metaclass=SingletonMeta):
                 f"Property {property} not found for {type} {id}")
         try:
             if isinstance(result.data, list):
-                return [self._convert_to_object_query_response_possibly(data) for data in result.data]
+                listData = [self._convert_to_object_query_response_possibly(
+                    data) for data in result.data]
+                return [self.load_from_response(data) if data is ObjectQueryResponse else data for data in listData]
             elif isinstance(result.data, dict):
-                return self._convert_to_object_query_response_possibly(result.data)
+                possibleQueryResponse = self._convert_to_object_query_response_possibly(result.data)
+                if possibleQueryResponse is ObjectQueryResponse:
+                    return self.load_from_response(possibleQueryResponse)
+                else:
+                    return possibleQueryResponse
             else:
                 return result.data
         except Exception as e:
