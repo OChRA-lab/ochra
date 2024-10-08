@@ -123,7 +123,8 @@ class LabConnection(metaclass=SingletonMeta):
         result: Result = self.rest_adapter.get(
             f"/{endpoint}/{str(station_identifier)}/get_by_station/{objectType}")
         try:
-            return ObjectQueryResponse(**result.data)
+            object = ObjectQueryResponse(**result.data)
+            return self.load_from_response(object)
         except ValidationError:
             raise LabEngineException(
                 f"Expected ObjectQueryResponse, got {result.data}")
