@@ -1,6 +1,8 @@
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from pydantic import BaseModel
 from typing import Dict, Optional, Type
+from os.path import exists as is_file
+import datetime
 import uvicorn
 import uvicorn.config
 
@@ -8,7 +10,7 @@ from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.spaces.location import Location
 from ochra_common.equipment.device import Device
 from ochra_common.equipment.operation import Operation
-from .work_station import WorkStation
+from .station_proxy import StationProxy
 
 
 
@@ -52,7 +54,6 @@ class StationServer():
         """
         self._devices[device.id] = device
         if self._station_proxy:
-            print(f"/////////////adding device {device}")
             self._station_proxy.add_device(device)
         
 
@@ -69,7 +70,7 @@ class StationServer():
             lab_ip (str): ip of the lab server connection.
         """
         self._lab_conn = LabConnection(lab_ip)
-        return WorkStation(self._name, self._location)
+        return StationProxy(self._name, self._location)
 
     def ping(self, request: Request):
         print(f"ping from {request.client.host}")
@@ -90,6 +91,22 @@ class StationServer():
             # need to add star timestamp to the operation
             device = self._devices[op.caller_id]
             method = getattr(device, op.method)
-            return method(**op.args)
+
+            # TODO crete an operation proxy to streamline setting properties
+            if self._lab_conn:
+                self._lab_conn.set_property("operations", op.id, "start_timestamp", datetime.datetime.now().isoformat())
+                # TODO change status to running
+            
+            result =  method(**op.args)
+
+            if self._lab_conn:
+                self._lab_conn.set_property("operations", op.id, "end_timestamp", datetime.datetime.now().isoformat())
+                # TODO change status to complete
+            
+            if is_file(str(result)):
+                # TODO do file stuff to upload to data db
+                return result
+            else:
+                return result
         except Exception as e:
             raise HTTPException(500, detail=str(e))

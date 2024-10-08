@@ -1,12 +1,13 @@
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, patch, call, ANY
 from ochra_manager.station.station_server import StationServer
 from ochra_common.spaces.location import Location
 from ochra_common.equipment.operation import Operation
 from fastapi.testclient import TestClient
 from uuid import uuid4
 
-@patch("ochra_manager.station.station_server.WorkStation")
+
+@patch("ochra_manager.station.station_server.StationProxy")
 @patch("ochra_manager.station.station_server.LabConnection")
 def test_setup(MockLab, MockWorkStationProxy):
     station_loc = Location(name="test_location", map="test_map", map_id=1)
@@ -30,7 +31,7 @@ def test_ping():
     assert response.status_code == 200
 
 
-@patch("ochra_manager.station.station_server.WorkStation")
+@patch("ochra_manager.station.station_server.StationProxy")
 @patch("ochra_manager.station.station_server.LabConnection")
 def test_add_device(MockLab, MockWorkStationProxy):
     station_loc = Location(name="test_location", map="test_map", map_id=1)
@@ -48,17 +49,19 @@ def test_add_device(MockLab, MockWorkStationProxy):
     mock_station_proxy.add_device.assert_called_once_with(mock_device)
 
 
-@patch("ochra_manager.station.station_server.WorkStation")
+@patch("ochra_manager.station.station_server.StationProxy")
 @patch("ochra_manager.station.station_server.LabConnection")
 def test_process_op(MockLab, MockWorkStationProxy):
     station_loc = Location(name="test_location", map="test_map", map_id=1)
     server = StationServer(name="test_station", location=station_loc)
     server.setup(lab_ip="1.2.3.4")
 
+    lab_mock = MockLab.return_value
+
     device_id = uuid4()
     mock_device = MagicMock(spec=["id", "execute_operation"])
     mock_device.id = device_id
-    mock_device.execute_operation.return_value = True
+    mock_device.execute_operation.return_value = [1, 2, 3]
 
     server.add_device(mock_device)
 
@@ -68,18 +71,20 @@ def test_process_op(MockLab, MockWorkStationProxy):
     # This is done to handle fields that are None
     op_json = {"id": str(op.id), "caller_id": str(
         op.caller_id), "method": op.method, "args": op.args}
-    
+
     client = TestClient(server._app)
     response = client.post(
         "/process_op", json=op_json)
-    
+
+    lab_mock.set_property.assert_has_calls([call("operations",
+                                                 op.id, "start_timestamp", ANY), call("operations", op.id, "end_timestamp", ANY)])
     assert response.status_code == 200
-    assert response.json() == True
+    assert response.json() == [1, 2, 3]
     mock_device.execute_operation.assert_called_once_with(**op.args)
 
     # test for invalid operation
     op_json = {"id": str(op.id), "caller_id": str(
-    op.caller_id), "method": "invalid_method", "args": op.args}
+        op.caller_id), "method": "invalid_method", "args": op.args}
 
     response = client.post(
         "/process_op", json=op_json)
@@ -88,12 +93,9 @@ def test_process_op(MockLab, MockWorkStationProxy):
 
     # test for unavailable device
     op_json = {"id": str(op.id), "caller_id": str(
-    uuid4()), "method": op.method, "args": op.args}
+        uuid4()), "method": op.method, "args": op.args}
 
     response = client.post(
         "/process_op", json=op_json)
 
     assert response.status_code == 500
-
-    
-

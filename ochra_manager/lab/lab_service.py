@@ -17,18 +17,6 @@ class LabService():
     def __init__(self) -> None:
         self.db_conn: DbConnection = DbConnection()
 
-    # @staticmethod
-    # def add_device(device):
-    #     logger.info(f"added {device.object_id} to lab")
-    #     .objects_dict[str(device.object_id)] = device
-
-    # @staticmethod
-    # def create_station(request: Request):
-    #     clientHost = request.client.host
-    #     # TODO: create station objects here
-    #     .objects_dict[clientHost] = StationConnection(clientHost + ":8000")
-    #     return clientHost
-
     def patch_object(self, object_id: str, collection: str, set_req: ObjectPropertySetRequest) -> bool:
         """patch properties of object_id using set_req key-value pairs
 
@@ -103,7 +91,7 @@ class LabService():
                 if station_id is None:
                     raise HTTPException(
                         status_code=404, detail="station not found")
-                        
+
                 station_ip = self.db_conn.read(
                     {"id": station_id, "_collection": "stations"}, "station_ip")
 
@@ -111,20 +99,30 @@ class LabService():
                 station_client: StationConnection = StationConnection(
                     station_ip + ":8000")
 
-                # create operation object
+                # create operation object and store in db
                 op = Operation(caller_id=object_id,
                                method=call_req.method, args=call_req.args)
+                # TODO change to use a proxy for operation instead of accessing db directly
+                self.db_conn.create(
+                    {"_collection": "operations"}, json.loads(op.to_json()))
+
+                # pass operation to station to execute
                 result = station_client.execute_op(op)
 
-                logger.info(f"called {call_req.method} on {object_id}")
+                 # TODO change to use a proxy for operation instead of accessing db directly
+                self.db_conn.update({"id": object_id, "_collection": "operations"}, {
+                                    "result": result.data})
 
-                return ObjectCallResponse(return_data=result.data)
+                logger.info(f"called {call_req.method} on {object_id}")
+                
+                # TODO change later to return a better response
+                return str(op.id)
 
             elif collection == "stations":
-                # do station stuff
+                # TODO do station stuff
                 pass
             elif collection == "robots":
-                # do robot stuff
+                # TODO do robot stuff
                 pass
 
         except HTTPException:

@@ -65,7 +65,6 @@ def test_construct_object(mock_service):
         mock_call.object_json = "invalid_json"
         lab_service.construct_object(mock_call, collection)
 
-
 @patch("ochra_manager.lab.lab_service.Operation")
 @patch("ochra_manager.lab.lab_service.StationConnection")
 def test_call_on_object(MockStationConnection, MockOperation, mock_service):
@@ -82,18 +81,19 @@ def test_call_on_object(MockStationConnection, MockOperation, mock_service):
     mock_station_conn = MockStationConnection.return_value
     mock_station_conn.execute_op.return_value = Result(
         status_code=200, data="test_result", message="")
+    MockOperation.return_value.id = "333d1936-1111-222a-adc5-036d7dc72c0e"
+    MockOperation.return_value.to_json.return_value = '{"id": "333d1936-1111-222a-adc5-036d7dc72c0e"}'
 
     result = lab_service.call_on_object(object_id, collection, mock_call)
 
+    mock_db_conn.create.assert_called_once_with({"_collection": "operations"}, {"id": "333d1936-1111-222a-adc5-036d7dc72c0e"})
     MockStationConnection.assert_called_once_with("station_ip:8000")
     MockOperation.assert_called_once_with(
         caller_id=object_id, method=mock_call.method, args=mock_call.args)
     mock_op = MockOperation.return_value
     mock_station_conn.execute_op.assert_called_once_with(mock_op)
 
-    assert isinstance(result, ObjectCallResponse)
-    assert result.return_data == "test_result"
-    assert result.warnings == None
+    assert result == str(mock_op.id)
 
     # error in read returns 404
     with pytest.raises(HTTPException) as e:

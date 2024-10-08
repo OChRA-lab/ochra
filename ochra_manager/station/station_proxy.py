@@ -7,7 +7,7 @@ from uuid import UUID
 from pydantic import Field
 
 
-class WorkStation(WorkStation, RestProxyMixin):
+class StationProxy(WorkStation, RestProxyMixin):
     devices: List[UUID] = Field(default_factory=list)
     
     def __init__(self, name: str, location: Location):
