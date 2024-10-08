@@ -59,7 +59,7 @@ def test_get_object_by_name(mock_connection):
     with patch("ochra_common.equipment.device.Device", TestDataModel()) as mock_device:
         result = lab_conn.get_object("test_type", "test_name")
         mock_rest.get.assert_called_once_with(
-            "/test_type/get", {"name": "test_name"})
+            "/test_type/get/test_name")
         assert result.id == id
         assert isinstance(result, TestDataModel)
         mock_rest.get.return_value = MagicMock(data="invalid_data")
