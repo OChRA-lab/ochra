@@ -12,6 +12,10 @@ class TestDataModel(BaseModel):
     params: dict = Field(default=None)
     objects: list = Field(default=None)
 
+    @classmethod
+    def from_id(cls, id):
+        return cls(id=id)
+
 
 @pytest.fixture
 @patch("ochra_common.connections.lab_connection.RestAdapter")
@@ -49,19 +53,18 @@ def test_get_object_by_name(mock_connection):
 
     id = uuid4()
     fake_result = Result(status_code=200, message="success",
-                         data={"id": str(id), "cls": "test_cls"})
+                         data={"id": str(id), "cls": "ochra_common.equipment.device.Device"})
 
     mock_rest.get.return_value = fake_result
-
-    result = lab_conn.get_object("test_type", "test_name")
-    mock_rest.get.assert_called_once_with(
-        "/test_type/get", {"name": "test_name"})
-    assert result.id == id
-    assert result.cls == "test_cls"
-
-    mock_rest.get.return_value = MagicMock(data="invalid_data")
-    with pytest.raises(LabEngineException):
-        lab_conn.get_object("test_type", "test_name")
+    with patch("ochra_common.equipment.device.Device", TestDataModel()) as mock_device:
+        result = lab_conn.get_object("test_type", "test_name")
+        mock_rest.get.assert_called_once_with(
+            "/test_type/get", {"name": "test_name"})
+        assert result.id == id
+        assert isinstance(result, TestDataModel)
+        mock_rest.get.return_value = MagicMock(data="invalid_data")
+        with pytest.raises(LabEngineException):
+            lab_conn.get_object("test_type", "test_name")
 
 
 def test_get_object_by_uuid(mock_connection):
@@ -143,6 +146,7 @@ def test_get_object_query_response_property(mock_connection):
     with pytest.raises(LabEngineException):
         lab_conn.get_property("stations", id, "name")
 
+
 def test_get_object_query_response_list_property(mock_connection):
     lab_conn, mock_rest = mock_connection
 
@@ -165,6 +169,7 @@ def test_get_object_query_response_list_property(mock_connection):
     with pytest.raises(LabEngineException):
         lab_conn.get_property("stations", id, "name")
 
+
 def test_get_property(mock_connection):
     lab_conn, mock_rest = mock_connection
 
@@ -183,6 +188,7 @@ def test_get_property(mock_connection):
         data="invalid_data", status_code=404)
     with pytest.raises(LabEngineException):
         lab_conn.get_property("stations", id, "name")
+
 
 def test_get_list_property(mock_connection):
     lab_conn, mock_rest = mock_connection
