@@ -23,7 +23,7 @@ def test_operation():
     assert operation.status == -1
     assert operation.start_timestamp == None
     assert operation.end_timestamp == None
-    assert operation.result == []
+    assert operation.result == ""
 
     # test operation methods
     start_timestamp = datetime.now()
@@ -39,13 +39,13 @@ def test_operation():
                                    "status": -1,
                                    "start_timestamp": start_timestamp,
                                    "end_timestamp": end_timestamp,
-                                   "result": []}
+                                   "result": ""}
 
     assert operation.to_json() == '{"id":"' + str(operation.id) + \
         '","cls":"ochra_common.equipment.operation.Operation","caller_id":"' + \
         str(caller_id) + '","method":"test_method","args":{"arg":1},"status":-1,' + \
         '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
-        end_timestamp.isoformat() + '","result":[]}'
+        end_timestamp.isoformat() + '","result":""}'
 
 
 def test_operation_result():

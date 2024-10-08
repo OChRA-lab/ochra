@@ -27,7 +27,7 @@ class Operation(DataModel):
     status: Enum = -1  # TODO: Define OperationStatus Enum
     start_timestamp: datetime = Field(default=None)
     end_timestamp: datetime = Field(default=None)
-    result: List[OperationResult] = Field(default_factory=list)
+    result: str = Field(default="") #TODO for later List[OperationResult] = Field(default_factory=list)
 
     def add_start_timestamp(self, timestamp: datetime):
         """
