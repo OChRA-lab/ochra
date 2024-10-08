@@ -34,8 +34,10 @@ class LabConnection(metaclass=SingletonMeta):
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger)
 
-    def load_from_response(obj: ObjectQueryResponse):
-        module = importlib.import_module(obj.cls)
+    def load_from_response(self, obj: ObjectQueryResponse):
+        moduleNameList = obj.cls.split(".")[:-1]
+        moduleName = ".".join(moduleNameList)
+        module = importlib.import_module(moduleName)
         class_to_instance = getattr(module, obj.cls.split(".")[-1])
         instance = class_to_instance.from_id(obj.id)
         return instance
@@ -55,12 +57,8 @@ class LabConnection(metaclass=SingletonMeta):
                 f"Unexpected error: {e}")
 
     def get_object(self, endpoint: str, identifier: Union[str, UUID]) -> ObjectQueryResponse:
-        if type(identifier) == UUID:
-            result: Result = self.rest_adapter.get(
-                f"/{endpoint}/get_by_id/{str(identifier)}")
-        else:
-            result: Result = self.rest_adapter.get(
-                f"/{endpoint}/get", {"name": identifier})
+        result: Result = self.rest_adapter.get(
+                f"/{endpoint}/get/{str(identifier)}")
         try:
             object = ObjectQueryResponse(**result.data)
             return self.load_from_response(object)
