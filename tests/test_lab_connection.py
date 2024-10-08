@@ -130,44 +130,47 @@ def test_get_object_query_response_property(mock_connection):
 
     id = uuid4()
     fake_result = Result(status_code=200, data={
-                         "id": str(id), "cls": "amy_station"})
+                         "id": str(id), "cls": "ochra_common.equipment.device.Device"})
     mock_rest.get.return_value = fake_result
+    with patch("ochra_common.equipment.device.Device", TestDataModel()) as mock_device:
+        result = lab_conn.get_property("stations", id, "name")
 
-    result = lab_conn.get_property("stations", id, "name")
+        mock_rest.get.assert_called_once_with(
+            f"/stations/{id}/get_property/name")
 
-    mock_rest.get.assert_called_once_with(
-        f"/stations/{id}/get_property/name")
+        assert result.id == id
+        assert isinstance(result, TestDataModel)
 
-    assert result.id == id
-    assert result.cls == "amy_station"
-
-    mock_rest.get.return_value = MagicMock(
-        data="invalid_data", status_code=404)
-    with pytest.raises(LabEngineException):
-        lab_conn.get_property("stations", id, "name")
+        mock_rest.get.return_value = MagicMock(
+            data="invalid_data", status_code=404)
+        with pytest.raises(LabEngineException):
+            lab_conn.get_property("stations", id, "name")
 
 
 def test_get_object_query_response_list_property(mock_connection):
     lab_conn, mock_rest = mock_connection
 
     id = uuid4()
-    fake_result = Result(status_code=200, data=[{"id": str(uuid4()), "cls": "john_station"},
-                         {"id": str(uuid4()), "cls": "tom_station"}])
+    id2 = uuid4()
+    fake_result = Result(status_code=200, data=[{"id": str(id), "cls": "ochra_common.equipment.device.Device"},
+                         {"id": str(id2), "cls": "ochra_common.equipment.device.Device"}])
     mock_rest.get.return_value = fake_result
+    with patch("ochra_common.equipment.device.Device", TestDataModel()) as mock_device:
+        result = lab_conn.get_property("stations", id, "objects")
 
-    result = lab_conn.get_property("stations", id, "objects")
+        mock_rest.get.assert_called_once_with(
+            f"/stations/{id}/get_property/objects")
 
-    mock_rest.get.assert_called_once_with(
-        f"/stations/{id}/get_property/objects")
-
-    assert len(result) == 2
-    assert result[0].cls == "john_station"
-    assert result[1].cls == "tom_station"
-
-    mock_rest.get.return_value = MagicMock(
-        data="invalid_data", status_code=404)
-    with pytest.raises(LabEngineException):
-        lab_conn.get_property("stations", id, "name")
+        assert len(result) == 2
+        assert result[0].id == id
+        assert result[1].id == id2
+        assert isinstance(result[0], TestDataModel)
+        assert isinstance(result[1], TestDataModel)
+        
+        mock_rest.get.return_value = MagicMock(
+            data="invalid_data", status_code=404)
+        with pytest.raises(LabEngineException):
+            lab_conn.get_property("stations", id, "name")
 
 
 def test_get_property(mock_connection):
