@@ -63,7 +63,7 @@ def test_rest_proxy_mixin(MockLabConnection):
         "/test/endpoint", object_id, 'name', 'new_value')
 
 
-@ patch("ochra_common.utils.mixins.LabConnection")
+@patch("ochra_common.utils.mixins.LabConnection")
 def test_rest_proxy_mixin_read_only(MockLabConnection):
     mock_lab_connection = MockLabConnection.return_value
     id = uuid4()
@@ -94,3 +94,30 @@ def test_rest_proxy_mixin_read_only(MockLabConnection):
     # test setter
     test_model.name = 'new_value'
     mock_lab_connection.set_property.assert_not_called()
+
+
+@patch("ochra_common.utils.mixins.LabConnection")
+def test_read_only_from_id(MockLabConnection):
+    mock_lab_connection = MockLabConnection.return_value
+    id = uuid4()
+    mock_lab_connection.get_object_id.return_value = id
+
+    mock_lab_connection.get_property.side_effect = [
+        "name", id, "test_class", {"test_params": "test_args"}, "name", "params", "params"]
+    test_instance = TestDataReadOnly.from_id("/test/endpoint", id)
+    assert isinstance(test_instance, TestDataReadOnly)
+    assert test_instance.name == "name"
+
+    mock_lab_connection.get_property.reset_mock()
+
+    a = test_instance.params
+
+    assert a == "params"
+
+    mock_lab_connection.get_property.assert_called_with(
+        "/test/endpoint", id, 'params')
+
+    test_instance.params = "some new params"
+
+    assert test_instance.params != "some new params"
+    
