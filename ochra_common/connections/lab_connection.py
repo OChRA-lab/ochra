@@ -35,12 +35,16 @@ class LabConnection(metaclass=SingletonMeta):
             hostname, api_key, ssl_verify, logger)
 
     def load_from_response(self, obj: ObjectQueryResponse):
-        moduleNameList = obj.cls.split(".")[:-1]
-        moduleName = ".".join(moduleNameList)
-        module = importlib.import_module(moduleName)
-        class_to_instance = getattr(module, obj.cls.split(".")[-1])
-        instance = class_to_instance.from_id(obj.id)
-        return instance
+        try:
+            moduleNameList = obj.cls.split(".")[:-1]
+            moduleName = ".".join(moduleNameList)
+            module = importlib.import_module(moduleName)
+            class_to_instance = getattr(module, obj.cls.split(".")[-1])
+            instance = class_to_instance.from_id(obj.id)
+            return instance
+        except Exception as e:
+            raise LabEngineException(
+                f"Unexpected error in importing class: {e}")
 
     def construct_object(self, type: str, object: Type[BaseModel]) -> UUID:
         req = ObjectConstructionRequest(object_json=object.model_dump_json())
