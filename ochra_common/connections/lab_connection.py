@@ -83,7 +83,7 @@ class LabConnection(metaclass=SingletonMeta):
         try:
             module = importlib.import_module("ochra_common.equipment.operation_proxy")
             class_to_instance = getattr(module, "OperationProxy")
-            instance = class_to_instance.from_id(result.data)
+            instance = class_to_instance.from_id(**result.data)
             return instance
         except Exception as e:
             raise LabEngineException(
