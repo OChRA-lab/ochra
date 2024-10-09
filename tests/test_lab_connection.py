@@ -11,6 +11,7 @@ class TestDataModel(BaseModel):
     cls: str = Field(default=None)
     params: dict = Field(default=None)
     objects: list = Field(default=None)
+    _endpoint = "test_type"
 
     @classmethod
     def from_id(cls, id):
@@ -104,25 +105,27 @@ def test_call_on_object(mock_connection):
     lab_conn, mock_rest = mock_connection
 
     id = uuid4()
+    operation_id = uuid4()
     fake_result = Result(status_code=200, message="success",
-                         data={"return_data": True, "warnings": ""})
-    mock_rest.post.return_value = Result(status_code=200, data=str(uuid4()))
+                         data=str(operation_id))
+    mock_rest.post.return_value = fake_result
 
-    result = lab_conn.call_on_object(
-        "test_type", id, "test_method", {"arg": "value"})
+    with patch("ochra_common.equipment.operation_proxy.OperationProxy", TestDataModel()) as mock_operation:
+        result = lab_conn.call_on_object(
+            "test_type", id, "test_method", {"arg": "value"})
 
-    mock_rest.post.assert_called_once_with(
-        f"/test_type/{id}/call_method",
-        data={"method": "test_method", "args": {"arg": "value"}},
-    )
-    assert result.return_data == True
-    assert result.warnings == ""
-
-    mock_rest.post.return_value = MagicMock(data="invalid_data")
-    with pytest.raises(LabEngineException):
-        lab_conn.call_on_object(
-            "test_type", UUID(f"{id}"), "test_method", {"arg": "value"}
+        mock_rest.post.assert_called_once_with(
+            f"/test_type/{id}/call_method",
+            data={"method": "test_method", "args": {"arg": "value"}},
         )
+        assert isinstance(result, TestDataModel)
+        assert result.id == operation_id
+
+        mock_rest.post.return_value = MagicMock(data="invalid_data")
+        with pytest.raises(LabEngineException):
+            lab_conn.call_on_object(
+                "test_type", UUID(f"{id}"), "test_method", {"arg": "value"}
+            )
 
 
 def test_get_object_query_response_property(mock_connection):

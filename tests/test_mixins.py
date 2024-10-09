@@ -18,12 +18,14 @@ class TestDataModel(BaseModel):
 
 
 class TestData(TestDataModel, RestProxyMixin):
+    _endpoint = "/test/endpoint"
     def __init__(self, object_id, name, params):
         super().__init__(id=object_id, name=name, params=params)
         self._mixin_hook("/test/endpoint", object_id)
 
 
 class TestDataReadOnly(TestDataModel, RestProxyMixinReadOnly):
+    _endpoint = "/test/endpoint"
     def __init__(self, name, **params):
         super().__init__(id=uuid4(), name=name, params=params)
         self._mixin_hook("/test/endpoint", name)
@@ -104,7 +106,7 @@ def test_read_only_from_id(MockLabConnection):
 
     mock_lab_connection.get_property.side_effect = [
         "name", id, "test_class", {"test_params": "test_args"}, "name", "params", "params"]
-    test_instance = TestDataReadOnly.from_id("/test/endpoint", id)
+    test_instance = TestDataReadOnly.from_id( id)
     assert isinstance(test_instance, TestDataReadOnly)
     assert test_instance.name == "name"
 
@@ -129,7 +131,7 @@ def test_proxy_from_id(MockLabConnection):
 
     mock_lab_connection.get_property.side_effect = [
         id, "name", {"params": "values"}, "name", {"params": "values"}]
-    test_instance = TestData.from_id("/test/endpoint", id)
+    test_instance = TestData.from_id(id)
     assert isinstance(test_instance, TestData)
     assert test_instance.name == "name"
 

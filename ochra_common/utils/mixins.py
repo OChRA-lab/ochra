@@ -30,12 +30,12 @@ class RestProxyMixin:
                 setattr(self.__class__, field, property(getter, setter))
 
     @classmethod
-    def from_id(cls, endpoint: str, object_id: UUID):
+    def from_id(cls, object_id: UUID):
         lab_conn: LabConnection = LabConnection()
         constructer_args = inspect.signature(cls)
         args = {}
         for arg in constructer_args.parameters:
-            arg_value = lab_conn.get_property(endpoint, str(object_id), arg)
+            arg_value = lab_conn.get_property(cls._endpoint, str(object_id), arg)
             args[arg] = arg_value
         cls._new = False
         cls._override_id = object_id
@@ -68,12 +68,12 @@ class RestProxyMixinReadOnly:
                 setattr(self.__class__, field, property(getter, setter))
 
     @classmethod
-    def from_id(cls, endpoint: str, object_id: UUID):
+    def from_id(cls, object_id: UUID):
         lab_conn: LabConnection = LabConnection()
         constructer_args = inspect.signature(cls)
         args = {}
         for arg in constructer_args.parameters:
-            arg_value = lab_conn.get_property(endpoint, str(object_id), arg)
+            arg_value = lab_conn.get_property(cls._endpoint, str(object_id), arg)
             args[arg] = arg_value
 
         return cls(**args)
