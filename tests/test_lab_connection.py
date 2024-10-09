@@ -106,7 +106,7 @@ def test_call_on_object(mock_connection):
     id = uuid4()
     fake_result = Result(status_code=200, message="success",
                          data={"return_data": True, "warnings": ""})
-    mock_rest.post.return_value = Result(status_code=200, data={"id": uuid4()})
+    mock_rest.post.return_value = Result(status_code=200, data=str(uuid4()))
 
     result = lab_conn.call_on_object(
         "test_type", id, "test_method", {"arg": "value"})
