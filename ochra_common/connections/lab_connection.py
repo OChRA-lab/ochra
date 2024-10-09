@@ -6,7 +6,7 @@ from uuid import UUID
 import logging
 from typing import Any, Type, Union
 import importlib
-
+from ..equipment.operation_proxy import OperationProxy
 
 class LabConnection(metaclass=SingletonMeta):
     """lab adapter built on top of RestAdapter,
@@ -82,10 +82,7 @@ class LabConnection(metaclass=SingletonMeta):
         result: Result = self.rest_adapter.post(
             f"/{type}/{str(id)}/call_method", data=req.model_dump())
         try:
-            return ObjectCallResponse(**result.data)
-        except ValueError:
-            raise LabEngineException(
-                f"Expected ObjectCallResponse, got {result.data}")
+            return OperationProxy.from_id(result.data)
         except Exception as e:
             raise LabEngineException(
                 f"Unexpected error: {e}")
