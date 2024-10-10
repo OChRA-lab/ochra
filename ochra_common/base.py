@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Literal, Dict
 import uuid
 from pydantic import BaseModel, Field
 
@@ -19,21 +19,3 @@ class DataModel(BaseModel):
         # retrieve the class name in addition to its import path
         self.cls = f"{self.__class__.__module__}.{self.__class__.__name__}"
         return super().model_post_init(__context)
-
-    def to_json(self) -> str:
-        """Convert the data model instance to a JSON string.
-
-        Returns:
-            str: json string representation of the data model instance.
-        """
-
-        return self.model_dump_json()
-
-    def to_dict(self) -> dict:
-        """
-        Convert the data model instance to a JSON-serializable dictionary.
-
-        Returns:
-            dict: A dictionary representation of the data model instance.
-        """
-        return self.model_dump()
