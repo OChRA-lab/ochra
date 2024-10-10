@@ -4,16 +4,15 @@ import inspect
 
 
 class RestProxyMixin:
-    _new = True
     _override_id = None
 
     def _mixin_hook(self, endpoint: str, object_id: UUID) -> None:
         # add lab connection and construct object on the endpoint
         self._lab_conn = LabConnection()
-        if self._new:
+        if self._override_id is None:
             self._lab_conn.construct_object(
                 endpoint, self)
-        if self._override_id is not None:
+        else:
             object_id = self._override_id
 
         # change the getter and setter for each field to work with endpoint
@@ -37,12 +36,10 @@ class RestProxyMixin:
         for arg in constructer_args.parameters:
             arg_value = lab_conn.get_property(cls._endpoint, str(object_id), arg)
             args[arg] = arg_value
-        cls._new = False
         cls._override_id = object_id
         instance = cls(**args)
         instance.id = object_id
         cls._override_id = None
-        cls._new = True
         return instance
 
 
