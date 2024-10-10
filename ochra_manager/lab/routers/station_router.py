@@ -23,6 +23,7 @@ class StationRouter(APIRouter):
     async def construct_station(self, args: ObjectConstructionRequest, request: Request):
         print(request.client.host)
         object = json.loads(args.object_json)
+        # TODO we can just set this as part of the station model
         object["station_ip"] = request.client.host
         args.object_json = json.dumps(object)
         return self.lab_service.construct_object(args, COLLECTION)

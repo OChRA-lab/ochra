@@ -63,6 +63,10 @@ class StationServer():
         """
         uvicorn.run(self._app, host=self._ip, port=self._port)
 
+    @property
+    def id(self):
+        return self._station_proxy.id
+
     def _connect_to_lab(self, lab_ip: str):
         """connects to the lab server and creates a station model on the db
 

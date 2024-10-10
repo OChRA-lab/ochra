@@ -1,6 +1,5 @@
-from ika_plate.abstract import IkaPlateAbstract
+from .abstract import IkaPlateAbstract
 from ochra_common.utils.mixins import RestProxyMixinReadOnly
-import uuid
 from ochra_common.connections.lab_connection import LabConnection
 
 

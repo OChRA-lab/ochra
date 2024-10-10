@@ -6,7 +6,6 @@ class IkaPlate(IkaPlateAbstract, RestProxyMixin):
     def __init__(self, name, station_id):
         super().__init__(name=name, station_id=station_id)
         self._mixin_hook("devices", self.id)
-        self._lab_init(f"devices/{station_id}")
 
     def set_temperature(self, temperature: int) -> bool:
         self.temperature = temperature
