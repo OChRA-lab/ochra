@@ -35,10 +35,9 @@ class LabConnection(metaclass=SingletonMeta):
 
     def load_from_response(self, obj: ObjectQueryResponse):
         try:
-            moduleNameList = obj.cls.split(".")[:-1]
-            moduleName = ".".join(moduleNameList)
+            moduleName, class_name = obj.cls.rsplit(".",1)
             module = importlib.import_module(moduleName)
-            class_to_instance = getattr(module, obj.cls.split(".")[-1])
+            class_to_instance = getattr(module, class_name)
             instance = class_to_instance.from_id(obj.id)
             return instance
         except Exception as e:
