@@ -142,7 +142,7 @@ class LabConnection(metaclass=SingletonMeta):
 
     def get_object_id(self, endpoint: str, name: str) -> UUID:
         result: Result = self.rest_adapter.get(
-            f"/{endpoint}/get", {"name": name})
+            f"/{endpoint}/get", {"identifier": name})
         try:
             return UUID(result.data["id"])
         except ValueError:
