@@ -2,10 +2,10 @@ from ochra_common.connections.lab_connection import LabConnection
 from ika_plate.device import IkaPlate
 
 # connect to lab
-mylabConnection = LabConnection("localhost:8001")
+mylabConnection: LabConnection = LabConnection("localhost:8001")
 
 # get my ika plate
-myIkaplate = IkaPlate(name="amyIka")
+myIkaplate = mylabConnection.get_object("devices", "yumi_ika")
 
 # try to set (frontend)
 myIkaplate.status = "idle"
@@ -33,6 +33,4 @@ vial = Vessel("vial")
 yumi.execute("home")
 yumi.execute("move_vial")
 ika_plate.add_vial(vial)
-op_result : OperationResult = ika_plate.set_temperature(100)
-
-
+op_result: OperationResult = ika_plate.set_temperature(100)

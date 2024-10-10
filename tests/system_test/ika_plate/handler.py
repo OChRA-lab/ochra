@@ -3,6 +3,8 @@ from ochra_common.utils.mixins import RestProxyMixin
 
 
 class IkaPlate(IkaPlateAbstract, RestProxyMixin):
+    _endpoint = "devices"
+
     def __init__(self, name, station_id):
         super().__init__(name=name, station_id=station_id)
         self._mixin_hook("devices", self.id)

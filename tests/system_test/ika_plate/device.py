@@ -4,6 +4,8 @@ from ochra_common.connections.lab_connection import LabConnection
 
 
 class IkaPlate(IkaPlateAbstract, RestProxyMixinReadOnly):
+    _endpoint = "devices"
+
     def __init__(self, name):
         self._mixin_hook("devices", name)
 
