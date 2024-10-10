@@ -9,12 +9,15 @@ from pydantic import Field
 
 class StationProxy(WorkStation, RestProxyMixin):
     devices: List[UUID] = Field(default_factory=list)
-    
+
     def __init__(self, name: str, location: Location):
         super().__init__(name=name, location=location)
         self._mixin_hook("stations", self.id)
 
     def add_device(self, device: Type[Device]):
         devices = self.devices
+        cls = device.cls.replace("handler", "device")
+        device.cls = self._lab_conn.set_property(
+            "devices", device.id, "cls", cls)
         devices.append(device.id)
         self.devices = devices
