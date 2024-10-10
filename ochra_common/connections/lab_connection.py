@@ -7,6 +7,7 @@ import logging
 from typing import Any, Type, Union
 import importlib
 
+
 class LabConnection(metaclass=SingletonMeta):
     """lab adapter built on top of RestAdapter,
     heavily coupled to lab engine api
@@ -35,7 +36,7 @@ class LabConnection(metaclass=SingletonMeta):
 
     def load_from_response(self, obj: ObjectQueryResponse):
         try:
-            moduleName, class_name = obj.cls.rsplit(".",1)
+            moduleName, class_name = obj.cls.rsplit(".", 1)
             module = importlib.import_module(moduleName)
             class_to_instance = getattr(module, class_name)
             instance = class_to_instance.from_id(obj.id)
@@ -60,7 +61,7 @@ class LabConnection(metaclass=SingletonMeta):
 
     def get_object(self, endpoint: str, identifier: Union[str, UUID]) -> ObjectQueryResponse:
         result: Result = self.rest_adapter.get(
-            f"/{endpoint}/get/{str(identifier)}")
+            f"/{endpoint}/get", {"identifier": str(identifier)})
         try:
             object = ObjectQueryResponse(**result.data)
             return self.load_from_response(object)
@@ -80,7 +81,8 @@ class LabConnection(metaclass=SingletonMeta):
         result: Result = self.rest_adapter.post(
             f"/{type}/{str(id)}/call_method", data=req.model_dump())
         try:
-            module = importlib.import_module("ochra_common.equipment.operation_proxy")
+            module = importlib.import_module(
+                "ochra_common.equipment.operation_proxy")
             class_to_instance = getattr(module, "OperationProxy")
             instance = class_to_instance.from_id(result.data)
             return instance

@@ -34,7 +34,7 @@ class RestProxyMixin:
         constructer_args = inspect.signature(cls)
         args = {}
         for arg in constructer_args.parameters:
-            arg_value = lab_conn.get_property(cls._endpoint, str(object_id), arg)
+            arg_value = lab_conn.get_property(cls._endpoint.default, str(object_id), arg)
             args[arg] = arg_value
         cls._override_id = object_id
         instance = cls(**args)
