@@ -34,7 +34,8 @@ class RestProxyMixin:
         constructer_args = inspect.signature(cls)
         args = {}
         for arg in constructer_args.parameters:
-            arg_value = lab_conn.get_property(cls._endpoint.default, str(object_id), arg)
+            arg_value = lab_conn.get_property(
+                cls._endpoint.default, str(object_id), arg)
             args[arg] = arg_value
         cls._override_id = object_id
         instance = cls(**args)
@@ -51,18 +52,16 @@ class RestProxyMixinReadOnly:
 
         # TODO add a check if the object is a device or something else
         object_id = lab_conn.get_object_id(endpoint, name)
-
         # change the getter and setter for each field to work with endpoint
         for field in self.model_fields.keys():
-            if field not in ["id", "cls"]:
-                def getter(self, name=field):
-                    return lab_conn.get_property(endpoint, object_id, name)
+            def getter(self, name=field):
+                return lab_conn.get_property(endpoint, object_id, name)
 
-                def setter(self, value, name=field):
-                    print("Read Only")
+            def setter(self, value, name=field):
+                print("Read Only")
 
-                # Set the property on the class with the custom getter and setter
-                setattr(self.__class__, field, property(getter, setter))
+            # Set the property on the class with the custom getter and setter
+            setattr(self.__class__, field, property(getter, setter))
 
     @classmethod
     def from_id(cls, object_id: UUID):
@@ -70,7 +69,8 @@ class RestProxyMixinReadOnly:
         constructer_args = inspect.signature(cls)
         args = {}
         for arg in constructer_args.parameters:
-            arg_value = lab_conn.get_property(cls._endpoint.default, str(object_id), arg)
+            arg_value = lab_conn.get_property(
+                cls._endpoint.default, str(object_id), arg)
             args[arg] = arg_value
 
         return cls(**args)
