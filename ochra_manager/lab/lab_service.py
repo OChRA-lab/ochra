@@ -100,11 +100,11 @@ class LabService():
                     station_ip + ":8000")
 
                 # create operation object and store in db
-                op = Operation(caller_id=object_id,
+                op: Operation = Operation(caller_id=object_id,
                                method=call_req.method, args=call_req.args)
                 # TODO change to use a proxy for operation instead of accessing db directly
                 self.db_conn.create(
-                    {"_collection": "operations"}, json.loads(op.to_json()))
+                    {"_collection": "operations"}, json.loads(op.model_dump_json()))
 
                 # pass operation to station to execute
                 result = station_client.execute_op(op)
