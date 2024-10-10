@@ -29,24 +29,6 @@ class Operation(DataModel):
     end_timestamp: datetime = Field(default=None)
     result: str = Field(default="") #TODO for later List[OperationResult] = Field(default_factory=list)
 
-    def add_start_timestamp(self, timestamp: datetime):
-        """
-        Add a start timestamp to the operation.
-
-        Args:
-            timestamp (datetime): The timestamp when the operation started.
-        """
-        raise NotImplementedError
-
-    def add_end_timestamp(self, timestamp: datetime):
-        """
-        Add an end timestamp to the operation.
-
-        Args:
-            timestamp (datetime): The timestamp when the operation ended.
-        """
-        raise NotImplementedError
-
     def add_result(self, result: OperationResult):
         """
         Add a result to the operation.

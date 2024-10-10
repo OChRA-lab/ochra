@@ -5,7 +5,7 @@ from pydantic import BaseModel, ValidationError
 from uuid import UUID
 import logging
 from typing import Any, Type, Union
-
+import importlib
 
 class LabConnection(metaclass=SingletonMeta):
     """lab adapter built on top of RestAdapter,
@@ -33,6 +33,17 @@ class LabConnection(metaclass=SingletonMeta):
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger)
 
+    def load_from_response(self, obj: ObjectQueryResponse):
+        try:
+            moduleName, class_name = obj.cls.rsplit(".",1)
+            module = importlib.import_module(moduleName)
+            class_to_instance = getattr(module, class_name)
+            instance = class_to_instance.from_id(obj.id)
+            return instance
+        except Exception as e:
+            raise LabEngineException(
+                f"Unexpected error in importing class: {e}")
+
     def construct_object(self, type: str, object: Type[BaseModel]) -> UUID:
         req = ObjectConstructionRequest(object_json=object.model_dump_json())
         result: Result = self.rest_adapter.put(
@@ -48,14 +59,11 @@ class LabConnection(metaclass=SingletonMeta):
                 f"Unexpected error: {e}")
 
     def get_object(self, endpoint: str, identifier: Union[str, UUID]) -> ObjectQueryResponse:
-        if type(identifier) == UUID:
-            result: Result = self.rest_adapter.get(
-                f"/{endpoint}/get_by_id/{str(identifier)}")
-        else:
-            result: Result = self.rest_adapter.get(
-                f"/{endpoint}/get", {"name": identifier})
+        result: Result = self.rest_adapter.get(
+            f"/{endpoint}/get/{str(identifier)}")
         try:
-            return ObjectQueryResponse(**result.data)
+            object = ObjectQueryResponse(**result.data)
+            return self.load_from_response(object)
         except ValueError:
             raise LabEngineException(
                 f"Expected ObjectQueryResponse, got {result.data}")
@@ -72,10 +80,10 @@ class LabConnection(metaclass=SingletonMeta):
         result: Result = self.rest_adapter.post(
             f"/{type}/{str(id)}/call_method", data=req.model_dump())
         try:
-            return ObjectCallResponse(**result.data)
-        except ValueError:
-            raise LabEngineException(
-                f"Expected ObjectCallResponse, got {result.data}")
+            module = importlib.import_module("ochra_common.equipment.operation_proxy")
+            class_to_instance = getattr(module, "OperationProxy")
+            instance = class_to_instance.from_id(result.data)
+            return instance
         except Exception as e:
             raise LabEngineException(
                 f"Unexpected error: {e}")
@@ -88,9 +96,16 @@ class LabConnection(metaclass=SingletonMeta):
                 f"Property {property} not found for {type} {id}")
         try:
             if isinstance(result.data, list):
-                return [self._convert_to_object_query_response_possibly(data) for data in result.data]
-            elif isinstance(result.data,dict):
-                return self._convert_to_object_query_response_possibly(result.data)
+                listData = [self._convert_to_object_query_response_possibly(
+                    data) for data in result.data]
+                return [self.load_from_response(data) if isinstance(data, ObjectQueryResponse) else data for data in listData]
+            elif isinstance(result.data, dict):
+                possibleQueryResponse = self._convert_to_object_query_response_possibly(
+                    result.data)
+                if isinstance(possibleQueryResponse, ObjectQueryResponse):
+                    return self.load_from_response(possibleQueryResponse)
+                else:
+                    return possibleQueryResponse
             else:
                 return result.data
         except Exception as e:
@@ -107,7 +122,8 @@ class LabConnection(metaclass=SingletonMeta):
         result: Result = self.rest_adapter.get(
             f"/{endpoint}/{str(station_identifier)}/get_by_station/{objectType}")
         try:
-            return ObjectQueryResponse(**result.data)
+            object = ObjectQueryResponse(**result.data)
+            return self.load_from_response(object)
         except ValidationError:
             raise LabEngineException(
                 f"Expected ObjectQueryResponse, got {result.data}")
@@ -120,3 +136,15 @@ class LabConnection(metaclass=SingletonMeta):
             return ObjectQueryResponse(**data)
         except (ValidationError, TypeError):
             return data
+
+    def get_object_id(self, endpoint: str, name: str) -> UUID:
+        result: Result = self.rest_adapter.get(
+            f"/{endpoint}/get", {"name": name})
+        try:
+            return UUID(result.data["id"])
+        except ValueError:
+            raise LabEngineException(
+                f"Expected UUID, got {result.data}")
+        except Exception as e:
+            raise LabEngineException(
+                f"Unexpected error: {e}")
