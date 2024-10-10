@@ -29,7 +29,7 @@ def test_task():
     task.end_timestamp = end_timestamp
 
     # test task methods
-    assert task.to_dict() == {
+    assert task.model_dump() == {
         "id": task.id,
         "cls": "ochra_common.agents.task.Task",
         "assignee_id": assignee_id,
@@ -40,7 +40,7 @@ def test_task():
         "end_timestamp": end_timestamp
     }
 
-    assert task.to_json() == '{"id":"' + str(task.id) + '","cls":"ochra_common.agents.task.Task"' +\
+    assert task.model_dump_json() == '{"id":"' + str(task.id) + '","cls":"ochra_common.agents.task.Task"' +\
         ',"assignee_id":"' + str(assignee_id) + '","name":"test_name","args":{},"status":-1,' + \
         '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
         end_timestamp.isoformat() + '"}'
@@ -65,7 +65,7 @@ def test_robot_task():
     task.end_timestamp = end_timestamp
 
     # test task methods
-    assert task.to_dict() == {
+    assert task.model_dump() == {
         "id": task.id,
         "cls": "ochra_common.agents.robot_task.RobotTask",
         "assignee_id": assignee_id,
@@ -77,7 +77,7 @@ def test_robot_task():
         "priority": -1
     }
 
-    assert task.to_json() == '{"id":"' + str(task.id) + '","cls":"ochra_common.agents.robot_task.RobotTask"' +\
+    assert task.model_dump_json() == '{"id":"' + str(task.id) + '","cls":"ochra_common.agents.robot_task.RobotTask"' +\
         ',"assignee_id":"' + str(assignee_id) + '","name":"test_name","args":{},"status":-1,' + \
         '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
         end_timestamp.isoformat() + '","priority":-1}'
@@ -101,7 +101,7 @@ def test_scientist_task():
     task.end_timestamp = end_timestamp
 
     # test task methods
-    assert task.to_dict() == {
+    assert task.model_dump() == {
         "id": task.id,
         "cls": "ochra_common.agents.scientist_task.ScientistTask",
         "assignee_id": assignee_id,
@@ -112,7 +112,7 @@ def test_scientist_task():
         "end_timestamp": end_timestamp
     }
 
-    assert task.to_json() == '{"id":"' + str(task.id) + '","cls":"ochra_common.agents.scientist_task.ScientistTask"' +\
+    assert task.model_dump_json() == '{"id":"' + str(task.id) + '","cls":"ochra_common.agents.scientist_task.ScientistTask"' +\
         ',"assignee_id":"' + str(assignee_id) + '","name":"test_name","args":{},"status":-1,' + \
         '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
         end_timestamp.isoformat() + '"}'
@@ -128,7 +128,7 @@ def test_agent():
     assert agent.tasks_history == []
 
     # test agent methods
-    assert agent.to_dict() == {
+    assert agent.model_dump() == {
         "id": agent.id,
         "cls": "ochra_common.agents.agent.Agent",
         "name": "test_name",
@@ -137,7 +137,7 @@ def test_agent():
         "tasks_history": []
     }
 
-    assert agent.to_json() == '{"id":"' + str(agent.id) + '","cls":"ochra_common.agents.agent.Agent",' + \
+    assert agent.model_dump_json() == '{"id":"' + str(agent.id) + '","cls":"ochra_common.agents.agent.Agent",' + \
         '"name":"test_name","status":-1,"assigned_task":null' + \
         ',"tasks_history":[]}'
 
@@ -152,7 +152,7 @@ def test_scientist():
     assert scientist.tasks_history == []
 
     # test scientist methods
-    assert scientist.to_dict() == {
+    assert scientist.model_dump() == {
         "id": scientist.id,
         "cls": "ochra_common.agents.scientist.Scientist",
         "name": "test_scientist",
@@ -162,7 +162,7 @@ def test_scientist():
         "tasks_history": []
     }
 
-    assert scientist.to_json() == '{"id":"' + str(scientist.id) + '","cls":"ochra_common.agents.scientist.Scientist",' + \
+    assert scientist.model_dump_json() == '{"id":"' + str(scientist.id) + '","cls":"ochra_common.agents.scientist.Scientist",' + \
         '"name":"test_scientist","status":-1,"assigned_task":null,"tasks_history":[],"privilege":-1}'
 
 
@@ -178,7 +178,7 @@ def test_robot():
     assert robot.tasks_history == []
 
     # test robot methods
-    assert robot.to_dict() == {
+    assert robot.model_dump() == {
         "id": robot.id,
         "cls": "ochra_common.agents.robot.Robot",
         "type": "test_type",
@@ -189,7 +189,7 @@ def test_robot():
         "tasks_history": []
     }
 
-    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.robot.Robot",' + \
+    assert robot.model_dump_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.robot.Robot",' + \
         '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
         '"type":"test_type","location":null}'
 
@@ -208,7 +208,7 @@ def test_manipulator():
     assert robot.available_tasks == ["task1", "task2"]
 
     # test robot methods
-    assert robot.to_dict() == {
+    assert robot.model_dump() == {
         "id": robot.id,
         "cls": "ochra_common.agents.manipulator.Manipulator",
         "type": "test_type",
@@ -220,7 +220,7 @@ def test_manipulator():
         "available_tasks": ["task1", "task2"]
     }
 
-    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.manipulator.Manipulator",' + \
+    assert robot.model_dump_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.manipulator.Manipulator",' + \
         '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
         '"type":"test_type","location":null,"available_tasks":["task1","task2"]}'
 
@@ -238,7 +238,7 @@ def test_mobile_platform():
     assert robot.conditions == {}
 
     # test robot methods
-    assert robot.to_dict() == {
+    assert robot.model_dump() == {
         "id": robot.id,
         "cls": "ochra_common.agents.mobile_platform.MobilePlatform",
         "type": "test_type",
@@ -250,7 +250,7 @@ def test_mobile_platform():
         "conditions": {}
     }
 
-    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.mobile_platform.MobilePlatform",' + \
+    assert robot.model_dump_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.mobile_platform.MobilePlatform",' + \
         '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
         '"type":"test_type","location":null,"conditions":{}}'
 
@@ -270,7 +270,7 @@ def test_mobile_manipulator():
     assert robot.conditions == {}
 
     # test robot methods
-    assert robot.to_dict() == {
+    assert robot.model_dump() == {
         "id": robot.id,
         "cls": "ochra_common.agents.mobile_manipulator.MobileManipulator",
         "type": "test_type",
@@ -283,6 +283,6 @@ def test_mobile_manipulator():
         "conditions": {}
     }
 
-    assert robot.to_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.mobile_manipulator.MobileManipulator",' + \
+    assert robot.model_dump_json() == '{"id":"' + str(robot.id) + '","cls":"ochra_common.agents.mobile_manipulator.MobileManipulator",' + \
         '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
         '"type":"test_type","location":null,"conditions":{},"available_tasks":["task1","task2"]}'

@@ -11,10 +11,14 @@ def test_base_model():
 
     # test base model methods
     assert (
-        model.to_json()
+        model.model_dump_json()
         == f'{{"id":"{model.id}","cls":"ochra_common.base.DataModel"}}'
     )
-    assert model.to_dict() == {
+    assert model.model_dump(mode="json") == {
+        "id": str(model.id),
+        "cls": "ochra_common.base.DataModel",
+    }
+    assert model.model_dump() == {
         "id": model.id,
         "cls": "ochra_common.base.DataModel",
     }

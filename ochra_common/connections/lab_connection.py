@@ -1,7 +1,8 @@
 from ..utils.singleton_meta import SingletonMeta
+from ..base import DataModel
 from .rest_adapter import RestAdapter, Result, LabEngineException
 from .api_models import ObjectConstructionRequest, ObjectQueryResponse, ObjectCallRequest, ObjectCallResponse, ObjectPropertySetRequest
-from pydantic import BaseModel, ValidationError
+from pydantic import ValidationError
 from uuid import UUID
 import logging
 from typing import Any, Type, Union
@@ -45,10 +46,10 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(
                 f"Unexpected error in importing class: {e}")
 
-    def construct_object(self, type: str, object: Type[BaseModel]) -> UUID:
+    def construct_object(self, type: str, object: Type[DataModel]) -> UUID:
         req = ObjectConstructionRequest(object_json=object.model_dump_json())
         result: Result = self.rest_adapter.put(
-            f"/{type}/construct", data=req.model_dump())
+            f"/{type}/construct", data=req.model_dump(mode="json"))
         try:
             id = UUID(result.data)
             return id
@@ -79,7 +80,7 @@ class LabConnection(metaclass=SingletonMeta):
     def call_on_object(self, type: str, id: UUID, method: str, args: dict) -> ObjectCallResponse:
         req = ObjectCallRequest(method=method, args=args)
         result: Result = self.rest_adapter.post(
-            f"/{type}/{str(id)}/call_method", data=req.model_dump())
+            f"/{type}/{str(id)}/call_method", data=req.model_dump(mode="json"))
         try:
             module = importlib.import_module(
                 "ochra_common.equipment.operation_proxy")
@@ -117,7 +118,7 @@ class LabConnection(metaclass=SingletonMeta):
     def set_property(self, type: str, id: UUID, property: str, value: Any):
         req = ObjectPropertySetRequest(property=property, property_value=value)
         result: Result = self.rest_adapter.patch(
-            f"/{type}/{str(id)}/modify_property", data=req.model_dump())
+            f"/{type}/{str(id)}/modify_property", data=req.model_dump(mode="json"))
         return result.data
 
     def get_by_station(self, station_identifier: Union[str, UUID], endpoint: str, objectType: str) -> ObjectQueryResponse:
