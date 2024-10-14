@@ -16,6 +16,8 @@ class Container(DataModel):
     physical_id: int = None
     is_used: bool = False
 
+    _endpoint = "storage"  # associated endpoint for all containers
+
     def get_used_capacity(self) -> float | int:
         """
         Get the used capacity of the container.

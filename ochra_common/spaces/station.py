@@ -16,3 +16,5 @@ class Station(DataModel):
     name: str
     location: Location
     stock: Stock = Field(default=None)
+
+    _endpoint = "stations"  # associated endpoint for all stations

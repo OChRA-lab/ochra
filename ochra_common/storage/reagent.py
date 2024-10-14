@@ -21,6 +21,8 @@ class Reagent(DataModel):
     physical_state: Enum = -1  # TODO: Define PhysicalState Enum
     properties: Dict[str, Any] = Field(default_factory=dict)
 
+    _endpoint = "reagents"  # associated endpoint for all reagents
+
     def add_property(self, property_name: str, property_value: Any) -> bool:
         """
         Add a property to the reagent.

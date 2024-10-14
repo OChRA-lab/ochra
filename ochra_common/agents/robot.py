@@ -13,3 +13,5 @@ class Robot(Agent):
     """
     type: str
     location: Location = Field(default=None)
+
+    _endpoint = "robots"  # associated endpoint for all robots

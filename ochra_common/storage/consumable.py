@@ -12,6 +12,8 @@ class Consumable(DataModel):
     type: str
     quantity: int
 
+    _endpoint = "storage"  # associated endpoint for all consumables
+
     def change_quantity(self, quantity: int) -> None:
         """
         Change the quantity of the consumable.

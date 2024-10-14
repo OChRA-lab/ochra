@@ -29,6 +29,8 @@ class Operation(DataModel):
     end_timestamp: datetime = Field(default=None)
     result: str = Field(default="") #TODO for later List[OperationResult] = Field(default_factory=list)
 
+    _endpoint = "operations" # associated endpoint for all operations
+
     def add_result(self, result: OperationResult):
         """
         Add a result to the operation.

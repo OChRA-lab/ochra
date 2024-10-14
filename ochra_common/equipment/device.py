@@ -23,3 +23,5 @@ class Device(DataModel):
     status: Enum = -1  # TODO: Define DeviceStatus Enum
     operation_history: List[Operation] = Field(default_factory=list)
     station_id: UUID = Field(default=None)
+
+    _endpoint = "devices" # associated endpoint for all devices
