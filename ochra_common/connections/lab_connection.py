@@ -5,9 +5,10 @@ from .api_models import ObjectConstructionRequest, ObjectQueryResponse, ObjectCa
 from pydantic import ValidationError
 from uuid import UUID
 import logging
-from typing import Any, Type, Union
+from typing import Any, Type, Union, List
 import importlib
 
+#TODO change the return types of get_property and get_all_objects to be more specific
 
 class LabConnection(metaclass=SingletonMeta):
     """lab adapter built on top of RestAdapter,
@@ -66,6 +67,19 @@ class LabConnection(metaclass=SingletonMeta):
         try:
             object = ObjectQueryResponse(**result.data)
             return self.load_from_response(object)
+        except ValueError:
+            raise LabEngineException(
+                f"Expected ObjectQueryResponse, got {result.data}")
+        except Exception as e:
+            raise LabEngineException(
+                f"Unexpected error: {e}")
+
+    def get_all_objects(self, endpoint: str) -> List[ObjectQueryResponse]:
+        result: Result = self.rest_adapter.get(
+            f"/{endpoint}/get_all")
+        try:
+            objects = [ObjectQueryResponse(**data) for data in result.data]
+            return [self.load_from_response(obj) for obj in objects]
         except ValueError:
             raise LabEngineException(
                 f"Expected ObjectQueryResponse, got {result.data}")

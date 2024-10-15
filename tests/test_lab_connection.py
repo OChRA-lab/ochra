@@ -87,6 +87,31 @@ def test_get_object_by_uuid(mock_connection):
         with pytest.raises(LabEngineException):
             lab_conn.get_object("test_type", id)
 
+def test_get_all_objects(mock_connection):
+    lab_conn, mock_rest = mock_connection
+
+    id = uuid4()
+    id2 = uuid4()
+    fake_result = Result(status_code=200, data=[{"id": str(id), "cls": "ochra_common.equipment.device.Device"},
+                         {"id": str(id2), "cls": "ochra_common.equipment.device.Device"}])
+    mock_rest.get.return_value = fake_result
+    with patch("ochra_common.equipment.device.Device", TestDataModel()) as mock_device:
+        result = lab_conn.get_all_objects("stations")
+
+        mock_rest.get.assert_called_once_with(
+            f"/stations/get_all")
+
+        assert len(result) == 2
+        assert result[0].id == id
+        assert result[1].id == id2
+        assert isinstance(result[0], TestDataModel)
+        assert isinstance(result[1], TestDataModel)
+        
+        mock_rest.get.return_value = MagicMock(
+            data="invalid_data", status_code=404)
+        with pytest.raises(LabEngineException):
+            lab_conn.get_all_objects("stations")
+
 
 def test_delete_object(mock_connection):
     lab_conn, mock_rest = mock_connection
