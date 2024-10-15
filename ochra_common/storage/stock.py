@@ -16,7 +16,7 @@ class Stock(DataModel):
     station_id: UUID
     inventories: List[Inventory] = Field(default_factory=list)
 
-    _endpoint = "storage"  # associated endpoint for all stocks
+    _endpoint = "storage/stocks"  # associated endpoint for all stocks
 
     def get_from_inventory_by_type(self, type: Union[str, type]) -> List[Any]:
         """

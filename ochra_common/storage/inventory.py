@@ -18,7 +18,7 @@ class Inventory(DataModel):
     containers: List[Type[Container]] = Field(default_factory=list)
     consumables: List[Consumable] = Field(default_factory=list)
 
-    _endpoint = "storage"  # associated endpoint for all inventories
+    _endpoint = "storage/inventories"  # associated endpoint for all inventories
 
     def add_container(self, container: Type[Container]) -> None:
         """
