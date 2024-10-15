@@ -152,23 +152,3 @@ def test_storage_station():
         '","cls":"ochra_common.spaces.storage_station.StorageStation","name":"test_storage_station",' + \
         '"location":{"id":"' + str(storage_station.location.id) + '","cls":"ochra_common.spaces.location.Location",' + \
         '"name":"test_location","map":"test_map","map_id":1},"stock":null}'
-
-
-def test_lab():
-    # test construction of the lab
-    lab = Lab()
-
-    # test lab attributes
-    assert lab.stations == []
-    assert lab.agents == []
-
-    # test lab methods
-    assert lab.model_dump() == {
-        "id": lab.id,
-        "cls": "ochra_common.spaces.lab.Lab",
-        "stations": [],
-        "agents": [],
-    }
-
-    assert lab.model_dump_json() == '{"id":"' + str(lab.id) + \
-        '","cls":"ochra_common.spaces.lab.Lab","stations":[],"agents":[]}'

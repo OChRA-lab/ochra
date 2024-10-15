@@ -1,23 +1,35 @@
-from pydantic import Field
 from typing import List, Type, Union
-from ..base import DataModel
 from .station import Station
-from ..agents.agent import Agent
 from ..agents.robot import Robot
 from ..agents.scientist import Scientist
 from uuid import UUID
 
 
-class Lab(DataModel):
+class Lab:
     """
     Abstract Lab class that represents a laboratory.
-
-    Attributes:
-        stations (List[Station]): A list of stations in the lab.
-        agents (List[Agent]): A list of agents in the lab.
     """
-    stations: List[Type[Station]] = Field(default_factory=list)
-    agents: List[Type[Agent]] = Field(default_factory=list)
+
+    def get_stations(self) -> List[Type[Station]]:
+        """
+        Retrieve all stations in the lab.
+
+        Returns:
+            List[Station]: A list of stations in the lab.
+        """
+        raise NotImplementedError
+
+    def get_station(self, station_name: str) -> Type[Station]:
+        """
+        Retrieve a specific station from the lab.
+
+        Args:
+            station_name (str): The name of the station.
+
+        Returns:
+            Station: The retrieved station.
+        """
+        raise NotImplementedError
 
     def get_robots(self) -> List[Type[Robot]]:
         """
