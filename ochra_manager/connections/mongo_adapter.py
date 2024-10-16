@@ -114,10 +114,21 @@ class MongoAdapter:
         return collection.delete_many(query)
 
     def find(self, db_data, search_params):
-        """Find documents from the specified collection that match the query."""
+        """Find a document from the specified collection that match the query."""
         collection = db_data["_collection"]
         collection = self._db_client[self._db_name][collection]
         result = collection.find_one(search_params)
         if result is not None:
             result.pop("_id")
         return result
+
+    def find_all(self, db_data, search_params):
+        """Find all documents from the specified collection that match the query."""
+        collection = db_data["_collection"]
+        collection = self._db_client[self._db_name][collection]
+        results = collection.find(search_params)
+        results_list = []
+        for result in results:
+            result.pop("_id")
+            results_list.append(result)
+        return results_list

@@ -62,3 +62,26 @@ def test_delete(db_connection, test_data):
     deleted_doc = db_connection.read(
         {"_collection": "test_collection", "id": test_data[1].id}, "name")
     assert deleted_doc is None, "The document was not deleted properly."
+
+def test_find(db_connection, test_data):
+    # Test finding a document
+    test_doc_1 = TestDocument(name="test_doc", id="123")
+    test_doc_2 = TestDocument(name="test_doc", id="456")
+    db_connection.create(test_data[0], test_doc_1)
+    db_connection.create(test_data[0], test_doc_2)
+    found_doc = db_connection.find(
+        {"_collection": "test_collection"}, {"name": "test_doc"})
+    assert found_doc["name"] == "test_doc", "The document was not found properly."
+
+def test_find_all(db_connection, test_data):
+    # Test finding all documents
+    test_doc_1 = TestDocument(name="test_doc", id="123")
+    test_doc_2 = TestDocument(name="test_doc", id="456")
+    db_connection.create(test_data[0], test_doc_1)
+    db_connection.create(test_data[0], test_doc_2)
+    found_docs = db_connection.find_all(
+        {"_collection": "test_collection"}, {"name": "test_doc"})
+    assert len(found_docs) == 2, "The documents were not found properly."
+    assert found_docs[0]["name"] == "test_doc", "The document was not found properly."
+    assert found_docs[1]["name"] == "test_doc", "The document was not found properly."
+    assert found_docs[0]["id"] != found_docs[1]["id"]
