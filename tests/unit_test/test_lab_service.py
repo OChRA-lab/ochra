@@ -65,6 +65,7 @@ def test_construct_object(mock_service):
         mock_call.object_json = "invalid_json"
         lab_service.construct_object(mock_call, collection)
 
+
 @patch("ochra_manager.lab.lab_service.Operation")
 @patch("ochra_manager.lab.lab_service.StationConnection")
 def test_call_on_object(MockStationConnection, MockOperation, mock_service):
@@ -86,7 +87,8 @@ def test_call_on_object(MockStationConnection, MockOperation, mock_service):
 
     result = lab_service.call_on_object(object_id, collection, mock_call)
 
-    mock_db_conn.create.assert_called_once_with({"_collection": "operations"}, {"id": "333d1936-1111-222a-adc5-036d7dc72c0e"})
+    mock_db_conn.create.assert_called_once_with({"_collection": "operations"}, {
+                                                "id": "333d1936-1111-222a-adc5-036d7dc72c0e"})
     MockStationConnection.assert_called_once_with("station_ip:8000")
     MockOperation.assert_called_once_with(
         caller_id=object_id, method=mock_call.method, args=mock_call.args)
@@ -105,7 +107,6 @@ def test_call_on_object(MockStationConnection, MockOperation, mock_service):
         lab_service.call_on_object(object_id, collection, mock_call)
     assert e.value.status_code == 500
     assert e.value.detail == "error"
-
 
 
 def test_get_object_property(mock_service):
@@ -135,12 +136,13 @@ def test_get_object_by_name(mock_service):
 
     object_name = "test_name"
     collection = "test_collection"
-    object_json = '{"id": 727d1936-9022-453a-adc5-036d7dc72c0e, "name": "test_name"}'
-    mock_db_conn.find.return_value = object_json
+    object_dict = {
+        "id": "727d1936-9022-453a-adc5-036d7dc72c0e", "name": "test_name"}
+    mock_db_conn.find.return_value = object_dict
     return_val = lab_service.get_object_by_name(object_name, collection)
     mock_db_conn.find.assert_called_once_with(
         {"_collection": collection}, {"name": object_name})
-    assert return_val == object_json
+    assert return_val == object_dict
 
     mock_db_conn.find.side_effect = Exception("test_exception")
     with pytest.raises(HTTPException) as e:
@@ -154,16 +156,36 @@ def test_get_object_by_id(mock_service):
 
     object_id = "727d1936-9022-453a-adc5-036d7dc72c0e"
     collection = "test_collection"
-    object_json = '{"id": 727d1936-9022-453a-adc5-036d7dc72c0e, "name": "test_name"}'
-    mock_db_conn.find.return_value = object_json
+    object_dict = {
+        "id": "727d1936-9022-453a-adc5-036d7dc72c0e", "name": "test_name"}
+    mock_db_conn.find.return_value = object_dict
     return_val = lab_service.get_object_by_id(object_id, collection)
     mock_db_conn.find.assert_called_once_with(
         {"_collection": collection}, {"id": object_id})
-    assert return_val == object_json
+    assert return_val == object_dict
 
     mock_db_conn.find.side_effect = Exception("test_exception")
     with pytest.raises(HTTPException) as e:
         lab_service.get_object_by_name(object_id, collection)
+    assert e.value.status_code == 404
+
+
+def test_get_all_object(mock_service):
+    lab_service: LabService = mock_service[0]
+    mock_db_conn: MagicMock = mock_service[1]
+
+    collection = "test_collection"
+    objects_list = [{"id": "727d1936-9022-453a-adc5-036d7dc72c0e", "name": "test_name"},
+                   {"id": "888d1936-9022-453a-aaa5-036d7dc72c0e", "name": "test_name"}]
+    mock_db_conn.find_all.return_value = objects_list
+    return_val = lab_service.get_all_objects(collection, {"name": "test_name"})
+    mock_db_conn.find_all.assert_called_once_with(
+        {"_collection": collection}, {"name": "test_name"})
+    assert return_val == objects_list
+
+    mock_db_conn.find_all.side_effect = Exception("test_exception")
+    with pytest.raises(HTTPException) as e:
+        lab_service.get_all_objects(collection)
     assert e.value.status_code == 404
 
 

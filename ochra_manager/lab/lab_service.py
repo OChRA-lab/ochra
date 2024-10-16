@@ -1,6 +1,6 @@
 
 import logging
-from typing import Any
+from typing import Any, List, Dict
 from ..connections.station_connection import StationConnection
 from ochra_common.equipment.operation import Operation
 from fastapi import HTTPException
@@ -70,7 +70,7 @@ class LabService():
         logger.info(f"constructed object of type {object_dict.get('cls')}")
         return object_dict.get("id")
 
-    def call_on_object(self, object_id: str, collection: str, call_req: ObjectCallRequest) -> ObjectCallResponse:
+    def call_on_object(self, object_id: str, collection: str, call_req: ObjectCallRequest) -> str:
         """call method of object on object
 
         Args:
@@ -101,7 +101,7 @@ class LabService():
 
                 # create operation object and store in db
                 op: Operation = Operation(caller_id=object_id,
-                               method=call_req.method, args=call_req.args)
+                                          method=call_req.method, args=call_req.args)
                 # TODO change to use a proxy for operation instead of accessing db directly
                 self.db_conn.create(
                     {"_collection": "operations"}, json.loads(op.model_dump_json()))
@@ -109,12 +109,12 @@ class LabService():
                 # pass operation to station to execute
                 result = station_client.execute_op(op)
 
-                 # TODO change to use a proxy for operation instead of accessing db directly
+                # TODO change to use a proxy for operation instead of accessing db directly
                 self.db_conn.update({"id": object_id, "_collection": "operations"}, {
                                     "result": result.data})
 
                 logger.info(f"called {call_req.method} on {object_id}")
-                
+
                 # TODO change later to return a better response
                 return str(op.id)
 
@@ -153,7 +153,7 @@ class LabService():
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
-    def get_object_by_name(self, name: str, collection: str) -> str:
+    def get_object_by_name(self, name: str, collection: str) -> Dict[str, Any]:
         """Get object by name
 
         Args:
@@ -172,7 +172,7 @@ class LabService():
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
-    def get_object_by_id(self, object_id: str, collection: str) -> str:
+    def get_object_by_id(self, object_id: str, collection: str) -> Dict[str, Any]:
         """Get object by id
 
         Args:
@@ -188,6 +188,24 @@ class LabService():
         try:
 
             return self.db_conn.find({"_collection": collection}, {"id": object_id})
+        except Exception as e:
+            raise HTTPException(status_code=404, detail=str(e))
+
+    def get_all_objects(self, collection: str, query_dict: Dict[str, Any] = None) -> List[Dict[str, Any]]:
+        """Get all objects in collection
+
+        Args:
+            collection (str): db collection where the objects are stored
+
+        Returns:
+            List[str]: list of objects json representation
+
+        Raises:
+            HTTPException: if object not found
+        """
+        try:
+
+            return self.db_conn.find_all({"_collection": collection}, query_dict)
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
