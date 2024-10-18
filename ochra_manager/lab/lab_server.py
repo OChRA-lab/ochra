@@ -5,6 +5,7 @@ from .routers.device_router import DeviceRouter
 from .routers.station_router import StationRouter
 from .routers.robot_router import RobotRouter
 from .routers.operation_router import OperationRouter
+from .routers.lab_router import LabRouter
 import inspect
 
 logger = logging.getLogger(__name__)
@@ -15,7 +16,8 @@ class LabServer():
         self.host = host
         self.port = port
         self.app = FastAPI()
-
+        
+        self.app.include_router(LabRouter())
         self.app.include_router(DeviceRouter())
         self.app.include_router(StationRouter())
         self.app.include_router(RobotRouter())
