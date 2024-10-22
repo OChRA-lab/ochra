@@ -136,10 +136,11 @@ def test_call_on_object(mock_connection):
     id = uuid4()
     operation_id = uuid4()
     fake_result = Result(status_code=200, message="success",
-                         data=str(operation_id))
+                         data={"id": str(operation_id), "cls": "Operation",
+                               "module_path": "ochra_discovery.equipment.operation"})
     mock_rest.post.return_value = fake_result
 
-    with patch("ochra_common.equipment.operation_proxy.OperationProxy", TestDataModel()) as mock_operation:
+    with patch("ochra_discovery.equipment.operation.Operation", TestDataModel()) as mock_operation:
         result = lab_conn.call_on_object(
             "test_type", id, "test_method", {"arg": "value"})
 

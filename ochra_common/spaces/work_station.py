@@ -14,7 +14,7 @@ class WorkStation(Station):
     """
     devices: List[Type[Device]] = Field(default_factory=list)
 
-    def get_device(self, device: Union[Type[Device], str, UUID]) -> Type[Device]:
+    def get_device(self, device_identifier: Union[str, UUID]) -> Type[Device]:
         """
         Retrieve a device from the workstation.
 

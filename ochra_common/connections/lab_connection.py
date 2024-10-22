@@ -1,7 +1,7 @@
 from ..utils.singleton_meta import SingletonMeta
 from ..base import DataModel
 from .rest_adapter import RestAdapter, Result, LabEngineException
-from .api_models import ObjectConstructionRequest, ObjectQueryResponse, ObjectCallRequest, ObjectCallResponse, ObjectPropertySetRequest
+from .api_models import ObjectConstructionRequest, ObjectQueryResponse, ObjectCallRequest, ObjectPropertySetRequest
 from pydantic import ValidationError
 from uuid import UUID
 import logging
@@ -90,16 +90,13 @@ class LabConnection(metaclass=SingletonMeta):
         result: Result = self.rest_adapter.delete(f"/{type}/delete/{str(id)}")
         return result.data
 
-    def call_on_object(self, type: str, id: UUID, method: str, args: dict) -> ObjectCallResponse:
+    def call_on_object(self, type: str, id: UUID, method: str, args: dict) -> ObjectQueryResponse:
         req = ObjectCallRequest(method=method, args=args)
         result: Result = self.rest_adapter.post(
             f"/{type}/{str(id)}/call_method", data=req.model_dump(mode="json"))
         try:
-            module = importlib.import_module(
-                "ochra_common.equipment.operation_proxy")
-            class_to_instance = getattr(module, "OperationProxy")
-            instance = class_to_instance.from_id(result.data)
-            return instance
+            object = ObjectQueryResponse(**result.data)
+            return self.load_from_response(object)
         except Exception as e:
             raise LabEngineException(
                 f"Unexpected error: {e}")
