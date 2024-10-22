@@ -21,11 +21,12 @@ def test_stock():
 
     # test stock methods
     assert stock.model_dump_json() == '{"id":"' + str(stock.id) + \
-        '","cls":"ochra_common.storage.stock.Stock","station_id":"' + \
+        '","cls":"Stock","module_path":null,"station_id":"' + \
         str(station_id) + '","inventories":[]}'
 
     assert stock.model_dump() == {"id": stock.id,
-                               "cls": "ochra_common.storage.stock.Stock",
+                               "cls": "Stock",
+                               "module_path": None,
                                "station_id": station_id,
                                "inventories": []}
 
@@ -41,11 +42,12 @@ def test_inventory():
 
     # test inventory methods
     assert inventory.model_dump_json() == '{"id":"' + str(inventory.id) + \
-        '","cls":"ochra_common.storage.inventory.Inventory","containers_max_capacity":100' + \
+        '","cls":"Inventory","module_path":null,"containers_max_capacity":100' + \
         ',"containers":[],"consumables":[]}'
 
     assert inventory.model_dump() == {"id": inventory.id,
-                                   "cls": "ochra_common.storage.inventory.Inventory",
+                                   "cls": "Inventory",
+                                    "module_path": None,
                                    "containers": [],
                                    "consumables": [],
                                    "containers_max_capacity": 100}
@@ -65,12 +67,13 @@ def test_device_inventory():
 
     # test device inventory methods
     assert inventory.model_dump_json() == '{"id":"' + str(inventory.id) + \
-        '","cls":"ochra_common.storage.device_inventory.DeviceInventory","containers_max_capacity":100' + \
+        '","cls":"DeviceInventory","module_path":null,"containers_max_capacity":100' + \
         ',"containers":[],"consumables":[],"device_id":"' + \
         str(device_id) + '"}'
 
     assert inventory.model_dump() == {"id": inventory.id,
-                                   "cls": "ochra_common.storage.device_inventory.DeviceInventory",
+                                   "cls": "DeviceInventory",
+                                   "module_path": None,
                                    "containers": [],
                                    "consumables": [],
                                    "containers_max_capacity": 100,
@@ -87,10 +90,11 @@ def test_consumables():
 
     # test consumable methods
     assert consumable.model_dump_json() == '{"id":"' + str(consumable.id) + \
-        '","cls":"ochra_common.storage.consumable.Consumable","type":"cap","quantity":10}'
+        '","cls":"Consumable","module_path":null,"type":"cap","quantity":10}'
 
     assert consumable.model_dump() == {"id": consumable.id,
-                                    "cls": "ochra_common.storage.consumable.Consumable",
+                                    "cls": "Consumable",
+                                    "module_path": None,
                                     "type": "cap",
                                     "quantity": 10}
 
@@ -107,11 +111,12 @@ def test_container():
 
     # test container methods
     assert container.model_dump_json() == '{"id":"' + str(container.id) + \
-        '","cls":"ochra_common.storage.container.Container","type":"box"' + \
+        '","cls":"Container","module_path":null,"type":"box"' + \
         ',"max_capacity":100,"physical_id":1,"is_used":false}'
 
     assert container.model_dump() == {"id": container.id,
-                                   "cls": "ochra_common.storage.container.Container",
+                                   "cls": "Container",
+                                   "module_path": None,
                                    "type": "box",
                                    "physical_id": 1,
                                    "max_capacity": 100,
@@ -130,11 +135,12 @@ def test_holder():
 
     # test holder methods
     assert holder.model_dump_json() == '{"id":"' + str(holder.id) + \
-        '","cls":"ochra_common.storage.holder.Holder","type":"rack"' + \
+        '","cls":"Holder","module_path":null,"type":"rack"' + \
         ',"max_capacity":16,"physical_id":1,"is_used":false,"containers":[]}'
 
     assert holder.model_dump() == {"id": holder.id,
-                                "cls": "ochra_common.storage.holder.Holder",
+                                "cls": "Holder",
+                                "module_path": None,
                                 "type": "rack",
                                 "physical_id": 1,
                                 "max_capacity": 16,
@@ -155,12 +161,13 @@ def test_vessel():
 
     # test vessel methods
     assert vessel.model_dump_json() == '{"id":"' + str(vessel.id) + \
-        '","cls":"ochra_common.storage.vessel.Vessel","type":"vial"' + \
+        '","cls":"Vessel","module_path":null,"type":"vial"' + \
         ',"max_capacity":5.0,"physical_id":1,"is_used":false,"capacity_unit":"ml"' + \
         ',"reagents":[]}'
 
     assert vessel.model_dump() == {"id": vessel.id,
-                                "cls": "ochra_common.storage.vessel.Vessel",
+                                "cls": "Vessel",
+                                "module_path": None,
                                 "type": "vial",
                                 "physical_id": 1,
                                 "max_capacity": 5.0,
@@ -182,11 +189,12 @@ def test_reagent():
 
     # test reagent methods
     assert reagent.model_dump_json() == '{"id":"' + str(reagent.id) + \
-        '","cls":"ochra_common.storage.reagent.Reagent","name":"water","amount":100.0' + \
+        '","cls":"Reagent","module_path":null,"name":"water","amount":100.0' + \
         ',"unit":"ml","physical_state":-1,"properties":{}}'
 
     assert reagent.model_dump() == {"id": reagent.id,
-                                 "cls": "ochra_common.storage.reagent.Reagent",
+                                 "cls": "Reagent",
+                                 "module_path": None,
                                  "name": "water",
                                  "amount": 100.0,
                                  "unit": "ml",

@@ -1,4 +1,4 @@
-from typing import Any, Literal, Dict
+from typing import Any, Literal
 import uuid
 from pydantic import BaseModel, Field
 
@@ -14,8 +14,10 @@ class DataModel(BaseModel):
     """
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     cls: str = Field(default=None)
+    module_path: str = Field(default=None)
+
 
     def model_post_init(self, __context: Any) -> None:
         # retrieve the class name in addition to its import path
-        self.cls = f"{self.__class__.__module__}.{self.__class__.__name__}"
+        self.cls = f"{self.__class__.__name__}"
         return super().model_post_init(__context)

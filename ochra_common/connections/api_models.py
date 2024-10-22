@@ -16,6 +16,7 @@ class ObjectCallResponse(BaseModel):
 class ObjectQueryResponse(BaseModel):
     id: UUID
     cls: str
+    module_path: str
 
 
 class ObjectPropertySetRequest(BaseModel):
