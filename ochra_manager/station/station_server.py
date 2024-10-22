@@ -10,7 +10,7 @@ from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.spaces.location import Location
 from ochra_common.equipment.device import Device
 from ochra_common.equipment.operation import Operation
-from .station_proxy import StationProxy
+from .work_station import WorkStation
 
 
 
@@ -74,7 +74,7 @@ class StationServer():
             lab_ip (str): ip of the lab server connection.
         """
         self._lab_conn = LabConnection(lab_ip)
-        return StationProxy(self._name, self._location)
+        return WorkStation(self._name, self._location)
 
     def ping(self, request: Request):
         print(f"ping from {request.client.host}")

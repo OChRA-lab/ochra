@@ -7,11 +7,11 @@ from uuid import UUID
 from pydantic import Field
 
 
-class StationProxy(WorkStation, RestProxyMixin):
+class WorkStation(WorkStation, RestProxyMixin):
     devices: List[UUID] = Field(default_factory=list)
 
     def __init__(self, name: str, location: Location):
-        super().__init__(name=name, location=location)
+        super().__init__(name=name, location=location, module_path="ochra_discovery.spaces.work_station")
         self._mixin_hook("stations", self.id)
 
     def add_device(self, device: Type[Device]):
