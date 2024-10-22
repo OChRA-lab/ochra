@@ -4,11 +4,11 @@ from typing import Any, List, Dict
 from ..connections.station_connection import StationConnection
 from ochra_common.equipment.operation import Operation
 from fastapi import HTTPException
-from ochra_common.connections.api_models import ObjectCallRequest, ObjectPropertySetRequest
-from ochra_common.connections.api_models import ObjectCallResponse, ObjectConstructionRequest
+from ochra_common.connections.api_models import ObjectCallRequest, ObjectPropertySetRequest, ObjectConstructionRequest
 from ..connections.db_connection import DbConnection
 import uuid
 import json
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -101,7 +101,9 @@ class LabService():
 
                 # create operation object and store in db
                 op: Operation = Operation(caller_id=object_id,
-                                          method=call_req.method, args=call_req.args)
+                                          method=call_req.method, args=call_req.args,
+                                          module_path="ochra_discovery.equipment.operation",
+                                          start_timestamp=datetime.now().isoformat())
                 # TODO change to use a proxy for operation instead of accessing db directly
                 self.db_conn.create(
                     {"_collection": "operations"}, json.loads(op.model_dump_json()))
@@ -111,12 +113,14 @@ class LabService():
 
                 # TODO change to use a proxy for operation instead of accessing db directly
                 self.db_conn.update({"id": object_id, "_collection": "operations"}, {
+                                    "end_timestamp": datetime.now().isoformat()})
+                self.db_conn.update({"id": object_id, "_collection": "operations"}, {
                                     "result": result.data})
 
                 logger.info(f"called {call_req.method} on {object_id}")
 
                 # TODO change later to return a better response
-                return str(op.id)
+                return op.model_dump(mode="json")
 
             elif collection == "stations":
                 # TODO do station stuff
