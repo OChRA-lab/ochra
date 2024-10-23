@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Any
 from .robot import Robot
 from .robot_task import RobotTask
 
@@ -12,7 +12,7 @@ class Manipulator(Robot):
     """
     available_tasks: List[str]
 
-    def execute(self, robot_task: RobotTask) -> bool:
+    def execute(self, task_name: str, args: Dict[str, Any]) -> bool:
         """
         Execute a given robot task.
 

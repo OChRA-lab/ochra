@@ -1,4 +1,5 @@
 from pydantic import Field
+from uuid import UUID
 from ..spaces.location import Location
 from .agent import Agent
 
@@ -13,5 +14,6 @@ class Robot(Agent):
     """
     type: str
     location: Location = Field(default=None)
+    station_id: UUID = Field(default=None)
 
     _endpoint = "robots"  # associated endpoint for all robots
