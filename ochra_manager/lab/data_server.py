@@ -2,17 +2,17 @@ from fastapi import FastAPI
 import uvicorn
 import logging
 import inspect
-from .data_router import DataRouter
+from .routers import operation_router
 
 logger = logging.getLogger(__name__)
 
-class LabServer():
+class DataServer():
     def __init__(self, host: str, port: int) -> None:
         self.host = host
         self.port = port
         self.app = FastAPI()
         
-        self.app.include_router(DataRouter())
+        self.app.include_router(operation_router())
 
     def get_caller_variable_name(self):
         frame = inspect.currentframe().f_back.f_back
