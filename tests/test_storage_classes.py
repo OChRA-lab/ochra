@@ -25,15 +25,17 @@ def test_stock():
         str(station_id) + '","inventories":[]}'
 
     assert stock.model_dump() == {"id": stock.id,
-                               "cls": "Stock",
-                               "module_path": None,
-                               "station_id": station_id,
-                               "inventories": []}
+                                  "cls": "Stock",
+                                  "module_path": None,
+                                  "station_id": station_id,
+                                  "inventories": []}
 
 
 def test_inventory():
     # test construction of the inventory
-    inventory = Inventory(containers_max_capacity=100)
+    station_id = uuid.uuid4()
+    inventory = Inventory(owner_id=station_id,
+                          owner_type="station", containers_max_capacity=100)
 
     # test inventory attributes
     assert inventory.containers == []
@@ -42,43 +44,18 @@ def test_inventory():
 
     # test inventory methods
     assert inventory.model_dump_json() == '{"id":"' + str(inventory.id) + \
-        '","cls":"Inventory","module_path":null,"containers_max_capacity":100' + \
+        '","cls":"Inventory","module_path":null,' + '"owner_id":"' + str(station_id) +\
+        '","owner_type":"station","containers_max_capacity":100' + \
         ',"containers":[],"consumables":[]}'
 
     assert inventory.model_dump() == {"id": inventory.id,
-                                   "cls": "Inventory",
-                                    "module_path": None,
-                                   "containers": [],
-                                   "consumables": [],
-                                   "containers_max_capacity": 100}
-
-
-def test_device_inventory():
-    # test construction of the device inventory
-    device_id = uuid.uuid4()
-    inventory = DeviceInventory(
-        containers_max_capacity=100, device_id=device_id)
-
-    # test device inventory attributes
-    assert inventory.containers == []
-    assert inventory.consumables == []
-    assert inventory.containers_max_capacity == 100
-    assert inventory.device_id == device_id
-
-    # test device inventory methods
-    assert inventory.model_dump_json() == '{"id":"' + str(inventory.id) + \
-        '","cls":"DeviceInventory","module_path":null,"containers_max_capacity":100' + \
-        ',"containers":[],"consumables":[],"device_id":"' + \
-        str(device_id) + '"}'
-
-    assert inventory.model_dump() == {"id": inventory.id,
-                                   "cls": "DeviceInventory",
-                                   "module_path": None,
-                                   "containers": [],
-                                   "consumables": [],
-                                   "containers_max_capacity": 100,
-                                   "device_id": device_id}
-
+                                      "cls": "Inventory",
+                                      "module_path": None,
+                                      "owner_id": station_id,
+                                      "owner_type": "station",
+                                      "containers": [],
+                                      "consumables": [],
+                                      "containers_max_capacity": 100}
 
 def test_consumables():
     # test construction of the consumable
@@ -93,10 +70,10 @@ def test_consumables():
         '","cls":"Consumable","module_path":null,"type":"cap","quantity":10}'
 
     assert consumable.model_dump() == {"id": consumable.id,
-                                    "cls": "Consumable",
-                                    "module_path": None,
-                                    "type": "cap",
-                                    "quantity": 10}
+                                       "cls": "Consumable",
+                                       "module_path": None,
+                                       "type": "cap",
+                                       "quantity": 10}
 
 
 def test_container():
@@ -115,12 +92,12 @@ def test_container():
         ',"max_capacity":100,"physical_id":1,"is_used":false}'
 
     assert container.model_dump() == {"id": container.id,
-                                   "cls": "Container",
-                                   "module_path": None,
-                                   "type": "box",
-                                   "physical_id": 1,
-                                   "max_capacity": 100,
-                                   "is_used": False}
+                                      "cls": "Container",
+                                      "module_path": None,
+                                      "type": "box",
+                                      "physical_id": 1,
+                                      "max_capacity": 100,
+                                      "is_used": False}
 
 
 def test_holder():
@@ -139,13 +116,13 @@ def test_holder():
         ',"max_capacity":16,"physical_id":1,"is_used":false,"containers":[]}'
 
     assert holder.model_dump() == {"id": holder.id,
-                                "cls": "Holder",
-                                "module_path": None,
-                                "type": "rack",
-                                "physical_id": 1,
-                                "max_capacity": 16,
-                                "is_used": False,
-                                "containers": []}
+                                   "cls": "Holder",
+                                   "module_path": None,
+                                   "type": "rack",
+                                   "physical_id": 1,
+                                   "max_capacity": 16,
+                                   "is_used": False,
+                                   "containers": []}
 
 
 def test_vessel():
@@ -166,14 +143,14 @@ def test_vessel():
         ',"reagents":[]}'
 
     assert vessel.model_dump() == {"id": vessel.id,
-                                "cls": "Vessel",
-                                "module_path": None,
-                                "type": "vial",
-                                "physical_id": 1,
-                                "max_capacity": 5.0,
-                                "is_used": False,
-                                "capacity_unit": "ml",
-                                "reagents": []}
+                                   "cls": "Vessel",
+                                   "module_path": None,
+                                   "type": "vial",
+                                   "physical_id": 1,
+                                   "max_capacity": 5.0,
+                                   "is_used": False,
+                                   "capacity_unit": "ml",
+                                   "reagents": []}
 
 
 def test_reagent():
@@ -193,10 +170,10 @@ def test_reagent():
         ',"unit":"ml","physical_state":-1,"properties":{}}'
 
     assert reagent.model_dump() == {"id": reagent.id,
-                                 "cls": "Reagent",
-                                 "module_path": None,
-                                 "name": "water",
-                                 "amount": 100.0,
-                                 "unit": "ml",
-                                 "physical_state": -1,
-                                 "properties": {}}
+                                    "cls": "Reagent",
+                                    "module_path": None,
+                                    "name": "water",
+                                    "amount": 100.0,
+                                    "unit": "ml",
+                                    "physical_state": -1,
+                                    "properties": {}}
