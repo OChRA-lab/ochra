@@ -259,3 +259,29 @@ class LabService:
             )
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
+
+    def get_data(self, identifier, collection):
+        try:
+            if uuid.UUID(identifier):
+                return self.db_conn.read(
+                    {"_collection": collection, "id": identifier}, file=True)
+            else:
+                doc = self.db_conn.find(
+                    {"_collection": collection}, {"name": identifier})
+                return self.db_conn.read(
+                    {"_collection": collection, "id": doc.get("id")}, file=True)
+        except Exception as e:
+            raise HTTPException(status_code=404, detail=str(e))
+
+    def put_data(self, identifier, data, collection):
+        try:
+            if uuid.UUID(identifier):
+                return self.db_conn.update(
+                    {"_collection": collection, "id": identifier}, {"data": data})
+            else:
+                doc = self.db_conn.find(
+                    {"_collection": collection}, {"name": identifier})
+                return self.db_conn.update(
+                    {"_collection": collection, "id": doc.get("id")}, {"data": data})
+        except Exception as e:
+            raise HTTPException(status_code=404, detail=str(e))
