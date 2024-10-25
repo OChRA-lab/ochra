@@ -5,13 +5,17 @@ from ochra_common.utils.mixins import RestProxyMixin
 from typing import List, Type
 from uuid import UUID
 from pydantic import Field
+from .inventory import Inventory
 
 
 class WorkStation(WorkStation, RestProxyMixin):
     devices: List[UUID] = Field(default_factory=list)
 
     def __init__(self, name: str, location: Location):
-        super().__init__(name=name, location=location, module_path="ochra_discovery.spaces.work_station")
+        super().__init__(name=name, location=location,
+                         module_path="ochra_discovery.spaces.work_station")
+        self.inventory = Inventory(
+            owner_id=self.id, owner_type="station", containers_max_capacity=100)
         self._mixin_hook("stations", self.id)
 
     def add_device(self, device: Type[Device]):
