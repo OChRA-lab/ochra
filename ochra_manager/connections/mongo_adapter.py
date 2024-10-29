@@ -104,7 +104,6 @@ class MongoAdapter:
         collection = db_data["_collection"]
         object_id = db_data["id"]
         collection = self._db_client[self._db_name][collection]
-        # might have to update this to use the flag
         if file:
             file_id = self.fs.put(update["data"], encoding="UTF8")
             key = list(update.keys())[0]
@@ -112,9 +111,6 @@ class MongoAdapter:
         else:
             update = {"$set": update}
         query = {"id": object_id}
-
-        print(query)
-        print(update)
 
         return collection.update_many(query, update)
 
