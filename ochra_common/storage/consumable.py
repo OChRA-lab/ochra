@@ -9,6 +9,7 @@ class Consumable(DataModel):
         type (str): The type of the consumable.
         quantity (int): The quantity of the consumable.
     """
+
     type: str
     quantity: int
 

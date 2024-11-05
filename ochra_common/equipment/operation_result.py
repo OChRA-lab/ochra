@@ -11,6 +11,7 @@ class OperationResult(DataModel):
         type (str): The type of the result.
         data (BinaryIO): The binary data of the result.
     """
+
     type: str
     data_entry_id: UUID
 

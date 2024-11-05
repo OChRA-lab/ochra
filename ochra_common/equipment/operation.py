@@ -21,15 +21,18 @@ class Operation(DataModel):
         end_timestamp (datetime): The timestamp when the operation ended.
         result (List[OperationResult]): A list of results from the operation.
     """
+
     caller_id: uuid.UUID
     method: str
     args: Dict[str, Any]
     status: Enum = -1  # TODO: Define OperationStatus Enum
     start_timestamp: datetime = Field(default=None)
     end_timestamp: datetime = Field(default=None)
-    result: str = Field(default="") #TODO for later List[OperationResult] = Field(default_factory=list)
+    result: str = Field(
+        default=""
+    )  # TODO for later List[OperationResult] = Field(default_factory=list)
 
-    _endpoint = "operations" # associated endpoint for all operations
+    _endpoint = "operations"  # associated endpoint for all operations
 
     def add_result(self, result: OperationResult):
         """

@@ -10,6 +10,7 @@ class Holder(Container):
     Attributes:
         containers (List[Container]): A list of containers held by this holder. Defaults to an empty list.
     """
+
     containers: List[Type[Container]] = Field(default_factory=list)
 
     def add_container(self, container: Type[Container]) -> None:

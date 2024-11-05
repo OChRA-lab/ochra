@@ -21,8 +21,7 @@ class TestDataModel(BaseModel):
 @pytest.fixture
 @patch("ochra_common.connections.lab_connection.RestAdapter")
 def mock_connection(MockRestAdapter):
-    lab_conn = LabConnection(hostname="test_host",
-                             api_key="test_key", ssl_verify=False)
+    lab_conn = LabConnection(hostname="test_host", api_key="test_key", ssl_verify=False)
     lab_conn.rest_adapter = MockRestAdapter
     return lab_conn, MockRestAdapter
 
@@ -31,16 +30,13 @@ def test_construct_object(mock_connection):
     lab_conn, mock_rest = mock_connection
 
     test_data = TestDataModel(cls="test_type", params={"param": "value"})
-    fake_result = Result(status_code=200, message="success",
-                         data=str(test_data.id))
+    fake_result = Result(status_code=200, message="success", data=str(test_data.id))
     mock_rest.put.return_value = fake_result
 
     result = lab_conn.construct_object("test_type", test_data)
     mock_rest.put.assert_called_once_with(
         "/test_type/construct",
-        data={
-            "object_json": test_data.model_dump_json()
-        },
+        data={"object_json": test_data.model_dump_json()},
     )
     assert result == test_data.id
 
@@ -53,15 +49,22 @@ def test_get_object_by_name(mock_connection):
     lab_conn, mock_rest = mock_connection
 
     id = uuid4()
-    fake_result = Result(status_code=200, message="success",
-                         data={"id": str(id), "cls": "Device",
-                               "module_path": "ochra_common.equipment.device"})
+    fake_result = Result(
+        status_code=200,
+        message="success",
+        data={
+            "id": str(id),
+            "cls": "Device",
+            "module_path": "ochra_common.equipment.device",
+        },
+    )
 
     mock_rest.get.return_value = fake_result
     with patch("ochra_common.equipment.device.Device", TestDataModel()) as mock_device:
         result = lab_conn.get_object("test_type", "test_name")
         mock_rest.get.assert_called_once_with(
-            "/test_type/get", {"identifier": "test_name"})
+            "/test_type/get", {"identifier": "test_name"}
+        )
         assert result.id == id
         assert isinstance(result, TestDataModel)
         mock_rest.get.return_value = MagicMock(data="invalid_data")
@@ -73,16 +76,21 @@ def test_get_object_by_uuid(mock_connection):
     lab_conn, mock_rest = mock_connection
 
     id = uuid4()
-    fake_result = Result(status_code=200, message="success",
-                         data={"id": str(id), "cls": "Device",
-                               "module_path": "ochra_common.equipment.device"})
+    fake_result = Result(
+        status_code=200,
+        message="success",
+        data={
+            "id": str(id),
+            "cls": "Device",
+            "module_path": "ochra_common.equipment.device",
+        },
+    )
 
     mock_rest.get.return_value = fake_result
     with patch("ochra_common.equipment.device.Device", TestDataModel()) as mock_device:
         result = lab_conn.get_object("test_type", id)
 
-        mock_rest.get.assert_called_once_with(
-            "/test_type/get", {"identifier": str(id)})
+        mock_rest.get.assert_called_once_with("/test_type/get", {"identifier": str(id)})
         assert result.id == id
         assert isinstance(result, TestDataModel)
 
@@ -96,14 +104,26 @@ def test_get_all_objects(mock_connection):
 
     id = uuid4()
     id2 = uuid4()
-    fake_result = Result(status_code=200, data=[{"id": str(id), "cls": "Device", "module_path": "ochra_common.equipment.device"},
-                         {"id": str(id2), "cls": "Device", "module_path": "ochra_common.equipment.device"}])
+    fake_result = Result(
+        status_code=200,
+        data=[
+            {
+                "id": str(id),
+                "cls": "Device",
+                "module_path": "ochra_common.equipment.device",
+            },
+            {
+                "id": str(id2),
+                "cls": "Device",
+                "module_path": "ochra_common.equipment.device",
+            },
+        ],
+    )
     mock_rest.get.return_value = fake_result
     with patch("ochra_common.equipment.device.Device", TestDataModel()) as mock_device:
         result = lab_conn.get_all_objects("stations")
 
-        mock_rest.get.assert_called_once_with(
-            f"/stations/get_all")
+        mock_rest.get.assert_called_once_with(f"/stations/get_all")
 
         assert len(result) == 2
         assert result[0].id == id
@@ -111,8 +131,7 @@ def test_get_all_objects(mock_connection):
         assert isinstance(result[0], TestDataModel)
         assert isinstance(result[1], TestDataModel)
 
-        mock_rest.get.return_value = MagicMock(
-            data="invalid_data", status_code=404)
+        mock_rest.get.return_value = MagicMock(data="invalid_data", status_code=404)
         with pytest.raises(LabEngineException):
             lab_conn.get_all_objects("stations")
 
@@ -135,14 +154,23 @@ def test_call_on_object(mock_connection):
 
     id = uuid4()
     operation_id = uuid4()
-    fake_result = Result(status_code=200, message="success",
-                         data={"id": str(operation_id), "cls": "Operation",
-                               "module_path": "ochra_discovery.equipment.operation"})
+    fake_result = Result(
+        status_code=200,
+        message="success",
+        data={
+            "id": str(operation_id),
+            "cls": "Operation",
+            "module_path": "ochra_discovery.equipment.operation",
+        },
+    )
     mock_rest.post.return_value = fake_result
 
-    with patch("ochra_discovery.equipment.operation.Operation", TestDataModel()) as mock_operation:
+    with patch(
+        "ochra_discovery.equipment.operation.Operation", TestDataModel()
+    ) as mock_operation:
         result = lab_conn.call_on_object(
-            "test_type", id, "test_method", {"arg": "value"})
+            "test_type", id, "test_method", {"arg": "value"}
+        )
 
         mock_rest.post.assert_called_once_with(
             f"/test_type/{id}/call_method",
@@ -162,21 +190,24 @@ def test_get_object_query_response_property(mock_connection):
     lab_conn, mock_rest = mock_connection
 
     id = uuid4()
-    fake_result = Result(status_code=200, data={
-                         "id": str(id), "cls": "Device",
-                         "module_path": "ochra_common.equipment.device"})
+    fake_result = Result(
+        status_code=200,
+        data={
+            "id": str(id),
+            "cls": "Device",
+            "module_path": "ochra_common.equipment.device",
+        },
+    )
     mock_rest.get.return_value = fake_result
     with patch("ochra_common.equipment.device.Device", TestDataModel()) as mock_device:
         result = lab_conn.get_property("stations", id, "name")
 
-        mock_rest.get.assert_called_once_with(
-            f"/stations/{id}/get_property/name")
+        mock_rest.get.assert_called_once_with(f"/stations/{id}/get_property/name")
 
         assert result.id == id
         assert isinstance(result, TestDataModel)
 
-        mock_rest.get.return_value = MagicMock(
-            data="invalid_data", status_code=404)
+        mock_rest.get.return_value = MagicMock(data="invalid_data", status_code=404)
         with pytest.raises(LabEngineException):
             lab_conn.get_property("stations", id, "name")
 
@@ -186,14 +217,26 @@ def test_get_object_query_response_list_property(mock_connection):
 
     id = uuid4()
     id2 = uuid4()
-    fake_result = Result(status_code=200, data=[{"id": str(id), "cls": "Device", "module_path": "ochra_common.equipment.device"},
-                         {"id": str(id2), "cls": "Device", "module_path": "ochra_common.equipment.device"}])
+    fake_result = Result(
+        status_code=200,
+        data=[
+            {
+                "id": str(id),
+                "cls": "Device",
+                "module_path": "ochra_common.equipment.device",
+            },
+            {
+                "id": str(id2),
+                "cls": "Device",
+                "module_path": "ochra_common.equipment.device",
+            },
+        ],
+    )
     mock_rest.get.return_value = fake_result
     with patch("ochra_common.equipment.device.Device", TestDataModel()) as mock_device:
         result = lab_conn.get_property("stations", id, "objects")
 
-        mock_rest.get.assert_called_once_with(
-            f"/stations/{id}/get_property/objects")
+        mock_rest.get.assert_called_once_with(f"/stations/{id}/get_property/objects")
 
         assert len(result) == 2
         assert result[0].id == id
@@ -201,8 +244,7 @@ def test_get_object_query_response_list_property(mock_connection):
         assert isinstance(result[0], TestDataModel)
         assert isinstance(result[1], TestDataModel)
 
-        mock_rest.get.return_value = MagicMock(
-            data="invalid_data", status_code=404)
+        mock_rest.get.return_value = MagicMock(data="invalid_data", status_code=404)
         with pytest.raises(LabEngineException):
             lab_conn.get_property("stations", id, "name")
 
@@ -216,13 +258,11 @@ def test_get_property(mock_connection):
 
     result = lab_conn.get_property("stations", id, "map")
 
-    mock_rest.get.assert_called_once_with(
-        f"/stations/{id}/get_property/map")
+    mock_rest.get.assert_called_once_with(f"/stations/{id}/get_property/map")
 
     assert result == {"number": 42}
 
-    mock_rest.get.return_value = MagicMock(
-        data="invalid_data", status_code=404)
+    mock_rest.get.return_value = MagicMock(data="invalid_data", status_code=404)
     with pytest.raises(LabEngineException):
         lab_conn.get_property("stations", id, "name")
 
@@ -236,13 +276,11 @@ def test_get_list_property(mock_connection):
 
     result = lab_conn.get_property("stations", id, "list")
 
-    mock_rest.get.assert_called_once_with(
-        f"/stations/{id}/get_property/list")
+    mock_rest.get.assert_called_once_with(f"/stations/{id}/get_property/list")
 
     assert result == [1, 2, 3]
 
-    mock_rest.get.return_value = MagicMock(
-        data="invalid_data", status_code=404)
+    mock_rest.get.return_value = MagicMock(data="invalid_data", status_code=404)
     with pytest.raises(LabEngineException):
         lab_conn.get_property("stations", id, "name")
 
@@ -254,8 +292,7 @@ def test_set_property(mock_connection):
     fake_result = Result(status_code=200, data="property_set")
     mock_rest.patch.return_value = fake_result
 
-    result = lab_conn.set_property(
-        "stations", id, "test_property", "new_value")
+    result = lab_conn.set_property("stations", id, "test_property", "new_value")
     mock_rest.patch.assert_called_once_with(
         f"/stations/{id}/modify_property",
         data={"property": "test_property", "property_value": "new_value"},

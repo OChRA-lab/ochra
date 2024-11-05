@@ -15,6 +15,7 @@ class Inventory(DataModel):
         containers (List[Container]): A list of containers in the inventory. Defaults to an empty list.
         consumables (List[Consumable]): A list of consumables in the inventory. Defaults to an empty list.
     """
+
     owner_id: UUID
     owner_type: Literal["station", "robot", "device"]
     containers_max_capacity: int

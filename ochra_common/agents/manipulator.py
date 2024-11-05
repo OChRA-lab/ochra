@@ -10,6 +10,7 @@ class Manipulator(Robot):
     Attributes:
         tasks (List[RobotTask]): A list of tasks assigned to the manipulator.
     """
+
     available_tasks: List[str]
 
     def execute(self, task_name: str, args: Dict[str, Any]) -> bool:

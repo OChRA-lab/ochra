@@ -13,6 +13,7 @@ class Robot(Agent):
         location (Location): The current location of the robot.
         station_id (UUID): The station id where the robot is located.
     """
+
     type: str
     location: Location = Field(default=None)
     station_id: UUID = Field(default=None)

@@ -15,6 +15,7 @@ class Reagent(DataModel):
         physical_state (Enum): The physical state of the reagent (e.g., solid, liquid, gas).
         properties (Dict[str, Any]): A dictionary of additional properties of the reagent.
     """
+
     name: str
     amount: float
     unit: str

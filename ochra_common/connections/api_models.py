@@ -6,7 +6,7 @@ from typing import Union
 
 class ObjectCallRequest(BaseModel):
     method: str
-    args: Union[Dict,None] = None
+    args: Union[Dict, None] = None
 
 
 class ObjectCallResponse(BaseModel):

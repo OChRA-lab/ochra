@@ -1,6 +1,7 @@
 from ..base import DataModel
 from typing import Union
 
+
 class Container(DataModel):
     """
     Abstract class for containers, anything that can hold something.
@@ -11,6 +12,7 @@ class Container(DataModel):
         physical_id (int): The physical identifier of the container. Defaults to None.
         is_used (bool): Indicates whether the container has been used. Defaults to False.
     """
+
     type: str
     max_capacity: Union[int, float]
     physical_id: int = None

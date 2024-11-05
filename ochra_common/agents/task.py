@@ -18,6 +18,7 @@ class Task(DataModel):
         start_timestamp (datetime): The timestamp when the task started.
         end_timestamp (datetime): The timestamp when the task ended.
     """
+
     assignee_id: UUID
     name: str
     args: Dict[str, Any] = Field(default_factory=dict)
