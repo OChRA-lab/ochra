@@ -1,7 +1,7 @@
 from pydantic import Field
 from ..base import DataModel
 from .location import Location
-from ..storage.stock import Stock
+from ..storage.inventory import Inventory
 
 
 class Station(DataModel):
@@ -15,6 +15,6 @@ class Station(DataModel):
     """
     name: str
     location: Location
-    stock: Stock = Field(default=None)
+    inventory: Inventory = Field(default=None)
 
     _endpoint = "stations"  # associated endpoint for all stations

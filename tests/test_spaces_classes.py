@@ -49,13 +49,13 @@ def test_station():
     assert station.location.name == "test_location"
     assert station.location.map == "test_map"
     assert station.location.map_id == 1
-    assert station.stock == None
+    assert station.inventory == None
 
     # test station methods
     assert station.model_dump_json() == '{"id":"' + str(station.id) + \
         '","cls":"Station","module_path":null,"name":"test_station",' + \
         '"location":{"id":"' + str(station.location.id) + '","cls":"Location","module_path":null,' + \
-        '"name":"test_location","map":"test_map","map_id":1},"stock":null}'
+        '"name":"test_location","map":"test_map","map_id":1},"inventory":null}'
 
     assert station.model_dump() == {
         "id": station.id,
@@ -70,7 +70,7 @@ def test_station():
             "map": "test_map",
             "map_id": 1,
         },
-        "stock": None,
+        "inventory": None,
     }
 
 
@@ -91,7 +91,7 @@ def test_work_station():
     assert work_station.location.name == "test_location"
     assert work_station.location.map == "test_map"
     assert work_station.location.map_id == 1
-    assert work_station.stock == None
+    assert work_station.inventory == None
     assert work_station.devices == []
 
     # test work station methods
@@ -108,14 +108,14 @@ def test_work_station():
             "map": "test_map",
             "map_id": 1,
         },
-        "stock": None,
+        "inventory": None,
         "devices": [],
     }
 
     assert work_station.model_dump_json() == '{"id":"' + str(work_station.id) + \
         '","cls":"WorkStation","module_path":null,"name":"test_work_station",' + \
         '"location":{"id":"' + str(work_station.location.id) + '","cls":"Location","module_path":null,' + \
-        '"name":"test_location","map":"test_map","map_id":1},"stock":null,"devices":[]}'
+        '"name":"test_location","map":"test_map","map_id":1},"inventory":null,"devices":[]}'
 
 
 def test_storage_station():
@@ -135,7 +135,7 @@ def test_storage_station():
     assert storage_station.location.name == "test_location"
     assert storage_station.location.map == "test_map"
     assert storage_station.location.map_id == 1
-    assert storage_station.stock == None
+    assert storage_station.inventory == None
 
     # test storage station methods
     assert storage_station.model_dump() == {
@@ -151,10 +151,10 @@ def test_storage_station():
             "map": "test_map",
             "map_id": 1,
         },
-        "stock": None,
+        "inventory": None,
     }
 
     assert storage_station.model_dump_json() == '{"id":"' + str(storage_station.id) + \
         '","cls":"StorageStation","module_path":null,"name":"test_storage_station",' + \
         '"location":{"id":"' + str(storage_station.location.id) + '","cls":"Location","module_path":null,' + \
-        '"name":"test_location","map":"test_map","map_id":1},"stock":null}'
+        '"name":"test_location","map":"test_map","map_id":1},"inventory":null}'
