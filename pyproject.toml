@@ -12,8 +12,8 @@ description = "OChRA_Discovery package..." #add summary of OChRA_Discovery here
 readme = "README.md"
 #license = {file = "LICENSE"} #don't need license a license yet
 requires-python = ">=3.11"
-dependencies = [ #add dependencies here
-    #"dependency==version",
+dependencies = [ 
+    "ruff>=0.7.2",
 ] 
 classifiers = [
     "Intended Audience :: Developers",
