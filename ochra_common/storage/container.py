@@ -1,5 +1,5 @@
 from ..base import DataModel
-
+from typing import Union
 
 class Container(DataModel):
     """
@@ -12,13 +12,13 @@ class Container(DataModel):
         is_used (bool): Indicates whether the container has been used. Defaults to False.
     """
     type: str
-    max_capacity: int | float
+    max_capacity: Union[int, float]
     physical_id: int = None
     is_used: bool = False
 
     _endpoint = "storage/containers"  # associated endpoint for all containers
 
-    def get_used_capacity(self) -> float | int:
+    def get_used_capacity(self) -> Union[float, int]:
         """
         Get the used capacity of the container.
 
@@ -27,7 +27,7 @@ class Container(DataModel):
         """
         raise NotImplementedError
 
-    def get_available_capacity(self) -> float | int:
+    def get_available_capacity(self) -> Union[float, int]:
         """
         Get the available capacity of the container.
 
