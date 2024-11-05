@@ -5,8 +5,12 @@ from typing import Any
 
 class Reagent(Reagent, RestProxyMixin):
     def __init__(self, name: str, amount: float, unit: str):
-        super().__init__(name=name, amount=amount, unit=unit,
-                         module_path="ochra_discovery.storage.reagent")
+        super().__init__(
+            name=name,
+            amount=amount,
+            unit=unit,
+            module_path="ochra_discovery.storage.reagent",
+        )
         self._mixin_hook(self._endpoint, self.id)
 
     def add_property(self, property_name: str, property_value: Any) -> bool:
