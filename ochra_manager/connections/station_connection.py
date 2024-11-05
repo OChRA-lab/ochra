@@ -14,9 +14,10 @@ class StationConnection():
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger)
 
-    def execute_op(self, op: Operation):
+    def execute_op(self, op: Operation, is_robot_op: bool):
         data = {"id": str(op.id),
                 "caller_id": str(op.caller_id),
                 "method": op.method,
                 "args": op.args}
-        return self.rest_adapter.post(endpoint="process_op", data=data)
+        endpoint = "process_robot_op" if is_robot_op else "process_device_op"
+        return self.rest_adapter.post(endpoint=endpoint, data=data)

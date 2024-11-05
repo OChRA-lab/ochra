@@ -83,7 +83,7 @@ class LabService():
         """
 
         try:
-            if collection == "devices":
+            if collection == "devices" or collection == "robots":
                 # get station ip
                 station_id = self.db_conn.read(
                     {"id": object_id, "_collection": collection}, "station_id")
@@ -102,18 +102,16 @@ class LabService():
                 # create operation object and store in db
                 op: Operation = Operation(caller_id=object_id,
                                           method=call_req.method, args=call_req.args,
-                                          module_path="ochra_discovery.equipment.operation",
-                                          start_timestamp=datetime.now().isoformat())
+                                          module_path="ochra_discovery.equipment.operation")
                 # TODO change to use a proxy for operation instead of accessing db directly
                 self.db_conn.create(
                     {"_collection": "operations"}, json.loads(op.model_dump_json()))
 
                 # pass operation to station to execute
-                result = station_client.execute_op(op)
+                is_robot_op = collection == "robots"
+                result = station_client.execute_op(op, is_robot_op=is_robot_op)
 
                 # TODO change to use a proxy for operation instead of accessing db directly
-                self.db_conn.update({"id": object_id, "_collection": "operations"}, {
-                                    "end_timestamp": datetime.now().isoformat()})
                 self.db_conn.update({"id": object_id, "_collection": "operations"}, {
                                     "result": result.data})
 
@@ -124,9 +122,6 @@ class LabService():
 
             elif collection == "stations":
                 # TODO do station stuff
-                pass
-            elif collection == "robots":
-                # TODO do robot stuff
                 pass
 
         except HTTPException:

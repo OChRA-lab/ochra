@@ -39,7 +39,9 @@ class StationServer():
         self._router = APIRouter()
         
         self._router.add_api_route(
-            "/process_op", self.process_op, methods=["POST"])
+            "/process_device_op", self.process_device_op, methods=["POST"])
+        self._router.add_api_route(
+            "/process_robot_op", self.process_robot_op, methods=["POST"])
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
         self._app.include_router(self._router)
         
@@ -79,7 +81,7 @@ class StationServer():
     def ping(self, request: Request):
         print(f"ping from {request.client.host}")
 
-    def process_op(self, op: Operation):
+    def process_device_op(self, op: Operation):
         """retrieve the device from the device dict and execute the method
 
         Args:
@@ -112,5 +114,39 @@ class StationServer():
                 return result
             else:
                 return result
+        except Exception as e:
+            raise HTTPException(500, detail=str(e))
+
+    def process_robot_op(self, op: Operation):
+        """retrieve the robot from the device dict and execute the given task
+
+        Args:
+            op (Operation): operation details to be executed by the robot
+
+        Raises:
+            HTTPException: If the device is not found or the method is not found
+
+        Returns:
+            Any: return value of the method
+        """
+        try:
+            # need to add star timestamp to the operation
+            robot = self._devices[op.caller_id]
+
+            if op.method not in robot.available_tasks:
+                raise HTTPException(404, detail=f"task {op.method} not found")
+
+            # TODO crete an operation proxy to streamline setting properties
+            if self._lab_conn:
+                self._lab_conn.set_property("operations", op.id, "start_timestamp", datetime.datetime.now().isoformat())
+                # TODO change status to running
+            
+            result =  robot.execute(task_name=op.method, args=op.args)
+
+            if self._lab_conn:
+                self._lab_conn.set_property("operations", op.id, "end_timestamp", datetime.datetime.now().isoformat())
+                # TODO change status to complete
+            
+            return result
         except Exception as e:
             raise HTTPException(500, detail=str(e))
