@@ -11,7 +11,9 @@ class IkaPlate(IkaPlateAbstract, RestProxyMixinReadOnly):
 
     def set_temperature(self, temperature: int) -> bool:
         lab_conn = LabConnection()
-        return lab_conn.call_on_object("devices", self.id, "set_temperature", {"temperature": temperature})
+        return lab_conn.call_on_object(
+            "devices", self.id, "set_temperature", {"temperature": temperature}
+        )
 
     def start_heat(self) -> bool:
         print("do the thing")

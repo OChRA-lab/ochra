@@ -22,8 +22,10 @@ def test_setup(MockLab, MockWorkStationProxy):
 
 
 def test_ping():
-    server = StationServer(name="test_station",
-                           location=Location(name="test_location", map="test_map", map_id=1))
+    server = StationServer(
+        name="test_station",
+        location=Location(name="test_location", map="test_map", map_id=1),
+    )
     server.setup()
 
     client = TestClient(server._app)
@@ -65,37 +67,49 @@ def test_process_op(MockLab, MockWorkStationProxy):
 
     server.add_device(mock_device)
 
-    op = Operation(caller_id=device_id,
-                   method="execute_operation", args={"arg": 1})
+    op = Operation(caller_id=device_id, method="execute_operation", args={"arg": 1})
 
     # This is done to handle fields that are None
-    op_json = {"id": str(op.id), "caller_id": str(
-        op.caller_id), "method": op.method, "args": op.args}
+    op_json = {
+        "id": str(op.id),
+        "caller_id": str(op.caller_id),
+        "method": op.method,
+        "args": op.args,
+    }
 
     client = TestClient(server._app)
-    response = client.post(
-        "/process_op", json=op_json)
+    response = client.post("/process_op", json=op_json)
 
-    lab_mock.set_property.assert_has_calls([call("operations",
-                                                 op.id, "start_timestamp", ANY), call("operations", op.id, "end_timestamp", ANY)])
+    lab_mock.set_property.assert_has_calls(
+        [
+            call("operations", op.id, "start_timestamp", ANY),
+            call("operations", op.id, "end_timestamp", ANY),
+        ]
+    )
     assert response.status_code == 200
     assert response.json() == [1, 2, 3]
     mock_device.execute_operation.assert_called_once_with(**op.args)
 
     # test for invalid operation
-    op_json = {"id": str(op.id), "caller_id": str(
-        op.caller_id), "method": "invalid_method", "args": op.args}
+    op_json = {
+        "id": str(op.id),
+        "caller_id": str(op.caller_id),
+        "method": "invalid_method",
+        "args": op.args,
+    }
 
-    response = client.post(
-        "/process_op", json=op_json)
+    response = client.post("/process_op", json=op_json)
 
     assert response.status_code == 500
 
     # test for unavailable device
-    op_json = {"id": str(op.id), "caller_id": str(
-        uuid4()), "method": op.method, "args": op.args}
+    op_json = {
+        "id": str(op.id),
+        "caller_id": str(uuid4()),
+        "method": op.method,
+        "args": op.args,
+    }
 
-    response = client.post(
-        "/process_op", json=op_json)
+    response = client.post("/process_op", json=op_json)
 
     assert response.status_code == 500

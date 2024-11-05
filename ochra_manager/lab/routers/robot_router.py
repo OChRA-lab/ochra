@@ -1,6 +1,10 @@
 import logging
 from fastapi import APIRouter
-from ochra_common.connections.api_models import ObjectCallRequest, ObjectPropertySetRequest, ObjectConstructionRequest
+from ochra_common.connections.api_models import (
+    ObjectCallRequest,
+    ObjectPropertySetRequest,
+    ObjectConstructionRequest,
+)
 from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid
 

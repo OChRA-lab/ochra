@@ -7,5 +7,7 @@ def api_call(type):
             lab_connection: LabConnection = LabConnection()
             obj = args[0]
             lab_connection.call_on_object(type, obj.id, func.__name__, kwargs)
+
         return wrapper
+
     return decorator

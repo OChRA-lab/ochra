@@ -1,6 +1,9 @@
 import logging
 from fastapi import APIRouter
-from ochra_common.connections.api_models import ObjectPropertySetRequest, ObjectConstructionRequest
+from ochra_common.connections.api_models import (
+    ObjectPropertySetRequest,
+    ObjectConstructionRequest,
+)
 from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid
 
@@ -16,19 +19,29 @@ class StorageRouter(APIRouter):
 
         # routes for containers
         self.put("/{object_type}/construct")(self.construct_storage_item)
-        self.get("/{object_type}/{object_id}/get_property/{property}")(self.get_storage_item_property)
-        self.patch("/{object_type}/{object_id}/modify_property")(self.modify_storage_item_property)
+        self.get("/{object_type}/{object_id}/get_property/{property}")(
+            self.get_storage_item_property
+        )
+        self.patch("/{object_type}/{object_id}/modify_property")(
+            self.modify_storage_item_property
+        )
         self.get("/{object_type}/get")(self.get_storage_item)
 
-    async def construct_storage_item(self, object_type: str, args: ObjectConstructionRequest):
+    async def construct_storage_item(
+        self, object_type: str, args: ObjectConstructionRequest
+    ):
         collection = object_type if object_type in COLLECTIONS else None
         return self.lab_service.construct_object(args, collection)
 
-    async def get_storage_item_property(self, object_type: str, object_id: str, property: str):
+    async def get_storage_item_property(
+        self, object_type: str, object_id: str, property: str
+    ):
         collection = object_type if object_type in COLLECTIONS else None
         return self.lab_service.get_object_property(object_id, collection, property)
 
-    async def modify_storage_item_property(self, object_type: str, object_id: str, args: ObjectPropertySetRequest):
+    async def modify_storage_item_property(
+        self, object_type: str, object_id: str, args: ObjectPropertySetRequest
+    ):
         collection = object_type if object_type in COLLECTIONS else None
         return self.lab_service.patch_object(object_id, collection, args)
 

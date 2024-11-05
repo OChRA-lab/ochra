@@ -12,12 +12,12 @@ import inspect
 logger = logging.getLogger(__name__)
 
 
-class LabServer():
+class LabServer:
     def __init__(self, host: str, port: int) -> None:
         self.host = host
         self.port = port
         self.app = FastAPI()
-        
+
         self.app.include_router(LabRouter())
         self.app.include_router(DeviceRouter())
         self.app.include_router(StationRouter())
