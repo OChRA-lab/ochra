@@ -11,9 +11,9 @@ authors = [ #add authors here
 description = "OChRA_Discovery package..." #add summary of OChRA_Discovery here
 readme = "README.md"
 #license = {file = "LICENSE"} #don't need license a license yet
-requires-python = ">=3.11"
+requires-python = ">=3.8"
 dependencies = [ 
-    "ochra_common>=0.0.0",
+    "ochra_common>=0.0.1",
     "ruff>=0.7.2",
 ] 
 classifiers = [
