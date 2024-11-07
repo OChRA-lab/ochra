@@ -1,3 +1,4 @@
+from pydantic import Field
 from typing import Any
 from uuid import UUID
 from ..base import DataModel
@@ -8,14 +9,29 @@ class OperationResult(DataModel):
     Abstract result class to keep results formatted and structured.
 
     Attributes:
-        type (str): The type of the result.
-        data (BinaryIO): The binary data of the result.
+        data_entry_id (uuid.UUID): The unique identifier of the data entry
+        success (bool): The outcome of the operation. 
+        error (str): The error if the operation failed. Defaulted to None 
+        data (Any): Data of the result. Can be any data
+        data_file_type (str): The file type of the result. Defaulted to None, which just means the data is saved as raw text
     """
 
-    type: str
     data_entry_id: UUID
+    success: bool
+    error: str = Field(default=None)
+    data: Any
+    data_file_type: str = Field(default=None)
 
-    def retrieve_processed_data(self) -> Any:
+    def put_data(self) -> bool:
+        """
+        Converts the data into bytestring and uploads the results
+
+        Returns:
+            bool: True if the data is converted and uploaded
+        """
+        raise NotImplementedError
+
+    def get_data(self) -> Any:
         """
         Retrieve the processed data from the result.
 
