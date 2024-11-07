@@ -1,6 +1,10 @@
 import logging
 from fastapi import APIRouter, Request
-from ochra_common.connections.api_models import ObjectCallRequest, ObjectConstructionRequest, ObjectPropertySetRequest
+from ochra_common.connections.api_models import (
+    ObjectCallRequest,
+    ObjectConstructionRequest,
+    ObjectPropertySetRequest,
+)
 from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid
 import json
@@ -14,13 +18,14 @@ class StationRouter(APIRouter):
         super().__init__(prefix=f"/{COLLECTION}")
         self.lab_service = LabService()
         self.put("/construct")(self.construct_station)
-        self.get(
-            "/{object_id}/get_property/{property}")(self.get_station_property)
+        self.get("/{object_id}/get_property/{property}")(self.get_station_property)
         self.patch("/{object_id}/modify_property")(self.modify_property)
         self.post("/{object_id}/call_method")(self.call_method)
         self.get("/get")(self.get_station)
 
-    async def construct_station(self, args: ObjectConstructionRequest, request: Request):
+    async def construct_station(
+        self, args: ObjectConstructionRequest, request: Request
+    ):
         print(request.client.host)
         object = json.loads(args.object_json)
         # TODO we can just set this as part of the station model

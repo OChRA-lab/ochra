@@ -3,8 +3,9 @@ from ochra_common.spaces.location import Location
 from ika_plate.handler import IkaPlate as backendIkaPlate
 
 # construct station server
-my_station = StationServer(name="myStation", location=Location(
-    name="myLocation", map="asd", map_id=123))
+my_station = StationServer(
+    name="myStation", location=Location(name="myLocation", map="asd", map_id=123)
+)
 
 # setup the station server
 my_station.setup(lab_ip="localhost:8001")

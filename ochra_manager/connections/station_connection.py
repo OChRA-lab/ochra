@@ -3,7 +3,7 @@ from ochra_common.equipment.operation import Operation
 import logging
 
 
-class StationConnection():
+class StationConnection:
     def __init__(
         self,
         hostname: str = "10.24.57.154:8000",
@@ -12,12 +12,15 @@ class StationConnection():
         logger: logging.Logger = None,
     ):
         self.rest_adapter: RestAdapter = RestAdapter(
-            hostname, api_key, ssl_verify, logger)
+            hostname, api_key, ssl_verify, logger
+        )
 
     def execute_op(self, op: Operation, is_robot_op: bool):
-        data = {"id": str(op.id),
-                "caller_id": str(op.caller_id),
-                "method": op.method,
-                "args": op.args}
+        data = {
+            "id": str(op.id),
+            "caller_id": str(op.caller_id),
+            "method": op.method,
+            "args": op.args,
+        }
         endpoint = "process_robot_op" if is_robot_op else "process_device_op"
         return self.rest_adapter.post(endpoint=endpoint, data=data)
