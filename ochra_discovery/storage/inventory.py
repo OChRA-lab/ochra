@@ -5,11 +5,20 @@ from ochra_common.storage.consumable import Consumable
 from uuid import UUID
 from typing import Type, Literal
 
+
 class Inventory(Inventory, RestProxyMixin):
-    def __init__(self, owner_id: UUID, owner_type: Literal["station", "robot", "device"], containers_max_capacity: int):
-        super().__init__(owner_id=owner_id, owner_type=owner_type,
-                         containers_max_capacity=containers_max_capacity,
-                         module_path="ochra_discovery.storage.inventory")
+    def __init__(
+        self,
+        owner_id: UUID,
+        owner_type: Literal["station", "robot", "device"],
+        containers_max_capacity: int,
+    ):
+        super().__init__(
+            owner_id=owner_id,
+            owner_type=owner_type,
+            containers_max_capacity=containers_max_capacity,
+            module_path="ochra_discovery.storage.inventory",
+        )
         self._mixin_hook(self._endpoint, self.id)
 
     def add_container(self, container: Type[Container]) -> None:
