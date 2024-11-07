@@ -1,14 +1,20 @@
 from ..utils.singleton_meta import SingletonMeta
 from ..base import DataModel
 from .rest_adapter import RestAdapter, Result, LabEngineException
-from .api_models import ObjectConstructionRequest, ObjectQueryResponse, ObjectCallRequest, ObjectPropertySetRequest
+from .api_models import (
+    ObjectConstructionRequest,
+    ObjectQueryResponse,
+    ObjectCallRequest,
+    ObjectPropertySetRequest,
+)
 from pydantic import ValidationError
 from uuid import UUID
 import logging
 from typing import Any, Type, Union, List
 import importlib
 
-#TODO change the return types of get_property and get_all_objects to be more specific
+# TODO change the return types of get_property and get_all_objects to be more specific
+
 
 class LabConnection(metaclass=SingletonMeta):
     """lab adapter built on top of RestAdapter,
@@ -34,7 +40,8 @@ class LabConnection(metaclass=SingletonMeta):
                 Defaults to None.
         """
         self.rest_adapter: RestAdapter = RestAdapter(
-            hostname, api_key, ssl_verify, logger)
+            hostname, api_key, ssl_verify, logger
+        )
 
     def load_from_response(self, obj: ObjectQueryResponse):
         try:
@@ -43,78 +50,86 @@ class LabConnection(metaclass=SingletonMeta):
             instance = class_to_instance.from_id(obj.id)
             return instance
         except Exception as e:
-            raise LabEngineException(
-                f"Unexpected error in importing class: {e}")
+            raise LabEngineException(f"Unexpected error in importing class: {e}")
 
     def construct_object(self, type: str, object: Type[DataModel]) -> UUID:
         req = ObjectConstructionRequest(object_json=object.model_dump_json())
         result: Result = self.rest_adapter.put(
-            f"/{type}/construct", data=req.model_dump(mode="json"))
+            f"/{type}/construct", data=req.model_dump(mode="json")
+        )
         try:
             id = UUID(result.data)
             return id
         except ValueError:
-            raise LabEngineException(
-                f"Expected UUID, got {result.data}")
+            raise LabEngineException(f"Expected UUID, got {result.data}")
         except Exception as e:
-            raise LabEngineException(
-                f"Unexpected error: {e}")
+            raise LabEngineException(f"Unexpected error: {e}")
 
-    def get_object(self, endpoint: str, identifier: Union[str, UUID]) -> ObjectQueryResponse:
+    def get_object(
+        self, endpoint: str, identifier: Union[str, UUID]
+    ) -> ObjectQueryResponse:
         result: Result = self.rest_adapter.get(
-            f"/{endpoint}/get", {"identifier": str(identifier)})
+            f"/{endpoint}/get", {"identifier": str(identifier)}
+        )
         try:
             object = ObjectQueryResponse(**result.data)
             return self.load_from_response(object)
         except ValueError:
-            raise LabEngineException(
-                f"Expected ObjectQueryResponse, got {result.data}")
+            raise LabEngineException(f"Expected ObjectQueryResponse, got {result.data}")
         except Exception as e:
-            raise LabEngineException(
-                f"Unexpected error: {e}")
+            raise LabEngineException(f"Unexpected error: {e}")
 
     def get_all_objects(self, endpoint: str) -> List[ObjectQueryResponse]:
-        result: Result = self.rest_adapter.get(
-            f"/{endpoint}/get_all")
+        result: Result = self.rest_adapter.get(f"/{endpoint}/get_all")
         try:
             objects = [ObjectQueryResponse(**data) for data in result.data]
             return [self.load_from_response(obj) for obj in objects]
         except ValueError:
-            raise LabEngineException(
-                f"Expected ObjectQueryResponse, got {result.data}")
+            raise LabEngineException(f"Expected ObjectQueryResponse, got {result.data}")
         except Exception as e:
-            raise LabEngineException(
-                f"Unexpected error: {e}")
+            raise LabEngineException(f"Unexpected error: {e}")
 
     def delete_object(self, type: str, id: UUID):
         result: Result = self.rest_adapter.delete(f"/{type}/delete/{str(id)}")
         return result.data
 
-    def call_on_object(self, type: str, id: UUID, method: str, args: dict) -> ObjectQueryResponse:
+    def call_on_object(
+        self, type: str, id: UUID, method: str, args: dict
+    ) -> ObjectQueryResponse:
         req = ObjectCallRequest(method=method, args=args)
         result: Result = self.rest_adapter.post(
-            f"/{type}/{str(id)}/call_method", data=req.model_dump(mode="json"))
+            f"/{type}/{str(id)}/call_method", data=req.model_dump(mode="json")
+        )
         try:
             object = ObjectQueryResponse(**result.data)
             return self.load_from_response(object)
         except Exception as e:
-            raise LabEngineException(
-                f"Unexpected error: {e}")
+            raise LabEngineException(f"Unexpected error: {e}")
 
-    def get_property(self, type: str, id: UUID, property: str) -> Union[Any, ObjectQueryResponse]:
+    def get_property(
+        self, type: str, id: UUID, property: str
+    ) -> Union[Any, ObjectQueryResponse]:
         result: Result = self.rest_adapter.get(
-            f"/{type}/{str(id)}/get_property/{property}")
+            f"/{type}/{str(id)}/get_property/{property}"
+        )
         if result.status_code == 404:
-            raise LabEngineException(
-                f"Property {property} not found for {type} {id}")
+            raise LabEngineException(f"Property {property} not found for {type} {id}")
         try:
             if isinstance(result.data, list):
-                listData = [self._convert_to_object_query_response_possibly(
-                    data) for data in result.data]
-                return [self.load_from_response(data) if isinstance(data, ObjectQueryResponse) else data for data in listData]
+                listData = [
+                    self._convert_to_object_query_response_possibly(data)
+                    for data in result.data
+                ]
+                return [
+                    self.load_from_response(data)
+                    if isinstance(data, ObjectQueryResponse)
+                    else data
+                    for data in listData
+                ]
             elif isinstance(result.data, dict):
                 possibleQueryResponse = self._convert_to_object_query_response_possibly(
-                    result.data)
+                    result.data
+                )
                 if isinstance(possibleQueryResponse, ObjectQueryResponse):
                     return self.load_from_response(possibleQueryResponse)
                 else:
@@ -122,42 +137,42 @@ class LabConnection(metaclass=SingletonMeta):
             else:
                 return result.data
         except Exception as e:
-            raise LabEngineException(
-                f"Unexpected error: {e}")
+            raise LabEngineException(f"Unexpected error: {e}")
 
     def set_property(self, type: str, id: UUID, property: str, value: Any):
         req = ObjectPropertySetRequest(property=property, property_value=value)
         result: Result = self.rest_adapter.patch(
-            f"/{type}/{str(id)}/modify_property", data=req.model_dump(mode="json"))
+            f"/{type}/{str(id)}/modify_property", data=req.model_dump(mode="json")
+        )
         return result.data
 
-    def get_by_station(self, station_identifier: Union[str, UUID], endpoint: str, objectType: str) -> ObjectQueryResponse:
+    def get_by_station(
+        self, station_identifier: Union[str, UUID], endpoint: str, objectType: str
+    ) -> ObjectQueryResponse:
         result: Result = self.rest_adapter.get(
-            f"/{endpoint}/{str(station_identifier)}/get_by_station/{objectType}")
+            f"/{endpoint}/{str(station_identifier)}/get_by_station/{objectType}"
+        )
         try:
             object = ObjectQueryResponse(**result.data)
             return self.load_from_response(object)
         except ValidationError:
-            raise LabEngineException(
-                f"Expected ObjectQueryResponse, got {result.data}")
+            raise LabEngineException(f"Expected ObjectQueryResponse, got {result.data}")
         except Exception as e:
-            raise LabEngineException(
-                f"Unexpected error: {e}")
+            raise LabEngineException(f"Unexpected error: {e}")
 
-    def _convert_to_object_query_response_possibly(self, data: Any) -> Union[ObjectQueryResponse, Any]:
+    def _convert_to_object_query_response_possibly(
+        self, data: Any
+    ) -> Union[ObjectQueryResponse, Any]:
         try:
             return ObjectQueryResponse(**data)
         except (ValidationError, TypeError):
             return data
 
     def get_object_id(self, endpoint: str, name: str) -> UUID:
-        result: Result = self.rest_adapter.get(
-            f"/{endpoint}/get", {"identifier": name})
+        result: Result = self.rest_adapter.get(f"/{endpoint}/get", {"identifier": name})
         try:
             return UUID(result.data["id"])
         except ValueError:
-            raise LabEngineException(
-                f"Expected UUID, got {result.data}")
+            raise LabEngineException(f"Expected UUID, got {result.data}")
         except Exception as e:
-            raise LabEngineException(
-                f"Unexpected error: {e}")
+            raise LabEngineException(f"Unexpected error: {e}")

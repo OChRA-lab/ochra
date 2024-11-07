@@ -39,13 +39,24 @@ def test_task():
         "args": {},
         "status": -1,
         "start_timestamp": start_timestamp,
-        "end_timestamp": end_timestamp
+        "end_timestamp": end_timestamp,
     }
 
-    assert task.model_dump_json() == '{"id":"' + str(task.id) + '","cls":"Task"' + ',"module_path":null' +\
-        ',"assignee_id":"' + str(assignee_id) + '","name":"test_name","args":{},"status":-1,' + \
-        '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
-        end_timestamp.isoformat() + '"}'
+    assert (
+        task.model_dump_json()
+        == '{"id":"'
+        + str(task.id)
+        + '","cls":"Task"'
+        + ',"module_path":null'
+        + ',"assignee_id":"'
+        + str(assignee_id)
+        + '","name":"test_name","args":{},"status":-1,'
+        + '"start_timestamp":"'
+        + start_timestamp.isoformat()
+        + '","end_timestamp":"'
+        + end_timestamp.isoformat()
+        + '"}'
+    )
 
 
 def test_robot_task():
@@ -78,13 +89,24 @@ def test_robot_task():
         "status": -1,
         "start_timestamp": start_timestamp,
         "end_timestamp": end_timestamp,
-        "priority": -1
+        "priority": -1,
     }
 
-    assert task.model_dump_json() == '{"id":"' + str(task.id) + '","cls":"RobotTask"' + ',"module_path":null' +\
-        ',"assignee_id":"' + str(assignee_id) + '","name":"test_name","args":{},"status":-1,' + \
-        '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
-        end_timestamp.isoformat() + '","priority":-1}'
+    assert (
+        task.model_dump_json()
+        == '{"id":"'
+        + str(task.id)
+        + '","cls":"RobotTask"'
+        + ',"module_path":null'
+        + ',"assignee_id":"'
+        + str(assignee_id)
+        + '","name":"test_name","args":{},"status":-1,'
+        + '"start_timestamp":"'
+        + start_timestamp.isoformat()
+        + '","end_timestamp":"'
+        + end_timestamp.isoformat()
+        + '","priority":-1}'
+    )
 
 
 def test_scientist_task():
@@ -115,13 +137,24 @@ def test_scientist_task():
         "args": {},
         "status": -1,
         "start_timestamp": start_timestamp,
-        "end_timestamp": end_timestamp
+        "end_timestamp": end_timestamp,
     }
 
-    assert task.model_dump_json() == '{"id":"' + str(task.id) + '","cls":"ScientistTask"' + ',"module_path":null' +\
-        ',"assignee_id":"' + str(assignee_id) + '","name":"test_name","args":{},"status":-1,' + \
-        '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
-        end_timestamp.isoformat() + '"}'
+    assert (
+        task.model_dump_json()
+        == '{"id":"'
+        + str(task.id)
+        + '","cls":"ScientistTask"'
+        + ',"module_path":null'
+        + ',"assignee_id":"'
+        + str(assignee_id)
+        + '","name":"test_name","args":{},"status":-1,'
+        + '"start_timestamp":"'
+        + start_timestamp.isoformat()
+        + '","end_timestamp":"'
+        + end_timestamp.isoformat()
+        + '"}'
+    )
 
 
 def test_agent():
@@ -142,12 +175,18 @@ def test_agent():
         "name": "test_name",
         "status": -1,
         "assigned_task": None,
-        "tasks_history": []
+        "tasks_history": [],
     }
 
-    assert agent.model_dump_json() == '{"id":"' + str(agent.id) + '","cls":"Agent"' + ',"module_path":null'+ \
-        ',"name":"test_name","status":-1,"assigned_task":null' + \
-        ',"tasks_history":[]}'
+    assert (
+        agent.model_dump_json()
+        == '{"id":"'
+        + str(agent.id)
+        + '","cls":"Agent"'
+        + ',"module_path":null'
+        + ',"name":"test_name","status":-1,"assigned_task":null'
+        + ',"tasks_history":[]}'
+    )
 
 
 def test_scientist():
@@ -169,11 +208,17 @@ def test_scientist():
         "privilege": -1,
         "status": -1,
         "assigned_task": None,
-        "tasks_history": []
+        "tasks_history": [],
     }
 
-    assert scientist.model_dump_json() == '{"id":"' + str(scientist.id) + '","cls":"Scientist",' + '"module_path":null,'+ \
-        '"name":"test_scientist","status":-1,"assigned_task":null,"tasks_history":[],"privilege":-1}'
+    assert (
+        scientist.model_dump_json()
+        == '{"id":"'
+        + str(scientist.id)
+        + '","cls":"Scientist",'
+        + '"module_path":null,'
+        + '"name":"test_scientist","status":-1,"assigned_task":null,"tasks_history":[],"privilege":-1}'
+    )
 
 
 def test_robot():
@@ -198,17 +243,24 @@ def test_robot():
         "name": "test_robot",
         "status": -1,
         "assigned_task": None,
-        "tasks_history": []
+        "tasks_history": [],
     }
 
-    assert robot.model_dump_json() == '{"id":"' + str(robot.id) + '","cls":"Robot",' + '"module_path":null,'+ \
-        '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
-        '"type":"test_type","location":null}'
+    assert (
+        robot.model_dump_json()
+        == '{"id":"'
+        + str(robot.id)
+        + '","cls":"Robot",'
+        + '"module_path":null,'
+        + '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],'
+        + '"type":"test_type","location":null}'
+    )
 
 
 def test_manipulator():
-    robot = Manipulator(name="test_robot", type="test_type",
-                        available_tasks=["task1", "task2"])
+    robot = Manipulator(
+        name="test_robot", type="test_type", available_tasks=["task1", "task2"]
+    )
     assert robot.id != None
     assert robot.cls == "Manipulator"
     assert robot.module_path == None
@@ -231,12 +283,18 @@ def test_manipulator():
         "status": -1,
         "assigned_task": None,
         "tasks_history": [],
-        "available_tasks": ["task1", "task2"]
+        "available_tasks": ["task1", "task2"],
     }
 
-    assert robot.model_dump_json() == '{"id":"' + str(robot.id) + '","cls":"Manipulator",' + '"module_path":null,'+ \
-        '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
-        '"type":"test_type","location":null,"available_tasks":["task1","task2"]}'
+    assert (
+        robot.model_dump_json()
+        == '{"id":"'
+        + str(robot.id)
+        + '","cls":"Manipulator",'
+        + '"module_path":null,'
+        + '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],'
+        + '"type":"test_type","location":null,"available_tasks":["task1","task2"]}'
+    )
 
 
 def test_mobile_platform():
@@ -263,17 +321,24 @@ def test_mobile_platform():
         "status": -1,
         "assigned_task": None,
         "tasks_history": [],
-        "conditions": {}
+        "conditions": {},
     }
 
-    assert robot.model_dump_json() == '{"id":"' + str(robot.id) + '","cls":"MobilePlatform",' + '"module_path":null,'+ \
-        '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
-        '"type":"test_type","location":null,"conditions":{}}'
+    assert (
+        robot.model_dump_json()
+        == '{"id":"'
+        + str(robot.id)
+        + '","cls":"MobilePlatform",'
+        + '"module_path":null,'
+        + '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],'
+        + '"type":"test_type","location":null,"conditions":{}}'
+    )
 
 
 def test_mobile_manipulator():
     robot = MobileManipulator(
-        name="test_robot", type="test_type", available_tasks=["task1", "task2"])
+        name="test_robot", type="test_type", available_tasks=["task1", "task2"]
+    )
     assert robot.id != None
     assert robot.cls == "MobileManipulator"
     assert robot.module_path == None
@@ -298,9 +363,15 @@ def test_mobile_manipulator():
         "assigned_task": None,
         "tasks_history": [],
         "available_tasks": ["task1", "task2"],
-        "conditions": {}
+        "conditions": {},
     }
 
-    assert robot.model_dump_json() == '{"id":"' + str(robot.id) + '","cls":"MobileManipulator",' + '"module_path":null,' + \
-        '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],' + \
-        '"type":"test_type","location":null,"conditions":{},"available_tasks":["task1","task2"]}'
+    assert (
+        robot.model_dump_json()
+        == '{"id":"'
+        + str(robot.id)
+        + '","cls":"MobileManipulator",'
+        + '"module_path":null,'
+        + '"name":"test_robot","status":-1,"assigned_task":null,"tasks_history":[],'
+        + '"type":"test_type","location":null,"conditions":{},"available_tasks":["task1","task2"]}'
+    )

@@ -12,10 +12,10 @@ class DataModel(BaseModel):
         _collection (str): The name of the collection where the data model will be stored.
         _cls (str): The class name of the data model.
     """
+
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
     cls: str = Field(default=None)
     module_path: str = Field(default=None)
-
 
     def model_post_init(self, __context: Any) -> None:
         # retrieve the class name in addition to its import path

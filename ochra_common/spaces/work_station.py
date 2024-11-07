@@ -13,6 +13,7 @@ class WorkStation(Station):
     Attributes:
         devices (List[Device]): A list of devices associated with the workstation.
     """
+
     devices: List[Type[Device]] = Field(default_factory=list)
 
     def get_device(self, device_identifier: Union[str, UUID]) -> Type[Device]:

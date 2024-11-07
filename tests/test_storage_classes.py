@@ -20,22 +20,30 @@ def test_stock():
     assert stock.inventories == []
 
     # test stock methods
-    assert stock.model_dump_json() == '{"id":"' + str(stock.id) + \
-        '","cls":"Stock","module_path":null,"station_id":"' + \
-        str(station_id) + '","inventories":[]}'
+    assert (
+        stock.model_dump_json()
+        == '{"id":"'
+        + str(stock.id)
+        + '","cls":"Stock","module_path":null,"station_id":"'
+        + str(station_id)
+        + '","inventories":[]}'
+    )
 
-    assert stock.model_dump() == {"id": stock.id,
-                                  "cls": "Stock",
-                                  "module_path": None,
-                                  "station_id": station_id,
-                                  "inventories": []}
+    assert stock.model_dump() == {
+        "id": stock.id,
+        "cls": "Stock",
+        "module_path": None,
+        "station_id": station_id,
+        "inventories": [],
+    }
 
 
 def test_inventory():
     # test construction of the inventory
     station_id = uuid.uuid4()
-    inventory = Inventory(owner_id=station_id,
-                          owner_type="station", containers_max_capacity=100)
+    inventory = Inventory(
+        owner_id=station_id, owner_type="station", containers_max_capacity=100
+    )
 
     # test inventory attributes
     assert inventory.containers == []
@@ -43,19 +51,28 @@ def test_inventory():
     assert inventory.containers_max_capacity == 100
 
     # test inventory methods
-    assert inventory.model_dump_json() == '{"id":"' + str(inventory.id) + \
-        '","cls":"Inventory","module_path":null,' + '"owner_id":"' + str(station_id) +\
-        '","owner_type":"station","containers_max_capacity":100' + \
-        ',"containers":[],"consumables":[]}'
+    assert (
+        inventory.model_dump_json()
+        == '{"id":"'
+        + str(inventory.id)
+        + '","cls":"Inventory","module_path":null,'
+        + '"owner_id":"'
+        + str(station_id)
+        + '","owner_type":"station","containers_max_capacity":100'
+        + ',"containers":[],"consumables":[]}'
+    )
 
-    assert inventory.model_dump() == {"id": inventory.id,
-                                      "cls": "Inventory",
-                                      "module_path": None,
-                                      "owner_id": station_id,
-                                      "owner_type": "station",
-                                      "containers": [],
-                                      "consumables": [],
-                                      "containers_max_capacity": 100}
+    assert inventory.model_dump() == {
+        "id": inventory.id,
+        "cls": "Inventory",
+        "module_path": None,
+        "owner_id": station_id,
+        "owner_type": "station",
+        "containers": [],
+        "consumables": [],
+        "containers_max_capacity": 100,
+    }
+
 
 def test_consumables():
     # test construction of the consumable
@@ -66,14 +83,20 @@ def test_consumables():
     assert consumable.quantity == 10
 
     # test consumable methods
-    assert consumable.model_dump_json() == '{"id":"' + str(consumable.id) + \
-        '","cls":"Consumable","module_path":null,"type":"cap","quantity":10}'
+    assert (
+        consumable.model_dump_json()
+        == '{"id":"'
+        + str(consumable.id)
+        + '","cls":"Consumable","module_path":null,"type":"cap","quantity":10}'
+    )
 
-    assert consumable.model_dump() == {"id": consumable.id,
-                                       "cls": "Consumable",
-                                       "module_path": None,
-                                       "type": "cap",
-                                       "quantity": 10}
+    assert consumable.model_dump() == {
+        "id": consumable.id,
+        "cls": "Consumable",
+        "module_path": None,
+        "type": "cap",
+        "quantity": 10,
+    }
 
 
 def test_container():
@@ -87,17 +110,23 @@ def test_container():
     assert container.is_used == False
 
     # test container methods
-    assert container.model_dump_json() == '{"id":"' + str(container.id) + \
-        '","cls":"Container","module_path":null,"type":"box"' + \
-        ',"max_capacity":100,"physical_id":1,"is_used":false}'
+    assert (
+        container.model_dump_json()
+        == '{"id":"'
+        + str(container.id)
+        + '","cls":"Container","module_path":null,"type":"box"'
+        + ',"max_capacity":100,"physical_id":1,"is_used":false}'
+    )
 
-    assert container.model_dump() == {"id": container.id,
-                                      "cls": "Container",
-                                      "module_path": None,
-                                      "type": "box",
-                                      "physical_id": 1,
-                                      "max_capacity": 100,
-                                      "is_used": False}
+    assert container.model_dump() == {
+        "id": container.id,
+        "cls": "Container",
+        "module_path": None,
+        "type": "box",
+        "physical_id": 1,
+        "max_capacity": 100,
+        "is_used": False,
+    }
 
 
 def test_holder():
@@ -111,24 +140,29 @@ def test_holder():
     assert holder.is_used == False
 
     # test holder methods
-    assert holder.model_dump_json() == '{"id":"' + str(holder.id) + \
-        '","cls":"Holder","module_path":null,"type":"rack"' + \
-        ',"max_capacity":16,"physical_id":1,"is_used":false,"containers":[]}'
+    assert (
+        holder.model_dump_json()
+        == '{"id":"'
+        + str(holder.id)
+        + '","cls":"Holder","module_path":null,"type":"rack"'
+        + ',"max_capacity":16,"physical_id":1,"is_used":false,"containers":[]}'
+    )
 
-    assert holder.model_dump() == {"id": holder.id,
-                                   "cls": "Holder",
-                                   "module_path": None,
-                                   "type": "rack",
-                                   "physical_id": 1,
-                                   "max_capacity": 16,
-                                   "is_used": False,
-                                   "containers": []}
+    assert holder.model_dump() == {
+        "id": holder.id,
+        "cls": "Holder",
+        "module_path": None,
+        "type": "rack",
+        "physical_id": 1,
+        "max_capacity": 16,
+        "is_used": False,
+        "containers": [],
+    }
 
 
 def test_vessel():
     # test construction of the vessel
-    vessel = Vessel(type="vial", max_capacity=5.0,
-                    capacity_unit="ml", physical_id=1)
+    vessel = Vessel(type="vial", max_capacity=5.0, capacity_unit="ml", physical_id=1)
 
     # test vessel attributes
     assert vessel.type == "vial"
@@ -137,20 +171,26 @@ def test_vessel():
     assert vessel.is_used == False
 
     # test vessel methods
-    assert vessel.model_dump_json() == '{"id":"' + str(vessel.id) + \
-        '","cls":"Vessel","module_path":null,"type":"vial"' + \
-        ',"max_capacity":5.0,"physical_id":1,"is_used":false,"capacity_unit":"ml"' + \
-        ',"reagents":[]}'
+    assert (
+        vessel.model_dump_json()
+        == '{"id":"'
+        + str(vessel.id)
+        + '","cls":"Vessel","module_path":null,"type":"vial"'
+        + ',"max_capacity":5.0,"physical_id":1,"is_used":false,"capacity_unit":"ml"'
+        + ',"reagents":[]}'
+    )
 
-    assert vessel.model_dump() == {"id": vessel.id,
-                                   "cls": "Vessel",
-                                   "module_path": None,
-                                   "type": "vial",
-                                   "physical_id": 1,
-                                   "max_capacity": 5.0,
-                                   "is_used": False,
-                                   "capacity_unit": "ml",
-                                   "reagents": []}
+    assert vessel.model_dump() == {
+        "id": vessel.id,
+        "cls": "Vessel",
+        "module_path": None,
+        "type": "vial",
+        "physical_id": 1,
+        "max_capacity": 5.0,
+        "is_used": False,
+        "capacity_unit": "ml",
+        "reagents": [],
+    }
 
 
 def test_reagent():
@@ -165,15 +205,21 @@ def test_reagent():
     assert reagent.properties == {}
 
     # test reagent methods
-    assert reagent.model_dump_json() == '{"id":"' + str(reagent.id) + \
-        '","cls":"Reagent","module_path":null,"name":"water","amount":100.0' + \
-        ',"unit":"ml","physical_state":-1,"properties":{}}'
+    assert (
+        reagent.model_dump_json()
+        == '{"id":"'
+        + str(reagent.id)
+        + '","cls":"Reagent","module_path":null,"name":"water","amount":100.0'
+        + ',"unit":"ml","physical_state":-1,"properties":{}}'
+    )
 
-    assert reagent.model_dump() == {"id": reagent.id,
-                                    "cls": "Reagent",
-                                    "module_path": None,
-                                    "name": "water",
-                                    "amount": 100.0,
-                                    "unit": "ml",
-                                    "physical_state": -1,
-                                    "properties": {}}
+    assert reagent.model_dump() == {
+        "id": reagent.id,
+        "cls": "Reagent",
+        "module_path": None,
+        "name": "water",
+        "amount": 100.0,
+        "unit": "ml",
+        "physical_state": -1,
+        "properties": {},
+    }

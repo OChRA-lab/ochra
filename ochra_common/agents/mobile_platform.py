@@ -11,6 +11,7 @@ class MobilePlatform(Robot):
     Attributes:
         conditions (dict): A dictionary of conditions related to the mobile platform.
     """
+
     conditions: Dict[str, Any] = Field(default_factory=dict)
 
     def go_to(self, location: Location) -> bool:

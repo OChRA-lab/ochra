@@ -9,6 +9,7 @@ class Scientist(Agent):
     Attributes:
         privilege (Enum): The privilege level of the scientist.
     """
+
     privilege: Enum = -1  # TODO: Define Enum for scientist privilege
 
     def complete_assigned_task(self) -> bool:

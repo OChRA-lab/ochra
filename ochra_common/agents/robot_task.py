@@ -9,4 +9,5 @@ class RobotTask(Task):
     Attributes:
         priority (Enum): The priority level of the task.
     """
+
     priority: Enum = -1  # TODO: Define Enum for robot task priority

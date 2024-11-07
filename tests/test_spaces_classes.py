@@ -20,9 +20,13 @@ def test_location():
     assert location.map_id == 1
 
     # test location methods
-    assert location.model_dump_json() == '{"id":"' + str(location.id) + \
-        '","cls":"Location","module_path":null,"name":"test_location",' + \
-        '"map":"test_map","map_id":1}'
+    assert (
+        location.model_dump_json()
+        == '{"id":"'
+        + str(location.id)
+        + '","cls":"Location","module_path":null,"name":"test_location",'
+        + '"map":"test_map","map_id":1}'
+    )
 
     # test location equality
     assert location == Location(
@@ -52,10 +56,16 @@ def test_station():
     assert station.inventory == None
 
     # test station methods
-    assert station.model_dump_json() == '{"id":"' + str(station.id) + \
-        '","cls":"Station","module_path":null,"name":"test_station",' + \
-        '"location":{"id":"' + str(station.location.id) + '","cls":"Location","module_path":null,' + \
-        '"name":"test_location","map":"test_map","map_id":1},"inventory":null}'
+    assert (
+        station.model_dump_json()
+        == '{"id":"'
+        + str(station.id)
+        + '","cls":"Station","module_path":null,"name":"test_station",'
+        + '"location":{"id":"'
+        + str(station.location.id)
+        + '","cls":"Location","module_path":null,'
+        + '"name":"test_location","map":"test_map","map_id":1},"inventory":null}'
+    )
 
     assert station.model_dump() == {
         "id": station.id,
@@ -112,10 +122,16 @@ def test_work_station():
         "devices": [],
     }
 
-    assert work_station.model_dump_json() == '{"id":"' + str(work_station.id) + \
-        '","cls":"WorkStation","module_path":null,"name":"test_work_station",' + \
-        '"location":{"id":"' + str(work_station.location.id) + '","cls":"Location","module_path":null,' + \
-        '"name":"test_location","map":"test_map","map_id":1},"inventory":null,"devices":[]}'
+    assert (
+        work_station.model_dump_json()
+        == '{"id":"'
+        + str(work_station.id)
+        + '","cls":"WorkStation","module_path":null,"name":"test_work_station",'
+        + '"location":{"id":"'
+        + str(work_station.location.id)
+        + '","cls":"Location","module_path":null,'
+        + '"name":"test_location","map":"test_map","map_id":1},"inventory":null,"devices":[]}'
+    )
 
 
 def test_storage_station():
@@ -141,12 +157,12 @@ def test_storage_station():
     assert storage_station.model_dump() == {
         "id": storage_station.id,
         "cls": "StorageStation",
-        "module_path":None,
+        "module_path": None,
         "name": "test_storage_station",
         "location": {
             "id": storage_station.location.id,
             "cls": "Location",
-            "module_path":None,
+            "module_path": None,
             "name": "test_location",
             "map": "test_map",
             "map_id": 1,
@@ -154,7 +170,13 @@ def test_storage_station():
         "inventory": None,
     }
 
-    assert storage_station.model_dump_json() == '{"id":"' + str(storage_station.id) + \
-        '","cls":"StorageStation","module_path":null,"name":"test_storage_station",' + \
-        '"location":{"id":"' + str(storage_station.location.id) + '","cls":"Location","module_path":null,' + \
-        '"name":"test_location","map":"test_map","map_id":1},"inventory":null}'
+    assert (
+        storage_station.model_dump_json()
+        == '{"id":"'
+        + str(storage_station.id)
+        + '","cls":"StorageStation","module_path":null,"name":"test_storage_station",'
+        + '"location":{"id":"'
+        + str(storage_station.location.id)
+        + '","cls":"Location","module_path":null,'
+        + '"name":"test_location","map":"test_map","map_id":1},"inventory":null}'
+    )

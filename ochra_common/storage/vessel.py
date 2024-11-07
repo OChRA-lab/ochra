@@ -12,6 +12,7 @@ class Vessel(Container):
         capacity_unit (str): The unit of measurement for the vessel's capacity.
         reagents (List[Reagent]): A list of reagents contained in the vessel. Defaults to an empty list.
     """
+
     capacity_unit: str
     reagents: List[Reagent] = Field(default_factory=list)
 

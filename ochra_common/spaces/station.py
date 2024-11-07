@@ -13,6 +13,7 @@ class Station(DataModel):
         location (Location): The location of the station.
         stock (Stock): The stock associated with the station.
     """
+
     name: str
     location: Location
     inventory: Inventory = Field(default=None)

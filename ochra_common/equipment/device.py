@@ -18,10 +18,11 @@ class Device(DataModel):
         operation_history (List[Operation]): A list of operations performed by the device.
         station_id (str): ID of the station which the device belongs to.
     """
+
     name: str
     inventory: DeviceInventory = Field(default=None)
     status: Enum = -1  # TODO: Define DeviceStatus Enum
     operation_history: List[Operation] = Field(default_factory=list)
     station_id: UUID = Field(default=None)
 
-    _endpoint = "devices" # associated endpoint for all devices
+    _endpoint = "devices"  # associated endpoint for all devices

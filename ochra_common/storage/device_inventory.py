@@ -9,4 +9,5 @@ class DeviceInventory(Inventory):
     Attributes:
         device_id (UUID): The unique identifier of the device to which the inventory belongs.
     """
+
     device_id: UUID

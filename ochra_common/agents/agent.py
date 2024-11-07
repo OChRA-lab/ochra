@@ -15,6 +15,7 @@ class Agent(DataModel):
         assigned_task (Task): The task currently assigned to the agent.
         tasks_history (List[Task]): A history of tasks assigned to the agent.
     """
+
     name: str
     status: Enum = -1  # TODO: Define Enum for agent status
     assigned_task: Task = Field(default=None)

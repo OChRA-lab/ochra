@@ -31,22 +31,32 @@ def test_operation():
     operation.start_timestamp = start_timestamp
     operation.end_timestamp = end_timestamp
 
-    assert operation.model_dump() == {"id": operation.id,
-                                   "cls": "Operation",
-                                   "module_path": None,
-                                   "caller_id": caller_id,
-                                   "method": "test_method",
-                                   "args": {"arg": 1},
-                                   "status": -1,
-                                   "start_timestamp": start_timestamp,
-                                   "end_timestamp": end_timestamp,
-                                   "result": ""}
+    assert operation.model_dump() == {
+        "id": operation.id,
+        "cls": "Operation",
+        "module_path": None,
+        "caller_id": caller_id,
+        "method": "test_method",
+        "args": {"arg": 1},
+        "status": -1,
+        "start_timestamp": start_timestamp,
+        "end_timestamp": end_timestamp,
+        "result": "",
+    }
 
-    assert operation.model_dump_json() == '{"id":"' + str(operation.id) + \
-        '","cls":"Operation","module_path":null,"caller_id":"' + \
-        str(caller_id) + '","method":"test_method","args":{"arg":1},"status":-1,' + \
-        '"start_timestamp":"' + start_timestamp.isoformat() + '","end_timestamp":"' + \
-        end_timestamp.isoformat() + '","result":""}'
+    assert (
+        operation.model_dump_json()
+        == '{"id":"'
+        + str(operation.id)
+        + '","cls":"Operation","module_path":null,"caller_id":"'
+        + str(caller_id)
+        + '","method":"test_method","args":{"arg":1},"status":-1,'
+        + '"start_timestamp":"'
+        + start_timestamp.isoformat()
+        + '","end_timestamp":"'
+        + end_timestamp.isoformat()
+        + '","result":""}'
+    )
 
 
 def test_operation_result():
@@ -63,15 +73,22 @@ def test_operation_result():
     assert result.data_entry_id == entry_id
 
     # test operation result methods
-    assert result.model_dump() == {"id": result.id,
-                                "cls": "OperationResult",
-                                "module_path": None,
-                                "type": "test",
-                                "data_entry_id": entry_id}
+    assert result.model_dump() == {
+        "id": result.id,
+        "cls": "OperationResult",
+        "module_path": None,
+        "type": "test",
+        "data_entry_id": entry_id,
+    }
 
-    assert result.model_dump_json() == '{"id":"' + str(result.id) + \
-        '","cls":"OperationResult","module_path":null,"type":"test","data_entry_id":"' + \
-        str(entry_id) + '"}'
+    assert (
+        result.model_dump_json()
+        == '{"id":"'
+        + str(result.id)
+        + '","cls":"OperationResult","module_path":null,"type":"test","data_entry_id":"'
+        + str(entry_id)
+        + '"}'
+    )
 
 
 def test_device():
@@ -87,15 +104,21 @@ def test_device():
     assert device.operation_history == []
 
     # test device methods
-    assert device.model_dump() == {"id": device.id,
-                                "cls": "Device",
-                                "module_path": None,
-                                "name": "test_device",
-                                "inventory": None,
-                                "status": -1,
-                                "station_id": None,
-                                "operation_history": []}
+    assert device.model_dump() == {
+        "id": device.id,
+        "cls": "Device",
+        "module_path": None,
+        "name": "test_device",
+        "inventory": None,
+        "status": -1,
+        "station_id": None,
+        "operation_history": [],
+    }
 
-    assert device.model_dump_json() == '{"id":"' + str(device.id) + \
-        '","cls":"Device","module_path":null,"name":"test_device","inventory":null,' + \
-        '"status":-1,"operation_history":[],"station_id":null}'
+    assert (
+        device.model_dump_json()
+        == '{"id":"'
+        + str(device.id)
+        + '","cls":"Device","module_path":null,"name":"test_device","inventory":null,'
+        + '"status":-1,"operation_history":[],"station_id":null}'
+    )

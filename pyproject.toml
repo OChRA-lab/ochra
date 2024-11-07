@@ -4,20 +4,20 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ochra_common"
-version = "0.0.0" #can switch to dynamic versioning and take from git tag later
+version = "0.0.1" #can switch to dynamic versioning and take from git tag later
 authors = [ #add authors here
     #{name = "placeholder", email = "place@holder"},
 ] 
 description = "OChRA_Common package..." #add summary of OChRA_Common here
 readme = "README.md"
 #license = {file = "LICENSE"} #don't need license a license yet
-requires-python = ">=3.11"
+requires-python = ">=3.8"
 dependencies = [
     "mongoengine==0.28.2",
-    "numpy==2.0.0",
-    "opencv_python==4.10.0.84",
     "pymongo==4.8.0",
     "pytest==8.2.2",
+    "pydantic==2.8.2",
+    "ruff>=0.7.2",
     "Requests==2.32.3",
     "typing_extensions==4.12.2",
 ] 

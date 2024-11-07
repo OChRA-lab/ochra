@@ -11,8 +11,9 @@ class Stock(DataModel):
 
     Attributes:
         station_id (UUID): The unique identifier of the station to which the stock belongs.
-        inventories (List[Inventory]): A list of inventories contained in the stock. Defaults to an empty list. 
+        inventories (List[Inventory]): A list of inventories contained in the stock. Defaults to an empty list.
     """
+
     station_id: UUID
     inventories: List[Inventory] = Field(default_factory=list)
 

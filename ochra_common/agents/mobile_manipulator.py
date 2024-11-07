@@ -8,4 +8,5 @@ class MobileManipulator(Manipulator, MobilePlatform):
 
     This class combines the functionalities of both a manipulator and a mobile platform.
     """
+
     pass

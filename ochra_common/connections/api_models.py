@@ -1,11 +1,12 @@
 from typing import Dict, Any
 from pydantic import BaseModel, Field
 from uuid import UUID
+from typing import Union
 
 
 class ObjectCallRequest(BaseModel):
     method: str
-    args: Dict | None = None
+    args: Union[Dict, None] = None
 
 
 class ObjectCallResponse(BaseModel):

@@ -6,6 +6,7 @@ class SingletonMeta(type):
     """
     ThreadSafe Singleton
     """
+
     _instances = {}
 
     _lock: Lock = Lock()
