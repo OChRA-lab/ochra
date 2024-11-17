@@ -39,9 +39,3 @@ class OperationRouter(APIRouter):
             return self.lab_service.get_object_by_id(identifier, COLLECTION)
         else:
             return self.lab_service.get_object_by_name(identifier, COLLECTION)
-
-    async def get_data(self, identifier: str):
-        return self.lab_service.get_data(identifier, COLLECTION)
-
-    async def put_data(self, identifier: str, data: bytes):
-        return self.lab_service.put_data(identifier, data, COLLECTION)
