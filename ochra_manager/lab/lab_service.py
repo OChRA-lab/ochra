@@ -21,7 +21,7 @@ class LabService:
         self.db_conn: DbConnection = DbConnection()
 
     def patch_object(
-        self, object_id: str, collection: str, set_req: ObjectPropertySetRequest
+        self, object_id: str, collection: str, set_req: ObjectPropertySetRequest, file = False
     ) -> bool:
         """patch properties of object_id using set_req key-value pairs
 
@@ -51,6 +51,7 @@ class LabService:
             self.db_conn.update(
                 {"id": object_id, "_collection": collection},
                 {set_req.property: set_req.property_value},
+                file = file
             )
 
             logger.info(f"changed {set_req.property} to {set_req.property_value}")
