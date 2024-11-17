@@ -55,7 +55,7 @@ class RestAdapter:
             requests.packages.urllib3.disable_warnings()
 
     def _do(
-        self, http_method: str, endpoint: str, ep_params: Dict = None, data: Dict = None
+        self, http_method: str, endpoint: str, ep_params: Dict = None, data: Dict = None, files = None
     ) -> Result:
         """Does a request of type based on the method passed in http_method
 
@@ -95,6 +95,7 @@ class RestAdapter:
                 headers=headers,
                 params=ep_params,
                 json=data,
+                files=files,
             )
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=str(e))
@@ -162,7 +163,7 @@ class RestAdapter:
             http_method="POST", endpoint=endpoint, ep_params=ep_params, data=data
         )
 
-    def patch(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
+    def patch(self, endpoint: str, ep_params: Dict = None, data: Dict = None, files = None) -> Result:
         """Do a Patch request to endpoint using _do
 
         Args:
@@ -174,7 +175,7 @@ class RestAdapter:
             Result: Data from request in the form of a Result instances
         """
         return self._do(
-            http_method="PATCH", endpoint=endpoint, ep_params=ep_params, data=data
+            http_method="PATCH", endpoint=endpoint, ep_params=ep_params, data=data, files = files
         )
 
     def delete(
