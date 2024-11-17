@@ -160,6 +160,15 @@ class StationServer:
                                                data_type = data_type,
                                                )
             
+            if is_file(str(result)):
+                with open(str(result), "rb") as file:
+                    data = {"file": file}
+                    
+                    # upload the file as a property
+                    self._lab_conn.put_data("operation_results", id = operation_result.id, data = data)
+
+                # TODO to deal with nonsequential data upload 
+            
             if self._lab_conn:
                 self._lab_conn.set_property(
                     "operations",
