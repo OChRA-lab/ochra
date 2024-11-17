@@ -10,6 +10,7 @@ from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.spaces.location import Location
 from ochra_common.equipment.device import Device
 from ochra_common.equipment.operation import Operation
+from ochra_manager.equipment.operation_result import OperationResult
 from .work_station import WorkStation
 
 
@@ -117,20 +118,64 @@ class StationServer:
 
             result = method(**op.args)
 
+            data = None
+            data_file_name = ""
+            error = ""
+            # checking if the result is bool
+            print(result)
+            if isinstance(result, bool):
+                success = result
+                data_type = "bool"
+            # if the result is a dictionary with the same mapping as OperationResult
+            elif isinstance(result, dict):
+                for k,v in dict.items():
+                    # protection if there's a key mismatch
+                    success = True
+                    data_type = ""
+                    if k == "success":
+                        success = v
+                    elif k == "error":
+                        error = v
+                    elif k == "data":
+                        data = v
+                    elif k == "data_type":
+                        data_type = v
+            elif not is_file(str(result)):
+                success = True
+                data = result
+                data_type = str(type(result))
+            else:
+                success = True
+                data_type = ""
+                data = None
+                # storing the file name for both linux and windows filesystems
+                file = result.split("\\")[-1]
+                data_file_name = file.split("\/")[-1]
+
+            # update the operation_result to data server here
+            operation_result = OperationResult(success = success,
+                                               error = error,
+                                               data = data,
+                                               data_file_name = data_file_name,
+                                               data_type = data_type,
+                                               )
+            
             if self._lab_conn:
                 self._lab_conn.set_property(
                     "operations",
                     op.id,
                     "end_timestamp",
                     datetime.datetime.now().isoformat(),
+                )   
+                self._lab_conn.set_property(
+                    "operations",
+                    op.id,
+                    "result",
+                    operation_result.id,
                 )
                 # TODO change status to complete
 
-            if is_file(str(result)):
-                # TODO do file stuff to upload to data db
-                return result
-            else:
-                return result
+
         except Exception as e:
             raise HTTPException(500, detail=str(e))
 
