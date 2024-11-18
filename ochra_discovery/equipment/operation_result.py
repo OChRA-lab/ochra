@@ -25,3 +25,11 @@ class OperationResult(OperationResult, RestProxyMixinReadOnly):
         with open(filename, "wb") as file:
             file.write(data)
             return True
+        
+    def get_raw_data(self) -> bytes:
+        """ Get the data in bytestring for direct manipulation
+        
+        Returns:
+            bytes: data
+        """
+        return self._lab_conn.get_data("operation_results", self.id)
