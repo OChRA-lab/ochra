@@ -12,7 +12,7 @@ class OperationResult(OperationResult, RestProxyMixinReadOnly):
         """Gets the data from the server and saves it to the filename. If filename is not provided, saves it as the original filename
         
         Args:
-            filename (str): The name the file is to be saved. Requires file extension to be part of the name
+            filename (str): The name the file is to be saved. Does not require file extension to be part of the name
 
         Returns:
             bool: True if successful
@@ -20,6 +20,8 @@ class OperationResult(OperationResult, RestProxyMixinReadOnly):
         data = self._lab_conn.get_data("operation_results", self.id)
         if filename == None:
             filename = self._lab_conn.get_property("operation_results", self.id, "data_file_name")
+        else:
+            filename = filename + self._lab_conn.get_property("operation_results", self.id, "data_file_name").split(".")[-1]
         with open(filename, "wb") as file:
             file.write(data)
             return True
