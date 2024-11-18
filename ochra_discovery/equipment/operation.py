@@ -4,6 +4,7 @@ from ochra_common.utils.mixins import RestProxyMixinReadOnly
 from uuid import UUID
 from typing import Union, Type
 
+
 class Operation(Operation, RestProxyMixinReadOnly):
     def __init__(self, object_id: UUID):
         super().__init__()
