@@ -99,7 +99,7 @@ class MongoAdapter:
         else:
             return result
 
-    def update(self, db_data, update: dict, file = False):
+    def update(self, db_data, update: dict, file=False):
         """Update documents in the specified collection that match the query."""
         collection = db_data["_collection"]
         object_id = db_data["id"]

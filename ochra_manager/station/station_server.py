@@ -128,7 +128,7 @@ class StationServer:
                 data_type = "bool"
             # if the result is a dictionary with the same mapping as OperationResult
             elif isinstance(result, dict):
-                for k,v in dict.items():
+                for k, v in dict.items():
                     # protection if there's a key mismatch
                     success = True
                     data_type = ""
@@ -153,29 +153,32 @@ class StationServer:
                 data_file_name = file.split("\/")[-1]
 
             # update the operation_result to data server here
-            operation_result = OperationResult(success = success,
-                                               error = error,
-                                               data = data,
-                                               data_file_name = data_file_name,
-                                               data_type = data_type,
-                                               )
-            
+            operation_result = OperationResult(
+                success=success,
+                error=error,
+                data=data,
+                data_file_name=data_file_name,
+                data_type=data_type,
+            )
+
             if is_file(str(result)):
                 with open(str(result), "rb") as file:
                     data = {"file": file}
-                    
-                    # upload the file as a property
-                    self._lab_conn.put_data("operation_results", id = operation_result.id, data = data)
 
-                # TODO to deal with nonsequential data upload 
-            
+                    # upload the file as a property
+                    self._lab_conn.put_data(
+                        "operation_results", id=operation_result.id, data=data
+                    )
+
+                # TODO to deal with nonsequential data upload
+
             if self._lab_conn:
                 self._lab_conn.set_property(
                     "operations",
                     op.id,
                     "end_timestamp",
                     datetime.datetime.now().isoformat(),
-                )   
+                )
                 self._lab_conn.set_property(
                     "operations",
                     op.id,
@@ -183,7 +186,6 @@ class StationServer:
                     operation_result.id,
                 )
                 # TODO change status to complete
-
 
         except Exception as e:
             raise HTTPException(500, detail=str(e))

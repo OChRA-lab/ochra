@@ -3,6 +3,7 @@ import uuid
 from fastapi import APIRouter
 from fastapi import HTTPException
 from fastapi import File, UploadFile
+
 # this is temp
 from fastapi.responses import FileResponse, Response
 from ochra_common.connections.api_models import (
@@ -37,10 +38,13 @@ class OperationResultRouter(APIRouter):
     async def get_op_property(self, object_id: str, property: str):
         if property == "data":
             # checking if there is a file in the data property
-            if self.lab_service.get_object_property(object_id, COLLECTION, property) != None:
+            if (
+                self.lab_service.get_object_property(object_id, COLLECTION, property)
+                != None
+            ):
                 data = "Use .get_data function to retrieve this"
         else:
-            data =  self.lab_service.get_object_property(object_id, COLLECTION, property)
+            data = self.lab_service.get_object_property(object_id, COLLECTION, property)
         return data
 
     async def modify_op_property(self, object_id: str, args: ObjectPropertySetRequest):
@@ -48,7 +52,7 @@ class OperationResultRouter(APIRouter):
 
     async def get_op(self, identifier: str):
         if is_valid_uuid(identifier):
-            value =  self.lab_service.get_object_by_id(identifier, COLLECTION)
+            value = self.lab_service.get_object_by_id(identifier, COLLECTION)
         else:
             value = self.lab_service.get_object_by_name(identifier, COLLECTION)
         if "data" in value.keys():
@@ -64,6 +68,6 @@ class OperationResultRouter(APIRouter):
         print(response)
         return response
 
-    async def put_data(self, object_id: str, file:UploadFile = File(...)):
+    async def put_data(self, object_id: str, file: UploadFile = File(...)):
         data = await file.read()
         return self.lab_service.patch_file(object_id, COLLECTION, data)

@@ -6,12 +6,13 @@ from .routers import operation_router
 
 logger = logging.getLogger(__name__)
 
-class DataServer():
+
+class DataServer:
     def __init__(self, host: str, port: int) -> None:
         self.host = host
         self.port = port
         self.app = FastAPI()
-        
+
         self.app.include_router(operation_router())
 
     def get_caller_variable_name(self):
