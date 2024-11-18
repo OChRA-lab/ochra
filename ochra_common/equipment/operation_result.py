@@ -9,12 +9,13 @@ class OperationResult(DataModel):
     Abstract result class to keep results formatted and structured.
 
     Attributes:
-        success (bool): The outcome of the operation. 
-        error (str): The error if the operation failed. Defaulted to None 
+        success (bool): The outcome of the operation.
+        error (str): The error if the operation failed. Defaulted to None
         data (Any): Data of the result. Can be any data
         data_file_name (str): The original file type of the result includes the filetype (e.g. .txt, .jpg). Leave as "" if the data_type is defined below
-        data_type (str): the python data model () 
+        data_type (str): the python data model ()
     """
+
     success: bool
     error: str = Field(default="")
     data: Any = Field(default=None)
