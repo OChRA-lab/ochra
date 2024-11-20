@@ -125,20 +125,6 @@ class StationServer:
             if isinstance(result, bool):
                 success = result
                 data_type = "bool"
-            # if the result is a dictionary with the same mapping as OperationResult
-            elif isinstance(result, dict):
-                for k, v in dict.items():
-                    # protection if there's a key mismatch
-                    success = True
-                    data_type = ""
-                    if k == "success":
-                        success = v
-                    elif k == "error":
-                        error = v
-                    elif k == "data":
-                        data = v
-                    elif k == "data_type":
-                        data_type = v
             elif not is_file(str(result)):
                 success = True
                 data = result
