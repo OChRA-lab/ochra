@@ -38,6 +38,9 @@ class OperationResult(OperationResult, RestProxyMixinReadOnly):
         """Get the data for direct manipulation
 
         Returns:
-            bytes: data
+            any: data
         """
-        return self._lab_conn.get_data("operation_results", self.id)
+        if self._lab_conn.get_property("operation_results", self.id, property="data_file_name") != "":
+            return self._lab_conn.get_property("operation_results", self.id, property="_data")
+        else:
+            return self._lab_conn.get_data("operation_results", self.id)
