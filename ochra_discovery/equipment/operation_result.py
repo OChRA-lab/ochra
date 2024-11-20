@@ -9,7 +9,7 @@ class OperationResult(OperationResult, RestProxyMixinReadOnly):
         super().__init__()
         self._mixin_hook(self._endpoint, id)
 
-    def get_data(self, filename: str = None) -> bool:
+    def get_file(self, filename: str = None) -> bool:
         """Gets the data from the server and saves it to the filename. If filename is not provided, saves it as the original filename
 
         Args:
@@ -34,8 +34,8 @@ class OperationResult(OperationResult, RestProxyMixinReadOnly):
             file.write(data)
             return True
 
-    def get_raw_data(self) -> bytes:
-        """Get the data in bytestring for direct manipulation
+    def get_data(self) -> bytes:
+        """Get the data for direct manipulation
 
         Returns:
             bytes: data
