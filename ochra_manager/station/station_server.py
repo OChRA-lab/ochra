@@ -122,7 +122,6 @@ class StationServer:
             data_file_name = ""
             error = ""
             # checking if the result is bool
-            print(result)
             if isinstance(result, bool):
                 success = result
                 data_type = "bool"
