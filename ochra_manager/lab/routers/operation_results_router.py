@@ -36,7 +36,7 @@ class OperationResultRouter(APIRouter):
         return self.lab_service.construct_object(args, COLLECTION)
 
     async def get_property(self, object_id: str, property: str):
-        if property == "data":
+        if property == "result_data":
             # checking if there is a file in the data property
             if (
                 self.lab_service.get_object_property(object_id, COLLECTION, property)
@@ -55,10 +55,10 @@ class OperationResultRouter(APIRouter):
             value = self.lab_service.get_object_by_id(identifier, COLLECTION)
         else:
             value = self.lab_service.get_object_by_name(identifier, COLLECTION)
-        if "data" in value.keys():
+        if "result_data" in value.keys():
             # checking if there is a file in the data property
-            if value["data"] != None:
-                value["data"] = "Use .get_data function to retrieve this"
+            if value["result_data"] != None:
+                value["result_data"] = "Use .get_data function to retrieve this"
         return value
 
     async def get_data(self, object_id: str):
@@ -69,5 +69,5 @@ class OperationResultRouter(APIRouter):
         return response
 
     async def put_data(self, object_id: str, file: UploadFile = File(...)):
-        data = await file.read()
-        return self.lab_service.patch_file(object_id, COLLECTION, data)
+        result_data = await file.read()
+        return self.lab_service.patch_file(object_id, COLLECTION, result_data)

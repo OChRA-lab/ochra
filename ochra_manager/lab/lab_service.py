@@ -265,14 +265,14 @@ class LabService:
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
-    def patch_file(self, object_id: str, collection: str, data):
+    def patch_file(self, object_id: str, collection: str, result_data):
         self.db_conn.update(
             {"id": object_id, "_collection": collection},
-            update={"data": data},
+            update={"result_data": result_data},
             file=True,
         )
 
     def get_file(self, object_id: str, collection: str):
         return self.db_conn.read(
-            {"id": object_id, "_collection": collection}, property="data", file=True
+            {"id": object_id, "_collection": collection}, property="result_data", file=True
         )

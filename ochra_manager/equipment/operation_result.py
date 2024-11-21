@@ -4,11 +4,11 @@ from uuid import UUID
 
 
 class OperationResult(OperationResult, RestProxyMixin):
-    def __init__(self, success, error, data, data_file_name, data_type):
+    def __init__(self, success, error, result_data, data_file_name, data_type):
         super().__init__(
             success=success,
             error=error,
-            data=data,
+            result_data=result_data,
             data_file_name=data_file_name,
             data_type=data_type,
         )

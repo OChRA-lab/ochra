@@ -105,7 +105,7 @@ class MongoAdapter:
         object_id = db_data["id"]
         collection = self._db_client[self._db_name][collection]
         if file:
-            file_id = self.fs.put(update["data"], encoding="UTF8")
+            file_id = self.fs.put(update["result_data"], encoding="UTF8")
             key = list(update.keys())[0]
             update = {"$set": {key: file_id}}
         else:
