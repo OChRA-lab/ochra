@@ -63,9 +63,7 @@ class OperationResultRouter(APIRouter):
 
     async def get_data(self, object_id: str):
         value = self.lab_service.get_file(object_id, COLLECTION)
-        print(f"value:{value}")
         response = Response(value)
-        print(response)
         return response
 
     async def put_data(self, object_id: str, file: UploadFile = File(...)):
