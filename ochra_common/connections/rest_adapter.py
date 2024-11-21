@@ -61,6 +61,7 @@ class RestAdapter:
         ep_params: Dict = None,
         data: Dict = None,
         files=None,
+        jsonify=True,
     ) -> Result:
         """Does a request of type based on the method passed in http_method
 
@@ -105,6 +106,9 @@ class RestAdapter:
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=str(e))
             raise LabEngineException(f"Request Failed: {e}")
+        
+        if jsonify == False:
+            return response
 
         # Deserialize response into python object
         try:
@@ -207,7 +211,7 @@ class RestAdapter:
         )
 
     def get_file(self, endpoint: str, ep_params: Dict = None) -> Result:
-        """do a get request to endpoint for files, which does not jsonify the response
+        """do a get request to endpoint using _do, but does not jsonify the output
 
         Args:
             endpoint (str): Endpoint to request
@@ -216,33 +220,7 @@ class RestAdapter:
         Returns:
             Result: Data from request in the form of a Result instances
         """
-        http_method = "GET"
-        full_url = self.url + endpoint
-        headers = {"x-api-key": self._api_key}
-        # fix for when ep_params is empty
-        log_line_pre = (
-            f"method={http_method}, "
-            + f"url={full_url}, params={str(ep_params).replace('{', '[').replace('}', ']')}"
-        )
-        log_line_post = ", ".join(
-            (log_line_pre, "success={}, status_code={}, message={}")
-        )
-
-        # log request and perform HTTP Request catching exceptions and re-raising
-        try:
-            self._logger.debug(msg=log_line_pre)
-            response = requests.request(
-                method=http_method,
-                url=full_url,
-                verify=self._ssl_verify,
-                headers=headers,
-                params=ep_params,
-            )
-        except requests.exceptions.RequestException as e:
-            self._logger.error(msg=str(e))
-            raise LabEngineException(f"Request Failed: {e}")
-        return response
-
+        return self._do(http_method="GET", endpoint=endpoint, ep_params=ep_params, jsonify=False)
 
 if __name__ == "__main__":
     adapter = RestAdapter("127.0.0.1:8000", ssl_verify=False)
