@@ -177,9 +177,9 @@ class LabConnection(metaclass=SingletonMeta):
         except Exception as e:
             raise LabEngineException(f"Unexpected error: {e}")
 
-    def put_data(self, endpoint: str, id: str, data) -> UUID:
+    def put_data(self, endpoint: str, id: str, result_data) -> UUID:
         result: Result = self.rest_adapter.patch(
-            f"/{endpoint}/{str(id)}/put_data", files=data
+            f"/{endpoint}/{str(id)}/put_data", files=result_data
         )
         return result.message
 
