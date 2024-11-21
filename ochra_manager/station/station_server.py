@@ -125,14 +125,17 @@ class StationServer:
             if isinstance(result, bool):
                 success = result
                 data_type = "bool"
+                data_status = 1
             elif not is_file(str(result)):
                 success = True
                 result_data = result
                 data_type = str(type(result))
+                data_status = 1
             else:
                 success = True
                 data_type = ""
                 result_data = None
+                data_status = 0
                 # storing the file name for both linux and windows filesystems
                 file = result.split("\\")[-1]
                 data_file_name = file.split("\/")[-1]
@@ -144,6 +147,7 @@ class StationServer:
                 result_data=result_data,
                 data_file_name=data_file_name,
                 data_type=data_type,
+                data_status=data_status,
             )
 
             if is_file(str(result)):
@@ -153,6 +157,14 @@ class StationServer:
                     # upload the file as a property
                     self._lab_conn.put_data(
                         "operation_results", id=operation_result.id, result_data=result_data
+                    )
+
+                    # change the data status to reflect success
+                    self._lab_conn.set_property(
+                        "operation_results",
+                        operation_result.id,
+                        "data_status",
+                        1,
                     )
 
                 # TODO to deal with nonsequential data upload
