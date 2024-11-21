@@ -133,7 +133,7 @@ class StationServer:
                 data_status = 1
             else:
                 success = True
-                data_type = ""
+                data_type = "file"
                 result_data = None
                 data_status = 0
                 # storing the file name for both linux and windows filesystems
