@@ -25,7 +25,7 @@ class OperationResult(OperationResult, RestProxyMixinReadOnly):
             )
         else:
             filename = (
-                filename
+                filename + "."
                 + self._lab_conn.get_property(
                     "operation_results", self.id, "data_file_name"
                 ).split(".")[-1]
