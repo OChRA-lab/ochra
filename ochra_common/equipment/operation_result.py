@@ -2,7 +2,7 @@ from pydantic import Field
 from typing import Any
 from uuid import UUID
 from ..base import DataModel
-
+from .operation_result_enum import OperationResultEnum
 
 class OperationResult(DataModel):
     """
@@ -14,6 +14,7 @@ class OperationResult(DataModel):
         result_data (Any): Data of the result. Can be any data
         data_file_name (str): The original file type of the result includes the filetype (e.g. .txt, .jpg). Leave as "" if the data_type is defined below
         data_type (str): the python data model ()
+        data_status (enum): The current status of the data. -1 (upload not started), 0 (uploading), 1(upload complete)
     """
 
     success: bool
@@ -21,6 +22,7 @@ class OperationResult(DataModel):
     result_data: Any = Field(default=None)
     data_file_name: str = Field(default="")
     data_type: str = Field(default="")
+    data_status: OperationResultEnum = -1
 
     _endpoint = "operation_results"  # associated endpoint for all operations
 
