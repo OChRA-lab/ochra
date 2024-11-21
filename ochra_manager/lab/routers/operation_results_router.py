@@ -36,16 +36,7 @@ class OperationResultRouter(APIRouter):
         return self.lab_service.construct_object(args, COLLECTION)
 
     async def get_property(self, object_id: str, property: str):
-        if property == "result_data":
-            # checking if there is a file in the data property
-            if (
-                self.lab_service.get_object_property(object_id, COLLECTION, property)
-                != None
-            ):
-                data = "Use .get_data function to retrieve this"
-        else:
-            data = self.lab_service.get_object_property(object_id, COLLECTION, property)
-        return data
+        return self.lab_service.get_object_property(object_id, COLLECTION, property)
 
     async def modify_property(self, object_id: str, args: ObjectPropertySetRequest):
         return self.lab_service.patch_object(object_id, COLLECTION, args)
@@ -55,10 +46,6 @@ class OperationResultRouter(APIRouter):
             value = self.lab_service.get_object_by_id(identifier, COLLECTION)
         else:
             value = self.lab_service.get_object_by_name(identifier, COLLECTION)
-        if "result_data" in value.keys():
-            # checking if there is a file in the data property
-            if value["result_data"] != None:
-                value["result_data"] = "Use .get_data function to retrieve this"
         return value
 
     async def get_data(self, object_id: str):
