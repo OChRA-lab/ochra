@@ -5,6 +5,16 @@ from uuid import UUID
 
 class OperationResult(OperationResult, RestProxyMixin):
     def __init__(self, success, error, result_data, data_file_name, data_type, data_status):
+        """result class to keep results formatted and structured.
+
+        Args:
+            success (bool): The outcome of the operation.
+            error (str): The error if the operation failed. Defaulted to ""
+            result_data (Any): Data of the result. Can be any data
+            data_file_name (str): The original file type of the result includes the filetype (e.g. .txt, .jpg). Leave as "" if the data_type is defined below
+            data_type (str): the python data model ()
+            data_status (enum): The current status of the data. -1 (upload not started), 0 (uploading), 1(upload complete)
+        """
         super().__init__(
             success=success,
             error=error,
