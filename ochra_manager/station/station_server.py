@@ -116,39 +116,43 @@ class StationServer:
                 )
                 # TODO change status to running
 
-            result = method(**op.args)
-
             result_data = None
             data_file_name = ""
             error = ""
-            # checking if the result is bool
-            if isinstance(result, bool):
-                success = result
-                data_type = "bool"
-                data_status = 1
-            elif not is_file(str(result)):
-                success = True
-                result_data = result
-                data_type = str(type(result))
-                data_status = 1
-            else:
-                success = True
-                data_type = "file"
-                result_data = None
-                data_status = 0
-                # storing the file name for both linux and windows filesystems
-                file = result.split("\\")[-1]
-                data_file_name = file.split("\/")[-1]
+            data_type = ""
+            data_status = -1
+            try:
+                result = method(**op.args)
 
-            # update the operation_result to data server here
-            operation_result = OperationResult(
-                success=success,
-                error=error,
-                result_data=result_data,
-                data_file_name=data_file_name,
-                data_type=data_type,
-                data_status=data_status,
-            )
+                # checking if the result is bool
+                if not is_file(str(result)):
+                    success = True
+                    result_data = result
+                    data_type = str(type(result))
+                    data_status = 1
+                else:
+                    success = True
+                    data_type = "file"
+                    result_data = None
+                    data_status = -1
+                    # storing the file name for both linux and windows filesystems
+                    file = result.split("\\")[-1]
+                    data_file_name = file.split("\/")[-1]
+            except Exception as e:
+                success = False
+                error = str(e)
+                raise Exception(e)
+
+            finally:
+                # update the operation_result to data server here
+                operation_result = OperationResult(
+                    success=success,
+                    error=error,
+                    result_data=result_data,
+                    data_file_name=data_file_name,
+                    data_type=data_type,
+                    data_status=data_status,
+                )
 
             if is_file(str(result)):
                 with open(str(result), "rb") as file:
