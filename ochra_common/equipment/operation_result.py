@@ -2,7 +2,7 @@ from pydantic import Field
 from typing import Any
 from uuid import UUID
 from ..base import DataModel
-from .operation_result_enum import OperationResultEnum
+from ..utils.enum import OperationResultEnum
 
 class OperationResult(DataModel):
     """
