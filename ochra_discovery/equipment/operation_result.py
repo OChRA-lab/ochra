@@ -33,14 +33,3 @@ class OperationResult(OperationResult, RestProxyMixinReadOnly):
         with open(filename, "wb") as file:
             file.write(data)
             return True
-
-    def get_data(self) -> bytes:
-        """Get the data for direct manipulation
-
-        Returns:
-            any: data
-        """
-        if self._lab_conn.get_property("operation_results", self.id, property="data_file_name") != "":
-            return self._lab_conn.get_property("operation_results", self.id, property="_data")
-        else:
-            return self._lab_conn.get_data("operation_results", self.id)
