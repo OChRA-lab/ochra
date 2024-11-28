@@ -24,7 +24,7 @@ class StationServer:
         self,
         name: str,
         location: Location,
-        station_ip: str = "127.0.0.1",
+        station_ip: str = "0.0.0.0",
         station_port: int = 8000,
     ):
         self._name = name
