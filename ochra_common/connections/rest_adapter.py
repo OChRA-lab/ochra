@@ -55,7 +55,13 @@ class RestAdapter:
             requests.packages.urllib3.disable_warnings()
 
     def _do(
-        self, http_method: str, endpoint: str, ep_params: Dict = None, data: Dict = None
+        self,
+        http_method: str,
+        endpoint: str,
+        ep_params: Dict = None,
+        data: Dict = None,
+        files=None,
+        jsonify=True,
     ) -> Result:
         """Does a request of type based on the method passed in http_method
 
@@ -95,10 +101,14 @@ class RestAdapter:
                 headers=headers,
                 params=ep_params,
                 json=data,
+                files=files,
             )
         except requests.exceptions.RequestException as e:
             self._logger.error(msg=str(e))
             raise LabEngineException(f"Request Failed: {e}")
+        
+        if jsonify == False:
+            return response
 
         # Deserialize response into python object
         try:
@@ -162,7 +172,9 @@ class RestAdapter:
             http_method="POST", endpoint=endpoint, ep_params=ep_params, data=data
         )
 
-    def patch(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
+    def patch(
+        self, endpoint: str, ep_params: Dict = None, data: Dict = None, files=None
+    ) -> Result:
         """Do a Patch request to endpoint using _do
 
         Args:
@@ -174,7 +186,11 @@ class RestAdapter:
             Result: Data from request in the form of a Result instances
         """
         return self._do(
-            http_method="PATCH", endpoint=endpoint, ep_params=ep_params, data=data
+            http_method="PATCH",
+            endpoint=endpoint,
+            ep_params=ep_params,
+            data=data,
+            files=files,
         )
 
     def delete(
@@ -194,6 +210,17 @@ class RestAdapter:
             http_method="DELETE", endpoint=endpoint, ep_params=ep_params, data=data
         )
 
+    def get_file(self, endpoint: str, ep_params: Dict = None) -> Result:
+        """do a get request to endpoint using _do, but does not jsonify the output
+
+        Args:
+            endpoint (str): Endpoint to request
+            ep_params (Dict, optional): end point parameters if exist. Defaults to None.
+
+        Returns:
+            Result: Data from request in the form of a Result instances
+        """
+        return self._do(http_method="GET", endpoint=endpoint, ep_params=ep_params, jsonify=False)
 
 if __name__ == "__main__":
     adapter = RestAdapter("127.0.0.1:8000", ssl_verify=False)
