@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ochra_discovery"
-version = "0.0.1" #can switch to dynamic versioning and take from git tag later
+version = "0.0.2" #can switch to dynamic versioning and take from git tag later
 authors = [ #add authors here
     #{name = "placeholder", email = "place@holder"},
 ]
@@ -13,7 +13,7 @@ readme = "README.md"
 #license = {file = "LICENSE"} #don't need license a license yet
 requires-python = ">=3.8"
 dependencies = [ 
-    "ochra_common>=0.0.1",
+    "ochra_common>=0.0.2",
     "ruff>=0.7.2",
 ] 
 classifiers = [
