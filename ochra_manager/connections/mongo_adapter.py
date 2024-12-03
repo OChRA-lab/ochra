@@ -86,24 +86,30 @@ class MongoAdapter:
         """Read documents from the specified collection that match the query."""
         object_id = db_data["id"]
         collection = db_data["_collection"]
-        if file:
-            return self.fs.get(object_id).read()
-
         collection = self._db_client[self._db_name][collection]
         query = {"id": object_id}
         result = collection.find_one(query)
 
         if property and result is not None:
-            return result[property]
+            value = result[property]
+            if file:
+                return self.fs.get(value).read()
+            else:
+                return value
         else:
             return result
 
-    def update(self, db_data, update: dict):
+    def update(self, db_data, update: dict, file=False):
         """Update documents in the specified collection that match the query."""
         collection = db_data["_collection"]
         object_id = db_data["id"]
         collection = self._db_client[self._db_name][collection]
-        update = {"$set": update}
+        if file:
+            file_id = self.fs.put(update["result_data"], encoding="UTF8")
+            key = list(update.keys())[0]
+            update = {"$set": {key: file_id}}
+        else:
+            update = {"$set": update}
         query = {"id": object_id}
 
         return collection.update_many(query, update)

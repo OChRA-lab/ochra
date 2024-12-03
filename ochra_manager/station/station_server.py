@@ -10,6 +10,7 @@ from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.spaces.location import Location
 from ochra_common.equipment.device import Device
 from ochra_common.equipment.operation import Operation
+from ochra_manager.equipment.operation_result import OperationResult
 from .work_station import WorkStation
 
 
@@ -115,7 +116,62 @@ class StationServer:
                 )
                 # TODO change status to running
 
-            result = method(**op.args)
+            result_data = None
+            data_file_name = ""
+            error = ""
+            data_type = ""
+            data_status = -1
+            try:
+                result = method(**op.args)
+
+                # checking if the result is bool
+                if not is_file(str(result)):
+                    success = True
+                    result_data = result
+                    data_type = str(type(result))
+                    data_status = 1
+                else:
+                    success = True
+                    data_type = "file"
+                    result_data = None
+                    data_status = -1
+                    # storing the file name for both linux and windows filesystems
+                    file = result.split("\\")[-1]
+                    data_file_name = file.split("\/")[-1]
+            except Exception as e:
+                success = False
+                error = str(e)
+                raise Exception(e)
+
+            finally:
+                # update the operation_result to data server here
+                operation_result = OperationResult(
+                    success=success,
+                    error=error,
+                    result_data=result_data,
+                    data_file_name=data_file_name,
+                    data_type=data_type,
+                    data_status=data_status,
+                )
+
+            if is_file(str(result)):
+                with open(str(result), "rb") as file:
+                    result_data = {"file": file}
+
+                    # upload the file as a property
+                    self._lab_conn.put_data(
+                        "operation_results", id=operation_result.id, result_data=result_data
+                    )
+
+                    # change the data status to reflect success
+                    self._lab_conn.set_property(
+                        "operation_results",
+                        operation_result.id,
+                        "data_status",
+                        1,
+                    )
+
+                # TODO to deal with nonsequential data upload
 
             if self._lab_conn:
                 self._lab_conn.set_property(
@@ -124,13 +180,14 @@ class StationServer:
                     "end_timestamp",
                     datetime.datetime.now().isoformat(),
                 )
+                self._lab_conn.set_property(
+                    "operations",
+                    op.id,
+                    "result",
+                    operation_result.id,
+                )
                 # TODO change status to complete
 
-            if is_file(str(result)):
-                # TODO do file stuff to upload to data db
-                return result
-            else:
-                return result
         except Exception as e:
             raise HTTPException(500, detail=str(e))
 

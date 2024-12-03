@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ochra_manager"
-version = "0.0.1" #can switch to dynamic versioning and take from git tag later
+version = "0.0.2" #can switch to dynamic versioning and take from git tag later
 authors = [ #add authors here
     #{name = "placeholder", email = "place@holder"},
 ]

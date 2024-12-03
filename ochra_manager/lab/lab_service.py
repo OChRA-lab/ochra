@@ -21,7 +21,11 @@ class LabService:
         self.db_conn: DbConnection = DbConnection()
 
     def patch_object(
-        self, object_id: str, collection: str, set_req: ObjectPropertySetRequest
+        self,
+        object_id: str,
+        collection: str,
+        set_req: ObjectPropertySetRequest,
+        file=False,
     ) -> bool:
         """patch properties of object_id using set_req key-value pairs
 
@@ -51,6 +55,7 @@ class LabService:
             self.db_conn.update(
                 {"id": object_id, "_collection": collection},
                 {set_req.property: set_req.property_value},
+                file=file,
             )
 
             logger.info(f"changed {set_req.property} to {set_req.property_value}")
@@ -259,3 +264,15 @@ class LabService:
             )
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
+
+    def patch_file(self, object_id: str, collection: str, result_data):
+        self.db_conn.update(
+            {"id": object_id, "_collection": collection},
+            update={"result_data": result_data},
+            file=True,
+        )
+
+    def get_file(self, object_id: str, collection: str):
+        return self.db_conn.read(
+            {"id": object_id, "_collection": collection}, property="result_data", file=True
+        )

@@ -32,9 +32,9 @@ class DbConnection(metaclass=SingletonMeta):
 
         return self.db_adapter.read(db_data, property, file=file)
 
-    def update(self, db_data, update):
+    def update(self, db_data, update, file=False):
         """Update documents in the specified collection that match the query."""
-        return self.db_adapter.update(db_data, update)
+        return self.db_adapter.update(db_data, update, file=file)
 
     def delete(self, db_data):
         """Delete documents from the specified collection that match the query."""
