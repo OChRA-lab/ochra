@@ -44,6 +44,17 @@ class LabConnection(metaclass=SingletonMeta):
         )
 
     def load_from_response(self, obj: ObjectQueryResponse):
+        """load object from response
+
+        Args:
+            obj (ObjectQueryResponse): object information, id, cls, module_path
+
+        Raises:
+            LabEngineException: if there is an error in importing class
+
+        Returns:
+            Any: instance of the class
+        """
         try:
             module = importlib.import_module(obj.module_path)
             class_to_instance = getattr(module, obj.cls)
@@ -53,6 +64,18 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(f"Unexpected error in importing class: {e}")
 
     def construct_object(self, type: str, object: Type[DataModel]) -> UUID:
+        """construct object on the lab
+
+        Args:
+            type (str): type of the object
+            object (Type[DataModel]): object to be constructed
+
+        Raises:
+            LabEngineException: if there is an error in constructing object
+
+        Returns:
+            UUID: id of the constructed object
+        """
         req = ObjectConstructionRequest(object_json=object.model_dump_json())
         result: Result = self.rest_adapter.put(
             f"/{type}/construct", data=req.model_dump(mode="json")
@@ -68,6 +91,18 @@ class LabConnection(metaclass=SingletonMeta):
     def get_object(
         self, endpoint: str, identifier: Union[str, UUID]
     ) -> ObjectQueryResponse:
+        """get object from lab
+
+        Args:
+            endpoint (str): endpoint of the object
+            identifier (Union[str, UUID]): id or name of the object
+
+        Raises:
+            LabEngineException: if there is an error in getting object
+
+        Returns:
+            ObjectQueryResponse: object information, id, cls, module_path
+        """
         result: Result = self.rest_adapter.get(
             f"/{endpoint}/get", {"identifier": str(identifier)}
         )
@@ -80,6 +115,17 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(f"Unexpected error: {e}")
 
     def get_all_objects(self, endpoint: str) -> List[ObjectQueryResponse]:
+        """returns a list of all objects of a certain type
+
+        Args:
+            endpoint (str): the endpoint of the object
+
+        Raises:
+            LabEngineException: if there is an error in getting objects
+
+        Returns:
+            List[ObjectQueryResponse]: list of object information, (id, cls, module_path)
+        """
         result: Result = self.rest_adapter.get(f"/{endpoint}/get_all")
         try:
             objects = [ObjectQueryResponse(**data) for data in result.data]
@@ -90,12 +136,35 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(f"Unexpected error: {e}")
 
     def delete_object(self, type: str, id: UUID):
+        """delete object from lab
+
+        Args:
+            type (str): type of the object
+            id (UUID): id of the object
+
+        Returns:
+            Any: response from the lab
+        """
         result: Result = self.rest_adapter.delete(f"/{type}/delete/{str(id)}")
         return result.data
 
     def call_on_object(
         self, type: str, id: UUID, method: str, args: dict
     ) -> ObjectQueryResponse:
+        """make a request for the lab to run a function on an object
+
+        Args:
+            type (str): type of the object
+            id (UUID): id of the object to run the function on
+            method (str): name of the function to run
+            args (dict): arguments to pass to the function
+
+        Raises:
+            LabEngineException: if there is an error in calling the function
+
+        Returns:
+            ObjectQueryResponse: object information, id, cls, module_path
+        """
         req = ObjectCallRequest(method=method, args=args)
         result: Result = self.rest_adapter.post(
             f"/{type}/{str(id)}/call_method", data=req.model_dump(mode="json")
@@ -109,6 +178,19 @@ class LabConnection(metaclass=SingletonMeta):
     def get_property(
         self, type: str, id: UUID, property: str
     ) -> Union[Any, ObjectQueryResponse]:
+        """get a property of an object on the lab
+
+        Args:
+            type (str): type of the object
+            id (UUID): id of the object
+            property (str): name of the property to get
+
+        Raises:
+            LabEngineException: if there is an error in getting the property
+
+        Returns:
+            Union[Any, ObjectQueryResponse]: value of the property
+        """
         result: Result = self.rest_adapter.get(
             f"/{type}/{str(id)}/get_property/{property}"
         )
@@ -140,6 +222,17 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(f"Unexpected error: {e}")
 
     def set_property(self, type: str, id: UUID, property: str, value: Any):
+        """set a property of an object on the lab
+
+        Args:
+            type (str): type of the object
+            id (UUID): id of the object
+            property (str): name of the property to set
+            value (Any): value to set the property to
+
+        Returns:
+            Any: response from the lab
+        """
         req = ObjectPropertySetRequest(property=property, property_value=value)
         result: Result = self.rest_adapter.patch(
             f"/{type}/{str(id)}/modify_property", data=req.model_dump(mode="json")
@@ -149,6 +242,19 @@ class LabConnection(metaclass=SingletonMeta):
     def get_by_station(
         self, station_identifier: Union[str, UUID], endpoint: str, objectType: str
     ) -> ObjectQueryResponse:
+        """get object by station
+
+        Args:
+            station_identifier (Union[str, UUID]): id or name of the station
+            endpoint (str): endpoint of the object
+            objectType (str): type of the object
+
+        Raises:
+            LabEngineException: if there is an error in getting the object
+
+        Returns:
+            ObjectQueryResponse: object information, id, cls, module_path
+        """
         result: Result = self.rest_adapter.get(
             f"/{endpoint}/{str(station_identifier)}/get_by_station/{objectType}"
         )
@@ -163,12 +269,32 @@ class LabConnection(metaclass=SingletonMeta):
     def _convert_to_object_query_response_possibly(
         self, data: Any
     ) -> Union[ObjectQueryResponse, Any]:
+        """convert data to ObjectQueryResponse if possible
+
+        Args:
+            data (Any): data to convert
+
+        Returns:
+            Union[ObjectQueryResponse, Any]: ObjectQueryResponse if possible, else data
+        """
         try:
             return ObjectQueryResponse(**data)
         except (ValidationError, TypeError):
             return data
 
     def get_object_id(self, endpoint: str, name: str) -> UUID:
+        """get object id from lab given name
+
+        Args:
+            endpoint (str): endpoint of the object
+            name (str): name of the object
+
+        Raises:
+            LabEngineException: if there is an error in getting the object id
+
+        Returns:
+            UUID: id of the object
+        """
         result: Result = self.rest_adapter.get(f"/{endpoint}/get", {"identifier": name})
         try:
             return UUID(result.data["id"])
@@ -178,11 +304,30 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(f"Unexpected error: {e}")
 
     def put_data(self, endpoint: str, id: str, result_data) -> UUID:
+        """put data into a results data object
+
+        Args:
+            endpoint (str): endpoint of the object
+            id (str): id of the object to put data into
+            result_data (Any): data to put into the object
+
+        Returns:
+            UUID: id of the object
+        """
         result: Result = self.rest_adapter.patch(
             f"/{endpoint}/{str(id)}/put_data", files=result_data
         )
         return result.message
 
     def get_data(self, endpoint: str, id: str) -> bytes:
+        """get data from a results data object
+
+        Args:
+            endpoint (str): endpoint of the object
+            id (str): id of the object to get data from
+
+        Returns:
+            bytes: raw bytes of the data
+        """
         result: Result = self.rest_adapter.get_file(f"/{endpoint}/{str(id)}/get_data")
         return result.content
