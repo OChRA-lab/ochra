@@ -7,6 +7,8 @@ import inspect
 
 
 class RestProxyMixin:
+    """Mixin class to add rest proxy functionality to a class
+    """
     _override_id = None
 
     # TODO remove object_id from the constructor
@@ -50,6 +52,8 @@ class RestProxyMixin:
 
 
 class RestProxyMixinReadOnly:
+    """Mixin class to add rest proxy functionality to a class with read only permissions
+    """
     def __new__(cls, *args, **kwargs):
         def make_field_optional(field, default: Any = None):
             new_field = deepcopy(field)
