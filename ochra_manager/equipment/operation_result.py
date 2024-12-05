@@ -2,7 +2,7 @@ from ochra_common.equipment.operation_result import OperationResult
 from ochra_common.utils.mixins import RestProxyMixin
 from uuid import UUID
 from typing import Any
-from enum import Enum
+from ochra_common.utils.enum import OperationResultEnum
 
 
 class OperationResult(OperationResult, RestProxyMixin):
@@ -13,7 +13,7 @@ class OperationResult(OperationResult, RestProxyMixin):
         result_data: Any,
         data_file_name: str,
         data_type: str,
-        data_status: Enum,
+        data_status: OperationResultEnum,
     ):
         """result class to keep results formatted and structured.
 
