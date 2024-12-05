@@ -22,7 +22,7 @@ class Holder(Holder, RestProxyMixin):
         self._mixin_hook(self._endpoint, self.id)
 
     def add_container(self, container: Type[Container]) -> None:
-        """adds container to the holders list of containers
+        """adds a container to the holders list of containers
 
         Args:
             container (Type[Container]): container to add
