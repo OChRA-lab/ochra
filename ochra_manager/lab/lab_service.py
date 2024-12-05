@@ -18,6 +18,8 @@ logger = logging.getLogger(__name__)
 
 class LabService:
     def __init__(self) -> None:
+        """Labservice object serves the common functionality within routers to avoid code duplication
+        """
         self.db_conn: DbConnection = DbConnection()
 
     def patch_object(
@@ -266,6 +268,13 @@ class LabService:
             raise HTTPException(status_code=404, detail=str(e))
 
     def patch_file(self, object_id: str, collection: str, result_data):
+        """update file in db
+
+        Args:
+            object_id (str): id to update
+            collection (str): collection object is in
+            result_data (bytestring): data to update it with
+        """
         self.db_conn.update(
             {"id": object_id, "_collection": collection},
             update={"result_data": result_data},
@@ -273,6 +282,15 @@ class LabService:
         )
 
     def get_file(self, object_id: str, collection: str):
+        """get file from db
+
+        Args:
+            object_id (str): id of object to get
+            collection (str): collection it is in
+
+        Returns:
+            bytestring: file data 
+        """
         return self.db_conn.read(
             {"id": object_id, "_collection": collection}, property="result_data", file=True
         )

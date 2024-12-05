@@ -28,6 +28,14 @@ class StationServer:
         station_ip: str = "0.0.0.0",
         station_port: int = 8000,
     ):
+        """initialize the station server
+
+        Args:
+            name (str): name of the station, used to identify and connect on the frontend
+            location (Location): location of the station
+            station_ip (str, optional): station ip to run the server on. Defaults to "127.0.0.1".
+            station_port (int, optional): port to oopen the station on. Defaults to 8000.
+        """
         self._name = name
         self._location = location
         self._ip = station_ip
