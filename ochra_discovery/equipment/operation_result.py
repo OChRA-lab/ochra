@@ -6,6 +6,11 @@ from typing import Union, Type
 
 class OperationResult(OperationResult, RestProxyMixinReadOnly):
     def __init__(self, id: UUID):
+        """Operation Result object
+
+        Args:
+            id (UUID): The id of the operation result
+        """
         super().__init__()
         self._mixin_hook(self._endpoint, id)
 
