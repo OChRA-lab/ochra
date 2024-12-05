@@ -110,10 +110,13 @@ class LabService:
                 station_ip = self.db_conn.read(
                     {"id": station_id, "_collection": "stations"}, "station_ip"
                 )
-
+                
+                station_port = self.db_conn.read(
+                    {"id": station_id, "_collection": "stations"}, "port"
+                )
                 # create station connection
                 station_client: StationConnection = StationConnection(
-                    station_ip + ":8000"
+                    station_ip + ":" +str(station_port)
                 )
 
                 # create operation object and store in db
