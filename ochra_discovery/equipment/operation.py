@@ -16,7 +16,7 @@ class Operation(Operation, RestProxyMixinReadOnly):
         self._mixin_hook(self._endpoint, object_id)
 
     def get_result(self) -> Type[OperationResult]:
-        """returns an operation result object which is used to access the data of the operation
+        """returns an operation result object which contains the data of the operation
 
         Returns:
             Type[OperationResult]: Operation Result object
