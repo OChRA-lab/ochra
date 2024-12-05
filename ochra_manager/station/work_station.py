@@ -10,13 +10,15 @@ from .inventory import Inventory
 
 class WorkStation(WorkStation, RestProxyMixin):
     devices: List[UUID] = Field(default_factory=list)
+    port: int = Field(default=None)
 
-    def __init__(self, name: str, location: Location):
+    def __init__(self, name: str, location: Location, port: int):
         super().__init__(
             name=name,
             location=location,
             module_path="ochra_discovery.spaces.work_station",
         )
+        self.port = port
         self.inventory = Inventory(
             owner_id=self.id, owner_type="station", containers_max_capacity=100
         )

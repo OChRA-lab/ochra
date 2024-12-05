@@ -31,7 +31,7 @@ class StationServer:
         self._name = name
         self._location = location
         self._ip = station_ip
-        self._port = station_port
+        self.port = station_port
         self._devices = {}
 
     def setup(self, lab_ip: str = None) -> None:
@@ -71,7 +71,7 @@ class StationServer:
         """
         start the server
         """
-        uvicorn.run(self._app, host=self._ip, port=self._port)
+        uvicorn.run(self._app, host=self._ip, port=self.port)
 
     @property
     def id(self):
@@ -84,7 +84,7 @@ class StationServer:
             lab_ip (str): ip of the lab server connection.
         """
         self._lab_conn = LabConnection(lab_ip)
-        return WorkStation(self._name, self._location)
+        return WorkStation(self._name, self._location,self.port)
 
     def ping(self, request: Request):
         print(f"ping from {request.client.host}")
