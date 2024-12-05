@@ -273,7 +273,7 @@ class LabService:
         Args:
             object_id (str): id to update
             collection (str): collection object is in
-            result_data (_type_): data to update it with
+            result_data (bytestring): data to update it with
         """
         self.db_conn.update(
             {"id": object_id, "_collection": collection},
@@ -289,7 +289,7 @@ class LabService:
             collection (str): collection it is in
 
         Returns:
-            gridfs: file data
+            bytestring: file data 
         """
         return self.db_conn.read(
             {"id": object_id, "_collection": collection}, property="result_data", file=True
