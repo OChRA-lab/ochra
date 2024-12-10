@@ -86,7 +86,7 @@ class RestProxyMixinReadOnly:
         for field_name in self.model_fields.keys():
             if field_name not in ["id", "cls"]:
 
-                if (field_name == "result_data") and (self._lab_conn.get_property(endpoint, self.id, "data_type") == "file"):
+                if (field_name == "result_data") and (self._lab_conn.get_property(endpoint, self.id, "data_type") in ["file", "folder"]):
                     def getter(self, name=field_name):
                         return self._lab_conn.get_data("operation_results", self.id)
                     
