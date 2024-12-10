@@ -1,7 +1,10 @@
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from pydantic import BaseModel
 from typing import Dict, Optional, Type
-from os.path import exists as is_file
+from pathlib import Path
+from pathlib import PurePath
+import shutil
+from os import remove
 import datetime
 import uvicorn
 import uvicorn.config
@@ -124,20 +127,28 @@ class StationServer:
             try:
                 result = method(**op.args)
 
-                # checking if the result is bool
-                if not is_file(str(result)):
+                # checking if the result is bool 
+                # TODO: test this new method
+                try:
+                    result = Path(result)
+                    if (not result.is_file()) and (not result.is_dir()):
+                        # raising an exception to exit the try loop
+                        raise Exception(e)
+                    elif result.is_file():
+                        data_type = "file"
+                        data_file_name = result.name
+                    else:
+                        data_type = "folder"
+                        data_file_name = result.name + ".zip"
+                    success = True
+                    result_data = None
+                    data_status = -1
+                except TypeError:
                     success = True
                     result_data = result
                     data_type = str(type(result))
-                    data_status = 1
-                else:
-                    success = True
-                    data_type = "file"
-                    result_data = None
-                    data_status = -1
-                    # storing the file name for both linux and windows filesystems
-                    file = result.split("\\")[-1]
-                    data_file_name = file.split("\/")[-1]
+                    data_status = 1                
+
             except Exception as e:
                 success = False
                 error = str(e)
@@ -154,22 +165,33 @@ class StationServer:
                     data_status=data_status,
                 )
 
-            if is_file(str(result)):
-                with open(str(result), "rb") as file:
-                    result_data = {"file": file}
+            if isinstance(result, PurePath):
+                # if result is a directory, zip it up and convert to a file
+                if result.is_dir():
+                    result = shutil.make_archive(result.name, "zip", result.as_posix())
+                    result = Path(result)
 
-                    # upload the file as a property
-                    self._lab_conn.put_data(
-                        "operation_results", id=operation_result.id, result_data=result_data
-                    )
+                # Do not make this an else or elif, this is code to upload all general files
+                if result.is_file():
+                    with open(str(result), "rb") as file:
+                        result_data = {"file": file}
 
-                    # change the data status to reflect success
-                    self._lab_conn.set_property(
-                        "operation_results",
-                        operation_result.id,
-                        "data_status",
-                        1,
-                    )
+                        # upload the file as a property
+                        self._lab_conn.put_data(
+                            "operation_results", id=operation_result.id, result_data=result_data
+                        )
+
+                        # change the data status to reflect success
+                        self._lab_conn.set_property(
+                            "operation_results",
+                            operation_result.id,
+                            "data_status",
+                            1,
+                        )
+
+                    # remove the zip file when upload is done
+                    if data_type == "folder":
+                        remove(result.name)
 
                 # TODO to deal with nonsequential data upload
 
