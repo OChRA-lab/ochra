@@ -131,18 +131,20 @@ class StationServer:
                 # TODO: test this new method
                 try:
                     result = Path(result)
+                    success = True
+                    result_data = None
+                    data_status = -1
                     if (not result.is_file()) and (not result.is_dir()):
                         # raising an exception to exit the try loop
-                        raise Exception(e)
+                        data_type = "string"
+                        result_data = result
+                        data_status = 1
                     elif result.is_file():
                         data_type = "file"
                         data_file_name = result.name
                     else:
                         data_type = "folder"
                         data_file_name = result.name + ".zip"
-                    success = True
-                    result_data = None
-                    data_status = -1
                 except TypeError:
                     success = True
                     result_data = result
