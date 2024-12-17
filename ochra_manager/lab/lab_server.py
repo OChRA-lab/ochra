@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class LabServer:
-    def __init__(self, host: str, port: int, folderpath: str = "") -> None:
+    def __init__(self, host: str, port: int, folderpath: str = None) -> None:
         self.host = host
         self.port = port
         self.app = FastAPI()
@@ -25,7 +25,7 @@ class LabServer:
         self.app.include_router(RobotRouter())
         self.app.include_router(OperationRouter())
         self.app.include_router(StorageRouter())
-        self.app.include_router(OperationResultRouter(folderpath))
+        self.app.include_router(OperationResultRouter(r"D:\deleteme\ochra\data"))
 
     def get_caller_variable_name(self):
         frame = inspect.currentframe().f_back.f_back

@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class LabService:
-    def __init__(self, folderpath: str = "") -> None:
+    def __init__(self, folderpath: str = None) -> None:
         """Labservice object serves the common functionality within routers to avoid code duplication
         """
         self.db_conn: DbConnection = DbConnection()

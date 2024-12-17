@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class DataServer:
-    def __init__(self, host: str, port: int, folderpath: str = "") -> None:
+    def __init__(self, host: str, port: int, folderpath: str = None) -> None:
         self.host = host
         self.port = port
         self.app = FastAPI()
