@@ -2,18 +2,18 @@ from fastapi import FastAPI
 import uvicorn
 import logging
 import inspect
-from .routers import operation_router
+from .routers import operation_results_router
 
 logger = logging.getLogger(__name__)
 
 
 class DataServer:
-    def __init__(self, host: str, port: int) -> None:
+    def __init__(self, host: str, port: int, folderpath: str = "") -> None:
         self.host = host
         self.port = port
         self.app = FastAPI()
 
-        self.app.include_router(operation_router())
+        self.app.include_router(operation_results_router(folderpath))
 
     def get_caller_variable_name(self):
         frame = inspect.currentframe().f_back.f_back

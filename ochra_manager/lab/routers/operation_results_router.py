@@ -21,10 +21,10 @@ COLLECTION = "operation_results"
 
 
 class OperationResultRouter(APIRouter):
-    def __init__(self):
+    def __init__(self, folderpath: str):
         prefix = f"/{COLLECTION}"
         super().__init__(prefix=prefix)
-        self.lab_service = LabService()
+        self.lab_service = LabService(folderpath)
         self.put("/construct")(self.construct_result)
         self.get("/{object_id}/get_property/{property}")(self.get_property)
         self.patch("/{object_id}/modify_property")(self.modify_property)
