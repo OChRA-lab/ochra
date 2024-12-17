@@ -299,10 +299,9 @@ class LabService:
 
             # unzip the file if the result data is a folder
             if self.db_conn.read({"id": object_id, "_collection": collection}, property="data_type") == "folder":
-                shutil.unpack_archive(filename, filename.split(".")[0], "zip")
+                shutil.unpack_archive(filename, filename.with_suffix(""), "zip")
                 remove(filename)
             
-
 
     def get_file(self, object_id: str, collection: str):
         return self.db_conn.read(
