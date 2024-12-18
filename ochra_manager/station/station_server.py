@@ -31,10 +31,18 @@ class StationServer:
         station_ip: str = "0.0.0.0",
         station_port: int = 8000,
     ):
+        """initialize the station server
+
+        Args:
+            name (str): name of the station, used to identify and connect on the frontend
+            location (Location): location of the station
+            station_ip (str, optional): station ip to run the server on. Defaults to "127.0.0.1".
+            station_port (int, optional): port to oopen the station on. Defaults to 8000.
+        """
         self._name = name
         self._location = location
         self._ip = station_ip
-        self._port = station_port
+        self.port = station_port
         self._devices = {}
 
     def setup(self, lab_ip: str = None) -> None:
@@ -74,7 +82,7 @@ class StationServer:
         """
         start the server
         """
-        uvicorn.run(self._app, host=self._ip, port=self._port)
+        uvicorn.run(self._app, host=self._ip, port=self.port)
 
     @property
     def id(self):
@@ -87,7 +95,7 @@ class StationServer:
             lab_ip (str): ip of the lab server connection.
         """
         self._lab_conn = LabConnection(lab_ip)
-        return WorkStation(self._name, self._location)
+        return WorkStation(self._name, self._location,self.port)
 
     def ping(self, request: Request):
         print(f"ping from {request.client.host}")

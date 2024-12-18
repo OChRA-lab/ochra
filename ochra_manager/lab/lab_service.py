@@ -123,10 +123,13 @@ class LabService:
                 station_ip = self.db_conn.read(
                     {"id": station_id, "_collection": "stations"}, "station_ip"
                 )
-
+                
+                station_port = self.db_conn.read(
+                    {"id": station_id, "_collection": "stations"}, "port"
+                )
                 # create station connection
                 station_client: StationConnection = StationConnection(
-                    station_ip + ":8000"
+                    station_ip + ":" +str(station_port)
                 )
 
                 # create operation object and store in db
@@ -279,6 +282,13 @@ class LabService:
             raise HTTPException(status_code=404, detail=str(e))
 
     def patch_file(self, object_id: str, collection: str, result_data):
+        """update file in db
+
+        Args:
+            object_id (str): id to update
+            collection (str): collection object is in
+            result_data (bytestring): data to update it with
+        """
         self.db_conn.update(
             {"id": object_id, "_collection": collection},
             update={"result_data": result_data},
@@ -304,6 +314,15 @@ class LabService:
             
 
     def get_file(self, object_id: str, collection: str):
+        """get file from db
+
+        Args:
+            object_id (str): id of object to get
+            collection (str): collection it is in
+
+        Returns:
+            bytestring: file data 
+        """
         return self.db_conn.read(
             {"id": object_id, "_collection": collection}, property="result_data", file=True
         )
