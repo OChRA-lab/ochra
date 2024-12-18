@@ -25,7 +25,7 @@ class LabServer:
         self.app.include_router(RobotRouter())
         self.app.include_router(OperationRouter())
         self.app.include_router(StorageRouter())
-        self.app.include_router(OperationResultRouter(r"D:\deleteme\ochra\data"))
+        self.app.include_router(OperationResultRouter(folderpath))
 
     def get_caller_variable_name(self):
         frame = inspect.currentframe().f_back.f_back
