@@ -2,24 +2,25 @@ from fastapi import FastAPI
 import uvicorn
 import logging
 import inspect
-from .routers import operation_router
+from .routers import operation_results_router
 
 logger = logging.getLogger(__name__)
 
 
 class DataServer:
-    def __init__(self, host: str, port: int) -> None:
-        """Setup a data server with the given host and port
+    def __init__(self, host: str, port: int, folderpath: str = None) -> None:
+        """Setup a data server with the given host and port optionally storing data in folderpath
 
         Args:
             host (str): host ip address
             port (int): port to open the server on
+            folderpath (str): path to store data in
         """
         self.host = host
         self.port = port
         self.app = FastAPI()
 
-        self.app.include_router(operation_router())
+        self.app.include_router(operation_results_router(folderpath))
 
     def get_caller_variable_name(self):
         """Find the name of the variable that called this function

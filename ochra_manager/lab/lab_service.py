@@ -12,15 +12,26 @@ from ..connections.db_connection import DbConnection
 import uuid
 import json
 from datetime import datetime
+from pathlib import Path
+import shutil
+from os import remove
 
 logger = logging.getLogger(__name__)
 
 
 class LabService:
-    def __init__(self) -> None:
+    def __init__(self, folderpath: str = None) -> None:
         """Labservice object serves the common functionality within routers to avoid code duplication
         """
         self.db_conn: DbConnection = DbConnection()
+
+        # TODO: split this to check if the string is an actual directory to return some form of error message
+        if folderpath and Path(folderpath).is_dir:
+            self.folderpath = Path(folderpath)
+            # make the actual folder in case it doesn't exist
+            self.folderpath.mkdir(parents=True, exist_ok=True)
+        else:
+            self.folderpath = None
 
     def patch_object(
         self,
@@ -283,6 +294,24 @@ class LabService:
             update={"result_data": result_data},
             file=True,
         )
+
+        if self.folderpath != None:
+            # create folder with the operation id
+            path = self.folderpath / object_id
+            path.mkdir(exist_ok=True)
+            
+            # create the file within the folder
+            filename = path / self.db_conn.read(
+                {"id": object_id, "_collection": collection}, 
+                property="data_file_name")
+            with open(filename, "wb") as file:
+                file.write(result_data)
+
+            # unzip the file if the result data is a folder
+            if self.db_conn.read({"id": object_id, "_collection": collection}, property="data_type") == "folder":
+                shutil.unpack_archive(filename, filename.with_suffix(""), "zip")
+                remove(filename)
+            
 
     def get_file(self, object_id: str, collection: str):
         """get file from db
