@@ -253,8 +253,7 @@ class StationServer:
                 # TODO change status to running
 
             if op.method == "go_to":
-                location = Location(**op.args)
-                result = robot.go_to(location)
+                result = robot.go_to(op.args)
             else:
                 result = robot.execute(task_name=op.method, args=op.args)
 
