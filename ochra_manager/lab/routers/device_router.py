@@ -31,7 +31,7 @@ class DeviceRouter(APIRouter):
         return self.lab_service.construct_object(args, COLLECTION)
 
     async def get_device_property(self, identifier: str, args: ObjectPropertyGetRequest):
-        return self.lab_service.get_object_property(identifier, COLLECTION, property)
+        return self.lab_service.get_object_property(identifier, COLLECTION, args)
 
     async def modify_device_property(
         self, identifier: str, args: ObjectPropertySetRequest
