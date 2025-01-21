@@ -71,6 +71,8 @@ class RestAdapter:
             ep_params (Dict, optional): end point parameters if exist.
                 Defaults to None.
             data (Dict, optional): data body (json). Defaults to None.
+            files (Any): files to be sent over the API
+            jsonify (Bool): flag to jsonify the output
 
         Raises:
             LabEngineException: Request failure
@@ -130,17 +132,18 @@ class RestAdapter:
             f"{response.status_code}: {response.reason}, {response.text}"
         )
 
-    def get(self, endpoint: str, ep_params: Dict = None) -> Result:
+    def get(self, endpoint: str, ep_params: Dict = None, jsonify = True) -> Result:
         """do a get request to endpoint using _do
 
         Args:
             endpoint (str): Endpoint to request
             ep_params (Dict, optional): end point parameters if exist. Defaults to None.
+            jsonify (Bool): Flag to jsonify the response
 
         Returns:
             Result: Data from request in the form of a Result instances
         """
-        return self._do(http_method="GET", endpoint=endpoint, ep_params=ep_params)
+        return self._do(http_method="GET", endpoint=endpoint, ep_params=ep_params, jsonify=jsonify)
 
     def put(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
         """Do a put request to endpoint using _do
@@ -209,18 +212,6 @@ class RestAdapter:
         return self._do(
             http_method="DELETE", endpoint=endpoint, ep_params=ep_params, data=data
         )
-
-    def get_file(self, endpoint: str, ep_params: Dict = None) -> Result:
-        """do a get request to endpoint using _do, but does not jsonify the output
-
-        Args:
-            endpoint (str): Endpoint to request
-            ep_params (Dict, optional): end point parameters if exist. Defaults to None.
-
-        Returns:
-            Result: Data from request in the form of a Result instances
-        """
-        return self._do(http_method="GET", endpoint=endpoint, ep_params=ep_params, jsonify=False)
 
 if __name__ == "__main__":
     adapter = RestAdapter("127.0.0.1:8000", ssl_verify=False)

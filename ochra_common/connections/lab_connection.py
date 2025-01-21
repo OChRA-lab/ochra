@@ -329,5 +329,5 @@ class LabConnection(metaclass=SingletonMeta):
         Returns:
             bytes: raw bytes of the data
         """
-        result: Result = self.rest_adapter.get_file(f"/{endpoint}/{str(id)}/get_data")
+        result: Result = self.rest_adapter.get(f"/{endpoint}/{str(id)}/get_data", jsonify=False)
         return result.content
