@@ -239,33 +239,6 @@ class LabConnection(metaclass=SingletonMeta):
         )
         return result.data
 
-    def get_by_station(
-        self, station_identifier: Union[str, UUID], endpoint: str, objectType: str
-    ) -> ObjectQueryResponse:
-        """get object by station
-
-        Args:
-            station_identifier (Union[str, UUID]): id or name of the station
-            endpoint (str): endpoint of the object
-            objectType (str): type of the object
-
-        Raises:
-            LabEngineException: if there is an error in getting the object
-
-        Returns:
-            ObjectQueryResponse: object information, id, cls, module_path
-        """
-        result: Result = self.rest_adapter.get(
-            f"/{endpoint}/{str(station_identifier)}/get_by_station/{objectType}"
-        )
-        try:
-            object = ObjectQueryResponse(**result.data)
-            return self.load_from_response(object)
-        except ValidationError:
-            raise LabEngineException(f"Expected ObjectQueryResponse, got {result.data}")
-        except Exception as e:
-            raise LabEngineException(f"Unexpected error: {e}")
-
     def _convert_to_object_query_response_possibly(
         self, data: Any
     ) -> Union[ObjectQueryResponse, Any]:
