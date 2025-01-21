@@ -25,5 +25,9 @@ class ObjectPropertySetRequest(BaseModel):
     property_value: Any
 
 
+class ObjectPropertyGetRequest(BaseModel):
+    property: str
+
+
 class ObjectConstructionRequest(BaseModel):
     object_json: str
