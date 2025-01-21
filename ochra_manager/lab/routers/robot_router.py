@@ -19,7 +19,7 @@ class RobotRouter(APIRouter):
         super().__init__(prefix=prefix)
         self.lab_service = LabService()
         self.put("/construct")(self.construct_robot)
-        self.get("/{identifier}/get_property/{property}")(self.get_property)
+        self.get("/{identifier}/get_property")(self.get_property)
         self.patch("/{identifier}/modify_property")(self.modify_property)
         self.post("/{identifier}/call_method")(self.call_robot)
         self.get("/get")(self.get_robot)
