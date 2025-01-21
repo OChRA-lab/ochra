@@ -6,6 +6,7 @@ from .api_models import (
     ObjectQueryResponse,
     ObjectCallRequest,
     ObjectPropertySetRequest,
+    ObjectPropertyGetRequest
 )
 from pydantic import ValidationError
 from uuid import UUID
@@ -191,8 +192,9 @@ class LabConnection(metaclass=SingletonMeta):
         Returns:
             Union[Any, ObjectQueryResponse]: value of the property
         """
+        req = ObjectPropertyGetRequest(property=property)
         result: Result = self.rest_adapter.get(
-            f"/{type}/{str(id)}/get_property",data = {"property": property}
+            f"/{type}/{str(id)}/get_property",data = req.model_dump(mode="json")
         )
         if result.status_code == 404:
             raise LabEngineException(f"Property {property} not found for {type} {id}")
