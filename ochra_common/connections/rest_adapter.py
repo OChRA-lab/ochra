@@ -132,7 +132,7 @@ class RestAdapter:
             f"{response.status_code}: {response.reason}, {response.text}"
         )
 
-    def get(self, endpoint: str, ep_params: Dict = None, jsonify = True) -> Result:
+    def get(self, endpoint: str, ep_params: Dict = None, data: Dict= None, jsonify = True) -> Result:
         """do a get request to endpoint using _do
 
         Args:
@@ -143,7 +143,7 @@ class RestAdapter:
         Returns:
             Result: Data from request in the form of a Result instances
         """
-        return self._do(http_method="GET", endpoint=endpoint, ep_params=ep_params, jsonify=jsonify)
+        return self._do(http_method="GET", endpoint=endpoint, ep_params=ep_params, data=data, jsonify=jsonify)
 
     def put(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
         """Do a put request to endpoint using _do
