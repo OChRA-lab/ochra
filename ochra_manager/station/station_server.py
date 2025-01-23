@@ -114,6 +114,10 @@ class StationServer:
         """
         try:
             # need to add star timestamp to the operation
+            if self.locked is not None:
+                if op.caller_id != self.locked:
+                    raise HTTPException(403, detail="Station is locked by another user")
+            
             device = self._devices[op.caller_id]
             method = getattr(device, op.method)
 
