@@ -63,6 +63,7 @@ class StationServer:
             "/process_robot_op", self.process_robot_op, methods=["POST"]
         )
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
+        self._rouer.add_api_route("/process_station_op", self.process_station_op, methods=["POST"])
         self._app.include_router(self._router)
 
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
@@ -270,3 +271,6 @@ class StationServer:
             return result
         except Exception as e:
             raise HTTPException(500, detail=str(e))
+
+    def process_station_op(self,op:Operation):
+        pass
