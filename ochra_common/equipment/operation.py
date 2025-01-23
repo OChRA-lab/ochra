@@ -23,6 +23,7 @@ class Operation(DataModel):
     """
 
     caller_id: uuid.UUID
+    device_id: uuid.UUID
     method: str
     args: Dict[str, Any]
     status: Enum = -1  # TODO: Define OperationStatus Enum
