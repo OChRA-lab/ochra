@@ -37,23 +37,10 @@ class Station(Station, RestProxyMixinReadOnly):
         """
         return self._lab_conn.get_object("robots", robot_identifier)
     
-    
     def lock(self):
         """Lock the station to the this session."""
-        self._lab_conn.call_on_object(self._endpoint,self.id, "lock", args={"session_id":self._lab_conn._session_id})
-        
+        self._lab_conn.call_on_object(self._endpoint,self.id, "lock", self._lab_conn.session_id)
 
     def unlock(self):
         """Unlock the station from the this session."""
-        self._lab_conn.call_on_object(self._endpoint,self.id, "unlock", args = {"session_id":self._lab_conn._session_id})
-
-
-class WorkStationLock(object):
-    def __init__(self, station: WorkStation):
-        self.station = station
-        
-    def __enter__(self):
-        self.station.lock()
-        
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.station.unlock()
+        self._lab_conn.call_on_object(self._endpoint,self.id, "unlock", self._lab_conn.session_id)
