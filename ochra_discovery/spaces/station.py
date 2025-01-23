@@ -37,3 +37,11 @@ class Station(Station, RestProxyMixinReadOnly):
             Type[Robot]: The robot object.
         """
         return self._lab_conn.get_object("robots", robot_identifier)
+    
+    def lock(self):
+        """Lock the station to the this session."""
+        self._lab_conn.call_on_object(self._endpoint,self.id, "lock", self._lab_conn.session_id)
+
+    def unlock(self):
+        """Unlock the station from the this session."""
+        self._lab_conn.call_on_object(self._endpoint,self.id, "unlock", self._lab_conn.session_id)
