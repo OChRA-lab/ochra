@@ -167,7 +167,7 @@ class LabConnection(metaclass=SingletonMeta):
         Returns:
             ObjectQueryResponse: object information, id, cls, module_path
         """
-        req = ObjectCallRequest(method=method, args=args)
+        req = ObjectCallRequest(method=method, args=args, caller_id = self._session_id)
         result: Result = self.rest_adapter.post(
             f"/{type}/{str(id)}/call_method", data=req.model_dump(mode="json")
         )
