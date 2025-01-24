@@ -3,7 +3,7 @@ from typing import List, Union, Type
 from uuid import UUID
 from .station import Station
 from ..equipment.device import Device
-from ..agents.manipulator import Manipulator
+from ..equipment.robot import Robot
 
 
 class WorkStation(Station):
@@ -28,7 +28,7 @@ class WorkStation(Station):
         """
         raise NotImplementedError
 
-    def get_robot(self, robot_identifier: Union[str, UUID]) -> Type[Manipulator]:
+    def get_robot(self, robot_identifier: Union[str, UUID]) -> Type[Robot]:
         """
         Retrieve a robot from the workstation.
 
@@ -36,6 +36,6 @@ class WorkStation(Station):
             robot_identifier (str | UUID): The robot name or its UUID.
 
         Returns:
-            Manipulator: The retrieved robot.
+            Robot: The retrieved robot.
         """
         raise NotImplementedError

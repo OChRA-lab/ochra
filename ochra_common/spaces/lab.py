@@ -1,7 +1,6 @@
 from typing import List, Type, Union
 from .station import Station
-from ..agents.robot import Robot
-from ..agents.scientist import Scientist
+from ..equipment.robot import Robot
 from uuid import UUID
 
 
@@ -49,38 +48,5 @@ class Lab:
 
         Returns:
             Robot: The retrieved robot.
-        """
-        raise NotImplementedError
-
-    def get_scientists(self) -> List[Scientist]:
-        """
-        Retrieve all scientists in the lab.
-
-        Returns:
-            List[Scientist]: A list of scientists in the lab.
-        """
-        raise NotImplementedError
-
-    def add_scientist(self, scientist: Scientist) -> bool:
-        """
-        Add a scientist to the lab.
-
-        Args:
-            scientist (Scientist): The scientist to be added.
-
-        Returns:
-            bool: True if the scientist was added successfully, False otherwise.
-        """
-        raise NotImplementedError
-
-    def remove_scientist(self, scientist: Scientist) -> bool:
-        """
-        Remove a scientist from the lab.
-
-        Args:
-            scientist (Scientist): The scientist to be removed.
-
-        Returns:
-            bool: True if the scientist was removed successfully, False otherwise.
         """
         raise NotImplementedError
