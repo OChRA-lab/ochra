@@ -18,6 +18,7 @@ class StationConnection:
     def execute_op(self, op: Operation, endpoint: str):
         data = {
             "id": str(op.id),
+            "device_id": str(op.device_id),
             "caller_id": str(op.caller_id),
             "method": op.method,
             "args": op.args,
