@@ -131,7 +131,7 @@ class StationServer:
                 if str(op.caller_id) != self._station_proxy.locked:
                     raise HTTPException(403, detail="Station is locked by another user")
 
-            device = self._devices[op.caller_id]
+            device = self._devices[op.device_id]
             method = getattr(device, op.method)
 
             # set device and station to busy
