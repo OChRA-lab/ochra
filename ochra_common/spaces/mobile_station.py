@@ -13,12 +13,3 @@ class MobileStation(Station):
     """
 
     mobile_robot: Type[MobileRobot] = Field(default=None)
-
-    def get_robot(self) -> Type[MobileRobot]:
-        """
-        Retrieve mobile robot of the mobile_station.
-
-        Returns:
-            Robot: The retrieved robot.
-        """
-        raise NotImplementedError
