@@ -1,6 +1,29 @@
 from enum import IntEnum
 
-class OperationResultEnum(IntEnum):
-    not_started = -1
-    uploading = 0
-    complete = 1
+class PhysicalState(IntEnum):
+    UNKNOWN = -1
+    SOLID = 0
+    LIQUID = 1
+    GAS = 2
+
+class ActiveStatus(IntEnum):
+    ERROR = -1
+    IDLE = 0
+    BUSY = 1
+
+class MobileRobotState(IntEnum):
+    ERROR = -1
+    AVAILABLE = 0
+    NAVIGATING = 1
+    CHARGING = 2
+
+class OperationStatus(IntEnum):
+    CREATED = 0
+    ASSIGNED = 1
+    IN_PROGRESS = 2
+    COMPLETED = 3
+
+class ResultDataStatus(IntEnum):
+    UNAVAILABLE = -1
+    UPLOADING = 0
+    AVAILABLE = 1
