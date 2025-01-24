@@ -37,9 +37,16 @@ class Station(Station, RestProxyMixinReadOnly):
         """
         return self._lab_conn.get_object("robots", robot_identifier)
     
+    
+    @contextmanager
     def lock(self):
         """Lock the station to the this session."""
-        self._lab_conn.call_on_object(self._endpoint,self.id, "lock", args={"session_id":self._lab_conn._session_id})
+        f = self._lab_conn.call_on_object(self._endpoint,self.id, "lock", args={"session_id":self._lab_conn._session_id})
+        
+        try:
+            yield f
+        finally:
+            self.unlock()
 
     def unlock(self):
         """Unlock the station from the this session."""
