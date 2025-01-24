@@ -1,10 +1,10 @@
 from pydantic import Field
-from enum import Enum
 from typing import List
 from uuid import UUID
 from ..base import DataModel
 from .operation import Operation
-from ..storage.device_inventory import DeviceInventory
+from ..utils.enum import ActiveStatus
+from ..storage.inventory import Inventory
 
 
 class Device(DataModel):
@@ -14,15 +14,15 @@ class Device(DataModel):
     Attributes:
         name (str): The name of the device.
         inventory (DeviceInventory): The inventory associated with the device.
-        status (Enum): The current status of the device.
+        status (ActiveStatus): The current active status of the device. Defaults to IDLE.
         operation_history (List[Operation]): A list of operations performed by the device.
-        station_id (str): ID of the station which the device belongs to.
+        owner_station (str): ID of the station which the device belongs to.
     """
 
     name: str
-    inventory: DeviceInventory = Field(default=None)
-    status: Enum = -1  # TODO: Define DeviceStatus Enum
+    inventory: Inventory = Field(default=None)
+    status: ActiveStatus = ActiveStatus.IDLE
     operation_history: List[Operation] = Field(default_factory=list)
-    station_id: UUID = Field(default=None)
+    owner_station: UUID = Field(default=None)
 
     _endpoint = "devices"  # associated endpoint for all devices
