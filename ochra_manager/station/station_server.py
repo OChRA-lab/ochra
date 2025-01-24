@@ -127,7 +127,7 @@ class StationServer:
         """
         try:
             # need to add star timestamp to the operation
-            if self._station_proxy.locked is not None:
+            if self._station_proxy.locked is not None and self._station_proxy.locked != []:
                 if str(op.caller_id) != self._station_proxy.locked:
                     raise HTTPException(403, detail="Station is locked by another user")
 
