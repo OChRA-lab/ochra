@@ -44,4 +44,4 @@ class Station(Station, RestProxyMixinReadOnly):
 
     def unlock(self):
         """Unlock the station from the this session."""
-        self._lab_conn.call_on_object(self._endpoint,self.id, "unlock", self._lab_conn._session_id)
+        self._lab_conn.call_on_object(self._endpoint,self.id, "unlock", args = {"session_id":self._lab_conn._session_id})
