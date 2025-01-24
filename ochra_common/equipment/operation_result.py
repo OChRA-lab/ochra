@@ -3,6 +3,7 @@ from typing import Any
 from ..base import DataModel
 from ..utils.enum import ResultDataStatus
 
+
 class OperationResult(DataModel):
     """
     Abstract result class to keep results formatted and structured.
@@ -40,5 +41,18 @@ class OperationResult(DataModel):
 
         Returns:
             Any: The processed data.
+        """
+        raise NotImplementedError
+
+    def save_data(self, path: str = None) -> bool:
+        """
+        Gets the data from the server and saves it to path. If path is not provided,
+        saves it using the original name at the current directory
+
+        Args:
+            path (str): The path to save the data to. If None, saves it to the current directory using original name.
+
+        Returns:
+            bool: True if the data is saved.
         """
         raise NotImplementedError
