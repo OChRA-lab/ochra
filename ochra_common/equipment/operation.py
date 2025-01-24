@@ -31,12 +31,3 @@ class Operation(DataModel):
     result: OperationResult = Field(default=None)
 
     _endpoint = "operations"  # associated endpoint for all operations
-
-    def add_result(self, result: OperationResult):
-        """
-        Add a result to the operation.
-
-        Args:
-            result (OperationResult): The result of the operation.
-        """
-        raise NotImplementedError
