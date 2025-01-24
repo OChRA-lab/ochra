@@ -239,7 +239,7 @@ class StationServer:
             # need to add star timestamp to the operation
             robot = self._devices[op.caller_id]
 
-            if op.method not in robot.available_tasks:
+            if op.method not in robot.available_tasks and op.method != "go_to":
                 raise HTTPException(404, detail=f"task {op.method} not found")
 
             # TODO crete an operation proxy to streamline setting properties
@@ -252,7 +252,10 @@ class StationServer:
                 )
                 # TODO change status to running
 
-            result = robot.execute(task_name=op.method, args=op.args)
+            if op.method == "go_to":
+                result = robot.go_to(op.args)
+            else:
+                result = robot.execute(task_name=op.method, args=op.args)
 
             if self._lab_conn:
                 self._lab_conn.set_property(
