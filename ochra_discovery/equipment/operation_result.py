@@ -1,7 +1,6 @@
 from ochra_common.equipment.operation_result import OperationResult
 from ochra_common.utils.mixins import RestProxyMixinReadOnly
 from uuid import UUID
-from typing import Union, Type
 import shutil
 from os import remove
 
@@ -15,34 +14,36 @@ class OperationResult(OperationResult, RestProxyMixinReadOnly):
         super().__init__()
         self._mixin_hook(self._endpoint, id)
 
-    def save_data(self, name: str = None) -> bool:
-        """Gets the data from the server and saves it to name. If name is not provided, saves it as the original name
+    def save_data(self, path: str = None) -> bool:
+        """
+        Gets the data from the server and saves it to path. If path is not provided,
+        saves it using the original name at the current directory
 
         Args:
-            name (str): The name the file is to be saved. Does not require file extension to be part of the name
+            path (str): The path to save the data to. If None, saves it to the current directory using original name.
 
         Returns:
-            bool: True if successful
+            bool: True if the data is saved.
         """
         data = self._lab_conn.get_data("operation_results", self.id)
-        if name == None:
-            name = self._lab_conn.get_property(
+        if path == None:
+            path = self._lab_conn.get_property(
                 "operation_results", self.id, "data_file_name"
             )
         else:
-            name = (
-                name + "."
+            path = (
+                path + "."
                 + self._lab_conn.get_property(
                     "operation_results", self.id, "data_file_name"
                 ).split(".")[-1]
             )
-        with open(name, "wb") as file:
+        with open(path, "wb") as file:
             file.write(data)
         
         if self._lab_conn.get_property(
             "operation_results", self.id, "data_type"
         ) == "folder":
-            shutil.unpack_archive(name, name.split(".")[0], "zip")
-            remove(name)
+            shutil.unpack_archive(path, path.split(".")[0], "zip")
+            remove(path)
 
         return True

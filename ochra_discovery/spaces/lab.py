@@ -1,13 +1,13 @@
 from ochra_common.spaces.lab import Lab
 from ochra_common.spaces.work_station import WorkStation
 from ochra_common.spaces.storage_station import StorageStation
-from ochra_common.agents.robot import Robot
+from ochra_common.spaces.mobile_station import MobileStation
+from ochra_common.equipment.robot import Robot
 from ochra_common.connections.lab_connection import LabConnection
 from typing import List, Type, Union
 
 
 class Lab(Lab):
-
     def __init__(self, hostname: str):
         """Connects to the lab and provides access to the stations and robots.
 
@@ -16,7 +16,9 @@ class Lab(Lab):
         """
         self._lab_conn: LabConnection = LabConnection(hostname)
 
-    def get_station(self, station_name: str) -> Union[WorkStation, StorageStation]:
+    def get_station(
+        self, station_name: str
+    ) -> Union[WorkStation, StorageStation, MobileStation]:
         """Get a station object by name.
 
         Args:
@@ -27,7 +29,7 @@ class Lab(Lab):
         """
         return self._lab_conn.get_object("lab/stations", station_name)
 
-    def get_stations(self) -> List[Union[WorkStation, StorageStation]]:
+    def get_stations(self) -> List[Union[WorkStation, StorageStation, MobileStation]]:
         """Get all the connected stations.
 
         Returns:

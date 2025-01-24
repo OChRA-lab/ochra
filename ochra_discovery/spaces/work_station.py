@@ -1,5 +1,5 @@
 from ochra_common.equipment.device import Device
-from ochra_common.agents.manipulator import Manipulator
+from ochra_common.equipment.robot import Robot
 from ochra_common.spaces.work_station import WorkStation
 from ochra_common.utils.mixins import RestProxyMixinReadOnly
 from uuid import UUID
@@ -27,13 +27,13 @@ class WorkStation(WorkStation, RestProxyMixinReadOnly):
         """
         return self._lab_conn.get_object("devices", device_identifier)
 
-    def get_robot(self, robot_identifier: Union[str, UUID]) -> Type[Manipulator]:
+    def get_robot(self, robot_identifier: Union[str, UUID]) -> Type[Robot]:
         """Get a robot object by name or UUID.
 
         Args:
             robot_identifier (Union[str, UUID]): Name or UUID of the robot to get.
 
         Returns:
-            Type[Manipulator]: The robot object.
+            Type[Robot]: The robot object.
         """
         return self._lab_conn.get_object("robots", robot_identifier)
