@@ -4,7 +4,7 @@ from ochra_common.spaces.work_station import WorkStation
 from ochra_common.utils.mixins import RestProxyMixinReadOnly
 from uuid import UUID
 from typing import Type, Union
-
+from contextlib import contextmanager
 
 class WorkStation(WorkStation, RestProxyMixinReadOnly):
     def __init__(self, object_id: UUID):
@@ -15,7 +15,7 @@ class WorkStation(WorkStation, RestProxyMixinReadOnly):
         """
         super().__init__()
         self._mixin_hook(self._endpoint, object_id)
-
+        
     def get_device(self, device_identifier: Union[str, UUID]) -> Type[Device]:
         """Get a device object by name or UUID.
 
@@ -38,9 +38,16 @@ class WorkStation(WorkStation, RestProxyMixinReadOnly):
         """
         return self._lab_conn.get_object("robots", robot_identifier)
     
+    
+    @contextmanager
     def lock(self):
         """Lock the station to the this session."""
-        self._lab_conn.call_on_object(self._endpoint,self.id, "lock", args={"session_id":self._lab_conn._session_id})
+        f = self._lab_conn.call_on_object(self._endpoint,self.id, "lock", args={"session_id":self._lab_conn._session_id})
+        
+        try:
+            yield f
+        finally:
+            self.unlock()
 
     def unlock(self):
         """Unlock the station from the this session."""
