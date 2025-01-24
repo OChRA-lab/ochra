@@ -17,6 +17,7 @@ class WorkStation(WorkStation, RestProxyMixin):
             name=name,
             location=location,
             module_path="ochra_discovery.spaces.work_station",
+            locked=None
         )
         self.port = port
         self.inventory = Inventory(
