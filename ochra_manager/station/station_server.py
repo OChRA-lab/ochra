@@ -117,8 +117,8 @@ class StationServer:
         """
         try:
             # need to add star timestamp to the operation
-            if self.locked is not None:
-                if op.caller_id != self.locked:
+            if self._station_proxy.locked is not None:
+                if str(op.caller_id) != self._station_proxy.locked:
                     raise HTTPException(403, detail="Station is locked by another user")
 
             device = self._devices[op.caller_id]
@@ -292,9 +292,30 @@ class StationServer:
         data_type = ""
         data_status = -1
 
-        method = getattr(self, op.method)
+        method = getattr(self._station_proxy, op.method)
         try:
             result = method(**op.args)
+            try:
+                result = Path(result)
+                success = True
+                result_data = None
+                data_status = -1
+                if (not result.is_file()) and (not result.is_dir()):
+                    # raising an exception to exit the try loop
+                    data_type = "string"
+                    result_data = result
+                    data_status = 1
+                elif result.is_file():
+                    data_type = "file"
+                    data_file_name = result.name
+                else:
+                    data_type = "folder"
+                    data_file_name = result.name + ".zip"
+            except TypeError:
+                success = True
+                result_data = result
+                data_type = str(type(result))
+                data_status = 1
         except Exception as e:
             success = False
             error = str(e)
