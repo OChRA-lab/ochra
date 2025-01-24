@@ -9,6 +9,7 @@ from .location import Location
 from ..utils.enum import ActivityStatus, StationType
 from ..storage.inventory import Inventory
 from uuid import UUID
+from typing import Optional
 
 class Station(DataModel):
     """
@@ -31,7 +32,7 @@ class Station(DataModel):
     locked_by: str = Field(default="")
     inventory: Inventory = Field(default=None)
     devices: List[Type[Device]] = Field(default_factory=list)
-    locked: UUID = Field(defualt=None)
+    locked: Optional[UUID] = Field(defualt=None)
 
     _endpoint = "stations"  # associated endpoint for all stations
 
@@ -62,15 +63,18 @@ class Station(DataModel):
 
     def lock(self, session_id: UUID):
         """Lock the device for the given session."""
-        if self.locked is not None:
+        if self.locked == []:
+            self.locked = session_id
+        elif self.locked != session_id:
             raise Exception(
                 f"Device {self.name} is already locked by session {self.locked}."
             )
-        else:
-            self.locked = session_id
+            
 
     def unlock(self, session_id: UUID):
         """Unlock the device for the given session."""
+        if session_id == "ADMIN":
+            self.locked = None
         if self.locked != session_id:
             raise Exception(
                 f"Session {session_id} does not have lock on device {self.name}."
