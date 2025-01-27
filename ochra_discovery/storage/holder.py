@@ -17,6 +17,7 @@ class Holder(Holder, RestProxyMixin):
             type=type,
             max_capacity=max_capacity,
             capacity_unit=capacity_unit,
+            collection="containers",
             module_path="ochra_discovery.storage.vessel",
         )
         self._mixin_hook(self._endpoint, self.id)

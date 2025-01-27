@@ -1,9 +1,9 @@
+from ochra_common.base import DataModel
 from ochra_common.storage.inventory import Inventory
 from ochra_common.utils.mixins import RestProxyMixin
 from ochra_common.storage.container import Container
 from ochra_common.storage.consumable import Consumable
-from uuid import UUID
-from typing import Type, Literal
+from typing import Type
 
 
 class Inventory(Inventory, RestProxyMixin):
@@ -18,14 +18,13 @@ class Inventory(Inventory, RestProxyMixin):
     """
     def __init__(
         self,
-        owner_id: UUID,
-        owner_type: Literal["station", "robot", "device"],
+        owner: DataModel,
         containers_max_capacity: int,
     ):
         super().__init__(
-            owner_id=owner_id,
-            owner_type=owner_type,
+            owner=owner,
             containers_max_capacity=containers_max_capacity,
+            collection="inventories",
             module_path="ochra_discovery.storage.inventory",
         )
         self._mixin_hook(self._endpoint, self.id)
