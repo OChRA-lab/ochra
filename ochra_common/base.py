@@ -23,3 +23,17 @@ class DataModel(BaseModel):
         # retrieve the class name in addition to its import path
         self.cls = f"{self.__class__.__name__}" if self.cls is None else self.cls
         return super().model_post_init(__context)
+
+    def get_base_model(self) -> "DataModel":
+        """
+        Get a base model containing the base information of the model instance.
+
+        Returns:
+            DataModel: A base model containing the base information of the model instance.
+        """
+        return DataModel(
+            id=self.id,
+            collection=self.collection,
+            cls=self.cls,
+            module_path=self.module_path,
+        )
