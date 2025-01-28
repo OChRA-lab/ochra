@@ -137,6 +137,7 @@ class LabService:
                     caller_id=object_id,
                     method=call_req.method,
                     args=call_req.args,
+                    collection="operations",
                     module_path="ochra_discovery.equipment.operation",
                 )
                 # TODO change to use a proxy for operation instead of accessing db directly
