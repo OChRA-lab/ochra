@@ -114,7 +114,7 @@ class LabService:
             if collection == "devices" or collection == "robots":
                 # get station ip
                 station_id = self.db_conn.read(
-                    {"id": object_id, "_collection": collection}, "station_id"
+                    {"id": object_id, "_collection": collection}, "owner_station"
                 )
 
                 if station_id is None:
