@@ -25,7 +25,7 @@ class WorkStation(WorkStation, RestProxyMixin):
         self._mixin_hook("stations", self.id)
 
     def add_device(self, device: Type[Device]):
-        device.station_id = self.id
+        device.owner_station = self.get_base_model()
         devices = self.devices
         devices.append(device.id)
         self.devices = devices
