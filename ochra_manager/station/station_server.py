@@ -95,7 +95,7 @@ class StationServer:
             lab_ip (str): ip of the lab server connection.
         """
         self._lab_conn = LabConnection(lab_ip)
-        return WorkStation(self._name, self._location)
+        return WorkStation(self._name, self._location, self.port)
 
     def ping(self, request: Request):
         print(f"ping from {request.client.host}")
