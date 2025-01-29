@@ -20,7 +20,7 @@ class OperationResult(DataModel):
     success: bool
     error: str = Field(default="")
     result_data: Any = Field(default=None)
-    data_filename: str = Field(default="")
+    data_file_name: str = Field(default="")
     data_type: str = Field(default="")
     data_status: ResultDataStatus = ResultDataStatus.UNAVAILABLE
 
