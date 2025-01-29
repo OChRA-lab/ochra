@@ -5,6 +5,7 @@ from ochra_common.connections.api_models import (
     ObjectPropertySetRequest,
     ObjectConstructionRequest,
     ObjectQueryResponse,
+    ObjectPropertyGetRequest,
 )
 from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid
@@ -20,19 +21,19 @@ class OperationRouter(APIRouter):
         super().__init__(prefix=prefix)
         self.lab_service = LabService()
         self.put("/construct")(self.construct_op)
-        self.get("/{object_id}/get_property/{property}")(self.get_op_property)
-        self.patch("/{object_id}/modify_property")(self.modify_op_property)
+        self.get("/{identifier}/get_property")(self.get_op_property)
+        self.patch("/{identifier}/modify_property")(self.modify_op_property)
         self.get("/get")(self.get_op)
 
     async def construct_op(self, args: ObjectConstructionRequest):
         # TODO: we need to assign the object to the station somehow
         return self.lab_service.construct_object(args, COLLECTION)
 
-    async def get_op_property(self, object_id: str, property: str):
-        return self.lab_service.get_object_property(object_id, COLLECTION, property)
+    async def get_op_property(self, identifier: str, args: ObjectPropertyGetRequest):
+        return self.lab_service.get_object_property(identifier, COLLECTION, args)
 
-    async def modify_op_property(self, object_id: str, args: ObjectPropertySetRequest):
-        return self.lab_service.patch_object(object_id, COLLECTION, args)
+    async def modify_op_property(self, identifier: str, args: ObjectPropertySetRequest):
+        return self.lab_service.patch_object(identifier, COLLECTION, args)
 
     async def get_op(self, identifier: str):
         if is_valid_uuid(identifier):

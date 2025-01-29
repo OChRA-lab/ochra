@@ -7,6 +7,7 @@ from ochra_common.connections.api_models import (
     ObjectCallRequest,
     ObjectPropertySetRequest,
     ObjectConstructionRequest,
+    ObjectPropertyGetRequest
 )
 from ..connections.db_connection import DbConnection
 import uuid
@@ -171,7 +172,7 @@ class LabService:
             raise HTTPException(status_code=500, detail=str(e))
 
     def get_object_property(
-        self, object_id: str, collection: str, property: str
+        self, object_id: str, collection: str, request: ObjectPropertyGetRequest
     ) -> Any:
         """Get property of object with id
 
@@ -188,7 +189,7 @@ class LabService:
         """
         try:
             return self.db_conn.read(
-                {"id": object_id, "_collection": collection}, property
+                {"id": object_id, "_collection": collection}, request.property
             )
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
