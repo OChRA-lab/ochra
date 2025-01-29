@@ -14,8 +14,9 @@ class ActiveStatus(IntEnum):
 class MobileRobotState(IntEnum):
     ERROR = -1
     AVAILABLE = 0
-    NAVIGATING = 1
-    CHARGING = 2
+    MANIPULATING = 1
+    NAVIGATING = 2
+    CHARGING = 3
 
 class OperationStatus(IntEnum):
     CREATED = 0
