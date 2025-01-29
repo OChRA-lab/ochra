@@ -10,6 +10,7 @@ import uvicorn
 import uvicorn.config
 
 from ochra_common.connections.lab_connection import LabConnection
+from ochra_common.utils.enum import ActiveStatus, OperationStatus, ResultDataStatus
 from ochra_common.spaces.location import Location
 from ochra_common.equipment.device import Device
 from ochra_common.equipment.operation import Operation
@@ -117,6 +118,10 @@ class StationServer:
             device = self._devices[op.caller_id]
             method = getattr(device, op.method)
 
+            # set device and station to busy
+            device.status = ActiveStatus.BUSY
+            self._station_proxy.status = ActiveStatus.BUSY
+
             # TODO crete an operation proxy to streamline setting properties
             if self._lab_conn:
                 self._lab_conn.set_property(
@@ -125,13 +130,19 @@ class StationServer:
                     "start_timestamp",
                     datetime.datetime.now().isoformat(),
                 )
-                # TODO change status to running
+                # change status to in progress
+                self._lab_conn.set_property(
+                    "operations",
+                    op.id,
+                    "status",
+                    OperationStatus.IN_PROGRESS,
+                )
 
             result_data = None
             data_file_name = ""
             error = ""
             data_type = ""
-            data_status = -1
+            data_status = ResultDataStatus.UNAVAILABLE
             try:
                 result = method(**op.args)
 
@@ -141,12 +152,12 @@ class StationServer:
                     result = Path(result)
                     success = True
                     result_data = None
-                    data_status = -1
+                    data_status = ResultDataStatus.UNAVAILABLE
                     if (not result.is_file()) and (not result.is_dir()):
                         # raising an exception to exit the try loop
                         data_type = "string"
                         result_data = result
-                        data_status = 1
+                        data_status = ResultDataStatus.AVAILABLE
                     elif result.is_file():
                         data_type = "file"
                         data_file_name = result.name
@@ -157,7 +168,7 @@ class StationServer:
                     success = True
                     result_data = result
                     data_type = str(type(result))
-                    data_status = 1                
+                    data_status = ResultDataStatus.AVAILABLE                
 
             except Exception as e:
                 success = False
@@ -196,7 +207,7 @@ class StationServer:
                             "operation_results",
                             operation_result.id,
                             "data_status",
-                            1,
+                            ResultDataStatus.AVAILABLE,
                         )
 
                     # remove the zip file when upload is done
@@ -218,7 +229,17 @@ class StationServer:
                     "result",
                     operation_result.id,
                 )
-                # TODO change status to complete
+                # change status to in progress
+                self._lab_conn.set_property(
+                    "operations",
+                    op.id,
+                    "status",
+                    OperationStatus.COMPLETED,
+                )
+
+            # set device and station to busy
+            device.status = ActiveStatus.IDLE
+            self._station_proxy.status = ActiveStatus.IDLE
 
         except Exception as e:
             raise HTTPException(500, detail=str(e))
@@ -241,6 +262,10 @@ class StationServer:
 
             if op.method not in robot.available_tasks and op.method != "go_to":
                 raise HTTPException(404, detail=f"task {op.method} not found")
+            
+             # set device and station to busy
+            robot.status = ActiveStatus.BUSY
+            self._station_proxy.status = ActiveStatus.BUSY
 
             # TODO crete an operation proxy to streamline setting properties
             if self._lab_conn:
@@ -250,7 +275,13 @@ class StationServer:
                     "start_timestamp",
                     datetime.datetime.now().isoformat(),
                 )
-                # TODO change status to running
+                # change status to in progress
+                self._lab_conn.set_property(
+                    "operations",
+                    op.id,
+                    "status",
+                    OperationStatus.IN_PROGRESS,
+                )
 
             if op.method == "go_to":
                 result = robot.go_to(op.args)
@@ -264,7 +295,17 @@ class StationServer:
                     "end_timestamp",
                     datetime.datetime.now().isoformat(),
                 )
-                # TODO change status to complete
+                 # change status to in progress
+                self._lab_conn.set_property(
+                    "operations",
+                    op.id,
+                    "status",
+                    OperationStatus.COMPLETED,
+                )
+
+            # set device and station to busy
+            robot.status = ActiveStatus.IDLE
+            self._station_proxy.status = ActiveStatus.IDLE
 
             return result
         except Exception as e:
