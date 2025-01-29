@@ -10,9 +10,15 @@ import uvicorn
 import uvicorn.config
 
 from ochra_common.connections.lab_connection import LabConnection
-from ochra_common.utils.enum import ActiveStatus, OperationStatus, ResultDataStatus
+from ochra_common.utils.enum import (
+    ActiveStatus,
+    OperationStatus,
+    ResultDataStatus,
+    MobileRobotState,
+)
 from ochra_common.spaces.location import Location
 from ochra_common.equipment.device import Device
+from ochra_common.equipment.mobile_robot import MobileRobot
 from ochra_common.equipment.operation import Operation
 from ..proxy_models.equipment.operation_result import OperationResult
 from ..proxy_models.space.work_station import WorkStation
@@ -146,7 +152,7 @@ class StationServer:
             try:
                 result = method(**op.args)
 
-                # checking if the result is bool 
+                # checking if the result is bool
                 # TODO: test this new method
                 try:
                     result = Path(result)
@@ -168,7 +174,7 @@ class StationServer:
                     success = True
                     result_data = result
                     data_type = str(type(result))
-                    data_status = ResultDataStatus.AVAILABLE                
+                    data_status = ResultDataStatus.AVAILABLE
 
             except Exception as e:
                 success = False
@@ -199,7 +205,9 @@ class StationServer:
 
                         # upload the file as a property
                         self._lab_conn.put_data(
-                            "operation_results", id=operation_result.id, result_data=result_data
+                            "operation_results",
+                            id=operation_result.id,
+                            result_data=result_data,
                         )
 
                         # change the data status to reflect success
@@ -262,8 +270,8 @@ class StationServer:
 
             if op.method not in robot.available_tasks and op.method != "go_to":
                 raise HTTPException(404, detail=f"task {op.method} not found")
-            
-             # set device and station to busy
+
+            # set device and station to busy
             robot.status = ActiveStatus.BUSY
             self._station_proxy.status = ActiveStatus.BUSY
 
@@ -284,8 +292,11 @@ class StationServer:
                 )
 
             if op.method == "go_to":
+                robot.state = MobileRobotState.NAVIGATING
                 result = robot.go_to(op.args)
             else:
+                if isinstance(robot, MobileRobot):
+                    robot.state = MobileRobotState.MANIPULATING
                 result = robot.execute(task_name=op.method, args=op.args)
 
             if self._lab_conn:
@@ -295,7 +306,7 @@ class StationServer:
                     "end_timestamp",
                     datetime.datetime.now().isoformat(),
                 )
-                 # change status to in progress
+                # change status to in progress
                 self._lab_conn.set_property(
                     "operations",
                     op.id,
@@ -305,6 +316,8 @@ class StationServer:
 
             # set device and station to busy
             robot.status = ActiveStatus.IDLE
+            if isinstance(robot, MobileRobot):
+                    robot.state = MobileRobotState.AVAILABLE
             self._station_proxy.status = ActiveStatus.IDLE
 
             return result
