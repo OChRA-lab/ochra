@@ -12,3 +12,6 @@ class MobileStation(MobileStation, RestProxyMixinReadOnly):
         """
         super().__init__()
         self._mixin_hook(self._endpoint, object_id)
+
+    def get_mobile_robot(self):
+        return self._lab_conn.get_object("robots", self.mobile_robot)
