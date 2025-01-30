@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from pydantic import BaseModel
-from typing import Dict, Optional, Type
+from typing import Dict, Optional, Type, Literal
 from pathlib import Path
 from pathlib import PurePath
 import shutil
@@ -22,6 +22,7 @@ from ochra_common.equipment.mobile_robot import MobileRobot
 from ochra_common.equipment.operation import Operation
 from ..proxy_models.equipment.operation_result import OperationResult
 from ..proxy_models.space.work_station import WorkStation
+from ..proxy_models.space.mobile_station import MobileStation
 
 
 class operationExecute(BaseModel):
@@ -35,6 +36,7 @@ class StationServer:
         self,
         name: str,
         location: Location,
+        station_type: Literal["work_station", "mobile_station"],
         station_ip: str = "0.0.0.0",
         station_port: int = 8000,
     ):
@@ -48,6 +50,7 @@ class StationServer:
         """
         self._name = name
         self._location = location
+        self._type = station_type
         self._ip = station_ip
         self.port = station_port
         self._devices = {}
@@ -81,9 +84,14 @@ class StationServer:
         Args:
             device (Device): device to add to the station
         """
-        self._devices[device.id] = device
-        if self._station_proxy:
-            self._station_proxy.add_device(device)
+        if self._type == "work_station":
+            self._devices[device.id] = device
+            if self._station_proxy:
+                self._station_proxy.add_device(device)
+        elif self._type == "mobile_station":
+            self._devices[device.id] = device
+            if self._station_proxy:
+                self._station_proxy.add_mobile_robot(device)
 
     def run(self):
         """
@@ -102,7 +110,10 @@ class StationServer:
             lab_ip (str): ip of the lab server connection.
         """
         self._lab_conn = LabConnection(lab_ip)
-        return WorkStation(self._name, self._location, self.port)
+        if self._type == "work_station":
+            return WorkStation(self._name, self._location, self.port)
+        elif self._type == "mobile_station":
+            return MobileStation(self._name, self._location, self.port)
 
     def ping(self, request: Request):
         print(f"ping from {request.client.host}")
