@@ -1,12 +1,12 @@
 from ochra_common.equipment.device import Device
 from ochra_common.equipment.robot import Robot
-from ochra_common.spaces.work_station import WorkStation
+from ochra_common.spaces.station import Station
 from ochra_common.utils.mixins import RestProxyMixinReadOnly
 from uuid import UUID
 from typing import Type, Union
 
 
-class WorkStation(WorkStation, RestProxyMixinReadOnly):
+class Station(Station, RestProxyMixinReadOnly):
     def __init__(self, object_id: UUID):
         """Station object that provides access to the devices and robots.
 
