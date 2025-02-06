@@ -3,7 +3,7 @@ from ochra_common.spaces.station import Station
 from ochra_common.spaces.work_station import WorkStation
 from ochra_common.spaces.mobile_station import MobileStation
 from ochra_common.spaces.storage_station import StorageStation
-from ochra_common.utils.enum import ActiveStatus
+from ochra_common.utils.enum import ActivityStatus
 
 
 def test_location():
@@ -61,7 +61,7 @@ def test_station():
     assert station.location.lab == "ACL"
     assert station.location.room == "main_lab"
     assert station.location.place == "bench_1"
-    assert station.status == ActiveStatus.IDLE
+    assert station.status == ActivityStatus.IDLE
     assert station.locked_by == ""
     assert station.inventory == None
 
@@ -84,7 +84,7 @@ def test_station():
             "landmarks": [],
             "additional_metadata": {},
         },
-        "status": ActiveStatus.IDLE,
+        "status": ActivityStatus.IDLE,
         "locked_by": "",
         "inventory": None,
     }
@@ -124,7 +124,7 @@ def test_work_station():
             "landmarks": [],
             "additional_metadata": {},
         },
-        "status": ActiveStatus.IDLE,
+        "status": ActivityStatus.IDLE,
         "locked_by": "",
         "inventory": None,
         "devices": [],
@@ -164,7 +164,7 @@ def test_storage_station():
             "landmarks": [],
             "additional_metadata": {},
         },
-        "status": ActiveStatus.IDLE,
+        "status": ActivityStatus.IDLE,
         "locked_by": "",
         "inventory": None,
     }
@@ -203,7 +203,7 @@ def test_mobile_station():
             "landmarks": [],
             "additional_metadata": {},
         },
-        "status": ActiveStatus.IDLE,
+        "status": ActivityStatus.IDLE,
         "locked_by": "",
         "inventory": None,
         "mobile_robot": None,

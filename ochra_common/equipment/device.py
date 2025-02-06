@@ -3,7 +3,7 @@ from typing import List
 from uuid import UUID
 from ..base import DataModel
 from .operation import Operation
-from ..utils.enum import ActiveStatus
+from ..utils.enum import ActivityStatus
 from ..storage.inventory import Inventory
 
 
@@ -21,7 +21,7 @@ class Device(DataModel):
 
     name: str
     inventory: Inventory = Field(default=None)
-    status: ActiveStatus = ActiveStatus.IDLE
+    status: ActivityStatus = ActivityStatus.IDLE
     operation_history: List[Operation] = Field(default_factory=list)
     owner_station: UUID = Field(default=None)
 

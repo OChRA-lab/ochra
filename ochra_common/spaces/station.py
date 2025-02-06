@@ -1,7 +1,7 @@
 from pydantic import Field
 from ..base import DataModel
 from .location import Location
-from ..utils.enum import ActiveStatus
+from ..utils.enum import ActivityStatus
 from ..storage.inventory import Inventory
 
 
@@ -19,7 +19,7 @@ class Station(DataModel):
 
     name: str
     location: Location
-    status: ActiveStatus = ActiveStatus.IDLE
+    status: ActivityStatus = ActivityStatus.IDLE
     locked_by: str = Field(default="")
     inventory: Inventory = Field(default=None)
 

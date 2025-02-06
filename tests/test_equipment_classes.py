@@ -3,7 +3,7 @@ from ochra_common.equipment.operation_result import OperationResult
 from ochra_common.equipment.device import Device
 from ochra_common.equipment.robot import Robot
 from ochra_common.equipment.mobile_robot import MobileRobot
-from ochra_common.utils.enum import OperationStatus, ResultDataStatus, ActiveStatus, MobileRobotState
+from ochra_common.utils.enum import OperationStatus, ResultDataStatus, ActivityStatus, MobileRobotState
 
 import uuid
 from datetime import datetime, timedelta
@@ -75,7 +75,7 @@ def test_operation_result():
         "success": True,
         "error": "",
         "result_data": 123,
-        "data_filename": "",
+        "data_file_name": "",
         "data_type": "int",
         "data_status": ResultDataStatus.AVAILABLE,
     }
@@ -89,7 +89,7 @@ def test_device():
     assert device.id is not None
     assert device.name == "test_device"
     assert device.inventory == None
-    assert device.status == ActiveStatus.IDLE
+    assert device.status == ActivityStatus.IDLE
     assert device.owner_station == None
     assert device.operation_history == []
 
@@ -101,7 +101,7 @@ def test_device():
         "module_path": None,
         "name": "test_device",
         "inventory": None,
-        "status": ActiveStatus.IDLE,
+        "status": ActivityStatus.IDLE,
         "owner_station": None,
         "operation_history": [],
     }
@@ -124,7 +124,7 @@ def test_robot():
         "module_path": None,
         "name": "test_robot",
         "inventory": None,
-        "status": ActiveStatus.IDLE,
+        "status": ActivityStatus.IDLE,
         "owner_station": None,
         "operation_history": [],
         "available_tasks": ["task1", "task2"],
@@ -148,7 +148,7 @@ def test_mobile_robot():
         "module_path": None,
         "name": "test_robot",
         "inventory": None,
-        "status": ActiveStatus.IDLE,
+        "status": ActivityStatus.IDLE,
         "state": MobileRobotState.AVAILABLE,
         "owner_station": None,
         "operation_history": [],

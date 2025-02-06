@@ -6,7 +6,7 @@ class PhysicalState(IntEnum):
     LIQUID = 1
     GAS = 2
 
-class ActiveStatus(IntEnum):
+class ActivityStatus(IntEnum):
     ERROR = -1
     IDLE = 0
     BUSY = 1
