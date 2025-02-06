@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from pydantic import BaseModel
-from typing import Dict, Optional, Type, Literal
+from typing import Dict, Optional, Type
 from pathlib import Path
 from pathlib import PurePath
 import shutil
@@ -11,6 +11,7 @@ import uvicorn.config
 
 from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.utils.enum import (
+    StationType,
     ActivityStatus,
     OperationStatus,
     ResultDataStatus,
@@ -21,8 +22,7 @@ from ochra_common.equipment.device import Device
 from ochra_common.equipment.mobile_robot import MobileRobot
 from ochra_common.equipment.operation import Operation
 from ..proxy_models.equipment.operation_result import OperationResult
-from ..proxy_models.space.work_station import WorkStation
-from ..proxy_models.space.mobile_station import MobileStation
+from ..proxy_models.space.station import Station
 
 
 class operationExecute(BaseModel):
@@ -36,7 +36,7 @@ class StationServer:
         self,
         name: str,
         location: Location,
-        station_type: Literal["work_station", "mobile_station"],
+        station_type: StationType,
         station_ip: str = "0.0.0.0",
         station_port: int = 8000,
     ):
@@ -84,14 +84,9 @@ class StationServer:
         Args:
             device (Device): device to add to the station
         """
-        if self._type == "work_station":
-            self._devices[device.id] = device
-            if self._station_proxy:
-                self._station_proxy.add_device(device)
-        elif self._type == "mobile_station":
-            self._devices[device.id] = device
-            if self._station_proxy:
-                self._station_proxy.add_mobile_robot(device)
+        self._devices[device.id] = device
+        if self._station_proxy:
+            self._station_proxy.add_device(device)
 
     def run(self):
         """
@@ -110,10 +105,7 @@ class StationServer:
             lab_ip (str): ip of the lab server connection.
         """
         self._lab_conn = LabConnection(lab_ip)
-        if self._type == "work_station":
-            return WorkStation(self._name, self._location, self.port)
-        elif self._type == "mobile_station":
-            return MobileStation(self._name, self._location, self.port)
+        return Station(self._name, self._type, self._location, self.port)
 
     def ping(self, request: Request):
         print(f"ping from {request.client.host}")
@@ -328,7 +320,7 @@ class StationServer:
             # set device and station to busy
             robot.status = ActivityStatus.IDLE
             if isinstance(robot, MobileRobot):
-                    robot.state = MobileRobotState.AVAILABLE
+                robot.state = MobileRobotState.AVAILABLE
             self._station_proxy.status = ActivityStatus.IDLE
 
             return result
