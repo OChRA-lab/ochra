@@ -11,7 +11,7 @@ import uvicorn.config
 
 from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.utils.enum import (
-    ActiveStatus,
+    ActivityStatus,
     OperationStatus,
     ResultDataStatus,
     MobileRobotState,
@@ -136,8 +136,8 @@ class StationServer:
             method = getattr(device, op.method)
 
             # set device and station to busy
-            device.status = ActiveStatus.BUSY
-            self._station_proxy.status = ActiveStatus.BUSY
+            device.status = ActivityStatus.BUSY
+            self._station_proxy.status = ActivityStatus.BUSY
 
             # TODO crete an operation proxy to streamline setting properties
             if self._lab_conn:
@@ -257,8 +257,8 @@ class StationServer:
                 )
 
             # set device and station to busy
-            device.status = ActiveStatus.IDLE
-            self._station_proxy.status = ActiveStatus.IDLE
+            device.status = ActivityStatus.IDLE
+            self._station_proxy.status = ActivityStatus.IDLE
 
         except Exception as e:
             raise HTTPException(500, detail=str(e))
@@ -283,8 +283,8 @@ class StationServer:
                 raise HTTPException(404, detail=f"task {op.method} not found")
 
             # set device and station to busy
-            robot.status = ActiveStatus.BUSY
-            self._station_proxy.status = ActiveStatus.BUSY
+            robot.status = ActivityStatus.BUSY
+            self._station_proxy.status = ActivityStatus.BUSY
 
             # TODO crete an operation proxy to streamline setting properties
             if self._lab_conn:
@@ -326,10 +326,10 @@ class StationServer:
                 )
 
             # set device and station to busy
-            robot.status = ActiveStatus.IDLE
+            robot.status = ActivityStatus.IDLE
             if isinstance(robot, MobileRobot):
                     robot.state = MobileRobotState.AVAILABLE
-            self._station_proxy.status = ActiveStatus.IDLE
+            self._station_proxy.status = ActivityStatus.IDLE
 
             return result
         except Exception as e:
