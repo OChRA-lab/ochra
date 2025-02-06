@@ -1,5 +1,10 @@
 from enum import IntEnum
 
+class StationType(IntEnum):
+    STORAGE_STATION = 0
+    WORK_STATION = 1
+    MOBILE_ROBOT_STATION = 2
+
 class PhysicalState(IntEnum):
     UNKNOWN = -1
     SOLID = 0
