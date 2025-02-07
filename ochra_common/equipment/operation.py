@@ -1,9 +1,9 @@
 from pydantic import Field
-from ..base import DataModel
 import uuid
-from enum import Enum
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import Dict, Any
+from ..base import DataModel
+from ..utils.enum import OperationStatus
 from .operation_result import OperationResult
 
 
@@ -16,7 +16,7 @@ class Operation(DataModel):
         caller_id (uuid.UUID): The unique identifier of the caller.
         method (str): The method name that was called.
         args (Dict[str, Any]): A dictionary of arguments passed to the method.
-        status (Enum): The current status of the operation.
+        status (Enum): The current status of the operation. Defaulted to CREATED
         start_timestamp (datetime): The timestamp when the operation started.
         end_timestamp (datetime): The timestamp when the operation ended.
         result (List[OperationResult]): A list of results from the operation.
@@ -25,20 +25,9 @@ class Operation(DataModel):
     caller_id: uuid.UUID
     method: str
     args: Dict[str, Any]
-    status: Enum = -1  # TODO: Define OperationStatus Enum
+    status: OperationStatus = OperationStatus.CREATED
     start_timestamp: datetime = Field(default=None)
     end_timestamp: datetime = Field(default=None)
-    result: str = Field(
-        default=""
-    )  # TODO for later List[OperationResult] = Field(default_factory=list)
+    result: OperationResult = Field(default=None)
 
     _endpoint = "operations"  # associated endpoint for all operations
-
-    def add_result(self, result: OperationResult):
-        """
-        Add a result to the operation.
-
-        Args:
-            result (OperationResult): The result of the operation.
-        """
-        raise NotImplementedError

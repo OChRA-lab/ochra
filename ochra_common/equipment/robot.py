@@ -1,17 +1,18 @@
 from typing import List, Dict, Any
-from .robot import Robot
-from .robot_task import RobotTask
+from .device import Device
 
 
-class Manipulator(Robot):
+class Robot(Device):
     """
-    Abstract manipulator robot that can execute tasks.
+    Abstract robot class to represent a generic robot.
 
     Attributes:
-        tasks (List[RobotTask]): A list of tasks assigned to the manipulator.
+        available_tasks (List[str]): A list of tasks available for execution by the robot.
     """
 
     available_tasks: List[str]
+
+    _endpoint = "robots"  # associated endpoint for all robots
 
     def execute(self, task_name: str, args: Dict[str, Any]) -> bool:
         """

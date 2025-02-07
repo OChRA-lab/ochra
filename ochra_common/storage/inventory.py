@@ -1,6 +1,5 @@
 from pydantic import Field
-from typing import List, Type, Literal
-from uuid import UUID
+from typing import List, Type
 from ..base import DataModel
 from .consumable import Consumable
 from .container import Container
@@ -11,13 +10,13 @@ class Inventory(DataModel):
     Abstract class for inventory, contains containers and consumables.
 
     Attributes:
+        owner (DataModel): The owner of the inventory.
         containers_max_capacity (int): The maximum capacity of containers in the inventory.
         containers (List[Container]): A list of containers in the inventory. Defaults to an empty list.
         consumables (List[Consumable]): A list of consumables in the inventory. Defaults to an empty list.
     """
 
-    owner_id: UUID
-    owner_type: Literal["station", "robot", "device"]
+    owner: DataModel
     containers_max_capacity: int
     containers: List[Type[Container]] = Field(default_factory=list)
     consumables: List[Consumable] = Field(default_factory=list)

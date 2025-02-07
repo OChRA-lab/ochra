@@ -1,3 +1,5 @@
+from pydantic import Field
+from typing import List, Dict, Any
 from ..base import DataModel
 
 
@@ -11,13 +13,15 @@ class Location(DataModel):
         map_id (int): The identifier for the location on the map.
     """
 
-    name: str
-    map: str
-    map_id: int
+    lab: str
+    room: str = Field(default="")
+    place: str = Field(default="")
+    landmarks: List[str] = Field(default_factory=list)
+    additional_metadata: Dict[str, Any] = Field(default_factory=dict)
 
     def __eq__(self, value: "Location") -> bool:
         return (
-            value.name == self.name
-            and value.map == self.map
-            and value.map_id == self.map_id
+            value.lab == self.lab
+            and value.room == self.room
+            and value.place == self.place
         )

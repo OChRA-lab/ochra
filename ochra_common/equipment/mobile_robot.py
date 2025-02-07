@@ -1,17 +1,17 @@
-from pydantic import Field
 from typing import Dict, Any
 from .robot import Robot
+from ..utils.enum import MobileRobotState
 
 
-class MobilePlatform(Robot):
+class MobileRobot(Robot):
     """
     Abstract mobile platform robot that can move.
 
     Attributes:
-        conditions (dict): A dictionary of conditions related to the mobile platform.
+        state (MobileRobotState): State of the mobile robot. Defaulted to AVAILABLE
     """
 
-    conditions: Dict[str, Any] = Field(default_factory=dict)
+    state: MobileRobotState = MobileRobotState.AVAILABLE
 
     def go_to(self, args: Dict[str, Any]) -> bool:
         """

@@ -1,4 +1,4 @@
-from typing import Any, Literal
+from typing import Any
 import uuid
 from pydantic import BaseModel, Field
 
@@ -9,15 +9,31 @@ class DataModel(BaseModel):
 
     Attributes:
         id (uuid.UUID): Unique identifier for the data model instance.
-        _collection (str): The name of the collection where the data model will be stored.
-        _cls (str): The class name of the data model.
+        collection (str): The name of the collection where the data model will be stored.
+        cls (str): The class name of the data model.
+        module_path(str): The module path of the data model.
     """
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
+    collection: str = Field(default=None)
     cls: str = Field(default=None)
     module_path: str = Field(default=None)
 
     def model_post_init(self, __context: Any) -> None:
         # retrieve the class name in addition to its import path
-        self.cls = f"{self.__class__.__name__}"
+        self.cls = f"{self.__class__.__name__}" if self.cls is None else self.cls
         return super().model_post_init(__context)
+
+    def get_base_model(self) -> "DataModel":
+        """
+        Get a base model containing the base information of the model instance.
+
+        Returns:
+            DataModel: A base model containing the base information of the model instance.
+        """
+        return DataModel(
+            id=self.id,
+            collection=self.collection,
+            cls=self.cls,
+            module_path=self.module_path,
+        )

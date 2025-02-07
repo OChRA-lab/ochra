@@ -1,6 +1,6 @@
 from pydantic import Field
 from ..base import DataModel
-from enum import Enum
+from ..utils.enum import PhysicalState
 from typing import Any, Dict
 
 
@@ -12,14 +12,14 @@ class Reagent(DataModel):
         name (str): The name of the reagent.
         amount (float): The amount of the reagent.
         unit (str): The unit of measurement for the amount.
-        physical_state (Enum): The physical state of the reagent (e.g., solid, liquid, gas).
+        physical_state (Enum): The physical state of the reagent (e.g., solid, liquid, gas). Defaults to UNKNOWN.
         properties (Dict[str, Any]): A dictionary of additional properties of the reagent.
     """
 
     name: str
     amount: float
     unit: str
-    physical_state: Enum = -1  # TODO: Define PhysicalState Enum
+    physical_state: PhysicalState = PhysicalState.UNKNOWN
     properties: Dict[str, Any] = Field(default_factory=dict)
 
     _endpoint = "storage/reagents"  # associated endpoint for all reagents
