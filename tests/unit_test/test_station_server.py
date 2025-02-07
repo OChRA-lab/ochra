@@ -3,19 +3,24 @@ from unittest.mock import MagicMock, patch, call, ANY
 from ochra_manager.station.station_server import StationServer
 from ochra_common.spaces.location import Location
 from ochra_common.equipment.operation import Operation
+from ochra_common.utils.enum import StationType
 from fastapi.testclient import TestClient
 from uuid import uuid4
 
 
-@patch("ochra_manager.station.station_server.StationProxy")
+@patch("ochra_manager.station.station_server.Station")
 @patch("ochra_manager.station.station_server.LabConnection")
 def test_setup(MockLab, MockWorkStationProxy):
-    station_loc = Location(name="test_location", map="test_map", map_id=1)
-    server = StationServer(name="test_station", location=station_loc)
+    station_loc = Location(lab="ACL", room="main_lab", place="bench_1")
+    server = StationServer(
+        name="test_station", station_type=StationType.WORK_STATION, location=station_loc
+    )
     server.setup(lab_ip="1.2.3.4")
 
     MockLab.assert_called_once_with("1.2.3.4")
-    MockWorkStationProxy.assert_called_once_with("test_station", station_loc)
+    MockWorkStationProxy.assert_called_once_with(
+        "test_station", StationType.WORK_STATION, station_loc, 8000
+    )
 
     assert server._app is not None
     assert server._router is not None
@@ -24,7 +29,8 @@ def test_setup(MockLab, MockWorkStationProxy):
 def test_ping():
     server = StationServer(
         name="test_station",
-        location=Location(name="test_location", map="test_map", map_id=1),
+        station_type=StationType.WORK_STATION,
+        location=Location(lab="ACL", room="main_lab", place="bench_1"),
     )
     server.setup()
 
@@ -33,11 +39,13 @@ def test_ping():
     assert response.status_code == 200
 
 
-@patch("ochra_manager.station.station_server.StationProxy")
+@patch("ochra_manager.station.station_server.Station")
 @patch("ochra_manager.station.station_server.LabConnection")
 def test_add_device(MockLab, MockWorkStationProxy):
-    station_loc = Location(name="test_location", map="test_map", map_id=1)
-    server = StationServer(name="test_station", location=station_loc)
+    station_loc = Location(lab="ACL", room="main_lab", place="bench_1")
+    server = StationServer(
+        name="test_station", station_type=StationType.WORK_STATION, location=station_loc
+    )
     server.setup(lab_ip="1.2.3.4")
 
     device_id = uuid4()
@@ -51,11 +59,14 @@ def test_add_device(MockLab, MockWorkStationProxy):
     mock_station_proxy.add_device.assert_called_once_with(mock_device)
 
 
-@patch("ochra_manager.station.station_server.StationProxy")
+@patch("ochra_manager.station.station_server.OperationResult")
+@patch("ochra_manager.station.station_server.Station")
 @patch("ochra_manager.station.station_server.LabConnection")
-def test_process_op(MockLab, MockWorkStationProxy):
-    station_loc = Location(name="test_location", map="test_map", map_id=1)
-    server = StationServer(name="test_station", location=station_loc)
+def test_process_op(MockLab, MockWorkStationProxy, MockOperationResult):
+    station_loc = Location(lab="ACL", room="main_lab", place="bench_1")
+    server = StationServer(
+        name="test_station", station_type=StationType.WORK_STATION, location=station_loc
+    )
     server.setup(lab_ip="1.2.3.4")
 
     lab_mock = MockLab.return_value
@@ -78,16 +89,19 @@ def test_process_op(MockLab, MockWorkStationProxy):
     }
 
     client = TestClient(server._app)
-    response = client.post("/process_op", json=op_json)
+    response = client.post("/process_device_op", json=op_json)
 
     lab_mock.set_property.assert_has_calls(
         [
             call("operations", op.id, "start_timestamp", ANY),
+            call("operations", op.id, "status", ANY),
             call("operations", op.id, "end_timestamp", ANY),
+            call("operations", op.id, "result", ANY),
+            call("operations", op.id, "status", ANY),
         ]
     )
     assert response.status_code == 200
-    assert response.json() == [1, 2, 3]
+
     mock_device.execute_operation.assert_called_once_with(**op.args)
 
     # test for invalid operation
@@ -98,7 +112,7 @@ def test_process_op(MockLab, MockWorkStationProxy):
         "args": op.args,
     }
 
-    response = client.post("/process_op", json=op_json)
+    response = client.post("/process_device_op", json=op_json)
 
     assert response.status_code == 500
 
@@ -110,6 +124,6 @@ def test_process_op(MockLab, MockWorkStationProxy):
         "args": op.args,
     }
 
-    response = client.post("/process_op", json=op_json)
+    response = client.post("/process_device_op", json=op_json)
 
     assert response.status_code == 500

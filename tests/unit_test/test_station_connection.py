@@ -14,10 +14,10 @@ def test_execute_op(MockRestAdapter):
     mock_rest.post.return_value = fake_result
 
     op = Operation(caller_id=uuid4(), method="test_op", args={"param1": "value1"})
-    result = station_conn.execute_op(op)
+    result = station_conn.execute_op(op, is_robot_op=False)
 
     mock_rest.post.assert_called_once_with(
-        endpoint="process_op",
+        endpoint="process_device_op",
         data={
             "id": str(op.id),
             "caller_id": str(op.caller_id),

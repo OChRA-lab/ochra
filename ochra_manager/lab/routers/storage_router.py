@@ -9,7 +9,7 @@ from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid
 
 logger = logging.getLogger(__name__)
-COLLECTIONS = ["consumables", "stocks", "containers", "inventories", "reagents"]
+COLLECTIONS = ["consumables", "containers", "inventories", "reagents"]
 
 
 class StorageRouter(APIRouter):

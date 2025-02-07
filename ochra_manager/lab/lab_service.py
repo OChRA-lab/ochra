@@ -115,7 +115,7 @@ class LabService:
             if collection == "devices" or collection == "robots":
                 # get station ip
                 station_id = self.db_conn.read(
-                    {"id": object_id, "_collection": collection}, "station_id"
+                    {"id": object_id, "_collection": collection}, "owner_station"
                 )
 
                 if station_id is None:
@@ -138,6 +138,7 @@ class LabService:
                     caller_id=object_id,
                     method=call_req.method,
                     args=call_req.args,
+                    collection="operations",
                     module_path="ochra_discovery.equipment.operation",
                 )
                 # TODO change to use a proxy for operation instead of accessing db directly

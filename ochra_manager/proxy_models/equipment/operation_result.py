@@ -1,8 +1,7 @@
 from ochra_common.equipment.operation_result import OperationResult
 from ochra_common.utils.mixins import RestProxyMixin
-from uuid import UUID
 from typing import Any
-from ochra_common.utils.enum import OperationResultEnum
+from ochra_common.utils.enum import ResultDataStatus
 
 
 class OperationResult(OperationResult, RestProxyMixin):
@@ -13,7 +12,7 @@ class OperationResult(OperationResult, RestProxyMixin):
         result_data: Any,
         data_file_name: str,
         data_type: str,
-        data_status: OperationResultEnum,
+        data_status: ResultDataStatus,
     ):
         """result class to keep results formatted and structured.
 
@@ -26,6 +25,7 @@ class OperationResult(OperationResult, RestProxyMixin):
             data_status (enum): The current status of the data. -1 (upload not started), 0 (uploading), 1(upload complete)
         """
         super().__init__(
+            collection="operation_results",
             success=success,
             error=error,
             result_data=result_data,
