@@ -16,6 +16,7 @@ from datetime import datetime
 from pathlib import Path
 import shutil
 from os import remove
+from .scheduler import Scheduler
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +26,8 @@ class LabService:
         """Labservice object serves the common functionality within routers to avoid code duplication
         """
         self.db_conn: DbConnection = DbConnection()
+        self.scheduler = Scheduler()
+        self.scheduler.run()
 
         # TODO: split this to check if the string is an actual directory to return some form of error message
         if folderpath and Path(folderpath).is_dir:
@@ -156,18 +159,8 @@ class LabService:
                 endpoint = "process_station_op"
             else:
                 endpoint = "process_device_op"
-                
-            result = station_client.execute_op(op, endpoint)
-
-            # TODO change to use a proxy for operation instead of accessing db directly
-            self.db_conn.update(
-                {"id": object_id, "_collection": "operations"},
-                {"result": result.data},
-            )
-
-            logger.info(f"called {call_req.method} on {object_id}")
-
-            # TODO change later to return a better response
+                        
+            self.scheduler.add_task(station_id, station_client, op, endpoint)
             return op.model_dump(mode="json")
 
         except HTTPException:
