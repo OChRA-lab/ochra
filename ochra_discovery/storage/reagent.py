@@ -16,6 +16,7 @@ class Reagent(Reagent, RestProxyMixin):
             name=name,
             amount=amount,
             unit=unit,
+            collection="reagents",
             module_path="ochra_discovery.storage.reagent",
         )
         self._mixin_hook(self._endpoint, self.id)

@@ -11,11 +11,11 @@ class Holder(Holder, RestProxyMixin):
         Args:
             type (str): type of holder
             max_capacity (int): Max capacity of the holder
-            capacity_unit (str): the unit of the capacity
         """
         super().__init__(
             type=type,
             max_capacity=max_capacity,
+            collection="containers",
             module_path="ochra_discovery.storage.holder",
         )
         self._mixin_hook(self._endpoint, self.id)
