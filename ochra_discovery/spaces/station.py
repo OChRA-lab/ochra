@@ -48,8 +48,8 @@ class Station(Station, RestProxyMixinReadOnly):
         self._lab_conn.call_on_object(self._endpoint,self.id, "unlock", args = {"session_id":self._lab_conn._session_id})
 
 
-class WorkStationLock(object):
-    def __init__(self, station: WorkStation):
+class StationLock(object):
+    def __init__(self, station: Station):
         self.station = station
         
     def __enter__(self):
