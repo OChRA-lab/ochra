@@ -20,6 +20,7 @@ class Station(Station, RestProxyMixin):
             type=type,
             location=location,
             module_path="ochra_discovery.spaces.station",
+            locked=None
         )
         self.port = port
         self.inventory = Inventory(
