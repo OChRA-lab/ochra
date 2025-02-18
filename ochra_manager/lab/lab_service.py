@@ -17,6 +17,7 @@ from pathlib import Path
 import shutil
 from os import remove
 from .scheduler import Scheduler
+from ochra_common.utils.enum import OperationStatus
 
 logger = logging.getLogger(__name__)
 
@@ -147,6 +148,7 @@ class LabService:
                 collection="operations",
                 module_path="ochra_discovery.equipment.operation",
             )
+            op.status = OperationStatus.CREATED
             # TODO change to use a proxy for operation instead of accessing db directly
             self.db_conn.create(
                 {"_collection": "operations"}, json.loads(op.model_dump_json())
