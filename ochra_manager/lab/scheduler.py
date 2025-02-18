@@ -1,5 +1,7 @@
 from ochra_manager.connections.db_connection import DbConnection
 from threading import Thread
+from ochra_common.utils.enum import OperationStatus
+
 
 class Scheduler:
     def __init__(self):
@@ -14,9 +16,7 @@ class Scheduler:
         self.schedule.pop(station_id)
 
     def add_task(self, station_id, station_client, operation, endpoint):
-        self.schedule[station_id].append(
-            [station_client, operation, endpoint]
-        )
+        self.schedule[station_id].append([station_client, operation, endpoint])
 
     def run(self):
         self.thread = Thread(target=self.run_loop)
@@ -34,13 +34,23 @@ class Scheduler:
                     "locked",
                 )
                 if station_status is None or station_status == []:
-                    result = station_client.execute_op(operation, endpoint)
+                    operation.status = OperationStatus.IN_PROGRESS
                     self.db_conn.update(
-                    {"id": operation.object_id, "_collection": "operations"},
-                    {"result": result.data},
+                        {"id": operation.object_id, "_collection": "operations"},
+                        {"status": operation.status},
+                    )
+                    result = station_client.execute_op(operation, endpoint)
+                    operation.status = OperationStatus.COMPLETED
+                    self.db_conn.update(
+                        {"id": operation.object_id, "_collection": "operations"},
+                        {"status": operation.status},
+                    )
+                    self.db_conn.update(
+                        {"id": operation.object_id, "_collection": "operations"},
+                        {"result": result.data},
                     )
                     self.schedule[station_id].pop(0)
-    
+
     def stop(self):
         self._stop = True
         self.thread.join()
