@@ -8,6 +8,7 @@ from .routers.operation_router import OperationRouter
 from .routers.lab_router import LabRouter
 from .routers.storage_router import StorageRouter
 from .routers.operation_results_router import OperationResultRouter
+from ochra_manager.ui.main import app
 import inspect
 
 logger = logging.getLogger(__name__)
@@ -33,6 +34,7 @@ class LabServer:
         self.app.include_router(OperationRouter())
         self.app.include_router(StorageRouter())
         self.app.include_router(OperationResultRouter(folderpath))
+        self.app.mount("/ui", app)
 
     def get_caller_variable_name(self):
         """Find the name of the variable that called this function

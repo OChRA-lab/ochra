@@ -1,0 +1,36 @@
+<!-- login.html -->
+{% extends "base.html" %}
+
+{% block title %}Login - OCHRA{% endblock %}
+
+{% block content %}
+<main class="flex w-full min-h-dvh justify-center items-center">
+	<!--FORM BOX-->
+	<div class="flex flex-col gap-4">
+		<p class="text-3xl font-medium">Login</p>
+		<form class="flex flex-col gap-4 w-72" hx-boost="true" action="/login" method="POST">
+			<label>
+				<span class="font-light dark:text-slate-200">Username</span>
+				<input class="mt-0.5 border w-full py-2 px-3 focus:outline-none focus:shadow-outline" type="text"
+					placeholder="John" name="username" value="" />
+			</label>
+			<label>
+				<span class="font-light dark:text-slate-200">Password</span>
+				<input class="mt-0.5 border w-full py-2 px-3 focus:outline-none focus:shadow-outline" type="password"
+					placeholder="********" name="password" value="" />
+			</label>
+			<div>
+				<button
+					class="hover:cursor-pointer mt-0.5 w-full bg-primary dark:bg-dark-primary text-text dark:text-dark-text font-bold py-2 px-3 focus:outline"
+					type="submit">
+					Sign In
+				</button>
+			</div>
+		</form>
+		<div class="w-full flex flex-col gap-3 items-center font-light">
+			<p>Forgot your password? Tough luck we don't have a reset yet</p>
+			<p>Don't have an account? <span class="underline"><a href="/register">Register</a></span></p>
+		</div>
+	</div>
+</main>
+{% endblock %}
