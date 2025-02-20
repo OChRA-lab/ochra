@@ -93,21 +93,3 @@ templates=Jinja2Templates(directory=template_directory)
 #
 #
 # ##########################################################################
-
-
-
-@app.get("/")
-async def index(request:Request):
-    return templates.TemplateResponse("stations.html",{"request":request, "active_link": "/ui"})
-
-@app.get("/stationui")
-async def stationui(request:Request):
-    return templates.TemplateResponse("stationui.html",{"request":request, "active_link": "/ui/station_ui"})
-
-@app.get("/settings")
-async def get_settings_page(request:Request):
-    return templates.TemplateResponse("settings.html",{"request":request, "active_link": "/ui/settings"})
-
-@app.get("/workflows")
-async def get_workflows_page(request:Request):
-    return templates.TemplateResponse("workflows.html",{"request":request, "active_link": "/ui/workflows"})

@@ -1,0 +1,35 @@
+<!-- home.html -->
+{% extends "base.html" %}
+
+{% block title %}Stations - OCHRA{% endblock %}
+
+{% block content %}
+<!--just a div-->
+
+{% include "navbar.html"%}
+<main class="flex-1">
+	<div class="flex min-h-dvh">
+		<!--just a div-->
+		<div class="flex-1">
+
+			<!--Banner-->
+			<div class="flex w-full p-6 border-b-[0.5px] border-text dark:border-dark-text justify-between">
+				<div>
+					<h1 class="text-primary dark:text-dark-primary text-4xl">Stations</h1>
+					<p class="text-text dark:text-dark-text">Logged in as Niall</p>
+				</div>
+				<div class="w-1.5 h-1.5 rounded-full bg-success dark:bg-dark-success animate-pulse">
+				</div>
+			</div>
+
+			<!--Main Content-->
+			<div>
+			</div>
+		</div>
+
+		<!--SIDEBAR-->
+		<div class="flex w-56 p-6 border-l-[0.5px] border-text dark:border-dark-text">
+		</div>
+	</div>
+</main>
+{% endblock %}
