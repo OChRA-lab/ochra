@@ -1,4 +1,6 @@
 from fastapi import FastAPI, APIRouter, Request, HTTPException
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import Dict, Optional, Type, Any
 from pathlib import Path
@@ -68,6 +70,7 @@ class StationServer:
         self.port = station_port
         self._devices = {}
 
+
     def setup(self, lab_ip: str = None) -> None:
         """
         setup the station server and connect to the lab server if lab_ip is provided
@@ -79,8 +82,22 @@ class StationServer:
         self._app = FastAPI()
         self._router = APIRouter()
 
+        module_dir = Path(__file__).resolve().parent
+
+        static_directory = module_dir / "static"
+        self._app.mount("/static", StaticFiles(directory=static_directory), name="static")
+
+
+        templates_dir = module_dir / "templates"
+        self._templates=Jinja2Templates(directory=templates_dir)
+
         self._router.add_api_route("/process_op", self.process_op, methods=["POST"])
+
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
+
+        #TODO: Look into the manual adding of routes in fastapi
+        self._router.add_route("/ui", self.station_ui, methods=["GET"] )
+
         self._app.include_router(self._router)
 
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
@@ -114,6 +131,10 @@ class StationServer:
         """
         self._lab_conn = LabConnection(lab_ip)
         return Station(self._name, self._type, self._location, self.port)
+
+    #TODO: CONTINUE TO UPDATE THIS BASIC HTML SYSTEM
+    def station_ui(self, request: Request):
+        return self._templates.TemplateResponse("ui.html",{"request":request, "station_name": self._name, "devices": [d.to_html() for d in self._devices.values()]})
 
     def ping(self, request: Request):
         print(f"ping from {request.client.host}")
