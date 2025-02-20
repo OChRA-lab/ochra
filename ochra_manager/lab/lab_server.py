@@ -1,7 +1,12 @@
+from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, APIRouter, HTTPException, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 import uvicorn
 import logging
+
+from ochra_manager.lab.routers.ui_router import WebAppRouter
 from .routers.device_router import DeviceRouter
 from .routers.station_router import StationRouter
 from .routers.robot_router import RobotRouter
@@ -25,6 +30,7 @@ class LabServer:
             port (int): port to open the server on
             folderpath (str): path to store data in
         """
+        MODULE_DIRECTORY = Path(__file__).resolve().parent
         self.host = host
         self.port = port
         self.scheduler = Scheduler()
@@ -37,6 +43,9 @@ class LabServer:
 
         self.app = FastAPI(lifespan=lifespan)
 
+        self.templates=Jinja2Templates(directory=MODULE_DIRECTORY / "templates")
+        self.app.mount("/static", StaticFiles(directory=MODULE_DIRECTORY / "static"), name="static")
+
         self.app.include_router(LabRouter())
         self.app.include_router(DeviceRouter(self.scheduler))
         self.app.include_router(StationRouter(self.scheduler))
@@ -44,7 +53,7 @@ class LabServer:
         self.app.include_router(OperationRouter())
         self.app.include_router(StorageRouter())
         self.app.include_router(OperationResultRouter(folderpath))
-        self.app.mount("/ui", app)
+        self.app.include_router(WebAppRouter(self.templates))
 
     def get_caller_variable_name(self):
         """Find the name of the variable that called this function
