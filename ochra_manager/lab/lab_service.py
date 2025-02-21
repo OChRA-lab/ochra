@@ -137,7 +137,7 @@ class LabService:
 
             # create operation object and store in db
             op: Operation = Operation(
-                device_id=object_id,
+                entity_id=object_id,
                 caller_id=call_req.caller_id,
                 method=call_req.method,
                 args=call_req.args,
