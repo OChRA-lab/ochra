@@ -150,11 +150,13 @@ class LabService:
             )
 
             # pass operation to station to execute
-            is_robot_op = collection == "robots"
-            is_station_op = collection == "stations"
-            endpoint = "process_robot_op" if is_robot_op else "process_device_op"
-            if is_station_op:
+            if collection == "robots":
+                endpoint = "process_robot_op"
+            elif collection == "stations":
                 endpoint = "process_station_op"
+            else:
+                endpoint = "process_device_op"
+                
             result = station_client.execute_op(op, endpoint)
 
             # TODO change to use a proxy for operation instead of accessing db directly
