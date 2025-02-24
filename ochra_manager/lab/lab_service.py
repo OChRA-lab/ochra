@@ -120,50 +120,55 @@ class LabService:
 
                 if station_id is None:
                     raise HTTPException(status_code=404, detail="station not found")
-
-                station_ip = self.db_conn.read(
-                    {"id": station_id, "_collection": "stations"}, "station_ip"
-                )
-                
-                station_port = self.db_conn.read(
-                    {"id": station_id, "_collection": "stations"}, "port"
-                )
-                # create station connection
-                station_client: StationConnection = StationConnection(
-                    station_ip + ":" +str(station_port)
-                )
-
-                # create operation object and store in db
-                op: Operation = Operation(
-                    caller_id=object_id,
-                    method=call_req.method,
-                    args=call_req.args,
-                    collection="operations",
-                    module_path="ochra_discovery.equipment.operation",
-                )
-                # TODO change to use a proxy for operation instead of accessing db directly
-                self.db_conn.create(
-                    {"_collection": "operations"}, json.loads(op.model_dump_json())
-                )
-
-                # pass operation to station to execute
-                is_robot_op = collection == "robots"
-                result = station_client.execute_op(op, is_robot_op=is_robot_op)
-
-                # TODO change to use a proxy for operation instead of accessing db directly
-                self.db_conn.update(
-                    {"id": object_id, "_collection": "operations"},
-                    {"result": result.data},
-                )
-
-                logger.info(f"called {call_req.method} on {object_id}")
-
-                # TODO change later to return a better response
-                return op.model_dump(mode="json")
-
             elif collection == "stations":
-                # TODO do station stuff
-                pass
+                station_id = object_id
+
+            station_ip = self.db_conn.read(
+                {"id": station_id, "_collection": "stations"}, "station_ip"
+            )
+            
+            station_port = self.db_conn.read(
+                {"id": station_id, "_collection": "stations"}, "port"
+            )
+            # create station connection
+            station_client: StationConnection = StationConnection(
+                station_ip + ":" +str(station_port)
+            )
+
+            # create operation object and store in db
+            op: Operation = Operation(
+                entity_id=object_id,
+                caller_id=call_req.caller_id,
+                method=call_req.method,
+                args=call_req.args,
+                collection="operations",
+                module_path="ochra_discovery.equipment.operation",
+            )
+            # TODO change to use a proxy for operation instead of accessing db directly
+            self.db_conn.create(
+                {"_collection": "operations"}, json.loads(op.model_dump_json())
+            )
+
+            # pass operation to station to execute
+            if collection == "robots":
+                endpoint = "process_robot_op"
+            elif collection == "stations":
+                endpoint = "process_station_op"
+            else:
+                endpoint = "process_device_op"
+                
+            result = station_client.execute_op(op, endpoint)
+
+            # TODO change to use a proxy for operation instead of accessing db directly
+            self.db_conn.update(
+                {"id": object_id, "_collection": "operations"},
+                {"result": result.data},
+            )
+
+            logger.info(f"called {call_req.method} on {object_id}")
+
+            # TODO change later to return a better response
+            return op.model_dump(mode="json")
 
         except HTTPException:
             raise

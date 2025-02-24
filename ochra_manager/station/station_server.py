@@ -73,6 +73,9 @@ class StationServer:
             "/process_robot_op", self.process_robot_op, methods=["POST"]
         )
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
+        self._router.add_api_route(
+            "/process_station_op", self.process_station_op, methods=["POST"]
+        )
         self._app.include_router(self._router)
 
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
@@ -124,7 +127,11 @@ class StationServer:
         """
         try:
             # need to add star timestamp to the operation
-            device = self._devices[op.caller_id]
+            if self._station_proxy.locked is not None and self._station_proxy.locked != []:
+                if str(op.caller_id) != self._station_proxy.locked:
+                    raise HTTPException(403, detail="Station is locked by another user")
+
+            device = self._devices[op.entity_id]
             method = getattr(device, op.method)
 
             # set device and station to busy
@@ -326,3 +333,73 @@ class StationServer:
             return result
         except Exception as e:
             raise HTTPException(500, detail=str(e))
+
+    def process_station_op(self, op: Operation):
+        if self._lab_conn:
+            self._lab_conn.set_property(
+                "operations",
+                op.id,
+                "start_timestamp",
+                datetime.datetime.now().isoformat(),
+            )
+            # TODO change status to running
+
+        result_data = None
+        data_file_name = ""
+        error = ""
+        data_type = ""
+        data_status = -1
+
+        method = getattr(self._station_proxy, op.method)
+        try:
+            result = method(**op.args)
+            try:
+                result = Path(result)
+                success = True
+                result_data = None
+                data_status = -1
+                if (not result.is_file()) and (not result.is_dir()):
+                    # raising an exception to exit the try loop
+                    data_type = "string"
+                    result_data = result
+                    data_status = 1
+                elif result.is_file():
+                    data_type = "file"
+                    data_file_name = result.name
+                else:
+                    data_type = "folder"
+                    data_file_name = result.name + ".zip"
+            except TypeError:
+                success = True
+                result_data = result
+                data_type = str(type(result))
+                data_status = 1
+        except Exception as e:
+            success = False
+            error = str(e)
+            raise Exception(e)
+
+        finally:
+            # update the operation_result to data server here
+            operation_result = OperationResult(
+                success=success,
+                error=error,
+                result_data=result_data,
+                data_file_name=data_file_name,
+                data_type=data_type,
+                data_status=data_status,
+            )
+        
+        if self._lab_conn:
+                self._lab_conn.set_property(
+                    "operations",
+                    op.id,
+                    "end_timestamp",
+                    datetime.datetime.now().isoformat(),
+                )
+                self._lab_conn.set_property(
+                    "operations",
+                    op.id,
+                    "result",
+                    operation_result.id,
+                )
