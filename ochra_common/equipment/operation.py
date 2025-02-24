@@ -23,6 +23,7 @@ class Operation(DataModel):
     """
 
     caller_id: uuid.UUID
+    entity_id: uuid.UUID
     method: str
     args: Dict[str, Any]
     status: OperationStatus = OperationStatus.CREATED

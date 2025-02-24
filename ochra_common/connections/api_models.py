@@ -6,6 +6,7 @@ from typing import Union
 
 class ObjectCallRequest(BaseModel):
     method: str
+    caller_id: UUID
     args: Union[Dict, None] = None
 
 
