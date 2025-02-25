@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 import uvicorn
 import logging
 
+from ochra_manager.lab.routers import HATEOAS_router
 from ochra_manager.lab.routers.ui_router import WebAppRouter
 from .routers.device_router import DeviceRouter
 from .routers.station_router import StationRouter
@@ -13,7 +14,7 @@ from .routers.operation_router import OperationRouter
 from .routers.lab_router import LabRouter
 from .routers.storage_router import StorageRouter
 from .routers.operation_results_router import OperationResultRouter
-from ochra_manager.ui.main import app
+from .routers.HATEOAS_router import HATEOASRouter
 import inspect
 
 logger = logging.getLogger(__name__)
@@ -43,7 +44,11 @@ class LabServer:
         self.app.include_router(OperationRouter())
         self.app.include_router(StorageRouter())
         self.app.include_router(OperationResultRouter(folderpath))
+
+        ##NOTE: NEW ADDITIONS ###################
         self.app.include_router(WebAppRouter(self.templates))
+        self.app.include_router(HATEOASRouter(self.templates, f"http://{self.host}:{self.port}/gateway"))
+        #########################################
 
     def get_caller_variable_name(self):
         """Find the name of the variable that called this function
