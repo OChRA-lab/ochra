@@ -713,6 +713,9 @@
   .resize {
     resize: both;
   }
+  .list-disc {
+    list-style-type: disc;
+  }
   .flex-col {
     flex-direction: column;
   }
@@ -743,9 +746,6 @@
   .gap-4 {
     gap: calc(var(--spacing) * 4);
   }
-  .gap-6 {
-    gap: calc(var(--spacing) * 6);
-  }
   .self-end {
     align-self: flex-end;
   }
@@ -775,10 +775,6 @@
     border-style: var(--tw-border-style);
     border-width: 0.5px;
   }
-  .border-t-\[0\.5px\] {
-    border-top-style: var(--tw-border-style);
-    border-top-width: 0.5px;
-  }
   .border-r-\[0\.5px\] {
     border-right-style: var(--tw-border-style);
     border-right-width: 0.5px;
@@ -797,6 +793,9 @@
   .bg-base {
     background-color: var(--color-base);
   }
+  .bg-neutral {
+    background-color: var(--color-neutral);
+  }
   .bg-primary {
     background-color: var(--color-primary);
   }
@@ -805,6 +804,9 @@
   }
   .p-2 {
     padding: calc(var(--spacing) * 2);
+  }
+  .p-3 {
+    padding: calc(var(--spacing) * 3);
   }
   .p-4 {
     padding: calc(var(--spacing) * 4);
@@ -817,9 +819,6 @@
   }
   .px-3 {
     padding-inline: calc(var(--spacing) * 3);
-  }
-  .px-6 {
-    padding-inline: calc(var(--spacing) * 6);
   }
   .py-1 {
     padding-block: calc(var(--spacing) * 1);
@@ -835,6 +834,9 @@
   }
   .text-justify {
     text-align: justify;
+  }
+  .text-left {
+    text-align: left;
   }
   .font-poppins {
     font-family: var(--font-poppins);
@@ -878,8 +880,17 @@
   .break-all {
     word-break: break-all;
   }
+  .text-blue-300 {
+    color: var(--color-blue-300);
+  }
+  .text-idle {
+    color: var(--color-idle);
+  }
   .text-primary {
     color: var(--color-primary);
+  }
+  .text-success {
+    color: var(--color-success);
   }
   .text-text {
     color: var(--color-text);
@@ -987,6 +998,11 @@
   .dark\:bg-dark-base {
     &:where([data-theme=dark], [data-theme=dark] *) {
       background-color: var(--color-dark-base);
+    }
+  }
+  .dark\:bg-dark-neutral {
+    &:where([data-theme=dark], [data-theme=dark] *) {
+      background-color: var(--color-dark-neutral);
     }
   }
   .dark\:bg-dark-primary {

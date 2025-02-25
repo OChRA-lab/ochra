@@ -1,10 +1,11 @@
+from uuid import UUID
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
 from pydantic import BaseModel
 from typing import Dict, Optional, Type, Any
-from pathlib import Path
-from pathlib import PurePath
+from pathlib import Path, PurePath
 import shutil
 from os import remove
 import datetime
@@ -68,17 +69,16 @@ class StationServer:
         self._type = station_type
         self._ip = station_ip
         self.port = station_port
-        self._devices = {}
+        self._devices: dict[str, Device] = {}
 
 
-    def setup(self, lab_ip: str = None) -> None:
+    def setup(self, lab_ip: Optional[str] = None) -> None:
         """
         setup the station server and connect to the lab server if lab_ip is provided
 
         Args:
             lab_ip (str, optional): ip of the lab server connection. Defaults to None.
         """
-
         self._app = FastAPI()
         self._router = APIRouter()
 
@@ -100,16 +100,31 @@ class StationServer:
 
         self._app.include_router(self._router)
 
+        MODULE = Path(__file__).resolve().parent
+        TEMPLATES = MODULE / "templates"
+
+
+
+        self._app.get("/ping")(self.ping)
+
+        self._app.get("/")(self.get_station)
+        self._app.get("/devices")(self.get_station_devices)
+        self._app.get("/devices/{device_id}")(self.get_device)
+        self._app.post("/devices/{device_id}/commands")(self.perform_device_operation)
+
+        self._templates=Jinja2Templates(directory=TEMPLATES)
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
 
-    def add_device(self, device: Type[Device]):
+    def add_device(self, device):
         """
         add a device to the station dict
 
         Args:
             device (Device): device to add to the station
         """
-        self._devices[device.id] = device
+
+        # TODO: str instead of pure uuid
+        self._devices[str(device.id)] = device
         if self._station_proxy:
             self._station_proxy.add_device(device)
 
@@ -132,9 +147,33 @@ class StationServer:
         self._lab_conn = LabConnection(lab_ip)
         return Station(self._name, self._type, self._location, self.port)
 
-    #TODO: CONTINUE TO UPDATE THIS BASIC HTML SYSTEM
-    def station_ui(self, request: Request):
-        return self._templates.TemplateResponse("ui.html",{"request":request, "station_name": self._name, "devices": [d.to_html() for d in self._devices.values()]})
+
+    async def get_station(self, request: Request):
+        return self._templates.TemplateResponse(
+                "station.html",
+                {
+                    "request":request, 
+                    "station_id": self.id, 
+                    "station_name": self._name,
+                }
+        )
+
+    async def get_station_devices(self, request: Request):
+        return self._templates.TemplateResponse(
+                "devices.html",
+                {
+                    "request":request, 
+                    "station_id": self.id, 
+                    "station_name": self._name,
+                    "devices": [
+                        {
+                            "uri": f"/gateway/stations/{self.id}/devices/{d.id}", 
+                            "name": d.name
+                        }
+                        for d in self._devices.values()
+                    ]
+                }
+        )
 
     def ping(self, request: Request):
         print(f"ping from {request.client.host}")

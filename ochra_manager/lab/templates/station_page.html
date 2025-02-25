@@ -1,0 +1,11 @@
+<!-- home.html -->
+{% extends "base.html" %}
+
+{% block title %}Station{% endblock %}
+
+{% block content %}
+<!--just a div-->
+
+{% include "navbar.html"%}
+{{html_response|safe}}
+{% endblock %}

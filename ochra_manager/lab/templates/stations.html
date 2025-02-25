@@ -7,10 +7,10 @@
 <!--just a div-->
 
 {% include "navbar.html"%}
-<main class="flex-1">
+<main id="MainContent" class="flex-1">
 	<div class="flex min-h-dvh">
 		<!--just a div-->
-		<div class="flex-1">
+		<div class="flex flex-col flex-1">
 
 			<!--Banner-->
 			<div class="flex w-full p-6 border-b-[0.5px] border-text dark:border-dark-text justify-between">
@@ -22,9 +22,40 @@
 				</div>
 			</div>
 
+
 			<!--Main Content-->
-			<div>
+			<div class="flex-1 overflow-y-auto">
+				<div class="p-3 border-b-[0.5px] border-text dark:border-dark-text">
+					<input type="text">
+				</div>
+				<!--TABLE-->
+				<div>
+					<!--TABLE FIELS IS FALSEY IF EMPTY-->
+					{% if table_fields %}
+					<table class="w-full text-left">
+						<tr class="bg-neutral dark:bg-dark-neutral border-b-[0.5px] border-text dark:border-dark-text">
+							<th class="p-3">Station Name</th>
+							<th class="p-3">Status</th>
+							<th class="p-3">No. Devices</th>
+							<th class="p-3">Active Routine</th>
+						</tr>
+						{% for station in table_fields %}
+						<tr hx-get="{{station.station_id}}" hx-trigger="dblclick" hx-target="body" hx-push-url="true" class="border-b-[0.5px] border-text dark:border-dark-text">
+								<td class="p-3">{{station.name}}</td>
+								{% if station.status == 0 %}
+									<td class="p-3 text-success">Available</td>
+								{% else %}
+									<td class="p-3 text-idle">Busy</td>
+								{% endif %}
+								<td class="p-3">{{station.device_count}}</td>
+								<td class="p-3">{{station.active_routine}}</td>
+							</tr>
+						{% endfor %}
+					</table> 
+					{% endif %}
+				</div>
 			</div>
+
 		</div>
 
 		<!--SIDEBAR-->

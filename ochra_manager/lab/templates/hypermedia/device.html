@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{theme: 'dark'}" x-bind:data-theme="theme">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,height=device-height initial-scale=1">
+	<link id="favicon" rel="icon" type="image/x-icon" href="{{url_for('static',path='/favicon.ico')}}">
+	<title>{% block title %}My Website{% endblock %}</title>
+	<link href="{{url_for('static',path='/css/app.css')}}" rel="stylesheet" />
+	<script src="https://unpkg.com/htmx.org@2.0.4"
+		integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+		crossorigin="anonymous"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body class="bg-base dark:bg-dark-base font-poppins text-text dark:text-dark-text">
+	<div class="p-6 flex flex-col gap-4">
+		{{html_response|safe}}
+	</div>
+</body>
+
+</html>
