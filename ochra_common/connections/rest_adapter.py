@@ -215,6 +215,7 @@ class RestAdapter:
 
 if __name__ == "__main__":
     adapter = RestAdapter("127.0.0.1:8000", ssl_verify=False)
+
     # doesnt do anything as adapter already exists
     adapter2 = RestAdapter("127.0.2.1:8000", ssl_verify=False)
 

@@ -11,11 +11,10 @@ from .api_models import (
 from pydantic import ValidationError
 from uuid import UUID
 import logging
-from typing import Any, Type, Union, List
+from typing import Any, Type, TypeVar, Union, List
 import importlib
 
 # TODO change the return types of get_property and get_all_objects to be more specific
-
 
 class LabConnection(metaclass=SingletonMeta):
     """lab adapter built on top of RestAdapter,
@@ -44,7 +43,7 @@ class LabConnection(metaclass=SingletonMeta):
             hostname, api_key, ssl_verify, logger
         )
 
-    def load_from_response(self, obj: ObjectQueryResponse):
+    def _load_from_response(self, obj: ObjectQueryResponse):
         """load object from response
 
         Args:
@@ -109,11 +108,12 @@ class LabConnection(metaclass=SingletonMeta):
         )
         try:
             object = ObjectQueryResponse(**result.data)
-            return self.load_from_response(object)
+            return self._load_from_response(object)
         except ValueError:
             raise LabEngineException(f"Expected ObjectQueryResponse, got {result.data}")
         except Exception as e:
             raise LabEngineException(f"Unexpected error: {e}")
+
 
     def get_all_objects(self, type: str) -> List[ObjectQueryResponse]:
         """returns a list of all objects of a certain type
@@ -130,7 +130,7 @@ class LabConnection(metaclass=SingletonMeta):
         result: Result = self.rest_adapter.get(f"/{type}/get_all")
         try:
             objects = [ObjectQueryResponse(**data) for data in result.data]
-            return [self.load_from_response(obj) for obj in objects]
+            return [self._load_from_response(obj) for obj in objects]
         except ValueError:
             raise LabEngineException(f"Expected ObjectQueryResponse, got {result.data}")
         except Exception as e:
@@ -172,7 +172,7 @@ class LabConnection(metaclass=SingletonMeta):
         )
         try:
             object = ObjectQueryResponse(**result.data)
-            return self.load_from_response(object)
+            return self._load_from_response(object)
         except Exception as e:
             raise LabEngineException(f"Unexpected error: {e}")
 
@@ -205,7 +205,7 @@ class LabConnection(metaclass=SingletonMeta):
                     for data in result.data
                 ]
                 return [
-                    self.load_from_response(data)
+                    self._load_from_response(data)
                     if isinstance(data, ObjectQueryResponse)
                     else data
                     for data in listData
@@ -215,7 +215,7 @@ class LabConnection(metaclass=SingletonMeta):
                     result.data
                 )
                 if isinstance(possibleQueryResponse, ObjectQueryResponse):
-                    return self.load_from_response(possibleQueryResponse)
+                    return self._load_from_response(possibleQueryResponse)
                 else:
                     return possibleQueryResponse
             else:
