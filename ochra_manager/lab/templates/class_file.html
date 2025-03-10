@@ -1,0 +1,167 @@
+<div class="h-dvh flex flex-col border-l-[0.5px] border-text dark:border-dark-text">
+	<div class="border-b-[0.5px] border-text dark:border-dark-text flex flex-col justify-between relative">
+		<div class="p-6">
+			<h1 class="text-primary dark:text-dark-primary text-4xl">Station1</h1>
+			<p class="">Centrifuge</p>
+		</div>
+		<div class="text-lg text-center  absolute bottom-0 w-full">
+			<ul class="flex px-6 pb-1 gap-4">
+				<li class="text-primary">
+					<a href="#">Centrifuge</a>
+				</li>
+				<li>
+					<a href="#" aria-current="page">Camera</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- Existing content... -->
+
+	<div class="flex-1 px-6 py-2 overflow-y-auto">
+		<!-- Section 1: Device Status Cards -->
+		<div class="mt-6 space-y-4">
+			<h3>Device Name</h3>
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+				<!-- Small Status Card 1 -->
+				<div
+					class="p-3 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
+					<div class="flex items-center gap-2">
+						<div class="p-1 bg-primary rounded-full">
+							<!-- Icon (replace with your actual icon) -->
+							<svg class="w-4 h-4 " fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									d="M13 10V3L4 14h7v7l9-11h-7z" />
+							</svg>
+						</div>
+						<h4 class="text-sm font-medium ">Voltage</h4>
+					</div>
+					<p class="mt-1 text-xl font-semibold ">230<span class="text-sm font-normal ml-1">V</span>
+					</p>
+				</div>
+
+				<!-- Small Status Card 1 -->
+				<div
+					class="p-3 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
+					<div class="flex items-center gap-2">
+						<div class="p-1 bg-primary rounded-full">
+							<!-- Icon (replace with your actual icon) -->
+							<svg class="w-4 h-4 " fill="#fff" stroke="currentColor" viewBox="0 0 24 24">
+								<path
+									d="M480-120q-83 0-141.5-58.5T280-320q0-48 21-89.5t59-70.5v-240q0-50 35-85t85-35q50 0 85 35t35 85v240q38 29 59 70.5t21 89.5q0 83-58.5 141.5T480-120Zm0-80q50 0 85-35t35-85q0-29-12.5-54T552-416l-32-24v-280q0-17-11.5-28.5T480-760q-17 0-28.5 11.5T440-720v280l-32 24q-23 17-35.5 42T360-320q0 50 35 85t85 35Zm0-120Z" />
+							</svg>
+						</div>
+						<h4 class="text-sm font-medium ">Celcius</h4>
+					</div>
+					<p class="mt-1 text-xl font-semibold ">230<span class="text-sm font-normal ml-1">ºC</span>
+					</p>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- Section 2: Form Cards -->
+		<div class="mt-8 space-y-6">
+			<h3>Device Controls</h3>
+
+			<!-- Form Card 1 -->
+			<div
+				class="p-4 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
+				<h4 class="text-sm font-semibold  mb-3">Motor Control</h4>
+				<form class="space-y-3">
+					<div>
+						<label class="block text-sm font-medium  mb-1">Speed</label>
+						<input type="number" class="w-full p-2 border border-text dark:border-dark-text rounded-md"
+							placeholder="Enter RPM" min="0" max="3000">
+					</div>
+					<div>
+						<label class="block text-sm font-medium  dark:border-dark-text mb-1">Direction</label>
+						<select class="w-full p-2 border border-text dark:border-dark-text rounded-md">
+							<option>Forward</option>
+							<option>Reverse</option>
+						</select>
+					</div>
+					<button type="submit" class="w-full bg-primary  px-4 py-2 rounded-md">
+						Execute
+					</button>
+				</form>
+			</div>
+
+			<!-- Form Card 2 -->
+			<div
+				class="p-4 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
+				<h4 class="text-sm font-semibold  mb-3">Temperature Settings</h4>
+				<form class="space-y-3">
+					<!-- Form inputs... -->
+					<button type="submit" class="w-full bg-primary  px-4 py-2 rounded-md">
+						Execute
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="mt-6 space-y-4">
+	<h3>{{station.name}}</h3>
+	<div class="grid grid-cols-3 gap-3">
+		<!--State Chips-->
+		{% for k,d in station._devices.items() %}
+		<a href="/app/stations/{{station.id}}/devices/{{d.id}}" hx-boost>
+			<div
+				class=" flex justify-center items-center aspect-square p-3 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
+				<h4 class="text-primary">
+					{{d.name}}
+				</h4>
+			</div>
+		</a>
+		{% endfor %}
+	</div>
+</div>
+
+<div class="flex items-center justify-center" x-data="{
+         min: {{ param.attrs.min | default(0) }},
+         max: {{ param.attrs.max | default(100) }},
+         step: {{ param.attrs.step | default(1) }},
+         custom_value: {{param.variable_binding | default(0)}},
+         isDragging: false,
+         updateDial(event) {
+           const rect = this.$refs.dial.getBoundingClientRect();
+           const centerX = rect.left + rect.width / 2;
+           const centerY = rect.top + rect.height / 2;
+           
+           // Handle both touch and mouse events
+           const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+           const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+           
+           let angle = Math.atan2(clientY - centerY, clientX - centerX) + Math.PI / 2;
+           angle = angle < 0 ? angle + Math.PI * 2 : angle;
+           
+           let rawValue = this.min + (angle / (2 * Math.PI)) * (this.max - this.min);
+           let newValue = Math.round(rawValue / this.step) * this.step;
+           newValue = Math.max(this.min, Math.min(newValue, this.max));
+           this.custom_value = newValue;
+         },
+         get percent() {
+           return Math.round(((this.custom_value - this.min) / (this.max - this.min)) * 100);
+         }
+       }">
+	<div class="text-center space-y-4 grid-cols-2 grid-cols-1 grid-cols-3">
+		<input x-ref="input" class="hidden" type="range" x-model="custom_value" :min="min" :max="max" :step="step"
+			name="{{ param.name }}" />
+		<div id="dial-container" x-ref="dial" @mousedown="isDragging = true; updateDial($event)"
+			@touchstart.prevent="isDragging = true; updateDial($event)"
+			@mousemove.window="if(isDragging) updateDial($event)"
+			@touchmove.prevent.window="if(isDragging) updateDial($event)" @mouseup.window="isDragging = false"
+			@touchend.window="isDragging = false"
+			class="touch-none flex justify-center items-center w-full aspect-square rounded-full transition-all duration-600 border-[0.5px] border-text dark:border-dark-text"
+			:style="`background-image: conic-gradient(#3b82f6 ${percent}%, #ffffff00 0)`">
+			<div
+				class="touch-none select-none text-sm font-medium flex flex-col uppercase font-bold justify-center items-center w-[95%] aspect-square rounded-full bg-base dark:bg-dark-base border-[0.5px] border-text dark:border-dark-text">
+				<span class="text-xl"
+					x-text="custom_value.toLocaleString(undefined, { maximumFractionDigits: 2 })"></span>
+				{{param.label|default('unit')}}
+			</div>
+		</div>
+	</div>
+</div>

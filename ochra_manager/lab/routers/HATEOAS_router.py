@@ -1,7 +1,12 @@
+from datetime import datetime
 import logging
-from fastapi import APIRouter, HTTPException, Request
+import uuid
+from fastapi import APIRouter, HTTPException, Request, Response, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from ochra_common.connections.api_models import ObjectConstructionRequest
+from ochra_common.equipment.operation import Operation
+from ochra_common.utils.enum import OperationStatus
 from ..lab_service import LabService
 import httpx
 
@@ -21,12 +26,17 @@ class HATEOASRouter(APIRouter):
         self.get("/stations/{station_id}/devices")(self.get_station_devices)
         self.get("/stations/{station_id}/devices/{device_id}")(self.get_device)
         self.post("/stations/{station_id}/devices/{device_id}/commands")(self.post_device_command)
+        self.get("/operations")(self.get_operation_audits)
+        self.get("/operations/{operation_id}")(self.get_operation_audit)
  
     async def get_lab(self, request: Request):
         return self.templates.TemplateResponse("/hypermedia/lab.html",{"request": request, "lab_uri": self.lab_uri})
 
 
     async def get_lab_stations(self, request: Request):
+        """
+        Fetch a list of all the station from the database and list them
+        """
         stations = self.lab_service.get_all_objects("stations")
         stations = [
                 {
@@ -47,6 +57,10 @@ class HATEOASRouter(APIRouter):
 
 
     async def get_station(self, request: Request, station_id: str):
+        """
+        Get a specific station by its ID from the database
+        This will proxy the station view from the station server itself
+        """
         s = self.lab_service.get_object_by_id(station_id, "stations")
         body = await request.body()
         headers = dict(request.headers)
@@ -65,6 +79,10 @@ class HATEOASRouter(APIRouter):
                 )
 
     async def get_station_devices(self, request: Request, station_id: str):
+        """
+        Get a list of all the curretly connected devices to the station
+        This will proxy the devices view from the station itself. This way it always represents the devices in the station
+        """
         s = self.lab_service.get_object_by_id(station_id, "stations")
         body = await request.body()
         headers = dict(request.headers)
@@ -83,6 +101,10 @@ class HATEOASRouter(APIRouter):
                 )
 
     async def get_device(self, request: Request, station_id: str, device_id: str):
+        """
+        Get a specific device from a station
+        This will proxy the device view from the station itself. 
+        """
         s = self.lab_service.get_object_by_id(station_id, "stations")
         body = await request.body()
         headers = dict(request.headers)
@@ -102,19 +124,62 @@ class HATEOASRouter(APIRouter):
 
 
     async def post_device_command(self, request: Request, station_id: str, device_id: str):
-        s = self.lab_service.get_object_by_id(station_id, "stations")
-        headers = dict(request.headers)
-        form_data = await request.form()
-        url = f"http://{s['station_ip']}:{s['port']}/devices/{device_id}/commands"
+        """
+        This posts a command to a device through a proxy post to the station
+        """
+        station = self.lab_service.get_object_by_id(station_id, "stations")
+        proxy_url = f"http://{station['station_ip']}:{station['port']}/devices/{device_id}/commands"
+        form = await request.form()
+
+        opp = Operation(
+            caller_id=uuid.uuid4(),
+            collection="operations",
+            method=str(""),
+            args={},
+            status = OperationStatus.CREATED,
+            start_timestamp = datetime.now(),
+        )
 
         async with httpx.AsyncClient() as client:
-            response = await client.post(url, headers=headers, data=form_data)
-            
-        if response.status_code == 200:
-            return RedirectResponse(
-                url=f"/gateway/stations/{station_id}/devices/{device_id}",
-                status_code=303
+            station_response = await client.post(
+                proxy_url,
+                headers = dict(request.headers),
+                data=form
             )
-        else:
-            raise HTTPException(status_code=response.status_code)
+
+        if station_response.is_success:
+            opp.end_timestamp = datetime.now()
+
+            self.lab_service.construct_object(
+                    ObjectConstructionRequest(object_json=opp.model_dump_json()),
+                    opp.collection
+            )
+
+            return Response(
+                    status_code=status.HTTP_202_ACCEPTED,
+                    headers={
+                        "Location": f"/gateway/operations/{opp.id}",
+                        "HX-Location": f"/gateway/operations/{opp.id}"
+                    }
+            )
+
+        # 3. Propagate station errors
+        return Response(
+            content=station_response.content,
+            status_code=station_response.status_code,
+            headers=station_response.headers
+        )
+
+
+
+    async def get_operation_audits(self, request: Request):
+        #TODO: Add html return
+        return self.lab_service.get_all_objects("operations")
+
+
+    async def get_operation_audit(self, request: Request, operation_id: str):
+        #TODO: Add html return
+        opp = self.lab_service.get_object_by_id(operation_id, "operations")
+        print(opp)
+        return opp
 

@@ -10,7 +10,12 @@
 <main id="MainContent" class="flex-1">
 	<div class="flex min-h-dvh">
 		<!--just a div-->
-		<div class="flex flex-col flex-1">
+
+		<div 
+			{% if sidepanel_view %}
+				class="hidden lg:flex flex-col flex-1"
+			{% endif %}
+			class="flex flex-col flex-1">
 
 			<!--Banner-->
 			<div class="flex w-full p-6 border-b-[0.5px] border-text dark:border-dark-text justify-between">
@@ -26,10 +31,9 @@
 			<!--Main Content-->
 			<div class="flex-1 overflow-y-auto">
 				<div class="p-3 border-b-[0.5px] border-text dark:border-dark-text">
-					<input type="text">
 				</div>
 				<!--TABLE-->
-				<div>
+				<div class="overflow-x-scroll max-w-screen">
 					<!--TABLE FIELS IS FALSEY IF EMPTY-->
 					{% if table_fields %}
 					<table class="w-full text-left">
@@ -40,7 +44,13 @@
 							<th class="p-3">Active Routine</th>
 						</tr>
 						{% for station in table_fields %}
-						<tr hx-get="{{station.station_id}}" hx-trigger="dblclick" hx-target="body" hx-push-url="true" class="border-b-[0.5px] border-text dark:border-dark-text">
+						<!--TODO:ADD BACK IN PUSH URL-->
+						<tr 
+							hx-trigger="click" 
+							hx-get="/app/stations/{{station.station_id}}" 
+							hx-target="body"
+							hx-push-url="true"
+							class="border-b-[0.5px] border-text dark:border-dark-text hover:bg-neutral dark:hover:bg-dark-neutral hover:cursor-pointer">
 								<td class="p-3">{{station.name}}</td>
 								{% if station.status == 0 %}
 									<td class="p-3 text-success">Available</td>
@@ -58,8 +68,14 @@
 
 		</div>
 
-		<!--SIDEBAR-->
-		<div class="flex w-56 p-6 border-l-[0.5px] border-text dark:border-dark-text">
+
+		<div
+			{% if not sidepanel_view %}
+				class="hidden lg:block w-full lg:w-72"
+			{% endif %}
+			class="w-full lg:w-72"
+		>
+			{% include "sidepanel.html"%}
 		</div>
 	</div>
 </main>
