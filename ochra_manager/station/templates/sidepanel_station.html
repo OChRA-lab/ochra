@@ -1,0 +1,38 @@
+<div class="border-b-[0.5px] border-text dark:border-dark-text flex flex-col justify-between relative">
+	<div class="p-6">
+		<h1 class="text-primary dark:text-dark-primary text-4xl">{{station._name}}</h1>
+		<p>Devices</p>
+	</div>
+	<div class="text-lg text-center  absolute bottom-0 w-full">
+		<ul class="flex px-6 pb-1 gap-4">
+			<li class="text-primary">
+				<a class="hover:cursor-pointer" hx-boost="true" href="/app/stations/{{station.id}}">Home</a>
+			</li>
+			{% for _, d in station._devices.items() %}
+			<li>
+				<a class="hover:cursor-pointer" hx-boost="true"
+					href="/app/stations/{{station.id}}/devices/{{d.id}}">{{d.name}}</a>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+
+<div class="flex-1 px-6 py-2 overflow-y-auto">
+	<div class="mt-6 space-y-4">
+		<h3>Devices</h3>
+		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+			<!--State Chips-->
+			{% for k,d in station._devices.items() %}
+			<a href="/app/stations/{{station.id}}/devices/{{d.id}}" hx-boost="true">
+				<div
+					class=" flex justify-center items-center aspect-square p-3 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
+					<h4 class="text-primary">
+						{{d.name}}
+					</h4>
+				</div>
+			</a>
+			{% endfor %}
+		</div>
+	</div>
+</div>

@@ -1,0 +1,28 @@
+<div class="border-b-[0.5px] border-text dark:border-dark-text flex flex-col justify-between relative">
+	<div class="p-6">
+		<h1 class="text-primary dark:text-dark-primary text-4xl">{{station._name}}</h1>
+		<p class="">{{device.name}}</p>
+	</div>
+	<div class="text-lg text-center  absolute bottom-0 w-full">
+		<ul class="flex px-6 pb-1 gap-4">
+			<li>
+				<a class="hover:cursor-pointer" hx-boost="true" href="/app/stations/{{station.id}}">Home</a>
+			</li>
+			{% for _, d in station._devices.items() %}
+			{% if d.id == device.id %}
+			<li class="text-primary hover:cursor-pointer">
+				<a class="hover:cursor-pointer" hx-trigger="click" hx-target="body"
+					hx-get="/app/stations/{{station.id}}/devices/{{d.id}}" hx-push-url="true">{{d.name}}</a>
+			</li>
+			{% else %}
+			<li>
+				<a class="hover:cursor-pointer" hx-boost="true"
+					href="/app/stations/{{station.id}}/devices/{{d.id}}">{{d.name}}</a>
+			</li>
+			{% endif %}
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+
+{{device_html|safe}}

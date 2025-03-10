@@ -1,7 +1,7 @@
 from ochra_common.equipment.operation_result import OperationResult
 from ochra_common.utils.mixins import RestProxyMixin
-from typing import Any
 from ochra_common.utils.enum import ResultDataStatus
+from typing import Any
 
 
 class OperationResult(OperationResult, RestProxyMixin):

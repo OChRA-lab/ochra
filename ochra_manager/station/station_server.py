@@ -1,6 +1,4 @@
-from uuid import UUID
 from fastapi import FastAPI, APIRouter, Request, HTTPException
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from pydantic import BaseModel
@@ -9,6 +7,7 @@ from pathlib import Path, PurePath
 import shutil
 from os import remove
 import datetime
+from starlette.types import Message
 import uvicorn
 
 from ochra_common.connections.lab_connection import LabConnection
@@ -112,6 +111,9 @@ class StationServer:
         self._app.get("/devices/{device_id}")(self.get_device)
         self._app.post("/devices/{device_id}/commands")(self.perform_device_operation)
 
+        self._app.get("/hypermedia")(self.get_pannel)
+        self._app.get("/hypermedia/devices/{device_id}")(self.get_pannel_device)
+
         self._templates=Jinja2Templates(directory=TEMPLATES)
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
 
@@ -148,6 +150,7 @@ class StationServer:
         return Station(self._name, self._type, self._location, self.port)
 
 
+
     async def get_station(self, request: Request):
         return self._templates.TemplateResponse(
                 "station.html",
@@ -175,11 +178,93 @@ class StationServer:
                 }
         )
 
-    def ping(self, request: Request):
-        print(f"ping from {request.client.host}")
 
-    def process_op(self, op: Operation):
-        """process the operation based on the entity type
+    #######################################################
+    #
+    #
+    #
+    async def get_pannel(self, request: Request):
+        return self._templates.TemplateResponse(
+                "sidepanel_station.html",
+                {
+                    "request":request, 
+                    "station": self, 
+                }
+        )
+
+
+    async def get_pannel_device(self, request: Request, device_id: str):
+        device: Optional[Device] = self._devices.get(device_id)
+        if not device:
+            raise HTTPException(status_code=404, detail="Device does not exist")
+
+        return self._templates.TemplateResponse(
+                "sidepanel_device.html",
+                {
+                    "request":request, 
+                    "station": self, 
+                    "device": device,
+                    "device_html": device.to_html()
+                }
+        )
+    #
+    #
+    #
+    #
+    #######################################################
+
+
+    async def get_device(self, request: Request, device_id: str):
+        device: Optional[Device] = self._devices.get(device_id)
+        if not device:
+            raise HTTPException(status_code=404, detail="Device does not exist")
+
+        return self._templates.TemplateResponse(
+                "device.html",
+                {
+                    "request":request, 
+                    "station_id": self.id, 
+                    "station_name": self._name,
+                    "html_response": device.to_html()
+                }
+        )
+    
+    async def perform_device_operation(self, request: Request, device_id: str):
+        form_data = await request.form()
+
+        device: Optional[Device] = self._devices.get(device_id)
+        if not device:
+            raise HTTPException(status_code=404, detail=f"Device {device_id} does not exist",)
+
+        command_name = form_data.get("command")
+        if not isinstance(command_name, str):
+            raise HTTPException(status_code=422, detail=f"Missing required parameter {command_name}")
+
+        
+        # Get the args and remove the command one
+        args = form_data._dict
+        args.pop("command")
+
+        # check if the method is on the device if not raise an error
+        method_exists = hasattr(device, command_name)
+        if not method_exists:
+            raise HTTPException(status_code=400, detail=f"Method does note xist")
+
+        try:
+            method = getattr(device, command_name)
+            method(**args)
+            return 
+        except Exception as e:
+            raise HTTPException(status_code=500,detail="Unexpected error in running method")
+
+
+
+
+    def ping(self):
+        print("ping from station")
+
+    def process_device_op(self, op: Operation):
+        """retrieve the device from the device dict and execute the method
 
         Args:
             op (Operation): operation to be processed

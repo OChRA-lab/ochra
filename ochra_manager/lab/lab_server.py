@@ -1,5 +1,6 @@
 from pathlib import Path
 from contextlib import asynccontextmanager
+from typing import Optional
 from fastapi import FastAPI, APIRouter, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -23,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 
 class LabServer:
-    def __init__(self, host: str, port: int, folderpath: str = None) -> None:
+    def __init__(self, host: str, port: int, folderpath: str = None, template_path: Optional[Path] = None) -> None:
         """Setup a lab server with the given host and port optionally storing data in folderpath
 
         Args:
@@ -31,7 +32,7 @@ class LabServer:
             port (int): port to open the server on
             folderpath (str): path to store data in
         """
-        MODULE_DIRECTORY = Path(__file__).resolve().parent
+        MODULE_DIRECTORY = Path(__file__).resolve().parent if not template_path else template_path
         self.host = host
         self.port = port
         self.scheduler = Scheduler()
