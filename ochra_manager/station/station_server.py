@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from typing import Dict, Optional
 from pathlib import Path, PurePath
 import shutil
+import traceback
 from os import remove
 import datetime
 from starlette.types import Message
@@ -221,9 +222,12 @@ class StationServer:
 
         try:
             method = getattr(device, command_name)
+            print(method)
+            print(args)
             method(**args)
             return 
         except Exception as e:
+            traceback.print_exception(e)
             raise HTTPException(status_code=500,detail="Unexpected error in running method")
 
 

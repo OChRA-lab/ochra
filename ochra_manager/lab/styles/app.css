@@ -4,7 +4,7 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {  
-	--spacing: 0.4rem;
+	--spacing: 0.36rem;
 	--color-text: #0a0a0a;
 	--color-neutral: #fff;
 	--color-base: #f3f4f6;
