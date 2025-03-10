@@ -252,7 +252,7 @@
     --color-stone-950: oklch(0.147 0.004 49.25);
     --color-black: #000;
     --color-white: #fff;
-    --spacing: 0.5rem;
+    --spacing: 0.4rem;
     --breakpoint-sm: 40rem;
     --breakpoint-md: 48rem;
     --breakpoint-lg: 64rem;
@@ -713,9 +713,6 @@
   .w-full {
     width: 100%;
   }
-  .max-w-72 {
-    max-width: calc(var(--spacing) * 72);
-  }
   .max-w-screen {
     max-width: 100vw;
   }
@@ -1116,11 +1113,6 @@
       outline-style: none;
     }
   }
-  .md\:grid-cols-2 {
-    @media (width >= 48rem) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
   .md\:grid-cols-3 {
     @media (width >= 48rem) {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1141,14 +1133,15 @@
       width: calc(var(--spacing) * 72);
     }
   }
-  .lg\:max-w-72 {
+  .lg\:w-90 {
     @media (width >= 64rem) {
-      max-width: calc(var(--spacing) * 72);
+      width: calc(var(--spacing) * 90);
     }
   }
-  .lg\:grid-cols-3 {
+  .lg\:border-l-\[0\.5px\] {
     @media (width >= 64rem) {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-left-style: var(--tw-border-style);
+      border-left-width: 0.5px;
     }
   }
   .dark\:border-dark-text {
