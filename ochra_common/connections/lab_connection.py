@@ -178,7 +178,7 @@ class LabConnection(metaclass=SingletonMeta):
             object = ObjectQueryResponse(**result.data)
             res_obj = self.load_from_response(object)
             if isinstance(res_obj, Operation):
-                while res_obj.status == OperationStatus.COMPLETED:
+                while res_obj.status != OperationStatus.COMPLETED:
                     time.sleep(5)
             return res_obj
         except Exception as e:
