@@ -127,7 +127,10 @@ class StationServer:
         """
         try:
             # need to add star timestamp to the operation
-            if self._station_proxy.locked is not None and self._station_proxy.locked != []:
+            if (
+                self._station_proxy.locked is not None
+                and self._station_proxy.locked != []
+            ):
                 if str(op.caller_id) != self._station_proxy.locked:
                     raise HTTPException(403, detail="Station is locked by another user")
 
@@ -137,6 +140,7 @@ class StationServer:
             # set device and station to busy
             device.status = ActivityStatus.BUSY
             self._station_proxy.status = ActivityStatus.BUSY
+            self._station_proxy.add_operation(op)
 
             # TODO crete an operation proxy to streamline setting properties
             if self._lab_conn:
@@ -275,8 +279,15 @@ class StationServer:
             Any: return value of the method
         """
         try:
+            if (
+                self._station_proxy.locked is not None
+                and self._station_proxy.locked != []
+            ):
+                if str(op.caller_id) != self._station_proxy.locked:
+                    raise HTTPException(403, detail="Station is locked by another user")
+
             # need to add star timestamp to the operation
-            robot = self._devices[op.caller_id]
+            robot = self._devices[op.entity_id]
 
             if op.method not in robot.available_tasks and op.method != "go_to":
                 raise HTTPException(404, detail=f"task {op.method} not found")
@@ -284,6 +295,7 @@ class StationServer:
             # set device and station to busy
             robot.status = ActivityStatus.BUSY
             self._station_proxy.status = ActivityStatus.BUSY
+            self._station_proxy.add_operation(op)
 
             # TODO crete an operation proxy to streamline setting properties
             if self._lab_conn:
@@ -335,6 +347,14 @@ class StationServer:
             raise HTTPException(500, detail=str(e))
 
     def process_station_op(self, op: Operation):
+        if self._station_proxy.locked is not None and self._station_proxy.locked != []:
+            if str(op.caller_id) != self._station_proxy.locked:
+                raise HTTPException(403, detail="Station is locked by another user")
+
+        # set device and station to busy
+        self._station_proxy.status = ActivityStatus.BUSY
+        self._station_proxy.add_operation(op)
+
         if self._lab_conn:
             self._lab_conn.set_property(
                 "operations",
@@ -342,7 +362,13 @@ class StationServer:
                 "start_timestamp",
                 datetime.datetime.now().isoformat(),
             )
-            # TODO change status to running
+            # change status to in progress
+            self._lab_conn.set_property(
+                "operations",
+                op.id,
+                "status",
+                OperationStatus.IN_PROGRESS,
+            )
 
         result_data = None
         data_file_name = ""
@@ -389,17 +415,27 @@ class StationServer:
                 data_type=data_type,
                 data_status=data_status,
             )
-        
+
         if self._lab_conn:
-                self._lab_conn.set_property(
-                    "operations",
-                    op.id,
-                    "end_timestamp",
-                    datetime.datetime.now().isoformat(),
-                )
-                self._lab_conn.set_property(
-                    "operations",
-                    op.id,
-                    "result",
-                    operation_result.id,
-                )
+            self._lab_conn.set_property(
+                "operations",
+                op.id,
+                "end_timestamp",
+                datetime.datetime.now().isoformat(),
+            )
+            self._lab_conn.set_property(
+                "operations",
+                op.id,
+                "result",
+                operation_result.id,
+            )
+            # change status to in progress
+            self._lab_conn.set_property(
+                "operations",
+                op.id,
+                "status",
+                OperationStatus.COMPLETED,
+            )
+
+        # set device and station to idle
+        self._station_proxy.status = ActivityStatus.IDLE

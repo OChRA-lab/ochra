@@ -5,7 +5,7 @@ from ochra_common.connections.api_models import (
     ObjectPropertySetRequest,
     ObjectConstructionRequest,
     ObjectQueryResponse,
-    ObjectPropertyGetRequest
+    ObjectPropertyGetRequest,
 )
 from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid
@@ -16,9 +16,10 @@ COLLECTION = "devices"
 
 
 class DeviceRouter(APIRouter):
-    def __init__(self):
+    def __init__(self, scheduler):
         prefix = f"/{COLLECTION}"
         super().__init__(prefix=prefix)
+        self.scheduler = scheduler
         self.lab_service = LabService()
         self.put("/construct")(self.construct_device)
         self.get("/{identifier}/get_property")(self.get_device_property)
@@ -30,7 +31,9 @@ class DeviceRouter(APIRouter):
         # TODO: we need to assign the object to the station somehow
         return self.lab_service.construct_object(args, COLLECTION)
 
-    async def get_device_property(self, identifier: str, args: ObjectPropertyGetRequest):
+    async def get_device_property(
+        self, identifier: str, args: ObjectPropertyGetRequest
+    ):
         return self.lab_service.get_object_property(identifier, COLLECTION, args)
 
     async def modify_device_property(
@@ -39,7 +42,9 @@ class DeviceRouter(APIRouter):
         return self.lab_service.patch_object(identifier, COLLECTION, args)
 
     async def call_device(self, identifier: str, args: ObjectCallRequest):
-        return self.lab_service.call_on_object(identifier, COLLECTION, args)
+        op = self.lab_service.call_on_object(identifier, args)
+        self.scheduler.add_operation(op, COLLECTION)
+        return op.model_dump(mode="json")
 
     async def get_device(self, identifier: str):
         if is_valid_uuid(identifier):

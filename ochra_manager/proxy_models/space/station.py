@@ -1,5 +1,6 @@
 from ochra_common.spaces.location import Location
 from ochra_common.equipment.device import Device
+from ochra_common.equipment.operation import Operation
 from ochra_common.spaces.station import Station
 from ochra_common.utils.mixins import RestProxyMixin
 from ochra_common.utils.enum import StationType
@@ -20,7 +21,7 @@ class Station(Station, RestProxyMixin):
             type=type,
             location=location,
             module_path="ochra_discovery.spaces.station",
-            locked=None
+            locked=None,
         )
         self.port = port
         self.inventory = Inventory(
@@ -33,3 +34,8 @@ class Station(Station, RestProxyMixin):
         devices = self.devices
         devices.append(device.id)
         self.devices = devices
+
+    def add_operation(self, op: Operation):
+        op_record = self.operation_record
+        op_record.append(op.id)
+        self.operation_record = op_record

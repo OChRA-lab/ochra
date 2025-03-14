@@ -18,12 +18,12 @@ class StationConnection:
     def execute_op(self, op: Operation, endpoint: str):
         data = {
             "id": str(op.id),
+            "collection": op.collection,
+            "module_path": op.module_path,
             "entity_id": str(op.entity_id),
             "caller_id": str(op.caller_id),
             "method": op.method,
             "args": op.args,
         }
-        
-        return self.rest_adapter.post(endpoint=endpoint, data=data)
-    
 
+        return self.rest_adapter.post(endpoint=endpoint, data=data)

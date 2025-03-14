@@ -15,8 +15,9 @@ COLLECTION = "stations"
 
 
 class StationRouter(APIRouter):
-    def __init__(self):
+    def __init__(self, scheduler):
         super().__init__(prefix=f"/{COLLECTION}")
+        self.scheduler = scheduler
         self.lab_service = LabService()
         self.put("/construct")(self.construct_station)
         self.get("/{identifier}/get_property")(self.get_station_property)
@@ -41,7 +42,9 @@ class StationRouter(APIRouter):
         return self.lab_service.patch_object(identifier, COLLECTION, args)
 
     async def call_method(self, identifier: str, args: ObjectCallRequest):
-        return self.lab_service.call_on_object(identifier, COLLECTION, args)
+        op = self.lab_service.call_on_object(identifier, args)
+        self.scheduler.add_operation(op, COLLECTION)
+        return op.model_dump(mode="json")
 
     async def get_station(self, identifier: str):
         if is_valid_uuid(identifier):

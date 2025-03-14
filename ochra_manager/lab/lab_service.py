@@ -7,7 +7,7 @@ from ochra_common.connections.api_models import (
     ObjectCallRequest,
     ObjectPropertySetRequest,
     ObjectConstructionRequest,
-    ObjectPropertyGetRequest
+    ObjectPropertyGetRequest,
 )
 from ..connections.db_connection import DbConnection
 import uuid
@@ -16,7 +16,6 @@ from datetime import datetime
 from pathlib import Path
 import shutil
 from os import remove
-from .scheduler import Scheduler
 from ochra_common.utils.enum import OperationStatus
 
 logger = logging.getLogger(__name__)
@@ -24,11 +23,8 @@ logger = logging.getLogger(__name__)
 
 class LabService:
     def __init__(self, folderpath: str = None) -> None:
-        """Labservice object serves the common functionality within routers to avoid code duplication
-        """
+        """Labservice object serves the common functionality within routers to avoid code duplication"""
         self.db_conn: DbConnection = DbConnection()
-        self.scheduler = Scheduler()
-        self.scheduler.run()
 
         # TODO: split this to check if the string is an actual directory to return some form of error message
         if folderpath and Path(folderpath).is_dir:
@@ -101,44 +97,18 @@ class LabService:
         logger.info(f"constructed object of type {object_dict.get('cls')}")
         return object_dict.get("id")
 
-    def call_on_object(
-        self, object_id: str, collection: str, call_req: ObjectCallRequest
-    ) -> str:
+    def call_on_object(self, object_id: str, call_req: ObjectCallRequest) -> Operation:
         """call method of object on object
 
         Args:
             object_id (str): Object id of object to call on
-            collection (str): db collection where the object will be stored
             call_req (ObjectCallModel): object call model message
 
         Returns:
-            str: object id of object post call
+            Operation: Operation object representing the call
         """
 
         try:
-            if collection == "devices" or collection == "robots":
-                # get station ip
-                station_id = self.db_conn.read(
-                    {"id": object_id, "_collection": collection}, "owner_station"
-                )
-
-                if station_id is None:
-                    raise HTTPException(status_code=404, detail="station not found")
-            elif collection == "stations":
-                station_id = object_id
-
-            station_ip = self.db_conn.read(
-                {"id": station_id, "_collection": "stations"}, "station_ip"
-            )
-            
-            station_port = self.db_conn.read(
-                {"id": station_id, "_collection": "stations"}, "port"
-            )
-            # create station connection
-            station_client: StationConnection = StationConnection(
-                station_ip + ":" +str(station_port)
-            )
-
             # create operation object and store in db
             op: Operation = Operation(
                 entity_id=object_id,
@@ -148,22 +118,13 @@ class LabService:
                 collection="operations",
                 module_path="ochra_discovery.equipment.operation",
             )
-            op.status = OperationStatus.CREATED
+
             # TODO change to use a proxy for operation instead of accessing db directly
             self.db_conn.create(
                 {"_collection": "operations"}, json.loads(op.model_dump_json())
             )
 
-            # pass operation to station to execute
-            if collection == "robots":
-                endpoint = "process_robot_op"
-            elif collection == "stations":
-                endpoint = "process_station_op"
-            else:
-                endpoint = "process_device_op"
-                        
-            self.scheduler.add_task(station_id, station_client, op, endpoint)
-            return op.model_dump(mode="json")
+            return op
 
         except HTTPException:
             raise
@@ -301,19 +262,23 @@ class LabService:
             # create folder with the operation id
             path = self.folderpath / object_id
             path.mkdir(exist_ok=True)
-            
+
             # create the file within the folder
             filename = path / self.db_conn.read(
-                {"id": object_id, "_collection": collection}, 
-                property="data_file_name")
+                {"id": object_id, "_collection": collection}, property="data_file_name"
+            )
             with open(filename, "wb") as file:
                 file.write(result_data)
 
             # unzip the file if the result data is a folder
-            if self.db_conn.read({"id": object_id, "_collection": collection}, property="data_type") == "folder":
+            if (
+                self.db_conn.read(
+                    {"id": object_id, "_collection": collection}, property="data_type"
+                )
+                == "folder"
+            ):
                 shutil.unpack_archive(filename, filename.with_suffix(""), "zip")
                 remove(filename)
-            
 
     def get_file(self, object_id: str, collection: str):
         """get file from db
@@ -323,8 +288,10 @@ class LabService:
             collection (str): collection it is in
 
         Returns:
-            bytestring: file data 
+            bytestring: file data
         """
         return self.db_conn.read(
-            {"id": object_id, "_collection": collection}, property="result_data", file=True
+            {"id": object_id, "_collection": collection},
+            property="result_data",
+            file=True,
         )

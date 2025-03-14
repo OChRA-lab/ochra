@@ -14,9 +14,10 @@ COLLECTION = "robots"
 
 
 class RobotRouter(APIRouter):
-    def __init__(self):
+    def __init__(self, scheduler):
         prefix = f"/{COLLECTION}"
         super().__init__(prefix=prefix)
+        self.scheduler = scheduler
         self.lab_service = LabService()
         self.put("/construct")(self.construct_robot)
         self.get("/{identifier}/get_property")(self.get_property)
@@ -34,7 +35,9 @@ class RobotRouter(APIRouter):
         return self.lab_service.patch_object(identifier, COLLECTION, args)
 
     async def call_robot(self, identifier: str, args: ObjectCallRequest):
-        return self.lab_service.call_on_object(identifier, COLLECTION, args)
+        op = self.lab_service.call_on_object(identifier, args)
+        self.scheduler.add_operation(op, COLLECTION)
+        return op.model_dump(mode="json")
 
     async def get_robot(self, identifier: str):
         if is_valid_uuid(identifier):
