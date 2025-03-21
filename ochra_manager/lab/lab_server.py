@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, APIRouter, HTTPException, Request
 import uvicorn
 import logging
@@ -8,6 +9,7 @@ from .routers.operation_router import OperationRouter
 from .routers.lab_router import LabRouter
 from .routers.storage_router import StorageRouter
 from .routers.operation_results_router import OperationResultRouter
+from .scheduler import Scheduler
 import inspect
 
 logger = logging.getLogger(__name__)
@@ -24,12 +26,20 @@ class LabServer:
         """
         self.host = host
         self.port = port
-        self.app = FastAPI()
+        self.scheduler = Scheduler()
+
+        @asynccontextmanager
+        async def lifespan(app: FastAPI):
+            self.scheduler.run()
+            yield
+            self.scheduler.stop()
+
+        self.app = FastAPI(lifespan=lifespan)
 
         self.app.include_router(LabRouter())
-        self.app.include_router(DeviceRouter())
-        self.app.include_router(StationRouter())
-        self.app.include_router(RobotRouter())
+        self.app.include_router(DeviceRouter(self.scheduler))
+        self.app.include_router(StationRouter(self.scheduler))
+        self.app.include_router(RobotRouter(self.scheduler))
         self.app.include_router(OperationRouter())
         self.app.include_router(StorageRouter())
         self.app.include_router(OperationResultRouter(folderpath))
@@ -50,8 +60,7 @@ class LabServer:
         return fileNameSplit[-1] + ":" + variableName + ".app"
 
     def run(self) -> None:
-        """launches the server on the initialized host and port
-        """
+        """launches the server on the initialized host and port"""
         logger.info("started server")
         app = self.get_caller_variable_name()
         uvicorn.run(app, host=self.host, port=self.port, workers=8)
