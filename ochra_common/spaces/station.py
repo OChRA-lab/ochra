@@ -4,6 +4,7 @@ from typing import List, Type, Union
 
 from ..base import DataModel
 from ..equipment.device import Device
+from ..equipment.operation import Operation
 from ..equipment.robot import Robot
 from .location import Location
 from ..utils.enum import ActivityStatus, StationType
@@ -20,18 +21,19 @@ class Station(DataModel):
         location (Location): The location of the station.
         type (StationType): The type of the station.
         status (ActiveStatus): The status of the station (e.g., idle, busy). Defaults to IDLE.
-        locked_by (str): The user that has locked the station. Defaults to an empty string.
         inventory (Inventory): The inventory associated with the station.
         devices (List[Device]): A list of devices associated with the workstation.
+        operation_record (List[Operation]): Record of the operations assigned to the station.
+        locked (UUID): The session ID of the user that has locked the station.
     """
 
     name: str
     location: Location
     type: StationType
     status: ActivityStatus = ActivityStatus.IDLE
-    locked_by: str = Field(default="")
     inventory: Inventory = Field(default=None)
     devices: List[Type[Device]] = Field(default_factory=list)
+    operation_record: List[Operation] = Field(default_factory=list)
     locked: Optional[UUID] = Field(defualt=None)
 
     _endpoint = "stations"  # associated endpoint for all stations

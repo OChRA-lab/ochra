@@ -13,6 +13,9 @@ from uuid import UUID, uuid4
 import logging
 from typing import Any, Type, Union, List
 import importlib
+from ochra_common.equipment.operation import Operation
+from ochra_common.utils.enum import OperationStatus
+import time
 
 # TODO change the return types of get_property and get_all_objects to be more specific
 
@@ -173,7 +176,11 @@ class LabConnection(metaclass=SingletonMeta):
         )
         try:
             object = ObjectQueryResponse(**result.data)
-            return self.load_from_response(object)
+            res_obj = self.load_from_response(object)
+            if isinstance(res_obj, Operation):
+                while res_obj.status != OperationStatus.COMPLETED:
+                    time.sleep(5)
+            return res_obj
         except Exception as e:
             raise LabEngineException(f"Unexpected error: {e}")
 
