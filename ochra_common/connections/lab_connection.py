@@ -3,18 +3,17 @@ from ..base import DataModel
 from .rest_adapter import RestAdapter, Result, LabEngineException
 from .api_models import (
     ObjectConstructionRequest,
-    ObjectQueryResponse,
     ObjectCallRequest,
     ObjectPropertySetRequest,
-    ObjectPropertyGetRequest
+    ObjectPropertyGetRequest,
 )
-from pydantic import ValidationError
 from uuid import UUID, uuid4
 import logging
 from typing import Any, Type, Union, List
 import importlib
-from ochra_common.equipment.operation import Operation
-from ochra_common.utils.enum import OperationStatus
+from ..equipment.operation import Operation
+from ..utils.enum import OperationStatus
+from ..utils.misc import is_data_model, convert_to_data_model
 import time
 
 # TODO change the return types of get_property and get_all_objects to be more specific
@@ -48,22 +47,19 @@ class LabConnection(metaclass=SingletonMeta):
         )
         self._session_id = uuid4()
 
-    def load_from_response(self, obj: ObjectQueryResponse):
-        """load object from response
-
+    def load_from_data_model(self, model: DataModel) -> Any:
+        """load object from data model
         Args:
-            obj (ObjectQueryResponse): object information, id, cls, module_path
-
+            model (DataModel): data model to load
         Raises:
-            LabEngineException: if there is an error in importing class
-
+            LabEngineException: if there is an error in loading object
         Returns:
             Any: instance of the class
         """
         try:
-            module = importlib.import_module(obj.module_path)
-            class_to_instance = getattr(module, obj.cls)
-            instance = class_to_instance.from_id(obj.id)
+            module = importlib.import_module(model.module_path)
+            class_to_instance = getattr(module, model.cls)
+            instance = class_to_instance.from_id(model.id)
             return instance
         except Exception as e:
             raise LabEngineException(f"Unexpected error in importing class: {e}")
@@ -93,9 +89,7 @@ class LabConnection(metaclass=SingletonMeta):
         except Exception as e:
             raise LabEngineException(f"Unexpected error: {e}")
 
-    def get_object(
-        self, type: str, identifier: Union[str, UUID]
-    ) -> ObjectQueryResponse:
+    def get_object(self, type: str, identifier: Union[str, UUID]) -> Any:
         """get object from lab
 
         Args:
@@ -106,35 +100,37 @@ class LabConnection(metaclass=SingletonMeta):
             LabEngineException: if there is an error in getting object
 
         Returns:
-            ObjectQueryResponse: object information, id, cls, module_path
+            Any: instance of the class
         """
         result: Result = self.rest_adapter.get(
             f"/{type}/get", {"identifier": str(identifier)}
         )
         try:
-            object = ObjectQueryResponse(**result.data)
-            return self.load_from_response(object)
+            base_model = convert_to_data_model(result.data)
+            return self.load_from_data_model(base_model)
         except ValueError:
             raise LabEngineException(f"Expected ObjectQueryResponse, got {result.data}")
         except Exception as e:
             raise LabEngineException(f"Unexpected error: {e}")
 
-    def get_all_objects(self, type: str) -> List[ObjectQueryResponse]:
+    def get_all_objects(self, type: str) -> List[Any]:
         """returns a list of all objects of a certain type
 
         Args:
-            type (str): the type of the object to get 
+            type (str): the type of the object to get
 
         Raises:
             LabEngineException: if there is an error in getting objects
 
         Returns:
-            List[ObjectQueryResponse]: list of object information, (id, cls, module_path)
+            List[Any]: list of instances of the class
         """
         result: Result = self.rest_adapter.get(f"/{type}/get_all")
         try:
-            objects = [ObjectQueryResponse(**data) for data in result.data]
-            return [self.load_from_response(obj) for obj in objects]
+            base_models = [
+                convert_to_data_model(model_dict) for model_dict in result.data
+            ]
+            return [self.load_from_data_model(model) for model in base_models]
         except ValueError:
             raise LabEngineException(f"Expected ObjectQueryResponse, got {result.data}")
         except Exception as e:
@@ -155,7 +151,7 @@ class LabConnection(metaclass=SingletonMeta):
 
     def call_on_object(
         self, type: str, id: UUID, method: str, args: dict
-    ) -> ObjectQueryResponse:
+    ) -> Operation:
         """make a request for the lab to run a function on an object
 
         Args:
@@ -170,23 +166,20 @@ class LabConnection(metaclass=SingletonMeta):
         Returns:
             ObjectQueryResponse: object information, id, cls, module_path
         """
-        req = ObjectCallRequest(method=method, args=args, caller_id = self._session_id)
+        req = ObjectCallRequest(method=method, args=args, caller_id=self._session_id)
         result: Result = self.rest_adapter.post(
             f"/{type}/{str(id)}/call_method", data=req.model_dump(mode="json")
         )
         try:
-            object = ObjectQueryResponse(**result.data)
-            res_obj = self.load_from_response(object)
-            if isinstance(res_obj, Operation):
-                while res_obj.status != OperationStatus.COMPLETED:
-                    time.sleep(5)
-            return res_obj
+            base_model = convert_to_data_model(result.data)
+            op: Operation = self.load_from_data_model(base_model)
+            while op.status != OperationStatus.COMPLETED:
+                time.sleep(5)
+            return op
         except Exception as e:
             raise LabEngineException(f"Unexpected error: {e}")
 
-    def get_property(
-        self, type: str, id: UUID, property: str
-    ) -> Union[Any, ObjectQueryResponse]:
+    def get_property(self, type: str, id: UUID, property: str) -> Any:
         """get a property of an object on the lab
 
         Args:
@@ -198,36 +191,35 @@ class LabConnection(metaclass=SingletonMeta):
             LabEngineException: if there is an error in getting the property
 
         Returns:
-            Union[Any, ObjectQueryResponse]: value of the property
+            Any: value of the property
         """
         req = ObjectPropertyGetRequest(property=property)
         result: Result = self.rest_adapter.get(
-            f"/{type}/{str(id)}/get_property",data = req.model_dump(mode="json")
+            f"/{type}/{str(id)}/get_property", data=req.model_dump(mode="json")
         )
         if result.status_code == 404:
             raise LabEngineException(f"Property {property} not found for {type} {id}")
         try:
-            if isinstance(result.data, list):
-                listData = [
-                    self._convert_to_object_query_response_possibly(data)
-                    for data in result.data
-                ]
+            value = result.data
+            if is_data_model(value):
+                base_model = convert_to_data_model(value)
+                return self.load_from_data_model(base_model)
+            elif isinstance(value, list):
                 return [
-                    self.load_from_response(data)
-                    if isinstance(data, ObjectQueryResponse)
-                    else data
-                    for data in listData
+                    self.load_from_data_model(convert_to_data_model(item))
+                    if is_data_model(item)
+                    else item
+                    for item in value
                 ]
-            elif isinstance(result.data, dict):
-                possibleQueryResponse = self._convert_to_object_query_response_possibly(
-                    result.data
-                )
-                if isinstance(possibleQueryResponse, ObjectQueryResponse):
-                    return self.load_from_response(possibleQueryResponse)
-                else:
-                    return possibleQueryResponse
+            elif isinstance(value, dict):
+                return {
+                    key: self.load_from_data_model(convert_to_data_model(val))
+                    if is_data_model(val)
+                    else val
+                    for key, val in value.items()
+                }
             else:
-                return result.data
+                return value
         except Exception as e:
             raise LabEngineException(f"Unexpected error: {e}")
 
@@ -243,27 +235,24 @@ class LabConnection(metaclass=SingletonMeta):
         Returns:
             Any: response from the lab
         """
+        if isinstance(value, DataModel):
+            value = value.get_base_model()
+        elif isinstance(value, list):
+            value = [
+                item.get_base_model() if isinstance(item, DataModel) else item
+                for item in value
+            ]
+        elif isinstance(value, dict):
+            value = {
+                key: val.get_base_model() if isinstance(val, DataModel) else val
+                for key, val in value.items()
+            }
+
         req = ObjectPropertySetRequest(property=property, property_value=value)
         result: Result = self.rest_adapter.patch(
             f"/{type}/{str(id)}/modify_property", data=req.model_dump(mode="json")
         )
         return result.data
-
-    def _convert_to_object_query_response_possibly(
-        self, data: Any
-    ) -> Union[ObjectQueryResponse, Any]:
-        """convert data to ObjectQueryResponse if possible
-
-        Args:
-            data (Any): data to convert
-
-        Returns:
-            Union[ObjectQueryResponse, Any]: ObjectQueryResponse if possible, else data
-        """
-        try:
-            return ObjectQueryResponse(**data)
-        except (ValidationError, TypeError):
-            return data
 
     def get_object_id(self, type: str, name: str) -> UUID:
         """get object id from lab given name
@@ -312,5 +301,7 @@ class LabConnection(metaclass=SingletonMeta):
         Returns:
             bytes: raw bytes of the data
         """
-        result: Result = self.rest_adapter.get(f"/{type}/{str(id)}/get_data", jsonify=False)
+        result: Result = self.rest_adapter.get(
+            f"/{type}/{str(id)}/get_data", jsonify=False
+        )
         return result.content
