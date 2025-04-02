@@ -1,6 +1,5 @@
 import logging
 from typing import Any, List, Dict
-from ..connections.station_connection import StationConnection
 from ochra_common.equipment.operation import Operation
 from fastapi import HTTPException
 from ochra_common.connections.api_models import (
@@ -9,14 +8,12 @@ from ochra_common.connections.api_models import (
     ObjectConstructionRequest,
     ObjectPropertyGetRequest,
 )
+from ochra_common.utils.misc import is_data_model, convert_to_data_model
 from ..connections.db_connection import DbConnection
-import uuid
 import json
-from datetime import datetime
 from pathlib import Path
 import shutil
 from os import remove
-from ochra_common.utils.enum import OperationStatus
 
 logger = logging.getLogger(__name__)
 
@@ -170,7 +167,10 @@ class LabService:
             HTTPException: if object not found
         """
         try:
-            return self.db_conn.find({"_collection": collection}, {"name": name})
+            obj_dict: Dict = self.db_conn.find(
+                {"_collection": collection}, {"name": name}
+            )
+            return convert_to_data_model(obj_dict)
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
@@ -188,7 +188,10 @@ class LabService:
             HTTPException: if object not found
         """
         try:
-            return self.db_conn.find({"_collection": collection}, {"id": object_id})
+            obj_dict: Dict = self.db_conn.find(
+                {"_collection": collection}, {"id": object_id}
+            )
+            return convert_to_data_model(obj_dict)
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
@@ -207,40 +210,10 @@ class LabService:
             HTTPException: if object not found
         """
         try:
-            return self.db_conn.find_all({"_collection": collection}, query_dict)
-        except Exception as e:
-            raise HTTPException(status_code=404, detail=str(e))
-
-    def get_object_by_station_and_type(
-        self, station_identifier: str, collection: str, obj_type: str
-    ) -> str:
-        """Get object by station and type
-
-        Args:
-            station_identifier (str): station id or name
-            collection (str): db collection where the object will be stored
-            obj_type (str): object type
-
-        Returns:
-            str: object json representation
-
-        Raises:
-            HTTPException: if object not found
-        """
-        try:
-            uuid.UUID(station_identifier)
-            return self.db_conn.find(
-                {"_collection": collection},
-                {"station_id": station_identifier, "_cls": obj_type},
+            objs_dicts: List[Dict] = self.db_conn.find_all(
+                {"_collection": collection}, query_dict
             )
-        except ValueError:
-            station_id = self.db_conn.find(
-                {"_collection": "stations"}, {"name": station_identifier}
-            )
-            return self.db_conn.find(
-                {"_collection": collection},
-                {"station_id": station_id, "_cls": obj_type},
-            )
+            return [convert_to_data_model(obj_dict) for obj_dict in objs_dicts]
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 

@@ -1,16 +1,13 @@
 import logging
 import uuid
 from fastapi import APIRouter
-from fastapi import HTTPException
 from fastapi import File, UploadFile
 
 # this is temp
 from fastapi.responses import FileResponse, Response
 from ochra_common.connections.api_models import (
-    ObjectCallRequest,
     ObjectPropertySetRequest,
     ObjectConstructionRequest,
-    ObjectQueryResponse,
     ObjectPropertyGetRequest
 )
 from ..lab_service import LabService

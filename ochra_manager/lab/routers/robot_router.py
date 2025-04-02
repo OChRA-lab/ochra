@@ -37,7 +37,7 @@ class RobotRouter(APIRouter):
     async def call_robot(self, identifier: str, args: ObjectCallRequest):
         op = self.lab_service.call_on_object(identifier, args)
         self.scheduler.add_operation(op, COLLECTION)
-        return op.model_dump(mode="json")
+        return op.get_base_model().model_dump(mode="json")
 
     async def get_robot(self, identifier: str):
         if is_valid_uuid(identifier):

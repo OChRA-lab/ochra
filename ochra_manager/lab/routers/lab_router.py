@@ -1,12 +1,7 @@
 import logging
 from fastapi import APIRouter
-from ochra_common.connections.api_models import (
-    ObjectPropertySetRequest,
-    ObjectConstructionRequest,
-)
 from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid
-from typing import Any
 
 logger = logging.getLogger(__name__)
 COLLECTIONS = ["stations", "robots", "scientists"]
