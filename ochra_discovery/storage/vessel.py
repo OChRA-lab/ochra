@@ -1,6 +1,7 @@
 from ochra_common.storage.vessel import Vessel
 from ochra_common.utils.mixins import RestProxyMixin
 from ochra_common.storage.reagent import Reagent
+from ochra_common.utils.enum import PatchType
 
 
 class Vessel(Vessel, RestProxyMixin):
@@ -27,9 +28,7 @@ class Vessel(Vessel, RestProxyMixin):
         Args:
             reagent (Reagent): reagent to add
         """
-        reagents = self.reagents
-        reagents.append(reagent)
-        self.reagents = reagents
+        self._lab_conn.patch_property(self._endpoint, self.id, "reagents", reagent, PatchType.LIST_APPEND)
 
     def remove_reagent(self, reagent: Reagent) -> None:
         """remove reagent from the vessel
@@ -37,6 +36,4 @@ class Vessel(Vessel, RestProxyMixin):
         Args:
             reagent (Reagent): reagent to remove
         """
-        reagents = self.reagents
-        reagents.remove(reagent)
-        self.reagents = reagents
+        self._lab_conn.patch_property(self._endpoint, self.id, "reagents", reagent, PatchType.LIST_DELETE)
