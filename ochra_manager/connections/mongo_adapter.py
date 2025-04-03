@@ -3,6 +3,7 @@ import logging
 import json
 from bson import ObjectId
 import gridfs
+from ochra_common.utils.enum import PatchType
 
 
 class MongoAdapter:
@@ -109,7 +110,34 @@ class MongoAdapter:
             key = list(update.keys())[0]
             update = {"$set": {key: file_id}}
         else:
-            update = {"$set": update}
+            property_name = update["property"]
+            property_value = update["property_value"]
+            update_type = update["patch_type"]
+            update_args = update["patch_args"]
+            if update_type == PatchType.SET:
+                update = {"$set": {property_name: property_value}}
+            elif update_type == PatchType.LIST_APPEND:
+                update = {"$push": {property_name: property_value}}
+            elif update_type == PatchType.LIST_POP:
+                pop_left = -1 if update_args["pop_left"] else 1
+                update = {"$pop": {property_name: pop_left}}
+            elif update_type == PatchType.LIST_DELETE:
+                update = {"$pull": {property_name: property_value}}
+            elif update_type == PatchType.LIST_INSERT:
+                insert_index = update_args["insert_index"]
+                update = {
+                    "$push": {
+                        property_name: {"$each": property_value},
+                        "$position": insert_index,
+                    }
+                }
+            elif update_type == PatchType.DICT_INSERT:
+                key = update_args["key"]
+                update = {"$set": {f"{property_name}.{key}": property_value}}
+            elif update_type == PatchType.DICT_DELETE:
+                key = update_args["key"]
+                update = {"$unset": {f"{property_name}.{key}": ""}}
+
         query = {"id": object_id}
 
         return collection.update_many(query, update)

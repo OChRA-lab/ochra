@@ -62,10 +62,10 @@ class LabService:
             logger.debug(
                 f"attempting to update {set_req.property} to {set_req.property_value}"
             )  # noqa
-
+            
             self.db_conn.update(
                 {"id": object_id, "_collection": collection},
-                {set_req.property: set_req.property_value},
+                set_req.model_dump(),
                 file=file,
             )
 
