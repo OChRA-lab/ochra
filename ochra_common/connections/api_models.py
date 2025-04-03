@@ -1,7 +1,8 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from pydantic import BaseModel, Field
 from uuid import UUID
 from typing import Union
+from ..utils.enum import PatchType
 
 
 class ObjectCallRequest(BaseModel):
@@ -18,6 +19,8 @@ class ObjectCallResponse(BaseModel):
 class ObjectPropertySetRequest(BaseModel):
     property: str
     property_value: Any
+    patch_type: PatchType = Field(default=PatchType.SET)
+    patch_args: Optional[Dict[str, Any]] = Field(default=None)
 
 
 class ObjectPropertyGetRequest(BaseModel):

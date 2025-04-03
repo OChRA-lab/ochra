@@ -12,7 +12,7 @@ import logging
 from typing import Any, Type, Union, List
 import importlib
 from ..equipment.operation import Operation
-from ..utils.enum import OperationStatus
+from ..utils.enum import OperationStatus, PatchType
 from ..utils.misc import is_data_model, convert_to_data_model
 import time
 
@@ -149,9 +149,7 @@ class LabConnection(metaclass=SingletonMeta):
         result: Result = self.rest_adapter.delete(f"/{type}/delete/{str(id)}")
         return result.data
 
-    def call_on_object(
-        self, type: str, id: UUID, method: str, args: dict
-    ) -> Operation:
+    def call_on_object(self, type: str, id: UUID, method: str, args: dict) -> Operation:
         """make a request for the lab to run a function on an object
 
         Args:
@@ -249,6 +247,42 @@ class LabConnection(metaclass=SingletonMeta):
             }
 
         req = ObjectPropertySetRequest(property=property, property_value=value)
+        result: Result = self.rest_adapter.patch(
+            f"/{type}/{str(id)}/modify_property", data=req.model_dump(mode="json")
+        )
+        return result.data
+
+    def patch_property(
+        self,
+        type: str,
+        id: UUID,
+        property: str,
+        value: Any,
+        patch_type: PatchType,
+        patch_args: dict = None,
+    ) -> Any:
+        """set a property of an object on the lab
+
+        Args:
+            type (str): type of the object to set property on
+            id (UUID): id of the object
+            property (str): name of the property to set
+            value (Any): value to set the property to
+            patch_type (PatchType): type of patch to apply
+            patch_args (dict, optional): arguments for the patch. Defaults to None.
+
+        Returns:
+            Any: response from the lab
+        """
+        if isinstance(value, DataModel):
+            value = value.get_base_model()
+
+        req = ObjectPropertySetRequest(
+            property=property,
+            property_value=value,
+            patch_type=patch_type,
+            patch_args=patch_args,
+        )
         result: Result = self.rest_adapter.patch(
             f"/{type}/{str(id)}/modify_property", data=req.model_dump(mode="json")
         )
