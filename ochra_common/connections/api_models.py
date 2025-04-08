@@ -16,7 +16,7 @@ class ObjectCallResponse(BaseModel):
     warnings: str = Field(default=None)
 
 
-class ObjectPropertySetRequest(BaseModel):
+class ObjectPropertyPatchRequest(BaseModel):
     property: str
     property_value: Any
     patch_type: PatchType = Field(default=PatchType.SET)

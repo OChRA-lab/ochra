@@ -4,7 +4,7 @@ from .rest_adapter import RestAdapter, Result, LabEngineException
 from .api_models import (
     ObjectConstructionRequest,
     ObjectCallRequest,
-    ObjectPropertySetRequest,
+    ObjectPropertyPatchRequest,
     ObjectPropertyGetRequest,
 )
 from uuid import UUID, uuid4
@@ -246,7 +246,7 @@ class LabConnection(metaclass=SingletonMeta):
                 for key, val in value.items()
             }
 
-        req = ObjectPropertySetRequest(property=property, property_value=value)
+        req = ObjectPropertyPatchRequest(property=property, property_value=value)
         result: Result = self.rest_adapter.patch(
             f"/{type}/{str(id)}/modify_property", data=req.model_dump(mode="json")
         )
@@ -277,7 +277,7 @@ class LabConnection(metaclass=SingletonMeta):
         if isinstance(value, DataModel):
             value = value.get_base_model()
 
-        req = ObjectPropertySetRequest(
+        req = ObjectPropertyPatchRequest(
             property=property,
             property_value=value,
             patch_type=patch_type,
