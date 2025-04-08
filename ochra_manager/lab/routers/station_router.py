@@ -7,7 +7,7 @@ from ochra_common.connections.api_models import (
     ObjectPropertyGetRequest
 )
 from ..lab_service import LabService
-from ochra_common.utils.misc import is_valid_uuid
+from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 import json
 
 logger = logging.getLogger(__name__)
@@ -44,10 +44,12 @@ class StationRouter(APIRouter):
     async def call_method(self, identifier: str, args: ObjectCallRequest):
         op = self.lab_service.call_on_object(identifier, args)
         self.scheduler.add_operation(op, COLLECTION)
-        return op.model_dump(mode="json")
+        return op.get_base_model().model_dump(mode="json")
 
     async def get_station(self, identifier: str):
         if is_valid_uuid(identifier):
-            return self.lab_service.get_object_by_id(identifier, COLLECTION)
+            station_obj = self.lab_service.get_object_by_id(identifier, COLLECTION)
         else:
-            return self.lab_service.get_object_by_name(identifier, COLLECTION)
+            station_obj = self.lab_service.get_object_by_name(identifier, COLLECTION)
+
+        return convert_to_data_model(station_obj)

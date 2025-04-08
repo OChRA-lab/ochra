@@ -11,7 +11,7 @@ from ochra_common.connections.api_models import (
     ObjectPropertyGetRequest
 )
 from ..lab_service import LabService
-from ochra_common.utils.misc import is_valid_uuid
+from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -41,10 +41,11 @@ class OperationResultRouter(APIRouter):
 
     async def get_result(self, identifier: str):
         if is_valid_uuid(identifier):
-            value = self.lab_service.get_object_by_id(identifier, COLLECTION)
+            result_obj = self.lab_service.get_object_by_id(identifier, COLLECTION)
         else:
-            value = self.lab_service.get_object_by_name(identifier, COLLECTION)
-        return value
+            result_obj = self.lab_service.get_object_by_name(identifier, COLLECTION)
+        
+        return convert_to_data_model(result_obj)
 
     async def get_data(self, identifier: str):
         value = self.lab_service.get_file(identifier, COLLECTION)

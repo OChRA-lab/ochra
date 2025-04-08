@@ -6,7 +6,7 @@ from ochra_common.connections.api_models import (
     ObjectPropertyGetRequest,
 )
 from ..lab_service import LabService
-from ochra_common.utils.misc import is_valid_uuid
+from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
 logger = logging.getLogger(__name__)
 COLLECTION = "operations"
@@ -34,6 +34,8 @@ class OperationRouter(APIRouter):
 
     async def get_op(self, identifier: str):
         if is_valid_uuid(identifier):
-            return self.lab_service.get_object_by_id(identifier, COLLECTION)
+            op_obj = self.lab_service.get_object_by_id(identifier, COLLECTION)
         else:
-            return self.lab_service.get_object_by_name(identifier, COLLECTION)
+            op_obj = self.lab_service.get_object_by_name(identifier, COLLECTION)
+
+        return convert_to_data_model(op_obj)

@@ -167,10 +167,9 @@ class LabService:
             HTTPException: if object not found
         """
         try:
-            obj_dict: Dict = self.db_conn.find(
+            return self.db_conn.find(
                 {"_collection": collection}, {"name": name}
             )
-            return convert_to_data_model(obj_dict)
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
@@ -188,10 +187,9 @@ class LabService:
             HTTPException: if object not found
         """
         try:
-            obj_dict: Dict = self.db_conn.find(
+            return self.db_conn.find(
                 {"_collection": collection}, {"id": object_id}
             )
-            return convert_to_data_model(obj_dict)
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
@@ -210,10 +208,9 @@ class LabService:
             HTTPException: if object not found
         """
         try:
-            objs_dicts: List[Dict] = self.db_conn.find_all(
+            return self.db_conn.find_all(
                 {"_collection": collection}, query_dict
             )
-            return [convert_to_data_model(obj_dict) for obj_dict in objs_dicts]
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
