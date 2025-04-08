@@ -4,7 +4,7 @@ from ochra_common.equipment.operation import Operation
 from fastapi import HTTPException
 from ochra_common.connections.api_models import (
     ObjectCallRequest,
-    ObjectPropertySetRequest,
+    ObjectPropertyPatchRequest,
     ObjectConstructionRequest,
     ObjectPropertyGetRequest,
 )
@@ -35,7 +35,7 @@ class LabService:
         self,
         object_id: str,
         collection: str,
-        set_req: ObjectPropertySetRequest,
+        set_req: ObjectPropertyPatchRequest,
         file=False,
     ) -> bool:
         """patch properties of object_id using set_req key-value pairs
@@ -43,7 +43,7 @@ class LabService:
         Args:
             object_id (str): id of object to patch
             collection (str): db collection where the object will be stored
-            set_req (ObjectPropertySetRequest): request for setting a property's value
+            set_req (ObjectPropertyPatchRequest): request for setting a property's value
 
         Returns:
             bool: True if successful

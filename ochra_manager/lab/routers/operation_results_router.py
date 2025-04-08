@@ -6,7 +6,7 @@ from fastapi import File, UploadFile
 # this is temp
 from fastapi.responses import FileResponse, Response
 from ochra_common.connections.api_models import (
-    ObjectPropertySetRequest,
+    ObjectPropertyPatchRequest,
     ObjectConstructionRequest,
     ObjectPropertyGetRequest
 )
@@ -36,7 +36,7 @@ class OperationResultRouter(APIRouter):
     async def get_property(self, identifier: str, args: ObjectPropertyGetRequest):
         return self.lab_service.get_object_property(identifier, COLLECTION, args)
 
-    async def modify_property(self, identifier: str, args: ObjectPropertySetRequest):
+    async def modify_property(self, identifier: str, args: ObjectPropertyPatchRequest):
         return self.lab_service.patch_object(identifier, COLLECTION, args)
 
     async def get_result(self, identifier: str):

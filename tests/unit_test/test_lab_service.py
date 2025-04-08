@@ -6,7 +6,7 @@ from fastapi import HTTPException
 import json
 from json.decoder import JSONDecodeError
 from ochra_common.connections.api_models import (
-    ObjectPropertySetRequest,
+    ObjectPropertyPatchRequest,
     ObjectConstructionRequest,
     ObjectCallRequest,
     ObjectCallResponse,
@@ -28,7 +28,7 @@ def test_patch_object(mock_service):
 
     object_id = "727d1936-9022-453a-adc5-036d7dc72c0e"
     collection = "test_collection"
-    mock_call = ObjectPropertySetRequest(
+    mock_call = ObjectPropertyPatchRequest(
         property="test_property", property_value="test_value"
     )
 
