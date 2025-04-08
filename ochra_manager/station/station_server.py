@@ -191,6 +191,10 @@ class StationServer:
                     data_status = ResultDataStatus.AVAILABLE
 
             except Exception as e:
+                # set device and station to error
+                device.status = ActivityStatus.ERROR
+                self._station_proxy.status = ActivityStatus.ERROR
+
                 success = False
                 error = str(e)
                 raise Exception(e)
@@ -205,6 +209,31 @@ class StationServer:
                     data_type=data_type,
                     data_status=data_status,
                 )
+
+                if self._lab_conn:
+                    self._lab_conn.set_property(
+                        "operations",
+                        op.id,
+                        "end_timestamp",
+                        datetime.datetime.now().isoformat(),
+                    )
+                    self._lab_conn.set_property(
+                        "operations",
+                        op.id,
+                        "result",
+                        operation_result.id,
+                    )
+                    # change status to completed
+                    self._lab_conn.set_property(
+                        "operations",
+                        op.id,
+                        "status",
+                        OperationStatus.COMPLETED,
+                    )
+
+            # set device and station to idle
+            device.status = ActivityStatus.IDLE
+            self._station_proxy.status = ActivityStatus.IDLE
 
             if isinstance(result, PurePath):
                 # if result is a directory, zip it up and convert to a file
@@ -237,31 +266,6 @@ class StationServer:
                         remove(result.name)
 
                 # TODO to deal with nonsequential data upload
-
-            if self._lab_conn:
-                self._lab_conn.set_property(
-                    "operations",
-                    op.id,
-                    "end_timestamp",
-                    datetime.datetime.now().isoformat(),
-                )
-                self._lab_conn.set_property(
-                    "operations",
-                    op.id,
-                    "result",
-                    operation_result.id,
-                )
-                # change status to in progress
-                self._lab_conn.set_property(
-                    "operations",
-                    op.id,
-                    "status",
-                    OperationStatus.COMPLETED,
-                )
-
-            # set device and station to busy
-            device.status = ActivityStatus.IDLE
-            self._station_proxy.status = ActivityStatus.IDLE
 
         except Exception as e:
             raise HTTPException(500, detail=str(e))
