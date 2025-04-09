@@ -15,12 +15,6 @@ class ObjectCallResponse(BaseModel):
     warnings: str = Field(default=None)
 
 
-class ObjectQueryResponse(BaseModel):
-    id: UUID
-    cls: str
-    module_path: str
-
-
 class ObjectPropertySetRequest(BaseModel):
     property: str
     property_value: Any
