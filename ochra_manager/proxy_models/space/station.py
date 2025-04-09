@@ -24,9 +24,10 @@ class Station(Station, RestProxyMixin):
             locked=None,
         )
         self.port = port
-        self.inventory = Inventory(
+        inventory = Inventory(
             owner=self.get_base_model(), containers_max_capacity=100
         )
+        self.inventory = inventory.get_base_model()
         self._mixin_hook("stations", self.id)
 
     def add_device(self, device: Type[Device]):

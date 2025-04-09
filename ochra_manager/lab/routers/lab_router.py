@@ -1,12 +1,7 @@
 import logging
 from fastapi import APIRouter
-from ochra_common.connections.api_models import (
-    ObjectPropertySetRequest,
-    ObjectConstructionRequest,
-)
 from ..lab_service import LabService
-from ochra_common.utils.misc import is_valid_uuid
-from typing import Any
+from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
 logger = logging.getLogger(__name__)
 COLLECTIONS = ["stations", "robots", "scientists"]
@@ -23,10 +18,13 @@ class LabRouter(APIRouter):
     async def get_lab_object(self, object_type: str, identifier: str):
         collection = object_type if object_type in COLLECTIONS else None
         if is_valid_uuid(identifier):
-            return self.lab_service.get_object_by_id(identifier, collection)
+            lab_obj = self.lab_service.get_object_by_id(identifier, collection)
         else:
-            return self.lab_service.get_object_by_name(identifier, collection)
+            lab_obj = self.lab_service.get_object_by_name(identifier, collection)
+
+        return convert_to_data_model(lab_obj)
 
     async def get_lab_objects(self, object_type: str):
         collection = object_type if object_type in COLLECTIONS else None
-        return self.lab_service.get_all_objects(collection)
+        lab_objs = self.lab_service.get_all_objects(collection)
+        return [convert_to_data_model(lab_obj) for lab_obj in lab_objs]

@@ -6,7 +6,7 @@ from ochra_common.connections.api_models import (
     ObjectPropertyGetRequest
 )
 from ..lab_service import LabService
-from ochra_common.utils.misc import is_valid_uuid
+from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
 logger = logging.getLogger(__name__)
 COLLECTIONS = ["consumables", "containers", "inventories", "reagents"]
@@ -49,6 +49,8 @@ class StorageRouter(APIRouter):
     async def get_storage_item(self, object_type: str, identifier: str):
         collection = object_type if object_type in COLLECTIONS else None
         if is_valid_uuid(identifier):
-            return self.lab_service.get_object_by_id(identifier, collection)
+            storage_obj = self.lab_service.get_object_by_id(identifier, collection)
         else:
-            return self.lab_service.get_object_by_name(identifier, collection)
+            storage_obj = self.lab_service.get_object_by_name(identifier, collection)
+
+        return convert_to_data_model(storage_obj)

@@ -4,12 +4,10 @@ from ochra_common.connections.api_models import (
     ObjectCallRequest,
     ObjectPropertySetRequest,
     ObjectConstructionRequest,
-    ObjectQueryResponse,
     ObjectPropertyGetRequest,
 )
 from ..lab_service import LabService
-from ochra_common.utils.misc import is_valid_uuid
-from typing import Any
+from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
 logger = logging.getLogger(__name__)
 COLLECTION = "devices"
@@ -44,10 +42,12 @@ class DeviceRouter(APIRouter):
     async def call_device(self, identifier: str, args: ObjectCallRequest):
         op = self.lab_service.call_on_object(identifier, args)
         self.scheduler.add_operation(op, COLLECTION)
-        return op.model_dump(mode="json")
+        return op.get_base_model().model_dump(mode="json")
 
     async def get_device(self, identifier: str):
         if is_valid_uuid(identifier):
-            return self.lab_service.get_object_by_id(identifier, COLLECTION)
+            device_obj = self.lab_service.get_object_by_id(identifier, COLLECTION)
         else:
-            return self.lab_service.get_object_by_name(identifier, COLLECTION)
+            device_obj = self.lab_service.get_object_by_name(identifier, COLLECTION)
+
+        return convert_to_data_model(device_obj)
