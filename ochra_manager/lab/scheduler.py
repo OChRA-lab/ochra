@@ -30,9 +30,7 @@ class Scheduler:
             queue = self.op_queue.copy()
             for operation in queue:
                 # resolve station id and endpoint
-                station_id, endpoint = self._resolve_station_id_endpoint(
-                    operation
-                )
+                station_id = self._resolve_station_id(operation)
 
                 # check station status
                 station_status = self._db_conn.read(
@@ -56,7 +54,7 @@ class Scheduler:
                         # execute operation in a new daemon thread
                         op_thread = Thread(
                             target=self._execute_op,
-                            args=(operation, station_id, endpoint),
+                            args=(operation, station_id, "process_op"),
                             daemon=True,
                         )
                         op_thread.start()
@@ -106,20 +104,21 @@ class Scheduler:
             },
         )
 
-    def _resolve_station_id_endpoint(self, op: Operation):
+    def _resolve_station_id(self, op: Operation):
         target_entity_id = str(op.entity_id)
         target_entity_type = op.entity_type
         if target_entity_type == "device" or target_entity_type == "robot":
-            collection = "devices" if target_entity_type == "device" else "robots"
             station_id = self._db_conn.read(
-                {"id": target_entity_id, "_collection": collection}, "owner_station"
+                {
+                    "id": target_entity_id,
+                    "_collection": "devices"
+                    if target_entity_type == "device"
+                    else "robots",
+                },
+                "owner_station",
             )
             if station_id is None:
                 raise HTTPException(status_code=404, detail="station not found")
-            endpoint = (
-                "process_device_op" if collection == "devices" else "process_robot_op"
-            )
         else:
             station_id = target_entity_id
-            endpoint = "process_station_op"
-        return station_id, endpoint
+        return station_id
