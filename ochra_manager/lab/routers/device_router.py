@@ -41,7 +41,7 @@ class DeviceRouter(APIRouter):
 
     async def call_device(self, identifier: str, args: ObjectCallRequest):
         op = self.lab_service.call_on_object(identifier, "device", args)
-        self.scheduler.add_operation(op, COLLECTION)
+        self.scheduler.add_operation(op)
         return op.get_base_model().model_dump(mode="json")
 
     async def get_device(self, identifier: str):

@@ -43,7 +43,7 @@ class StationRouter(APIRouter):
 
     async def call_method(self, identifier: str, args: ObjectCallRequest):
         op = self.lab_service.call_on_object(identifier, "station", args)
-        self.scheduler.add_operation(op, COLLECTION)
+        self.scheduler.add_operation(op)
         return op.get_base_model().model_dump(mode="json")
 
     async def get_station(self, identifier: str):

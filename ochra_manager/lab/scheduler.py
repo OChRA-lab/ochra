@@ -18,8 +18,8 @@ class Scheduler:
             {"_collection": "lab"}, {"op_queue": self.op_queue}
         )
 
-    def add_operation(self, operation: Operation, collection: str):
-        self.op_queue.append((operation, collection))
+    def add_operation(self, operation: Operation):
+        self.op_queue.append(operation)
 
     def run(self):
         self.thread = Thread(target=self._schedule, daemon=False)
@@ -28,10 +28,10 @@ class Scheduler:
     def _schedule(self):
         while not self._stop:
             queue = self.op_queue.copy()
-            for operation, collection in queue:
+            for operation in queue:
                 # resolve station id and endpoint
                 station_id, endpoint = self._resolve_station_id_endpoint(
-                    str(operation.entity_id), collection
+                    operation
                 )
 
                 # check station status
@@ -51,7 +51,7 @@ class Scheduler:
                         operation.caller_id
                     ):
                         # remove operation from queue
-                        self.op_queue.remove((operation, collection))
+                        self.op_queue.remove(operation)
 
                         # execute operation in a new daemon thread
                         op_thread = Thread(
@@ -69,7 +69,7 @@ class Scheduler:
                         "property": "op_queue",
                         "property_value": [
                             op.get_base_model().model_dump_json()
-                            for op, _ in self.op_queue
+                            for op, in self.op_queue
                         ],
                         "patch_type": PatchType.SET,
                         "patch_args": None,
@@ -106,8 +106,11 @@ class Scheduler:
             },
         )
 
-    def _resolve_station_id_endpoint(self, target_entity_id: str, collection: str):
-        if collection == "devices" or collection == "robots":
+    def _resolve_station_id_endpoint(self, op: Operation):
+        target_entity_id = str(op.entity_id)
+        target_entity_type = op.entity_type
+        if target_entity_type == "device" or target_entity_type == "robot":
+            collection = "devices" if target_entity_type == "device" else "robots"
             station_id = self._db_conn.read(
                 {"id": target_entity_id, "_collection": collection}, "owner_station"
             )
