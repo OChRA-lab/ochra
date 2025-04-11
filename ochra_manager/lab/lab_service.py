@@ -94,7 +94,7 @@ class LabService:
         logger.info(f"constructed object of type {object_dict.get('cls')}")
         return object_dict.get("id")
 
-    def call_on_object(self, object_id: str, call_req: ObjectCallRequest) -> Operation:
+    def call_on_object(self, object_id: str, object_type, call_req: ObjectCallRequest) -> Operation:
         """call method of object on object
 
         Args:
@@ -109,6 +109,7 @@ class LabService:
             # create operation object and store in db
             op: Operation = Operation(
                 entity_id=object_id,
+                entity_type=object_type,
                 caller_id=call_req.caller_id,
                 method=call_req.method,
                 args=call_req.args,

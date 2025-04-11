@@ -35,7 +35,7 @@ class RobotRouter(APIRouter):
         return self.lab_service.patch_object(identifier, COLLECTION, args)
 
     async def call_robot(self, identifier: str, args: ObjectCallRequest):
-        op = self.lab_service.call_on_object(identifier, args)
+        op = self.lab_service.call_on_object(identifier, "robot", args)
         self.scheduler.add_operation(op, COLLECTION)
         return op.get_base_model().model_dump(mode="json")
 

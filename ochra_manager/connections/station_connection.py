@@ -21,6 +21,7 @@ class StationConnection:
             "collection": op.collection,
             "module_path": op.module_path,
             "entity_id": str(op.entity_id),
+            "entity_type": op.entity_type,
             "caller_id": str(op.caller_id),
             "method": op.method,
             "args": op.args,
