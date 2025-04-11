@@ -16,6 +16,7 @@ from ochra_common.utils.enum import (
     ResultDataStatus,
     MobileRobotState,
 )
+from ochra_common.utils.misc import is_path
 from ochra_common.spaces.location import Location
 from ochra_common.equipment.device import Device
 from ochra_common.equipment.mobile_robot import MobileRobot
@@ -144,7 +145,6 @@ class StationServer:
                     OperationStatus.IN_PROGRESS,
                 )
 
-            # prepare result
             result_data = None
             data_file_name = ""
             error = ""
@@ -164,32 +164,26 @@ class StationServer:
                 else:
                     result = method(**op.args)
 
-                # checking if the result is bool
-                # TODO: test this new method
-                try:
+                # process result
+                if is_path(result):
                     result = Path(result)
                     success = True
                     result_data = None
                     data_status = ResultDataStatus.UNAVAILABLE
-                    if (not result.is_file()) and (not result.is_dir()):
-                        # raising an exception to exit the try loop
-                        data_type = "string"
-                        result_data = result
-                        data_status = ResultDataStatus.AVAILABLE
-                    elif result.is_file():
+                    if result.is_file():
                         data_type = "file"
                         data_file_name = result.name
                     else:
                         data_type = "folder"
                         data_file_name = result.name + ".zip"
-                except TypeError:
+                else:
                     success = True
                     result_data = result
                     data_type = str(type(result))
                     data_status = ResultDataStatus.AVAILABLE
 
             except Exception as e:
-                # set status
+                # set status to error
                 self._station_proxy.status = ActivityStatus.ERROR
                 if op.entity_type != "station":
                     device.status = ActivityStatus.ERROR
@@ -199,7 +193,7 @@ class StationServer:
                 raise Exception(e)
 
             finally:
-                # update the operation_result to data server here
+                # update the operation_result in the lab server
                 operation_result = OperationResult(
                     success=success,
                     error=error,
@@ -230,44 +224,56 @@ class StationServer:
                         OperationStatus.COMPLETED,
                     )
 
-            # set status
+            # set status to idle
             self._station_proxy.status = ActivityStatus.IDLE
             if op.entity_type != "station":
                 device.status = ActivityStatus.IDLE
                 if isinstance(device, MobileRobot):
                     device.state = MobileRobotState.AVAILABLE
 
-            # upload data if available
+            # upload result data if appropriate
             if isinstance(result, PurePath):
-                # if result is a directory, zip it up and convert to a file
-                if result.is_dir():
-                    result = shutil.make_archive(result.name, "zip", result.as_posix())
-                    result = Path(result)
+                self._upload_result_data(result, operation_result)
 
-                # Do not make this an else or elif, this is code to upload all general files
-                if result.is_file():
-                    with open(str(result), "rb") as file:
-                        result_data = {"file": file}
-
-                        # upload the file as a property
-                        self._lab_conn.put_data(
-                            "operation_results",
-                            id=operation_result.id,
-                            result_data=result_data,
-                        )
-
-                        # change the data status to reflect success
-                        self._lab_conn.set_property(
-                            "operation_results",
-                            operation_result.id,
-                            "data_status",
-                            ResultDataStatus.AVAILABLE,
-                        )
-
-                    # remove the zip file when upload is done
-                    if data_type == "folder":
-                        remove(result.name)
-
-                # TODO to deal with nonsequential data upload
         except Exception as e:
             raise HTTPException(500, detail=str(e))
+
+    def _upload_result_data(self, result: PurePath, operation_result: OperationResult):
+        """upload the result data to the lab server
+
+        Args:
+            result (PurePath): path to the result data
+            operation_result (OperationResult): operation result model
+        """
+        # TODO to deal with nonsequential data upload
+        # if result is a directory, zip it up and convert to a file
+        delete_archive = False
+        if result.is_dir():
+            result = shutil.make_archive(result.name, "zip", result.as_posix())
+            result = Path(result)
+            delete_archive = True
+
+        # Do not make this an else or elif, this is code to upload all general files
+        if result.is_file():
+            with open(str(result), "rb") as file:
+                result_data = {"file": file}
+
+                # upload the file as a property
+                self._lab_conn.put_data(
+                    "operation_results",
+                    id=operation_result.id,
+                    result_data=result_data,
+                )
+
+                # change the data status to reflect success
+                self._lab_conn.set_property(
+                    "operation_results",
+                    operation_result.id,
+                    "data_status",
+                    ResultDataStatus.AVAILABLE,
+                )
+
+            # remove the zip file when upload is done
+            if delete_archive:
+                remove(result.name)
+
