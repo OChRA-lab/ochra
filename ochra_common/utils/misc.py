@@ -1,5 +1,6 @@
 from uuid import UUID
 from typing import Dict, Any
+from pathlib import Path
 from ..base import DataModel
 
 
@@ -18,6 +19,23 @@ def is_valid_uuid(string: str) -> bool:
     except ValueError:
         return False
 
+
+def is_path(obj: Any) -> bool:
+    """Check if an object is a path.
+
+    Args:
+        obj (Any): The object to check.
+
+    Returns:
+        bool: True if the object is a path, False otherwise.
+    """
+    try:
+        path = Path(obj)
+        return path.exists()
+    except (TypeError, ValueError):
+        return False
+
+
 def is_data_model(obj: Any) -> bool:
     """Check if an dict is a DataModel.
 
@@ -27,10 +45,13 @@ def is_data_model(obj: Any) -> bool:
     Returns:
         bool: True if the object is a DataModel, False otherwise.
     """
-    if isinstance(obj, dict) and all(key in obj for key in ["id", "cls", "collection", "module_path"]):
+    if isinstance(obj, dict) and all(
+        key in obj for key in ["id", "cls", "collection", "module_path"]
+    ):
         return True
     else:
         return False
+
 
 def convert_to_data_model(a_dict: Dict) -> DataModel:
     """Convert a dict to a DataModel.
