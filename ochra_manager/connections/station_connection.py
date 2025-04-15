@@ -27,4 +27,6 @@ class StationConnection:
             "args": op.args,
         }
 
+        # Not possible to use op.model_dump(mode="json") because there are no optional
+        # fields and thus None is not an allowed value for them
         return self.rest_adapter.post(endpoint=endpoint, data=data)
