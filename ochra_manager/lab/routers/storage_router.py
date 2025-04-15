@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter
 from ochra_common.connections.api_models import (
-    ObjectPropertySetRequest,
+    ObjectPropertyPatchRequest,
     ObjectConstructionRequest,
     ObjectPropertyGetRequest
 )
@@ -41,7 +41,7 @@ class StorageRouter(APIRouter):
         return self.lab_service.get_object_property(identifier, collection, args)
 
     async def modify_storage_item_property(
-        self, object_type: str, identifier: str, args: ObjectPropertySetRequest
+        self, object_type: str, identifier: str, args: ObjectPropertyPatchRequest
     ):
         collection = object_type if object_type in COLLECTIONS else None
         return self.lab_service.patch_object(identifier, collection, args)

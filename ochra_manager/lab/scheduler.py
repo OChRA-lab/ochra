@@ -2,7 +2,7 @@ from ochra_manager.connections.db_connection import DbConnection
 from ochra_common.equipment.operation import Operation
 from threading import Thread
 from time import sleep
-from ochra_common.utils.enum import ActivityStatus
+from ochra_common.utils.enum import ActivityStatus, PatchType
 from fastapi import HTTPException
 from ..connections.station_connection import StationConnection
 
@@ -66,10 +66,13 @@ class Scheduler:
                 self._db_conn.update(
                     {"id": self._queue_id, "_collection": "lab"},
                     {
-                        "op_queue": [
+                        "property": "op_queue",
+                        "property_value": [
                             op.get_base_model().model_dump_json()
                             for op, _ in self.op_queue
-                        ]
+                        ],
+                        "patch_type": PatchType.SET,
+                        "patch_args": None,
                     },
                 )
             sleep(1)
@@ -91,10 +94,16 @@ class Scheduler:
             station_ip + ":" + str(station_port)
         )
         # execute operation and save result in db
+        # TODO fix this when working on operation handling issue
         result = station_client.execute_op(operation, endpoint)
         self._db_conn.update(
             {"id": operation.id, "_collection": "operations"},
-            {"result": result.data},
+            {
+                "property": "result",
+                "property_value": result.data,
+                "patch_type": PatchType.SET,
+                "patch_args": None,
+            },
         )
 
     def _resolve_station_id_endpoint(self, target_entity_id: str, collection: str):

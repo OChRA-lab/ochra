@@ -2,7 +2,7 @@ import logging
 from fastapi import APIRouter
 from ochra_common.connections.api_models import (
     ObjectCallRequest,
-    ObjectPropertySetRequest,
+    ObjectPropertyPatchRequest,
     ObjectConstructionRequest,
     ObjectPropertyGetRequest,
 )
@@ -31,7 +31,7 @@ class RobotRouter(APIRouter):
     async def get_property(self, identifier: str, args: ObjectPropertyGetRequest):
         return self.lab_service.get_object_property(identifier, COLLECTION, args)
 
-    async def modify_property(self, identifier: str, args: ObjectPropertySetRequest):
+    async def modify_property(self, identifier: str, args: ObjectPropertyPatchRequest):
         return self.lab_service.patch_object(identifier, COLLECTION, args)
 
     async def call_robot(self, identifier: str, args: ObjectCallRequest):

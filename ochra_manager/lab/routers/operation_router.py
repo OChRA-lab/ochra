@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter
 from ochra_common.connections.api_models import (
-    ObjectPropertySetRequest,
+    ObjectPropertyPatchRequest,
     ObjectConstructionRequest,
     ObjectPropertyGetRequest,
 )
@@ -29,7 +29,7 @@ class OperationRouter(APIRouter):
     async def get_op_property(self, identifier: str, args: ObjectPropertyGetRequest):
         return self.lab_service.get_object_property(identifier, COLLECTION, args)
 
-    async def modify_op_property(self, identifier: str, args: ObjectPropertySetRequest):
+    async def modify_op_property(self, identifier: str, args: ObjectPropertyPatchRequest):
         return self.lab_service.patch_object(identifier, COLLECTION, args)
 
     async def get_op(self, identifier: str):
