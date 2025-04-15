@@ -1,5 +1,6 @@
 from ochra_common.storage.reagent import Reagent
 from ochra_common.utils.mixins import RestProxyMixin
+from ochra_common.utils.enum import PatchType
 from typing import Any
 
 
@@ -29,9 +30,7 @@ class Reagent(Reagent, RestProxyMixin):
             property_value (Any): property value
 
         """
-        properties = self.properties
-        properties.update({property_name: property_value})
-        self.properties = properties
+        self._lab_conn.patch_property(self._endpoint, self.id, "properties", property_value, PatchType.DICT_INSERT, {"key": property_name})
         return True
 
     def remove_property(self, property_name: str) -> bool:
@@ -43,9 +42,7 @@ class Reagent(Reagent, RestProxyMixin):
         Returns:
             bool: returns True if successful
         """
-        properties = self.properties
-        properties.pop(property_name, None)
-        self.properties = properties
+        self._lab_conn.patch_property(self._endpoint, self.id, "properties", None, PatchType.DICT_DELETE, {"key": property_name})
         return True
 
     def change_amount(self, amount: float) -> bool:

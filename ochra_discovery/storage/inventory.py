@@ -3,6 +3,7 @@ from ochra_common.storage.inventory import Inventory
 from ochra_common.utils.mixins import RestProxyMixin
 from ochra_common.storage.container import Container
 from ochra_common.storage.consumable import Consumable
+from ochra_common.utils.enum import PatchType
 from typing import Type
 
 
@@ -36,9 +37,7 @@ class Inventory(Inventory, RestProxyMixin):
         Args:
             container (Container): The container to be added.
         """
-        containers = self.containers
-        containers.append(container)
-        self.containers = containers
+        self._lab_conn.patch_property(self._endpoint, self.id, "containers", container, PatchType.LIST_APPEND)
 
     def remove_container(self, container: Type[Container]) -> None:
         """
@@ -47,9 +46,7 @@ class Inventory(Inventory, RestProxyMixin):
         Args:
             container (Container): The container to be removed.
         """
-        containers = self.containers
-        containers.remove(container)
-        self.containers = containers
+        self._lab_conn.patch_property(self._endpoint, self.id, "containers", container, PatchType.LIST_DELETE)
 
     def add_consumable(self, consumable: Consumable) -> None:
         """
@@ -58,9 +55,7 @@ class Inventory(Inventory, RestProxyMixin):
         Args:
             consumable (Consumable): The consumable to be added.
         """
-        consumables = self.consumables
-        consumables.append(consumable)
-        self.consumables = consumables
+        self._lab_conn.patch_property(self._endpoint, self.id, "consumables", consumable, PatchType.LIST_APPEND)
 
     def remove_consumable(self, consumable: Consumable) -> None:
         """
@@ -69,6 +64,4 @@ class Inventory(Inventory, RestProxyMixin):
         Args:
             consumable (Consumable): The consumable to be removed.
         """
-        consumables = self.consumables
-        consumables.remove(consumable)
-        self.consumables = consumables
+        self._lab_conn.patch_property(self._endpoint, self.id, "consumables", consumable, PatchType.LIST_DELETE)

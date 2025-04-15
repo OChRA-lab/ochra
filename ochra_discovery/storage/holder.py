@@ -1,6 +1,7 @@
 from ochra_common.storage.holder import Holder
 from ochra_common.storage.container import Container
 from ochra_common.utils.mixins import RestProxyMixin
+from ochra_common.utils.enum import PatchType
 from typing import Type
 
 
@@ -26,9 +27,7 @@ class Holder(Holder, RestProxyMixin):
         Args:
             container (Type[Container]): container to add
         """
-        containers = self.containers
-        containers.append(container)
-        self.containers = containers
+        self._lab_conn.patch_property(self._endpoint, self.id, "containers", container, PatchType.LIST_APPEND)
 
     def remove_container(self, container: Type[Container]) -> None:
         """removes container from the holders list of containers
@@ -36,6 +35,4 @@ class Holder(Holder, RestProxyMixin):
         Args:
             container (Type[Container]): container to remove
         """
-        containers = self.containers
-        containers.remove(container)
-        self.containers = containers
+        self._lab_conn.patch_property(self._endpoint, self.id, "containers", container, PatchType.LIST_DELETE)
