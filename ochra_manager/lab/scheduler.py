@@ -54,7 +54,7 @@ class Scheduler:
                         # execute operation in a new daemon thread
                         op_thread = Thread(
                             target=self._execute_op,
-                            args=(operation, station_id, "process_op"),
+                            args=(operation, station_id),
                             daemon=True,
                         )
                         op_thread.start()
@@ -67,7 +67,7 @@ class Scheduler:
                         "property": "op_queue",
                         "property_value": [
                             op.get_base_model().model_dump_json()
-                            for op, in self.op_queue
+                            for op in self.op_queue
                         ],
                         "patch_type": PatchType.SET,
                         "patch_args": None,
@@ -79,7 +79,7 @@ class Scheduler:
         self._stop = True
         self.thread.join()
 
-    def _execute_op(self, operation, station_id, endpoint):
+    def _execute_op(self, operation, station_id):
         # establish connection with station
         station_ip = self._db_conn.read(
             {"id": station_id, "_collection": "stations"}, "station_ip"
@@ -93,7 +93,7 @@ class Scheduler:
         )
         # execute operation and save result in db
         # TODO fix this when working on operation handling issue
-        result = station_client.execute_op(operation, endpoint)
+        result = station_client.execute_op(operation, "process_op")
         self._db_conn.update(
             {"id": operation.id, "_collection": "operations"},
             {
