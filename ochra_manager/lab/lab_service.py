@@ -94,7 +94,7 @@ class LabService:
         logger.info(f"constructed object of type {object_dict.get('cls')}")
         return object_dict.get("id")
 
-    def call_on_object(self, object_id: str, object_type, call_req: ObjectCallRequest) -> Operation:
+    def call_on_object(self, object_id: str, object_type: str, call_req: ObjectCallRequest) -> Operation:
         """call method of object on object
 
         Args:
