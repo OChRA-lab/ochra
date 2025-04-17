@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from pydantic import BaseModel
-from typing import Dict, Optional, Type
+from typing import Dict, Optional, Type, Any
 from pathlib import Path
 from pathlib import PurePath
 import shutil
@@ -16,13 +16,26 @@ from ochra_common.utils.enum import (
     ResultDataStatus,
     MobileRobotState,
 )
-from ochra_common.utils.misc import is_path
 from ochra_common.spaces.location import Location
 from ochra_common.equipment.device import Device
 from ochra_common.equipment.mobile_robot import MobileRobot
 from ochra_common.equipment.operation import Operation
 from ..proxy_models.equipment.operation_result import OperationResult
 from ..proxy_models.space.station import Station
+
+
+def _is_path(obj: Any) -> bool:
+    """Check if an object is a path.
+    Args:
+        obj (Any): The object to check.
+    Returns:
+        bool: True if the object is a path, False otherwise.
+    """
+    try:
+        path = Path(obj)
+        return path.exists()
+    except (TypeError, ValueError):
+        return False
 
 
 class operationExecute(BaseModel):
@@ -66,9 +79,7 @@ class StationServer:
         self._app = FastAPI()
         self._router = APIRouter()
 
-        self._router.add_api_route(
-            "/process_op", self.process_op, methods=["POST"]
-        )
+        self._router.add_api_route("/process_op", self.process_op, methods=["POST"])
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
         self._app.include_router(self._router)
 
@@ -117,6 +128,14 @@ class StationServer:
             HTTPException: If the entity type is not found
         """
         try:
+            # check if the station is not locked
+            if (
+                self._station_proxy.locked is not None
+                and self._station_proxy.locked != []
+            ):
+                if str(op.caller_id) != self._station_proxy.locked:
+                    raise HTTPException(403, detail="Station is locked by another user")
+
             if op.entity_type != "station":
                 device = self._devices[op.entity_id]
                 method = getattr(device, op.method)
@@ -150,22 +169,19 @@ class StationServer:
             error = ""
             data_type = ""
             data_status = ResultDataStatus.UNAVAILABLE
-           
+
             try:
-                if op.entity_type == "robot":
+                # set appropriate state for mobile robot
+                if op.entity_type == "robot" and isinstance(device, MobileRobot):
                     if op.method == "execute":
-                        task_name = op.args.pop("task_name")
-                        if isinstance(device, MobileRobot):
-                            device.state = MobileRobotState.MANIPULATING
-                        result = method(task_name=task_name, args=op.args)
+                        device.state = MobileRobotState.MANIPULATING
                     elif op.method == "go_to":
                         device.state = MobileRobotState.NAVIGATING
-                        result = method(op.args)
-                else:
-                    result = method(**op.args)
+
+                result = method(**op.args)
 
                 # process result
-                if is_path(result):
+                if _is_path(result):
                     result = Path(result)
                     success = True
                     result_data = None
@@ -276,4 +292,3 @@ class StationServer:
             # remove the zip file when upload is done
             if delete_archive:
                 remove(result.name)
-
