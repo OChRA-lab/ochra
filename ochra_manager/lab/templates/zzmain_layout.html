@@ -1,0 +1,15 @@
+<!-- home.html -->
+{% extends "zbase.html" %}
+
+{% block title %}OCHRA{% endblock %}
+
+{% block body %}
+<div>
+	{% include "/components/navbar.html"%}
+</div>
+<main id="MainContent" class="flex-1">
+	<div class="flex min-h-dvh">
+		{% block content %}{% endblock %}
+	</div>
+</main>
+{% endblock %}
