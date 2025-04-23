@@ -1,5 +1,5 @@
 import logging
-from typing import Any, List, Dict
+from typing import Any, List, Dict, Optional
 from ..connections.station_connection import StationConnection
 from ochra_common.equipment.operation import Operation
 from fastapi import HTTPException
@@ -12,7 +12,6 @@ from ochra_common.connections.api_models import (
 from ..connections.db_connection import DbConnection
 import uuid
 import json
-from datetime import datetime
 from pathlib import Path
 import shutil
 from os import remove
@@ -21,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class LabService:
-    def __init__(self, folderpath: str = None) -> None:
+    def __init__(self, folderpath: Optional[str] = None) -> None:
         """Labservice object serves the common functionality within routers to avoid code duplication
         """
         self.db_conn: DbConnection = DbConnection()

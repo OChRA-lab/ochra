@@ -1,21 +1,31 @@
+<a href="/app" class="z-50 absolute left-0 top-0 pl-2 pt-2 lg:hidden">
+	<svg xmlns="http://www.w3.org/2000/svg" class="fill-text dark:fill-dark-text" height="24px" viewBox="0 -960 960 960"
+		width="24px">
+		<path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
+	</svg>
+</a>
+
 <div class="border-b-[0.5px] border-text dark:border-dark-text flex flex-col justify-between relative">
 	<div class="p-6">
 		<h1 class="text-primary dark:text-dark-primary text-4xl">{{station._name}}</h1>
 		<p>Devices</p>
 	</div>
+
 	<div class="text-lg text-center  absolute bottom-0 w-full">
 		<ul class="flex px-6 pb-1 gap-4">
 			<li class="text-primary">
-				<a class="hover:cursor-pointer" hx-boost="true" href="/app/stations/{{station.id}}">Home</a>
+				<a class="hover:cursor-pointer" hx-trigger="click" hx-target="#sidepanel" hx-swap="innerHTML"
+					hx-push-url="true" hx-get="/app/stations/{{station.id}}">Home</a>
 			</li>
 			{% for _, d in station._devices.items() %}
 			<li>
-				<a class="hover:cursor-pointer" hx-boost="true"
-					href="/app/stations/{{station.id}}/devices/{{d.id}}">{{d.name}}</a>
+				<a class="hover:cursor-pointer" hx-trigger="click" hx-target="#sidepanel" hx-swap="innerHTML"
+					hx-push-url="true" hx-get="/app/stations/{{station.id}}/devices/{{d.id}}">{{d.name}}</a>
 			</li>
 			{% endfor %}
 		</ul>
 	</div>
+
 </div>
 
 <div class="flex-1 px-6 py-2 overflow-y-auto">
@@ -24,7 +34,8 @@
 		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
 			<!--State Chips-->
 			{% for k,d in station._devices.items() %}
-			<a href="/app/stations/{{station.id}}/devices/{{d.id}}" hx-boost="true">
+			<a hx-trigger="click" hx-target="#sidepanel" hx-swap="innerHTML" hx-push-url="true"
+				hx-get="/app/stations/{{station.id}}/devices/{{d.id}}">
 				<div
 					class=" flex justify-center items-center p-3 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
 					<h4 class="text-primary">

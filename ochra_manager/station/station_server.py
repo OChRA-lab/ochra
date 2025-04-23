@@ -68,8 +68,8 @@ class StationServer:
         """
         self._app = FastAPI()
         self._router = APIRouter()
-        MODULE = Path(__file__).resolve().parent
-        TEMPLATES = MODULE / "templates"
+        self.MODULE = Path(__file__).resolve().parent
+        self.TEMPLATES = self.MODULE / "templates"
 
 
         self._app.get( "/process_device_op")(self.process_device_op)
@@ -84,7 +84,7 @@ class StationServer:
         self._app.get("/hypermedia")(self.get_pannel)
         self._app.get("/hypermedia/devices/{device_id}")(self.get_pannel_device)
 
-        self._templates=Jinja2Templates(directory=TEMPLATES)
+        self._templates=Jinja2Templates(directory=self.TEMPLATES)
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
 
     def add_device(self, device):
@@ -174,7 +174,7 @@ class StationServer:
                     "request":request, 
                     "station": self, 
                     "device": device,
-                    "device_html": device.to_html()
+                    "device_html": device.to_html(),
                 }
         )
     #
