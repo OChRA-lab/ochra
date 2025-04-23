@@ -8,10 +8,8 @@ from typing import Dict, Optional, Type, Any
 from pathlib import Path, PurePath
 import shutil
 import traceback
-import traceback
 from os import remove
 import datetime
-from starlette.types import Message
 from starlette.types import Message
 import uvicorn
 
@@ -88,9 +86,6 @@ class StationServer:
 
         module_dir = Path(__file__).resolve().parent
 
-        static_directory = module_dir / "static"
-        self._app.mount("/static", StaticFiles(directory=static_directory), name="static")
-
 
         templates_dir = module_dir / "templates"
         self._templates=Jinja2Templates(directory=templates_dir)
@@ -100,7 +95,7 @@ class StationServer:
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
 
         #TODO: Look into the manual adding of routes in fastapi
-        self._router.add_route("/ui", self.station_ui, methods=["GET"] )
+        # self._router.add_route("/ui", self.station_ui, methods=["GET"] )
 
         self._app.include_router(self._router)
 
@@ -271,7 +266,7 @@ class StationServer:
     def ping(self):
         print("ping from station")
 
-    def process_device_op(self, op: Operation):
+    def process_op(self, op: Operation):
         """retrieve the device from the device dict and execute the method
 
         Args:

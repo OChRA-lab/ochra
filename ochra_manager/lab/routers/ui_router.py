@@ -215,6 +215,8 @@ class WebAppRouter(APIRouter):
         opp = Operation(
             caller_id=uuid.uuid4(),
             collection="operations",
+            entity_id=device_id,
+            entity_type="devices",
             method=str(""),
             args={},
             status = OperationStatus.CREATED,
