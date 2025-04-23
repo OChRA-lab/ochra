@@ -11,6 +11,9 @@ import logging
 
 from ochra_manager.lab.auth.auth import SessionToken, get_db, init_user_db
 from ochra_manager.lab.routers.ui_router import WebAppRouter
+
+from ochra_manager.lab.auth.auth import SessionToken, get_db, init_user_db
+from ochra_manager.lab.routers.ui_router import WebAppRouter
 from .routers.device_router import DeviceRouter
 from .routers.station_router import StationRouter
 from .routers.robot_router import RobotRouter
@@ -27,6 +30,7 @@ logger = logging.getLogger(__name__)
 
 class LabServer:
     def __init__(self, host: str, port: int, folderpath: str = None, template_path: Optional[Path] = None) -> None:
+    def __init__(self, host: str, port: int, folderpath: str = None, template_path: Optional[Path] = None) -> None:
         """Setup a lab server with the given host and port optionally storing data in folderpath
 
         Args:
@@ -34,6 +38,7 @@ class LabServer:
             port (int): port to open the server on
             folderpath (str): path to store data in
         """
+        MODULE_DIRECTORY = Path(__file__).resolve().parent if not template_path else template_path
         MODULE_DIRECTORY = Path(__file__).resolve().parent if not template_path else template_path
         self.host = host
         self.port = port

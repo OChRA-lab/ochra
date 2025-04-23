@@ -1,5 +1,6 @@
 import logging
 from typing import Any, List, Dict, Optional
+from typing import Any, List, Dict, Optional
 from ..connections.station_connection import StationConnection
 from ochra_common.equipment.operation import Operation
 from fastapi import HTTPException
@@ -20,6 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class LabService:
+    def __init__(self, folderpath: Optional[str] = None) -> None:
     def __init__(self, folderpath: Optional[str] = None) -> None:
         """Labservice object serves the common functionality within routers to avoid code duplication
         """
