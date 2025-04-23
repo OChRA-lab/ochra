@@ -1,13 +1,12 @@
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from pydantic import BaseModel
-from typing import Dict, Optional, Type
+from typing import Dict, Optional, Type, Any
 from pathlib import Path
 from pathlib import PurePath
 import shutil
 from os import remove
 import datetime
 import uvicorn
-import uvicorn.config
 
 from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.utils.enum import (
@@ -23,6 +22,20 @@ from ochra_common.equipment.mobile_robot import MobileRobot
 from ochra_common.equipment.operation import Operation
 from ..proxy_models.equipment.operation_result import OperationResult
 from ..proxy_models.space.station import Station
+
+
+def _is_path(obj: Any) -> bool:
+    """Check if an object is a path.
+    Args:
+        obj (Any): The object to check.
+    Returns:
+        bool: True if the object is a path, False otherwise.
+    """
+    try:
+        path = Path(obj)
+        return path.exists()
+    except (TypeError, ValueError):
+        return False
 
 
 class operationExecute(BaseModel):
@@ -66,16 +79,8 @@ class StationServer:
         self._app = FastAPI()
         self._router = APIRouter()
 
-        self._router.add_api_route(
-            "/process_device_op", self.process_device_op, methods=["POST"]
-        )
-        self._router.add_api_route(
-            "/process_robot_op", self.process_robot_op, methods=["POST"]
-        )
+        self._router.add_api_route("/process_op", self.process_op, methods=["POST"])
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
-        self._router.add_api_route(
-            "/process_station_op", self.process_station_op, methods=["POST"]
-        )
         self._app.include_router(self._router)
 
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
@@ -113,20 +118,17 @@ class StationServer:
     def ping(self, request: Request):
         print(f"ping from {request.client.host}")
 
-    def process_device_op(self, op: Operation):
-        """retrieve the device from the device dict and execute the method
+    def process_op(self, op: Operation):
+        """process the operation based on the entity type
 
         Args:
-            op (Operation): operation details to be executed on the device
+            op (Operation): operation to be processed
 
         Raises:
-            HTTPException: If the device is not found or the method is not found
-
-        Returns:
-            Any: return value of the method
+            HTTPException: If the entity type is not found
         """
         try:
-            # need to add star timestamp to the operation
+            # check if the station is not locked
             if (
                 self._station_proxy.locked is not None
                 and self._station_proxy.locked != []
@@ -134,15 +136,19 @@ class StationServer:
                 if str(op.caller_id) != self._station_proxy.locked:
                     raise HTTPException(403, detail="Station is locked by another user")
 
-            device = self._devices[op.entity_id]
-            method = getattr(device, op.method)
+            if op.entity_type != "station":
+                device = self._devices[op.entity_id]
+                method = getattr(device, op.method)
+            else:
+                method = getattr(self._station_proxy, op.method)
 
-            # set device and station to busy
-            device.status = ActivityStatus.BUSY
+            # set status to busy
             self._station_proxy.status = ActivityStatus.BUSY
+            if op.entity_type != "station":
+                device.status = ActivityStatus.BUSY
             self._station_proxy.add_operation(op)
 
-            # TODO crete an operation proxy to streamline setting properties
+            # set operation start timestamp and status
             if self._lab_conn:
                 self._lab_conn.set_property(
                     "operations",
@@ -163,44 +169,47 @@ class StationServer:
             error = ""
             data_type = ""
             data_status = ResultDataStatus.UNAVAILABLE
+
             try:
+                # set appropriate state for mobile robot
+                if op.entity_type == "robot" and isinstance(device, MobileRobot):
+                    if op.method == "execute":
+                        device.state = MobileRobotState.MANIPULATING
+                    elif op.method == "go_to":
+                        device.state = MobileRobotState.NAVIGATING
+
                 result = method(**op.args)
 
-                # checking if the result is bool
-                # TODO: test this new method
-                try:
+                # process result
+                if _is_path(result):
                     result = Path(result)
                     success = True
                     result_data = None
                     data_status = ResultDataStatus.UNAVAILABLE
-                    if (not result.is_file()) and (not result.is_dir()):
-                        # raising an exception to exit the try loop
-                        data_type = "string"
-                        result_data = result
-                        data_status = ResultDataStatus.AVAILABLE
-                    elif result.is_file():
+                    if result.is_file():
                         data_type = "file"
                         data_file_name = result.name
                     else:
                         data_type = "folder"
                         data_file_name = result.name + ".zip"
-                except TypeError:
+                else:
                     success = True
                     result_data = result
                     data_type = str(type(result))
                     data_status = ResultDataStatus.AVAILABLE
 
             except Exception as e:
-                # set device and station to error
-                device.status = ActivityStatus.ERROR
+                # set status to error
                 self._station_proxy.status = ActivityStatus.ERROR
+                if op.entity_type != "station":
+                    device.status = ActivityStatus.ERROR
 
                 success = False
                 error = str(e)
                 raise Exception(e)
 
             finally:
-                # update the operation_result to data server here
+                # update the operation_result in the lab server
                 operation_result = OperationResult(
                     success=success,
                     error=error,
@@ -231,215 +240,55 @@ class StationServer:
                         OperationStatus.COMPLETED,
                     )
 
-            # set device and station to idle
-            device.status = ActivityStatus.IDLE
+            # set status to idle
             self._station_proxy.status = ActivityStatus.IDLE
+            if op.entity_type != "station":
+                device.status = ActivityStatus.IDLE
+                if isinstance(device, MobileRobot):
+                    device.state = MobileRobotState.AVAILABLE
 
+            # upload result data if appropriate
             if isinstance(result, PurePath):
-                # if result is a directory, zip it up and convert to a file
-                if result.is_dir():
-                    result = shutil.make_archive(result.name, "zip", result.as_posix())
-                    result = Path(result)
-
-                # Do not make this an else or elif, this is code to upload all general files
-                if result.is_file():
-                    with open(str(result), "rb") as file:
-                        result_data = {"file": file}
-
-                        # upload the file as a property
-                        self._lab_conn.put_data(
-                            "operation_results",
-                            id=operation_result.id,
-                            result_data=result_data,
-                        )
-
-                        # change the data status to reflect success
-                        self._lab_conn.set_property(
-                            "operation_results",
-                            operation_result.id,
-                            "data_status",
-                            ResultDataStatus.AVAILABLE,
-                        )
-
-                    # remove the zip file when upload is done
-                    if data_type == "folder":
-                        remove(result.name)
-
-                # TODO to deal with nonsequential data upload
+                self._upload_result_data(result, operation_result)
 
         except Exception as e:
             raise HTTPException(500, detail=str(e))
 
-    def process_robot_op(self, op: Operation):
-        """retrieve the robot from the device dict and execute the given task
+    def _upload_result_data(self, result: PurePath, operation_result: OperationResult):
+        """upload the result data to the lab server
 
         Args:
-            op (Operation): operation details to be executed by the robot
-
-        Raises:
-            HTTPException: If the device is not found or the method is not found
-
-        Returns:
-            Any: return value of the method
+            result (PurePath): path to the result data
+            operation_result (OperationResult): operation result model
         """
-        try:
-            if (
-                self._station_proxy.locked is not None
-                and self._station_proxy.locked != []
-            ):
-                if str(op.caller_id) != self._station_proxy.locked:
-                    raise HTTPException(403, detail="Station is locked by another user")
+        # TODO to deal with nonsequential data upload
+        # if result is a directory, zip it up and convert to a file
+        delete_archive = False
+        if result.is_dir():
+            result = shutil.make_archive(result.name, "zip", result.as_posix())
+            result = Path(result)
+            delete_archive = True
 
-            # need to add star timestamp to the operation
-            robot = self._devices[op.entity_id]
+        # Do not make this an else or elif, this is code to upload all general files
+        if result.is_file():
+            with open(str(result), "rb") as file:
+                result_data = {"file": file}
 
-            if op.method not in robot.available_tasks and op.method != "go_to":
-                raise HTTPException(404, detail=f"task {op.method} not found")
-
-            # set device and station to busy
-            robot.status = ActivityStatus.BUSY
-            self._station_proxy.status = ActivityStatus.BUSY
-            self._station_proxy.add_operation(op)
-
-            # TODO crete an operation proxy to streamline setting properties
-            if self._lab_conn:
-                self._lab_conn.set_property(
-                    "operations",
-                    op.id,
-                    "start_timestamp",
-                    datetime.datetime.now().isoformat(),
-                )
-                # change status to in progress
-                self._lab_conn.set_property(
-                    "operations",
-                    op.id,
-                    "status",
-                    OperationStatus.IN_PROGRESS,
+                # upload the file as a property
+                self._lab_conn.put_data(
+                    "operation_results",
+                    id=operation_result.id,
+                    result_data=result_data,
                 )
 
-            if op.method == "go_to":
-                robot.state = MobileRobotState.NAVIGATING
-                result = robot.go_to(op.args)
-            else:
-                if isinstance(robot, MobileRobot):
-                    robot.state = MobileRobotState.MANIPULATING
-                result = robot.execute(task_name=op.method, args=op.args)
-
-            if self._lab_conn:
+                # change the data status to reflect success
                 self._lab_conn.set_property(
-                    "operations",
-                    op.id,
-                    "end_timestamp",
-                    datetime.datetime.now().isoformat(),
-                )
-                # change status to in progress
-                self._lab_conn.set_property(
-                    "operations",
-                    op.id,
-                    "status",
-                    OperationStatus.COMPLETED,
+                    "operation_results",
+                    operation_result.id,
+                    "data_status",
+                    ResultDataStatus.AVAILABLE,
                 )
 
-            # set device and station to busy
-            robot.status = ActivityStatus.IDLE
-            if isinstance(robot, MobileRobot):
-                robot.state = MobileRobotState.AVAILABLE
-            self._station_proxy.status = ActivityStatus.IDLE
-
-            return result
-        except Exception as e:
-            raise HTTPException(500, detail=str(e))
-
-    def process_station_op(self, op: Operation):
-        if self._station_proxy.locked is not None and self._station_proxy.locked != []:
-            if str(op.caller_id) != self._station_proxy.locked:
-                raise HTTPException(403, detail="Station is locked by another user")
-
-        # set device and station to busy
-        self._station_proxy.status = ActivityStatus.BUSY
-        self._station_proxy.add_operation(op)
-
-        if self._lab_conn:
-            self._lab_conn.set_property(
-                "operations",
-                op.id,
-                "start_timestamp",
-                datetime.datetime.now().isoformat(),
-            )
-            # change status to in progress
-            self._lab_conn.set_property(
-                "operations",
-                op.id,
-                "status",
-                OperationStatus.IN_PROGRESS,
-            )
-
-        result_data = None
-        data_file_name = ""
-        error = ""
-        data_type = ""
-        data_status = -1
-
-        method = getattr(self._station_proxy, op.method)
-        try:
-            result = method(**op.args)
-            try:
-                result = Path(result)
-                success = True
-                result_data = None
-                data_status = -1
-                if (not result.is_file()) and (not result.is_dir()):
-                    # raising an exception to exit the try loop
-                    data_type = "string"
-                    result_data = result
-                    data_status = 1
-                elif result.is_file():
-                    data_type = "file"
-                    data_file_name = result.name
-                else:
-                    data_type = "folder"
-                    data_file_name = result.name + ".zip"
-            except TypeError:
-                success = True
-                result_data = result
-                data_type = str(type(result))
-                data_status = 1
-        except Exception as e:
-            success = False
-            error = str(e)
-            raise Exception(e)
-
-        finally:
-            # update the operation_result to data server here
-            operation_result = OperationResult(
-                success=success,
-                error=error,
-                result_data=result_data,
-                data_file_name=data_file_name,
-                data_type=data_type,
-                data_status=data_status,
-            )
-
-        if self._lab_conn:
-            self._lab_conn.set_property(
-                "operations",
-                op.id,
-                "end_timestamp",
-                datetime.datetime.now().isoformat(),
-            )
-            self._lab_conn.set_property(
-                "operations",
-                op.id,
-                "result",
-                operation_result.id,
-            )
-            # change status to in progress
-            self._lab_conn.set_property(
-                "operations",
-                op.id,
-                "status",
-                OperationStatus.COMPLETED,
-            )
-
-        # set device and station to idle
-        self._station_proxy.status = ActivityStatus.IDLE
+            # remove the zip file when upload is done
+            if delete_archive:
+                remove(result.name)

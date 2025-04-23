@@ -18,8 +18,8 @@ class Scheduler:
             {"_collection": "lab"}, {"op_queue": self.op_queue}
         )
 
-    def add_operation(self, operation: Operation, collection: str):
-        self.op_queue.append((operation, collection))
+    def add_operation(self, operation: Operation):
+        self.op_queue.append(operation)
 
     def run(self):
         self.thread = Thread(target=self._schedule, daemon=False)
@@ -28,11 +28,9 @@ class Scheduler:
     def _schedule(self):
         while not self._stop:
             queue = self.op_queue.copy()
-            for operation, collection in queue:
+            for operation in queue:
                 # resolve station id and endpoint
-                station_id, endpoint = self._resolve_station_id_endpoint(
-                    str(operation.entity_id), collection
-                )
+                station_id = self._resolve_station_id(operation)
 
                 # check station status
                 station_status = self._db_conn.read(
@@ -51,12 +49,12 @@ class Scheduler:
                         operation.caller_id
                     ):
                         # remove operation from queue
-                        self.op_queue.remove((operation, collection))
+                        self.op_queue.remove(operation)
 
                         # execute operation in a new daemon thread
                         op_thread = Thread(
                             target=self._execute_op,
-                            args=(operation, station_id, endpoint),
+                            args=(operation, station_id),
                             daemon=True,
                         )
                         op_thread.start()
@@ -69,7 +67,7 @@ class Scheduler:
                         "property": "op_queue",
                         "property_value": [
                             op.get_base_model().model_dump_json()
-                            for op, _ in self.op_queue
+                            for op in self.op_queue
                         ],
                         "patch_type": PatchType.SET,
                         "patch_args": None,
@@ -81,7 +79,7 @@ class Scheduler:
         self._stop = True
         self.thread.join()
 
-    def _execute_op(self, operation, station_id, endpoint):
+    def _execute_op(self, operation, station_id):
         # establish connection with station
         station_ip = self._db_conn.read(
             {"id": station_id, "_collection": "stations"}, "station_ip"
@@ -95,7 +93,7 @@ class Scheduler:
         )
         # execute operation and save result in db
         # TODO fix this when working on operation handling issue
-        result = station_client.execute_op(operation, endpoint)
+        result = station_client.execute_op(operation, "process_op")
         self._db_conn.update(
             {"id": operation.id, "_collection": "operations"},
             {
@@ -106,17 +104,21 @@ class Scheduler:
             },
         )
 
-    def _resolve_station_id_endpoint(self, target_entity_id: str, collection: str):
-        if collection == "devices" or collection == "robots":
+    def _resolve_station_id(self, op: Operation):
+        target_entity_id = str(op.entity_id)
+        target_entity_type = op.entity_type
+        if target_entity_type == "device" or target_entity_type == "robot":
             station_id = self._db_conn.read(
-                {"id": target_entity_id, "_collection": collection}, "owner_station"
+                {
+                    "id": target_entity_id,
+                    "_collection": "devices"
+                    if target_entity_type == "device"
+                    else "robots",
+                },
+                "owner_station",
             )
             if station_id is None:
                 raise HTTPException(status_code=404, detail="station not found")
-            endpoint = (
-                "process_device_op" if collection == "devices" else "process_robot_op"
-            )
         else:
             station_id = target_entity_id
-            endpoint = "process_station_op"
-        return station_id, endpoint
+        return station_id

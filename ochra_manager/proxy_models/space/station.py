@@ -3,7 +3,7 @@ from ochra_common.equipment.device import Device
 from ochra_common.equipment.operation import Operation
 from ochra_common.spaces.station import Station
 from ochra_common.utils.mixins import RestProxyMixin
-from ochra_common.utils.enum import StationType
+from ochra_common.utils.enum import StationType, PatchType
 from typing import List, Type
 from uuid import UUID
 from pydantic import Field
@@ -32,11 +32,7 @@ class Station(Station, RestProxyMixin):
 
     def add_device(self, device: Type[Device]):
         device.owner_station = self.id
-        devices = self.devices
-        devices.append(device.id)
-        self.devices = devices
+        self._lab_conn.patch_property(self._endpoint, self.id, "devices", device.id, PatchType.LIST_APPEND)
 
     def add_operation(self, op: Operation):
-        op_record = self.operation_record
-        op_record.append(op.id)
-        self.operation_record = op_record
+        self._lab_conn.patch_property(self._endpoint, self.id, "operation_record", op, PatchType.LIST_APPEND)
