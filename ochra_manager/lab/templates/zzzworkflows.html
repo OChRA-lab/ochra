@@ -15,8 +15,11 @@
 	</div>
 
 	<!--Main Content-->
-	<div class="flex-1 bg-dotted">
-		<canvas class="w-full h-full" fill="transparent"></canvas>
+	<div class="flex-1">
+		<div class="w-full h-full" id="floweditor"></div>
 	</div>
+	<script>
+		var flow = WebComponentFlow({container: '#floweditor'})
+	</script>
 </div>
 {% endblock %}

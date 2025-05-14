@@ -2,10 +2,9 @@ from pathlib import Path
 from contextlib import asynccontextmanager
 from typing import Optional
 from fastapi import FastAPI, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-import jinja2
 import uvicorn
 import logging
 from ochra_manager.lab.auth.auth import SessionToken, get_db, init_user_db
@@ -60,8 +59,14 @@ class LabServer:
         self.app.include_router(WebAppRouter(self.templates))
         self.app.middleware("http")(self.auth_middleware)
 
+        self.app.get("/", response_class=HTMLResponse)(self.serve_index)
+
         init_user_db()
         #########################################
+
+    async def serve_index(self, request: Request):
+        # if you need to pass any context, add it here
+        return self.templates.TemplateResponse("index.html", {"request": request})
 
     async def auth_middleware(self, request: Request, call_next):
         with next(get_db()) as database:
