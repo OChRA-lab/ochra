@@ -9,7 +9,8 @@ from .api_models import (
 )
 from uuid import UUID, uuid4
 import logging
-from typing import Any, Type, Union, List
+from typing import Any, Type, TypeVar, Union, List
+from typing import Any, Type, TypeVar, Union, List
 import importlib
 from ..equipment.operation import Operation
 from ..utils.enum import OperationStatus, PatchType
@@ -17,7 +18,6 @@ from ..utils.misc import is_data_model, convert_to_data_model
 import time
 
 # TODO change the return types of get_property and get_all_objects to be more specific
-
 
 class LabConnection(metaclass=SingletonMeta):
     """lab adapter built on top of RestAdapter,

@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Self
 import uuid
 from pydantic import BaseModel, Field
 
@@ -24,7 +24,7 @@ class DataModel(BaseModel):
         self.cls = f"{self.__class__.__name__}" if self.cls is None else self.cls
         return super().model_post_init(__context)
 
-    def get_base_model(self) -> "DataModel":
+    def get_base_model(self) -> Self:
         """
         Get a base model containing the base information of the model instance.
 
