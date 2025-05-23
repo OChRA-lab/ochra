@@ -2,7 +2,7 @@ from pathlib import Path
 from contextlib import asynccontextmanager
 from typing import Optional
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
@@ -23,7 +23,13 @@ logger = logging.getLogger(__name__)
 
 
 class LabServer:
-    def __init__(self, host: str, port: int, folderpath: str = None, template_path: Optional[Path] = None) -> None:
+    def __init__(
+        self,
+        host: str,
+        port: int,
+        folderpath: str = None,
+        template_path: Optional[Path] = None,
+    ) -> None:
         """Setup a lab server with the given host and port optionally storing data in folderpath
 
         Args:
@@ -31,7 +37,9 @@ class LabServer:
             port (int): port to open the server on
             folderpath (str): path to store data in
         """
-        MODULE_DIRECTORY = Path(__file__).resolve().parent if not template_path else template_path
+        MODULE_DIRECTORY = (
+            Path(__file__).resolve().parent if not template_path else template_path
+        )
         self.host = host
         self.port = port
         self.scheduler = Scheduler()
@@ -44,8 +52,10 @@ class LabServer:
 
         self.app = FastAPI(lifespan=lifespan)
 
-        self.templates=Jinja2Templates(directory=MODULE_DIRECTORY / "templates")
-        self.app.mount("/static", StaticFiles(directory=MODULE_DIRECTORY / "static"), name="static")
+        self.templates = Jinja2Templates(directory=MODULE_DIRECTORY / "templates")
+        self.app.mount(
+            "/static", StaticFiles(directory=MODULE_DIRECTORY / "static"), name="static"
+        )
 
         self.app.include_router(LabRouter())
         self.app.include_router(DeviceRouter(self.scheduler))
@@ -59,31 +69,26 @@ class LabServer:
         self.app.include_router(WebAppRouter(self.templates))
         self.app.middleware("http")(self.auth_middleware)
 
-        self.app.get("/", response_class=HTMLResponse)(self.serve_index)
-
         init_user_db()
         #########################################
 
-    async def serve_index(self, request: Request):
-        # if you need to pass any context, add it here
-        return self.templates.TemplateResponse("index.html", {"request": request})
-
     async def auth_middleware(self, request: Request, call_next):
         with next(get_db()) as database:
-            if request.url.path.startswith("/app") and request.url.path not in ['/app/login','/app/register']:
-
-                session_token = request.cookies.get('session_token')
+            if request.url.path.startswith("/app") and request.url.path not in [
+                "/app/login",
+                "/app/register",
+            ]:
+                session_token = request.cookies.get("session_token")
                 if not session_token:
-                    return RedirectResponse(url='/app/login')
+                    return RedirectResponse(url="/app/login")
 
                 user = SessionToken.get_user_from_session(session_token, database)
                 if not user:
-                    return RedirectResponse(url='/app/login')
+                    return RedirectResponse(url="/app/login")
 
                 request.state.user = user
 
             return await call_next(request)
-
 
     def get_caller_variable_name(self):
         """Find the name of the variable that called this function

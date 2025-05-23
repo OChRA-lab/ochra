@@ -125,7 +125,7 @@ class WebAppRouter(APIRouter):
             response.headers["HX-Location"] = "/app/login"
             return response
 
-        raise HTTPException(status_code=404, detail=f"User session {request.cookies["session_token"]} not found")
+        raise HTTPException(status_code=404, detail=f"User session {request.cookies['session_token']} not found")
 
 
 
@@ -134,7 +134,7 @@ class WebAppRouter(APIRouter):
         body = await request.body()
         headers = dict(request.headers)
         method = request.method
-        url=f"http://{s["station_ip"]}:{s["port"]}/hypermedia"
+        url=f"http://{s['station_ip']}:{s['port']}/hypermedia"
 
 
         stations = self.lab_service.get_all_objects(STATIONS)
@@ -174,7 +174,7 @@ class WebAppRouter(APIRouter):
         body = await request.body()
         headers = dict(request.headers)
         method = request.method
-        url=f"http://{s["station_ip"]}:{s["port"]}/hypermedia/devices/{device_id}"
+        url=f"http://{s['station_ip']}:{s['port']}/hypermedia/devices/{device_id}"
 
         stations = self.lab_service.get_all_objects(STATIONS)
         table_fields = [
@@ -241,7 +241,7 @@ class WebAppRouter(APIRouter):
             return Response(
                     status_code=status.HTTP_202_ACCEPTED,
                     headers={
-                        "HX-Location": f"/app/stations/{station["id"]}/devices/{device_id}"
+                        "HX-Location": f"/app/stations/{station['id']}/devices/{device_id}"
                     }
             )
 
