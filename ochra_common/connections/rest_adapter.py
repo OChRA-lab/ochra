@@ -220,27 +220,3 @@ class RestAdapter:
         return self._do(
             http_method="DELETE", endpoint=endpoint, ep_params=ep_params, data=data
         )
-
-if __name__ == "__main__":
-    adapter = RestAdapter("127.0.0.1:8000", ssl_verify=False)
-
-    # doesnt do anything as adapter already exists
-    adapter2 = RestAdapter("127.0.2.1:8000", ssl_verify=False)
-
-    print(adapter2.url)
-    print(adapter.url)
-    data = {
-        "operation": "Some Operation",
-        "station": "some Station",
-        # "device": "some Device",
-        # "args": {
-        #    "abc": 123
-        # }
-    }
-
-    data2 = {
-        "object_type": "Rack",
-        "contstructor_params": {"some param": "param1", "some other param": "param2"},
-    }
-    print(adapter.post("Operation", data=data).message)
-    print(adapter.post("ConstructObject", data=data2).data)
