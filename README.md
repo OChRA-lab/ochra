@@ -4,7 +4,7 @@ This functions as a 'front end' in code for controlling devices for use by peopl
 
 Nearly everything within this module is designed in such a way to appear as if you are just using the device/station its connected to but in reality just makes http requests for everything
 
-To actually find out how to control devices, Look to the ochra_examples repo, readme in devices folder should explain. However the short version is front end proxy object(device) makes request to lab that maps to back end driver(handler) and executes given function then returns back through lab to front end as an operation object 
+To actually find out how to control devices, Look to the [ochra_examples](https://github.com/OChRA-lab/ochra_examples) repo, readme in devices folder should explain. However the short version is front end proxy object(device) makes request to lab that maps to back end driver(handler) and executes given function then returns back through lab to front end as an operation object 
 
 ## UTILS
 
@@ -13,9 +13,9 @@ Lock class and context manager are for calling the lock method to restrict acces
 
 ## STORAGE
 
-Each of these are implementations of the abstract classes in ochra_common, with any functions implemented as their respective http requests
+Each of these are implementations of the abstract classes in [ochra_common](https://github.com/OChRA-lab/ochra_common), with any functions implemented as their respective http requests
 
-The purpose of these classes is for you in your code to keep track of your experiment, they are stored in the DB and get assigned to whichever things use them if you add/remove from their inventory but mostly just to keep track of what youre doing for yourself. We have some example usages in the ochra_examples repo
+The purpose of these classes is for you in your code to keep track of your experiment, they are stored in the DB and get assigned to whichever things use them if you add/remove from their inventory but mostly just to keep track of what youre doing for yourself. We have some example usages in the [ochra_examples](https://github.com/OChRA-lab/ochra_examples) repo
 ## SPACES
 
 ### LAB
