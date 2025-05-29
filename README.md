@@ -74,7 +74,7 @@ The same functionality as device, but for stations
 
 - *get_property*: This is for getting a reading from a station (or its latest reading in the database). has endpoint: `/stations/{_id_}/get_property`
 
-- *modify_property*: This is a patch for a property the station has in the database, e.g. a value of temperature or something like that and has the endpoint of PATCH `/stations/{_id_}/modify_property`
+- *modify_property*: This is a patch for a property the station has in the database, e.g. the stations status, or devices and has the endpoint of PATCH `/stations/{_id_}/modify_property`
 
 - *call_method*: This is for calling a method on a station, firstly we use the lab_service to create our operation, then we pass it to the scheduler to be executed `/stations/{_id_}/call_method`
 
@@ -92,7 +92,7 @@ The same functionality as device, but for robots
 
 - *get_property*: This is for getting a reading from a Robot (or its latest reading in the database). has endpoint: `/robots/{_id_}/get_property`
 
-- *modify_property*: This is a patch for a property the Robot has in the database, e.g. a value of temperature or something like that and has the endpoint of PATCH `/robots/{_id_}/modify_property`
+- *modify_property*: This is a patch for a property the Robot has in the database, e.g. robot position or location and has the endpoint of PATCH `/robots/{_id_}/modify_property`
 
 - *call_method*: This is for calling a method on a Robot, firstly we use the lab_service to create our operation, then we pass it to the scheduler to be executed `/robots/{_id_}/call_method`
 
