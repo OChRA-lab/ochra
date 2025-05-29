@@ -1,6 +1,6 @@
 # OCHRA COMMON
 
-For the things that're used in both Discovery and manager
+For the things that're used in both [Discovery](https://github.com/OChRA-lab/ochra_discovery) and [manager](https://github.com/OChRA-lab/ochra_manager)
 
 ### base.py
 
@@ -56,7 +56,7 @@ This is mostly used to allow a shared LabConnection while only having to define 
 
 Module that contains a variety of classes for different types of storage objects that exist in reality. The current docstrings contain enough information for these simple classes. I have added these below for the sake of brevity. The Storage classes are all inheritents of DataModel
 
-The majority of these classes are implemented in discovery for usage by a user
+The majority of these classes are implemented in [discovery](https://github.com/OChRA-lab/ochra_discovery) for usage by a user
 
 ### consumable.py
 **Abstract class** for lab consumables (caps, needles, etc.).
