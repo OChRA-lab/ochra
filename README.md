@@ -15,6 +15,7 @@ Lock class and context manager are for calling the lock method to restrict acces
 
 Each of these are implementations of the abstract classes in ochra_common, with any functions implemented as their respective http requests
 
+The purpose of these classes is for you in your code to keep track of your experiment, they are stored in the DB and get assigned to whichever things use them if you add/remove from their inventory but mostly just to keep track of what youre doing for yourself. We have some example usages in the ochra_examples repo
 ## SPACES
 
 ### LAB
