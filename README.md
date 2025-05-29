@@ -68,9 +68,17 @@ Each router makes use of the Lab_service class to do the common functionality me
 
 ##### Station Router
 
+The same functionality as device, but for stations
   
+- *construct*: This is for adding a new station entry but it should be post not put. `/stations/construct`
 
-EXACT SAME AS DEVICES BUT FOR STATIONS
+- *get_property*: This is for getting a reading from a station (or its latest reading in the database). has endpoint: `/stations/{_id_}/get_property`
+
+- *modify_property*: This is a patch for a property the station has in the database, e.g. a value of temperature or something like that and has the endpoint of PATCH `/stations/{_id_}/modify_property`
+
+- *call_method*: This is for calling a method on a station, firstly we use the lab_service to create our operation, then we pass it to the scheduler to be executed `/stations/{_id_}/call_method`
+
+- *get_*: This is for getting a specific station and has the endpoint `/stations/get/{_id_}`
 
   
 
@@ -78,8 +86,17 @@ EXACT SAME AS DEVICES BUT FOR STATIONS
 
   
 
-EXACT SAME AS DEVICES AND STATIONS BUT FOR ROBOTS
+The same functionality as device, but for robots
 
+- *construct*: This is for adding a new Robot entry but it should be post not put. `/robots/construct`
+
+- *get_property*: This is for getting a reading from a Robot (or its latest reading in the database). has endpoint: `/robots/{_id_}/get_property`
+
+- *modify_property*: This is a patch for a property the Robot has in the database, e.g. a value of temperature or something like that and has the endpoint of PATCH `/robots/{_id_}/modify_property`
+
+- *call_method*: This is for calling a method on a Robot, firstly we use the lab_service to create our operation, then we pass it to the scheduler to be executed `/robots/{_id_}/call_method`
+
+- *get_*: This is for getting a specific Robot and has the endpoint `/robots/get/{_id_}`
   
   
 
@@ -134,11 +151,7 @@ EXACT SAME AS DEVICES AND STATIONS BUT FOR ROBOTS
 
     - *construct_object*: for creating an object in the database
 
-  
-
     - *call_on_object*: creates operations based on requests to allow the scheduler to call the objects
-
-  
 
     - *get_object_property*: this is a function that takes an ID and gets a property from an object type
 
@@ -149,8 +162,6 @@ EXACT SAME AS DEVICES AND STATIONS BUT FOR ROBOTS
     - *get_all_objects*: Get all the ojects of a certain collection
 
     - *get_object_by_station_and_type*: This is basically get an object type but filtered by the station
-
-  
 
     - *patch_file*: UPDATE A FILE
 
@@ -166,34 +177,24 @@ EXACT SAME AS DEVICES AND STATIONS BUT FOR ROBOTS
 
 The station acts as a proxy for devices connected to it The main point of it is to organize collections of devices in to logical places mapped to real world locations but from a networking point of view it takes HTTP calls and converts those commands in to serial or whatever protocol used by the IoT device
 
-  
+It is composed of a fastapi application instance which acts as the main router.
 
-It is composed of a fastapi application instance which acts as the main router. It also has the following attributes
-
-  
-
-- name
-
-- location
-
-- type
-
-- ip
-
-- port
-
-- devices
-
-- router
-
-- app
-
-- station_proxy: All proxies are REST proxies for the database
-
-- lab_conn: This is a connection to the lab
 
   
+**ATTRIBUTES**
+- `name` (str) : name of the station, used to identify and connect on the frontend
+- `location`(Location): location of the station
+- `type` (ENUM): type of station
+- `ip` (str, optional): station ip to run the server on. Defaults to "127.0.0.1".
+- `port` (int, optional): port to oopen the station on. Defaults to 8000.
+- `devices` (dict[str,device]): the connected devices to station
+- `router` (APIRouter): fastapi router 
+- `app` (FastAPI): fastapi instance
+- `station_proxy`: All proxies are REST proxies for the database
+- `lab_conn`: This is a connection to the lab
+
   
+**Methods**
 
 - *setup*: this method sets up the lab which creates the fastapi app adds the routes then connects to the lab using the method.
 
@@ -239,6 +240,7 @@ It is composed of a fastapi application instance which acts as the main router. 
 This is a database connecton class and SHOULD take an adapter and logger and then details to connect to the database
 
   
+**Methods**
 
 - *create*: This will create a new document in the specified collection
 
@@ -258,7 +260,7 @@ This is a database connecton class and SHOULD take an adapter and logger and the
 
   
 
-The methods here have to be the same as the db_connection and purely used for the mongo_adapter
+The methods here have to be the same as the db_connection and purely used for the mongo_adapter. The purpose of this class is to be the swappable interface with whichever database you want to use.
 
   
 
@@ -268,31 +270,34 @@ The methods here have to be the same as the db_connection and purely used for th
 
 This class is for executing operations on the server. It's essentially the same as the lab connection but maps to the station functionality
 
+**methods**
+- *execute_op*: take a given operation and send it to the station to be executed
+
   
 
 ## OCHRA MANAGER/PROXY_MODELS
 
   
 
-All proxy models are for connecting to databases. They are all Mixin class to add rest proxy functionality to a class
+All proxy models are for connecting to databases. They are all Mixin class to add rest proxy functionality to a class. They are implementations of the abstract classes in [ochra_common](https://github.com/OChRA-lab/ochra_common)
 
   
 
 ### [OPERATION_RESULT](./ochra_manager/ochra_manager/proxy_models/equipment/operation_result.py)
 
-A class for operation results that inherits from the RestProxy
+A class for operation results that inherits from the RestProxy. See [operation_result](https://github.com/OChRA-lab/ochra_common?tab=readme-ov-file#operation_resultpy)
 
   
 
 ### [STATION](./ochra_manager/ochra_manager/proxy_models/space/station.py)
 
-A station proxy for station models
+A station proxy for station models. See [Station](https://github.com/OChRA-lab/ochra_common?tab=readme-ov-file#stationpy)
 
   
 
 ### [INVENTORY](./ochra_manager/ochra_manager/proxy_models/storage/inventory.py)
 
-A class for inventories
+A class for inventories. See [Inventory](https://github.com/OChRA-lab/ochra_common?tab=readme-ov-file#inventorypy)
 
   
   
