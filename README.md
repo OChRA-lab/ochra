@@ -56,46 +56,203 @@ This is mostly used to allow a shared LabConnection while only having to define 
 
 Module that contains a variety of classes for different types of storage objects that exist in reality. The current docstrings contain enough information for these simple classes. I have added these below for the sake of brevity. The Storage classes are all inheritents of DataModel
 
-- consumable.py: Abstract class for lab consumables such as caps, needles, etc. This is the abstract class for the rest of the classes in the module. it has one method. *change_quantity* which will be used changing the quantity of the consumable.
+The majority of these classes are implemented in discovery for usage by a user
 
-- container.py: Abstract class for containers, anything that can hold something
-    - *get_used_capacity*: Get the used capacity of the container at present
-    - *get_avalable_capacity*: Gets the available capacity of the container at present
+### consumable.py
+**Abstract class** for lab consumables (caps, needles, etc.).
 
-- holder.py: Abstract class that represents any container that can hold another container it has two methods
-    - *add_container*: Method for adding containers to the Holder
-    - *remove_containers*: Method for removing containers from a holder
+**Attributes**  
+- `name` (str): The name of the consumable item.  
+- `quantity` (int): The current quantity available.
 
-- inventory.py: Abstract class for inventory, contains containers and consumables.
-    - *add_container* : Add a container to the inventory
-    - *remove_container* : Remove a container from the inventory
-    - *add_consumable* : Add a consumable to the inventory
-    - *remove_consumable* : Remove the consumable from the inventory
+**Methods**  
+- **change_quantity(amount: int):** Adjusts the consumable quantity by the specified amount.
 
-- reagent.py: Abstract Reagent class to represent any chemicals used
-    - *add_property*:  Add a property to the reagent
-    - *remove_property*: Remove a property of the reagent
-    - *change_amount*: Change the amount of the reagent
+**Usage**  
+- Track disposable items in the lab’s inventory.  
+- Update the quantity as items are used up.
 
-- vessel.py: Vessel Abstract class, any container that can hold reagents
-    - *add_reagent* 
-    - *remove_reagent*
+*Example subclass:*  
+```python
+class Syringe(Consumable):
+    def __init__(self, name, quantity):
+        super().__init__(name=name, quantity=quantity)
+```
+
+### container.py:
+**Abstract class** for containers, anything that can hold something
+**Attributes**
+- `type` (str): The type of the container.
+- `max_capacity` (int|float): The maximum capacity of the container.
+- `physical_id` (int): The physical identifier of the container. Defaults to None.
+- `is_used` (bool): Indicates whether the container has been used. Defaults to False.
+
+**Methods**
+- *get_used_capacity*: Get the used capacity of the container at present
+- *get_avalable_capacity*: Gets the available capacity of the container at present
+
+**Usage**
+- To represent physical objects like racks.
+
+*Example subclass*
+Look to vessel or holder
+
+### holder.py
+**Abstract class** that represents any container that can hold another container
+**Attributes**
+- containers: (List[Type[Container]]): list of containers inside the holder
+
+**Methods**
+- *add_container*: Method for adding containers to the Holder
+- *remove_containers*: Method for removing containers from a holder
+
+**Usage**
+- Organise how your containers are stored
+
+*Example Subclass*
+```python
+class Rack(Holder):
+    def __init__(self):
+        super().__init__()
+```
+
+### inventory.py
+**Abstract class** for inventory, contains containers and consumables.
+
+**Attributes**
+- `owner` (DataModel): The owner of the inventory.
+- `containers_max_capacity` (int): The maximum capacity of containers in the inventory.
+- `containers` (List[Container]): A list of containers in the inventory. Defaults to an empty list.
+- `consumables` (List[Consumable]): A list of consumables in the inventory. Defaults to an empty list.
+
+**Methods**
+- *add_container* : Add a container to the inventory
+- *remove_container* : Remove a container from the inventory
+- *add_consumable* : Add a consumable to the inventory
+- *remove_consumable* : Remove the consumable from the inventory
+
+
+### reagent.py
+**Abstract** Reagent class to represent any chemicals used
+- `name` (str): The name of the reagent.
+- `amount` (float): The amount of the reagent.
+- `unit` (str): The unit of measurement for the amount.
+- `physical_state` (Enum): The physical state of the reagent (e.g., solid, liquid, gas). Defaults to UNKNOWN.
+- `properties` (Dict[str, Any]): A dictionary of additional properties of the reagent.
+
+**Methods**
+- *add_property*:  Add a property to the reagent
+- *remove_property*: Remove a property of the reagent
+- *change_amount*: Change the amount of the reagent
+
+**Usage**
+- Represent our chemicals used in workflows
+
+*Example Subclass*
+```python
+class Alcohol(Reagent):
+    def __init__(self, amount=100.0):
+        super().__init__(properties={}, amount=amount)
+```
+
+### vessel.py
+Vessel **Abstract class**, any container that can hold reagents
+
+**Attributes**
+- `capacity_unit` (str): The unit of measurement for the vessel's capacity.
+- `reagents` (List[Reagent]): A list of reagents contained in the vessel. Defaults to an empty list.
+
+**Methods**
+- *add_reagent*(reagent: Reagent): Place a reagent in the vessel.
+- *remove_reagent*(reagent_id: UUID): Remove a reagent by ID.
+
+**Usage**
+- store combinations of reagents so you know whats in what vial etc
+
+*Example Subclass*
+```python
+class Flask(Vessel):
+    def __init__(self):
+        super().__init__()
+```
 
 ## SPACES
 
 This module are for classes that represent physical spaces in the real setting. Similar to storage there is not much business logic that has actually been implemented and so I have just provided a small excerpt below for explaining what these classes are meant to be.
 
-- lab.py: Abstract Lab class that represents a laboratory.
-    - *get_stations*: Retrieve all stations in the lab
-    - *get_station*: Retrieve a specific station from the lab.
-    - *get_robots*: Retrieve all robots in the lab.
-    - *get_robot*: Retrieve a specific robot from the lab.
+### lab.py
+**Abstract class** representing a laboratory.
 
-- location.py: Abstract location to correspond to a physical location.
+**Attributes**  
+- `stations` (List[Station]): A list of Station objects within the lab.  
+- `robots` (List[Robot]): A list of Robot objects supervised by the lab.  
 
-- station.py: Abstract station class that contains information all stations will have.
-    - *get_device*: Retrieve a device from the workstation.
-    - *get_robot*: Retrieve a robot from the workstation.
+**Methods**  
+- **get_stations():** Retrieve all Station objects in the lab.  
+- **get_station(station_id: str):** Retrieve a specific station by its identifier.  
+- **get_robots():** Retrieve all Robot objects in the lab.  
+- **get_robot(robot_id: str):** Retrieve a specific robot by its identifier.
+
+**Usage**  
+- Acts as a high-level controller that manages stations and orchestrates operations.  
+- Provides an entry point for discovering and accessing lab resources.
+
+*Example subclass:*  
+```python
+class MyLab(Lab):
+    def custom_method(self):
+        pass
+```
+
+### location.py: 
+**Abstract class** location to correspond to a physical location.
+
+**Attributes**
+- `lab` (str): The name of the lab this location belongs to
+- `room` (str): The room name
+- `place` (str): Description of where in the room it is
+
+**Methods**
+None
+
+**Usage**
+- Used to describe to someone how to get to the physical location of some device/lab/station
+
+*Example Subclass*:
+```python
+class CustomLocation(Location):
+    def detailed_description(self) -> str:
+        return f"Lab: {self.lab}, Room: {self.room}, Place: {self.place}"
+```
+
+### station.py: 
+**Abstract Class** station that contains information all stations will have.
+
+**Attributes**
+- name: str : name of station
+- location: Location: location of station
+- type: StationType: enum for station type
+- status: ActivityStatus: current status. defaults to IDLE
+- inventory: Inventory: stations inventory. Defaults to none
+- devices: List[Type[Device]]: list of devices connected to station
+- operation_record: List[Operation] : history of operations performed by the station.
+- locked: Optional[UUID]: ID of the station currently locking the station. None if not locked
+
+**Methods**
+- *get_device*: Retrieve a device from the station.
+- *get_robot*: Retrieve a robot from the station.
+
+**Usage**
+- Interacts with the lab for higher-level coordination of tasks.
+- Manages and supervises local devices or robots.
+
+*Example subclass*
+```python
+class MyStation(Station):
+    def perform_maintenance(self):
+        # Custom logic for station maintenance
+        pass
+```
 
 ## CONNECTIONS
 
@@ -219,11 +376,11 @@ Class representing actions performed by agents/devices.
 `class CustomResult(OperationResult): ...`
 
 
-### robot.py (Depreciated kinda)
+### robot.py
 
 An abstract class to represent a generic robot. It contains an execute function which should be implemented for a class to be considered a robot and has an endpoint and available_tasks list
 
-### mobile_robot.py (Depreciated kinda more)
+### mobile_robot.py 
 
 An abstract class to represent a mobile robot platform which inherits from Robot, It has a go_to method as part of its contract. It contains an execute function which should be implemented for a class to be considered a robot and has an endpoinyt and available_tasks list
 
