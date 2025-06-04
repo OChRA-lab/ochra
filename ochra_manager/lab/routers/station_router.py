@@ -23,7 +23,7 @@ class StationRouter(APIRouter):
         self.get("/{identifier}/get_property")(self.get_station_property)
         self.patch("/{identifier}/modify_property")(self.modify_property)
         self.post("/{identifier}/call_method")(self.call_method)
-        self.get("/get/{identifier}")(self.get_station)
+        self.get("/get")(self.get_station)
 
     async def construct_station(
         self, args: ObjectConstructionRequest, request: Request
