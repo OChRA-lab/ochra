@@ -94,7 +94,7 @@ class LabService:
         
         object_dict: dict = json.loads(construct_req.object_json)
         existing_object = self.db_conn.find(
-            {"_collection": collection}, {"name": object_dict.get("name")}
+            {"_collection": collection}, {"name": object_dict.get("name","")}
         )
         print(f"existing_object: {existing_object}")
         if existing_object is not None:
