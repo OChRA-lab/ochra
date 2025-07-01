@@ -126,7 +126,7 @@ class StationServer:
         """
 
         # TODO: str instead of pure uuid
-        self._devices[str(device.id)] = device
+        self._devices[device.id] = device
         if self._station_proxy:
             self._station_proxy.add_device(device)
 
