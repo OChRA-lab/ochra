@@ -91,8 +91,18 @@ class LabService:
         Returns:
             str: object id of constructed object
         """
-
+        
         object_dict: dict = json.loads(construct_req.object_json)
+        existing_object = self.db_conn.find(
+            {"_collection": collection}, {"name": object_dict.get("name")}
+        )
+        print(f"existing_object: {existing_object}")
+        if existing_object is not None:
+            object_dict["id"] = existing_object.get("id")
+            self.db_conn.delete(
+                {"id": existing_object.get("id"), "_collection": collection}
+            )
+        
         self.db_conn.create({"_collection": collection}, object_dict)
         logger.info(f"constructed object of type {object_dict.get('cls')}")
         return object_dict.get("id")
