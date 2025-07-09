@@ -163,23 +163,31 @@ class HypermediaBuilder:
             for name, meta in self.device._ui_states
         ]
         
-
     def _get_form_context(self):
-        return [
-            {
+        forms = []
+        for _, meta in self.device._ui_forms:
+            params = {}
+            for name, input_meta in meta['params'].items():
+                attributes = dict(input_meta.attrs)  # Copying to avoid mutating original dict
+
+                # Insert dynamic dropdown options if available for 'task_list' parameter
+                if name == "task_name" and hasattr(self.device, 'available_tasks'):
+                    attributes['options'] = self.device.available_tasks
+                
+                params[name] = {
+                    "name": name,
+                    "label": input_meta.label,
+                    "type": input_meta.type,
+                    "variable_binding": getattr(self.device, input_meta.variable_binding) if hasattr(self.device, input_meta.variable_binding) else "",
+                    "attrs": attributes
+                }
+            forms.append({
                 "call": meta['call'],
                 "method": meta['method'],
                 "action": meta['action'],
-                "params": {
-                    name: {
-                        "name": name,
-                        "label": input_meta.label,
-                        "type": input_meta.type,
-                        "variable_binding": getattr(self.device, input_meta.variable_binding) if hasattr(self.device, input_meta.variable_binding) else "", # TODO: Write documentation on the variable binding 
-                        "attrs": input_meta.attrs
-                    }
-                    for name, input_meta in meta['params'].items()
-                }
-            }
-            for _, meta in self.device._ui_forms
-        ]
+                "params": params
+            })
+        
+        # TODO: Write documentation on the variable binding 
+
+        return forms
