@@ -1,24 +1,27 @@
 from datetime import datetime
 import hashlib
 import logging
-from typing import Optional
 import uuid
+from typing import Optional
+
 from fastapi import APIRouter, Depends, Form, HTTPException, Request, Response, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session, context
+
+import httpx
+import re
+import ast
+
 from ochra_common.connections.api_models import ObjectConstructionRequest
 from ochra_common.equipment.device import Operation
 from ochra_common.utils.enum import OperationStatus
-from sqlalchemy.orm import Session, context
 
 from ochra_manager.lab.auth.auth import SessionToken, User, get_db
-
 from ..lab_service import LabService
-import httpx
 
 logger = logging.getLogger(__name__)
 STATIONS = "stations"
-
 
 class WebAppRouter(APIRouter):
     def __init__(self, templates: Jinja2Templates):
@@ -48,9 +51,9 @@ class WebAppRouter(APIRouter):
         self.get("/stations/{station_id}/devices/{device_id}")(self.get_device)
         self.post("/stations/{station_id}/devices/{device_id}/commands")(self.post_command)
 
-
-
-
+    def isHXRequest(self, request: Request) -> bool:
+        return request.headers.get("HX-Request") == "true"
+    
     async def get_stations(self, request:Request):
         stations = self.lab_service.get_all_objects(STATIONS)
         table_fields = [
@@ -72,20 +75,17 @@ class WebAppRouter(APIRouter):
                      "sidepanel_view": False
                      })
 
-    def isHXRequest(self, request: Request) -> bool:
-        return request.headers.get("HX-Request") == "true"
-
     async def get_register(self, request: Request):
         return self.templates.TemplateResponse(name="zregister.html", request=request, context={})
 
     async def post_register(self, username: str = Form(...), email: str = Form(...), password: str = Form(...), confirm: str = Form(...), db: Session = Depends(get_db)):
+        if password != confirm:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Passwords did not match")
+        
         existing_user = User.fetch_user(db, username)
         if existing_user:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already taken")
-
-        if password != confirm:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Passwords did not match")
-
+        
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         new_user = User( username=username, password=hashed_password, email=email)
 
@@ -97,10 +97,8 @@ class WebAppRouter(APIRouter):
         response.headers["HX-Location"] = "/app"
         return response
 
-
     async def get_login(self, request: Request):
         return self.templates.TemplateResponse(name="zlogin.html", request=request, context={})
-
 
     async def post_login(self, username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
         user = User.authenticate_user(username, password, db)
@@ -113,9 +111,6 @@ class WebAppRouter(APIRouter):
         response.headers["HX-Location"] = "/app"
         return response
 
-
-
-
     async def post_logout(self, request: Request, db: Session = Depends(get_db)):
         session = SessionToken.get_session(db, request.cookies["session_token"])
         if session != None:
@@ -126,8 +121,6 @@ class WebAppRouter(APIRouter):
             return response
 
         raise HTTPException(status_code=404, detail=f"User session {request.cookies['session_token']} not found")
-
-
 
     async def get_station(self, request:Request, station_id: str):
         s = self.lab_service.get_object_by_id(station_id, "stations")
@@ -149,7 +142,7 @@ class WebAppRouter(APIRouter):
                 for station in stations
         ]
         
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=50.0) as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
 
@@ -167,7 +160,6 @@ class WebAppRouter(APIRouter):
                         "sidepanel_view": True
                     }
                 )
-
 
     async def get_device(self, request:Request, station_id: str, device_id: str):
         s = self.lab_service.get_object_by_id(station_id, "stations")
@@ -188,9 +180,10 @@ class WebAppRouter(APIRouter):
                 for station in stations
         ]
         
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=50.0) as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
+            
             if self.isHXRequest(request):
                 return HTMLResponse(content=decoded_html)
             else:
@@ -206,12 +199,63 @@ class WebAppRouter(APIRouter):
                     }
                 )
 
-
     async def post_command(self, request: Request, station_id: str, device_id: str):
         station = self.lab_service.get_object_by_id(station_id, "stations")
         proxy_url = f"http://{station['station_ip']}:{station['port']}/devices/{device_id}/commands"
         form = await request.form()
 
+        args_raw = form.get("args", "").strip()
+
+        def sanitize_dict_string(s: str) -> str:
+            # Quote unquoted keys
+            s = re.sub(r'([{,]\s*)(\w+)\s*:', r'\1"\2":', s)
+            # Quote unquoted string values (words that are not True/False/None/numbers)
+            s = re.sub(r':\s*([a-zA-Z_]\w*)\s*([,}])', r':"\1"\2', s)
+            return s
+        
+        def convert_colon_string_to_dict(s: str) -> dict:
+            result = {}
+            if not s:
+                return result
+            try:
+                for pair in s.split(","):
+                    if not pair.strip():
+                        continue
+                    if ":" not in pair:
+                        raise ValueError(f"Invalid key:value pair: {pair}")
+                    key, value = map(str.strip, pair.split(":", 1))
+                    if value.isdigit():
+                        value = int(value)
+                    else:
+                        try:
+                            value = float(value)
+                        except ValueError:
+                            value = value.strip('"').strip("'")
+                    result[key] = value
+                return result
+            except Exception as e:
+                raise ValueError(f"Failed to convert string to dict: {e}")
+                    
+        try:
+            if args_raw == "":
+                args_dict = {}
+            else:
+                try:
+                    # Ensure keys in the args are quoted properly
+                    # Use ast.literal_eval to safely parse Python-like string
+                    args_dict = ast.literal_eval(args_raw)
+                except (ValueError, SyntaxError, NameError):
+                    try:
+                        quoted = sanitize_dict_string(args_raw)
+                        args_dict = ast.literal_eval(quoted)
+                    except Exception:
+                        args_dict = convert_colon_string_to_dict(args_raw)
+                
+            if not isinstance(args_dict, dict):
+                raise ValueError("Parsed args is not a dictionary.")
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Invalid args format: {e}")
+        
         opp = Operation(
             caller_id=uuid.uuid4(),
             collection="operations",
@@ -223,10 +267,15 @@ class WebAppRouter(APIRouter):
             start_timestamp = datetime.now(),
         )
 
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=50.0) as client:
+            headers = {
+                key: value for key, value in request.headers.items()
+                if key.lower() not in ("content-length", "content-type")
+            }
+
             station_response = await client.post(
                 proxy_url,
-                headers = dict(request.headers),
+                headers = headers,
                 data=form
             )
 
@@ -252,9 +301,6 @@ class WebAppRouter(APIRouter):
             headers=station_response.headers
         )
 
-
-
-
     async def get_settings(self, request:Request, edit: bool = False):
         return self.templates.TemplateResponse(
                 "zzzsettings.html",
@@ -278,8 +324,6 @@ class WebAppRouter(APIRouter):
         request.state.user = user
 
         return self.templates.TemplateResponse("zzzsettings.html",{"request":request, "active_link": self.prefix + "/settings", "edit": False})
-
-
 
     async def get_workflows(self, request:Request):
         return self.templates.TemplateResponse("zzzworkflows.html",{"request":request, "active_link": self.prefix + "/workflows"})

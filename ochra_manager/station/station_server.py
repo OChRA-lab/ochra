@@ -28,6 +28,7 @@ from ochra_common.equipment.operation import Operation
 from ..proxy_models.equipment.operation_result import OperationResult
 from ..proxy_models.space.station import Station
 
+import json
 
 def _is_path(obj: Any) -> bool:
     """Check if an object is a path.
@@ -240,9 +241,8 @@ class StationServer:
         if not isinstance(command_name, str):
             raise HTTPException(status_code=422, detail=f"Missing required parameter {command_name}")
 
-        
         # Get the args and remove the command one
-        args = form_data._dict
+        args = dict(form_data)
         args.pop("command")
 
         # check if the method is on the device if not raise an error
@@ -254,6 +254,7 @@ class StationServer:
             method = getattr(device, command_name)
             print(method)
             print(args)
+            print(f"[DEBUG] Type of args: {type(args)}")
             method(**args)
             return 
         except Exception as e:

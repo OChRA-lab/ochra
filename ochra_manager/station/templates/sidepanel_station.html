@@ -20,7 +20,7 @@
 			{% for _, d in station._devices.items() %}
 			<li>
 				<a class="hover:cursor-pointer" hx-trigger="click" hx-target="#sidepanel" hx-swap="innerHTML"
-					hx-push-url="true" hx-get="/app/stations/{{station.id}}/devices/{{d.id}}">{{d.name}}</a>
+					hx-push-url="true" hx-get="/app/stations/{{station.id}}/devices/{{d.id}}">{{d.name}}</a> 
 			</li>
 			{% endfor %}
 		</ul>
@@ -37,7 +37,8 @@
 			<a hx-trigger="click" hx-target="#sidepanel" hx-swap="innerHTML" hx-push-url="true"
 				hx-get="/app/stations/{{station.id}}/devices/{{d.id}}">
 				<div
-					class=" flex justify-center items-center p-3 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
+					class="flex justify-center items-center p-3 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral
+					hover:cursor-pointer transition-transform transform-gpu hover:-translate-y-1 active:bg-primary dark:active:bg-primary actine:outline-none">
 					<h4 class="text-primary">
 						{{d.name}}
 					</h4>
