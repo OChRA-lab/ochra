@@ -1,7 +1,6 @@
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 
-from fastapi.templating import Jinja2Templates
 
 from pydantic import BaseModel
 from typing import Dict, Optional, Type, Any
