@@ -29,6 +29,8 @@ class Station(Station, RestProxyMixin):
         )
         self.inventory = inventory.get_base_model()
         self._mixin_hook("stations", self.id)
+        if self.inventory.id != inventory.id:
+            self._lab_conn.delete_object("storage/inventories", inventory.id)
 
     def add_device(self, device: Type[Device]):
         device.owner_station = self.id
