@@ -37,3 +37,9 @@ class DataModel(BaseModel):
             cls=self.cls,
             module_path=self.module_path,
         )
+
+    def _cleanup(self) -> None:
+        """ Clean up the data model instance by deleting it from the database."""
+        from  .connections.lab_connection import LabConnection
+        lab: LabConnection = LabConnection()
+        lab.delete_object(self.collection,self.id)
