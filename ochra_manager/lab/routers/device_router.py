@@ -24,7 +24,7 @@ class DeviceRouter(APIRouter):
         self.patch("/{identifier}/modify_property")(self.modify_device_property)
         self.post("/{identifier}/call_method")(self.call_device)
         self.get("/get")(self.get_device)
-        self.post("/{identifier}/delete")(self.delete_device)
+        self.delete("/{identifier}/delete")(self.delete_device)
 
     async def construct_device(self, args: ObjectConstructionRequest):
         # TODO: we need to assign the object to the station somehow
