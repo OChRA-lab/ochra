@@ -4,10 +4,12 @@ import logging.handlers
 import inspect
 from pathlib import Path
 
+
 # Filter to allow INFO level only
 class InfoPassFilter(logging.Filter):
     def filter(self, record):
         return record.levelno == logging.INFO
+
 
 # Find OChRA root and set log directory
 current_path = Path(__file__).resolve()
@@ -16,6 +18,7 @@ for parent in current_path.parents:
         (parent / "ochra_common").exists() and (parent / "ochra_discovery").exists()
     ):
         WORKSPACE_ROOT = parent
+        break
 LOG_DIR = WORKSPACE_ROOT / "ochra_logs"
 
 # Dictionary to configure logging
@@ -209,8 +212,9 @@ LOGGING_CONFIG_DICT = {
     },
 }
 
-_default_getLogger = logging.getLogger()
+_default_getLogger = logging.getLogger
 _device_logger_cache = {}
+
 
 def _get_device_module():
     frame = inspect.currentframe()
@@ -224,6 +228,7 @@ def _get_device_module():
     finally:
         del frame
     return None
+
 
 def _create_device_handler(device_name):
     """Dynamically create a handler for a specific device."""
@@ -248,16 +253,16 @@ def _create_device_handler(device_name):
 
     return handler
 
-def custom_getLogger(name=None):
 
+def custom_getLogger(name=None):
     # Use the default logger if not an OChRA device
     if name != "ochra_device":
         return _default_getLogger(name)
-    
+
     logger_name = _get_device_module()
     if logger_name in _device_logger_cache:
         return _device_logger_cache[logger_name]
-    
+
     # Extract device name from module for the log file
     parts = logger_name.split(".")
     if len(parts) >= 2:
