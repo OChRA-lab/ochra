@@ -34,6 +34,117 @@ LOGGING_CONFIG_DICT = {
         },
     },
 
+    # Filters
+    "filters": {
+        "info_pass_filter": {
+            "()": InfoPassFilter,
+        },
+    },
+
+    # Handlers
+    "handlers": {
+        "console_handler": {
+            "class": "logging.StreamHandler",
+            "level": "INFO",
+            "formatter": "simple",
+            "stream": "ext://sys.stdout",
+        },
+        "info_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "INFO",
+            "filters": ["info_pass_filter"],
+            "formatter": "standard",
+            "filename": str(LOG_DIR / "ochra_info.log"),
+            "when": "midnight",
+            "backupCount": 7,
+        },
+        "error_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "WARNING",
+            "formatter": "detailed",
+            "filename": str(LOG_DIR / "ochra_error.log"),
+            "when": "midnight",
+            "backupCount": 7,
+        },
+        # "critical_handler": {
+        #    "level": "CRITICAL",
+        #    "formatter": "detailed",
+        #    "class": "logging.handlers.SMTPHandler",
+        #    "mailhost" : "mailserver",
+        #    "fromaddr": "sender@example.com",
+        #    "toaddrs": ["recipient@example.com"],
+        #    "subject": "Critical error in OChRA framework"
+        # },
+
+        # Lab server handlers
+        "lab_server_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": str(LOG_DIR / "lab_server.log"),
+            "when": "midnight",
+            "backupCount": 7,
+        },
+        "scheduler_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": str(LOG_DIR / "scheduler.log"),
+            "when": "midnight",
+            "backupCount": 7,
+        },
+        "routers_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": str(LOG_DIR / "routers.log"),
+            "when": "midnight",
+            "backupCount": 7,
+        },
+        "db_connection_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": str(LOG_DIR / "db_connection.log"),
+            "when": "midnight",
+            "backupCount": 7,
+        },
+        "station_connection_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": str(LOG_DIR / "station_connection.log"),
+            "when": "midnight",
+            "backupCount": 7,
+        },
+        # Station server handlers
+        "station_server_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": str(LOG_DIR / "station_server.log"),
+            "when": "midnight",
+            "backupCount": 7,
+        },
+        "lab_connection_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": str(LOG_DIR / "db_connection.log"),
+            "when": "midnight",
+            "backupCount": 7,
+        },
+
+        # Client handlers
+        "experiment_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": str(LOG_DIR / "experiment.log"),
+            "when": "midnight",
+            "backupCount": 7,
+        },
+    },
 
 _default_getLogger = logging.getLogger()
 _device_logger_cache = {}
