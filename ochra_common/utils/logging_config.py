@@ -32,6 +32,29 @@ def _get_device_module():
         del frame
     return None
 
+def _create_device_handler(device_name):
+    """Dynamically create a handler for a specific device."""
+
+    # Sanitise device name and create log file path
+    safe_device_name = "".join(
+        c for c in device_name if c.isalnum() or c in ("_", "-")
+    ).rstrip()
+    devices_log_dir = LOG_DIR / "devices"
+    devices_log_dir.mkdir(parents=True, exist_ok=True)
+    log_file = devices_log_dir / f"{safe_device_name}.log"
+
+    # Create and configure the handler
+    handler = logging.handlers.TimedRotatingFileHandler(
+        filename=str(log_file), when="midnight", backupCount=7
+    )
+    handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(
+        "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+    )
+    handler.setFormatter(formatter)
+
+    return handler
+
 def custom_getLogger(name=None):
 
     # Use the default logger if not an OChRA device
@@ -48,4 +71,4 @@ def custom_getLogger(name=None):
         device_name = parts[0]
     else:
         device_name = logger_name
-        
+
