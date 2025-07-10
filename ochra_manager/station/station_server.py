@@ -449,5 +449,6 @@ class StationServer:
             if device.inventory != [] or device.inventory is None:
                 device.inventory._cleanup()
             device._cleanup()
+        self._station_proxy.inventory._cleanup()
         self._station_proxy._cleanup()
         #shutdown the server
