@@ -146,6 +146,67 @@ LOGGING_CONFIG_DICT = {
         },
     },
 
+    # Loggers
+    "root": {
+        "level": "NOTSET",
+        "handlers": ["console_handler", "info_handler", "error_handler"],
+        "propagate": False,
+    },
+    "loggers": {
+
+        # Lab server loggers
+        "lab_server": {
+            "level": "DEBUG",
+            "handlers": ["lab_server_handler"],
+            "propagate": False,
+        },
+        "scheduler": {
+            "level": "DEBUG",
+            "handlers": ["scheduler_handler"],
+            "propagate": False,
+        },
+        "routers": {
+            "level": "DEBUG",
+            "handlers": ["routers_handler"],
+            "propagate": False,
+        },
+        "db_connection": {
+            "level": "DEBUG",
+            "handlers": ["db_connection_handler"],
+            "propagate": False,
+        },
+        "station_connection": {
+            "level": "DEBUG",
+            "handlers": ["station_connection_handler"],
+            "propagate": False,
+        },
+
+        # Station server loggers
+        "station_server": {
+            "level": "DEBUG",
+            "handlers": ["station_server_handler"],
+            "propagate": False,
+        },
+        "lab_connection": {
+            "level": "DEBUG",
+            "handlers": ["lab_connection_handler"],
+            "propagate": False,
+        },
+        "ochra_device": {
+            "level": "DEBUG",
+            "handlers": [],
+            "propagate": False,
+        },
+        
+        # Client devices loggers
+        "experiment": {
+            "level": "DEBUG",
+            "handlers": ["experiment_handler"],
+            "propagate": False,
+        },
+    },
+}
+
 _default_getLogger = logging.getLogger()
 _device_logger_cache = {}
 
