@@ -212,15 +212,19 @@ LOGGING_CONFIG_DICT = {
     },
 }
 
+
 _default_getLogger = logging.getLogger
 _device_logger_cache = {}
 
 
 def _get_device_module():
+    """Find the device module name from the call stack"""
     frame = inspect.currentframe()
     try:
+        # Traverse up the call stack to find the device module
         caller_frame = frame.f_back
         while caller_frame:
+            # Only accept modules that contain "handler" in their name
             module_name = caller_frame.f_globals.get("__name__")
             if module_name and "handler" in module_name:
                 return module_name
@@ -232,7 +236,6 @@ def _get_device_module():
 
 def _create_device_handler(device_name):
     """Dynamically create a handler for a specific device."""
-
     # Sanitise device name and create log file path
     safe_device_name = "".join(
         c for c in device_name if c.isalnum() or c in ("_", "-")
@@ -255,10 +258,12 @@ def _create_device_handler(device_name):
 
 
 def custom_getLogger(name=None):
+    """ Replace the default getLogger to handle OChRA devices."""
     # Use the default logger if not an OChRA device
     if name != "ochra_device":
         return _default_getLogger(name)
 
+    # Check if the logger is already cached
     logger_name = _get_device_module()
     if logger_name in _device_logger_cache:
         return _device_logger_cache[logger_name]
