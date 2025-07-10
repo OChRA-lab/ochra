@@ -72,3 +72,12 @@ def custom_getLogger(name=None):
     else:
         device_name = logger_name
 
+    # Get device logger and add a handler
+    device_logger = _default_getLogger(logger_name)
+    if not device_logger.handlers:
+        handler = _create_device_handler(device_name)
+        device_logger.addHandler(handler)
+        device_logger.setLevel(logging.DEBUG)
+        device_logger.propagate = False
+    
+
