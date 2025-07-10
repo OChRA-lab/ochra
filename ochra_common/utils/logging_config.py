@@ -275,3 +275,13 @@ def custom_getLogger(name=None):
     _device_logger_cache[logger_name] = device_logger
 
     return device_logger
+
+
+def configure_logging():
+    """Configure the custom logging system."""
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    logging.config.dictConfig(LOGGING_CONFIG_DICT)
+    logging.getLogger = custom_getLogger
+
+
+configure_logging()
