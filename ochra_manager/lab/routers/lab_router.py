@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("routers")
 COLLECTIONS = ["stations", "robots", "scientists"]
 
 

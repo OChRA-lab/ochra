@@ -15,7 +15,7 @@ from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 from typing import Any
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("routers")
 COLLECTION = "operation_results"
 
 
