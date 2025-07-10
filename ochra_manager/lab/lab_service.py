@@ -99,6 +99,9 @@ class LabService:
         logger.info(f"existing_object: {existing_object}")
         if existing_object is not None:
             object_dict["id"] = existing_object.get("id")
+            obj_inv = existing_object.get("inventory",None)
+            if obj_inv is not None:
+                object_dict["inventory"] = obj_inv
             self.db_conn.delete(
                 {"id": existing_object.get("id"), "_collection": collection}
             )
