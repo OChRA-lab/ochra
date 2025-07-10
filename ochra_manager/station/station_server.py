@@ -12,6 +12,8 @@ from os import remove
 import datetime
 from starlette.types import Message
 import uvicorn
+import os
+import signal
 
 from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.utils.enum import (
@@ -451,4 +453,6 @@ class StationServer:
             device._cleanup()
         self._station_proxy.inventory._cleanup()
         self._station_proxy._cleanup()
+        os.kill(os.getpid(),signal.SIGTERM)
+        return 200
         #shutdown the server
