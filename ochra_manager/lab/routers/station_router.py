@@ -12,7 +12,7 @@ import json
 
 logger = logging.getLogger("routers")
 COLLECTION = "stations"
-
+logger.info("Test message")
 
 class StationRouter(APIRouter):
     def __init__(self, scheduler):

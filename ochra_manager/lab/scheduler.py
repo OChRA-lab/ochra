@@ -14,6 +14,7 @@ class Scheduler:
         self._db_conn: DbConnection = DbConnection()
         self._stop = False
         self._logger = logging.getLogger("scheduler")
+        self._logger.info("Test message")
 
         # create operation queue in db
         self._queue_id = self._db_conn.create(

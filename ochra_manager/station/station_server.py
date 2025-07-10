@@ -82,6 +82,7 @@ class StationServer:
         self.port = station_port
         self._devices: dict[str, Device] = {}
         self._logger = logger
+        self._logger.info("Test message")
 
 
     def setup(self, lab_ip: Optional[str] = None) -> None:

@@ -11,7 +11,7 @@ from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
 logger = logging.getLogger("routers")
 COLLECTION = "robots"
-
+logger.info("Test message")
 
 class RobotRouter(APIRouter):
     def __init__(self, scheduler):

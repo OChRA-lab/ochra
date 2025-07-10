@@ -44,6 +44,7 @@ class LabServer:
         self.port = port
         self.scheduler = Scheduler()
         self._logger = logger
+        self._logger.info("Test message")
 
         @asynccontextmanager
         async def lifespan(app: FastAPI):
