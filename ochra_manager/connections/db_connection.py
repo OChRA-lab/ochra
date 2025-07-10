@@ -11,7 +11,7 @@ class DbConnection(metaclass=SingletonMeta):
         self,
         hostname: str = "127.0.0.1:27017",
         db_name: str = "ochra_test_db",
-        logger: logging.Logger = None,
+        logger: logging.Logger = logging.getLogger("db_connection"),
     ) -> Self:
         """Constructor for DbConnection
 
@@ -22,6 +22,7 @@ class DbConnection(metaclass=SingletonMeta):
                 Defaults to None.
         """
         self.db_adapter: MongoAdapter = MongoAdapter(hostname, db_name, logger)
+        self._logger = logger
 
     def create(self, db_data, doc):
         """Create a new document in the specified collection."""
