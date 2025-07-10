@@ -1,10 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
-import logging
 import inspect
 from .routers import operation_results_router
-
-logger = logging.getLogger(__name__)
 
 
 class DataServer:
@@ -40,6 +37,5 @@ class DataServer:
     def run(self) -> None:
         """launches the server on the initialized host and port
         """        
-        logger.info("started server")
         app = self.get_caller_variable_name()
         uvicorn.run(app, host=self.host, port=self.port, workers=8)
