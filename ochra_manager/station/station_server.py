@@ -113,6 +113,8 @@ class StationServer:
 
         self._app.get("/hypermedia")(self.get_pannel)
         self._app.get("/hypermedia/devices/{device_id}")(self.get_pannel_device)
+        
+        self._app.post("/shutdown")(self.shutdown)
 
         self._templates=Jinja2Templates(directory=self.TEMPLATES)
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
@@ -440,3 +442,12 @@ class StationServer:
             # remove the zip file when upload is done
             if delete_archive:
                 remove(result.name)
+
+
+    def shutdown(self):
+        for _, device in self._devices.items():
+            if device.inventory != [] or device.inventory is None:
+                device.inventory._cleanup()
+            device._cleanup()
+        self._station_proxy._cleanup()
+        #shutdown the server
