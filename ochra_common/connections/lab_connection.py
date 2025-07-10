@@ -29,7 +29,7 @@ class LabConnection(metaclass=SingletonMeta):
         experiment_id: str = None,
         api_key: str = "",
         ssl_verify: bool = False,
-        logger: logging.Logger = None,
+        logger: logging.Logger = logging.getLogger("lab_connection"),
     ):
         """constructor for labAdapter class
 
@@ -40,7 +40,7 @@ class LabConnection(metaclass=SingletonMeta):
             ssl_verify (bool, optional): if we need to verify ssl.
                 Defaults to False.
             logger (logging.Logger, optional): logger if you have one.
-                Defaults to None.
+                Defaults to logging.getLogger("lab_connection").
         """
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger
