@@ -1,7 +1,6 @@
 import inspect
 import logging
 from pathlib import Path
-import re
 
 # Filter to allow INFO level only
 class InfoPassFilter(logging.Filter):
@@ -17,7 +16,8 @@ for parent in current_path.parents:
         WORKSPACE_ROOT = parent
 LOG_DIR = WORKSPACE_ROOT / "ochra_logs"
 
-_default_getLogger = logging.getLogge()r
+_default_getLogger = logging.getLogger()
+_device_logger_cache = {}
 
 def _get_device_module():
     frame = inspect.currentframe()
@@ -37,3 +37,7 @@ def custom_getLogger(name=None):
     # Use the default logger if not an OChRA device
     if name != "ochra_device":
         return _default_getLogger(name)
+    
+    logger_name = _get_device_module()
+    if logger_name in _device_logger_cache:
+        return _device_logger_cache[logger_name]
