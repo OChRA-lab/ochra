@@ -41,3 +41,11 @@ def custom_getLogger(name=None):
     logger_name = _get_device_module()
     if logger_name in _device_logger_cache:
         return _device_logger_cache[logger_name]
+    
+    # Extract device name from module for the log file
+    parts = logger_name.split(".")
+    if len(parts) >= 2:
+        device_name = parts[0]
+    else:
+        device_name = logger_name
+        
