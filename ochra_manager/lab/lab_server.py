@@ -19,8 +19,6 @@ from .routers.operation_results_router import OperationResultRouter
 from .scheduler import Scheduler
 import inspect
 
-logger = logging.getLogger(__name__)
-
 
 class LabServer:
     def __init__(
@@ -29,6 +27,7 @@ class LabServer:
         port: int,
         folderpath: str,
         template_path: Optional[Path] = None,
+        logger: logging.Logger = logging.getLogger("lab_server")
     ) -> None:
         """Setup a lab server with the given host and port optionally storing data in folderpath
 
@@ -36,6 +35,7 @@ class LabServer:
             host (str): host ip address
             port (int): port to open the server on
             folderpath (str): path to store data in
+            logger (logging.Logger, optional): logger to use for the lab server.
         """
         MODULE_DIRECTORY = (
             Path(__file__).resolve().parent if not template_path else template_path
@@ -43,6 +43,7 @@ class LabServer:
         self.host = host
         self.port = port
         self.scheduler = Scheduler()
+        self._logger = logger
 
         @asynccontextmanager
         async def lifespan(app: FastAPI):
@@ -107,6 +108,5 @@ class LabServer:
 
     def run(self) -> None:
         """launches the server on the initialized host and port"""
-        logger.info("started server")
         app = self.get_caller_variable_name()
         uvicorn.run(app, host=self.host, port=self.port, workers=8)
