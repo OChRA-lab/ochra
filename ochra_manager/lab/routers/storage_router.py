@@ -27,6 +27,7 @@ class StorageRouter(APIRouter):
             self.modify_storage_item_property
         )
         self.get("/{object_type}/get")(self.get_storage_item)
+        self.delete("/{object_type}/{identifier}/delete")(self.delete_storage_item)
 
     async def construct_storage_item(
         self, object_type: str, args: ObjectConstructionRequest
@@ -54,3 +55,8 @@ class StorageRouter(APIRouter):
             storage_obj = self.lab_service.get_object_by_name(identifier, collection)
 
         return convert_to_data_model(storage_obj)
+
+    async def delete_storage_item(self, object_type: str, identifier: str):
+        collection = object_type if object_type in COLLECTIONS else None
+        self.lab_service.delete_object(identifier, collection)
+        return {"message": f"{object_type} deleted successfully"}
