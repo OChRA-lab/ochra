@@ -42,4 +42,7 @@ class DataModel(BaseModel):
         """ Clean up the data model instance by deleting it from the database."""
         from  .connections.lab_connection import LabConnection
         lab: LabConnection = LabConnection()
-        lab.delete_object(self.collection,self.id)
+        if self._endpoint is not None:
+            lab.delete_object(self._endpoint, self.id)
+        else:
+            lab.delete_object(self.collection,self.id)
