@@ -79,5 +79,11 @@ def custom_getLogger(name=None):
         device_logger.addHandler(handler)
         device_logger.setLevel(logging.DEBUG)
         device_logger.propagate = False
+
+    # Cache the logger
+    _device_logger_cache[logger_name] = device_logger
+
+    return device_logger
+
     
 
