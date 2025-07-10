@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 
@@ -63,6 +64,7 @@ class StationServer:
         station_type: StationType,
         station_ip: str = "0.0.0.0",
         station_port: int = 8000,
+        logger: logging.Logger = logging.getLogger("station_server")
     ):
         """initialize the station server
 
@@ -71,6 +73,7 @@ class StationServer:
             location (Location): location of the station
             station_ip (str, optional): station ip to run the server on. Defaults to "127.0.0.1".
             station_port (int, optional): port to oopen the station on. Defaults to 8000.
+            logger (logging.Logger, optional): logger to use for the station server. Defaults to logging.getLogger("station_server").
         """
         self._name = name
         self._location = location
@@ -78,6 +81,7 @@ class StationServer:
         self._ip = station_ip
         self.port = station_port
         self._devices: dict[str, Device] = {}
+        self._logger = logger
 
 
     def setup(self, lab_ip: Optional[str] = None) -> None:
