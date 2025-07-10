@@ -5,6 +5,7 @@ from time import sleep
 from ochra_common.utils.enum import ActivityStatus, PatchType
 from fastapi import HTTPException
 from ..connections.station_connection import StationConnection
+import logging
 
 
 class Scheduler:
@@ -12,6 +13,7 @@ class Scheduler:
         self.op_queue = []
         self._db_conn: DbConnection = DbConnection()
         self._stop = False
+        self._logger = logging.getLogger("scheduler")
 
         # create operation queue in db
         self._queue_id = self._db_conn.create(
