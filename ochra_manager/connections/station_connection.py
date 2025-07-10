@@ -9,11 +9,12 @@ class StationConnection:
         hostname: str = "10.24.57.154:8000",
         api_key: str = "",
         ssl_verify: bool = False,
-        logger: logging.Logger = None,
+        logger: logging.Logger = logging.getLogger("station_connection"),
     ):
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger
         )
+        self._logger = logger
 
     def execute_op(self, op: Operation, endpoint: str):
         data = {
