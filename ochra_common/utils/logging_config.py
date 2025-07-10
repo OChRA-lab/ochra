@@ -14,3 +14,11 @@ for parent in current_path.parents:
     ):
         WORKSPACE_ROOT = parent
 LOG_DIR = WORKSPACE_ROOT / "ochra_logs"
+
+_default_getLogger = logging.getLogger
+
+def custom_getLogger(name=None):
+
+    # Use the default logger if not an OChRA device
+    if name != "ochra_device":
+        return _default_getLogger(name)
