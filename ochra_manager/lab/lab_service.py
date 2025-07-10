@@ -279,3 +279,18 @@ class LabService:
             property="result_data",
             file=True,
         )
+
+    def delete_object(self, object_id: str, collection: str):
+        """delete object from db
+
+        Args:
+            object_id (str): id of object to delete
+            collection (str): collection it is in
+
+        Raises:
+            HTTPException: if object not found
+        """
+        try:
+            self.db_conn.delete({"id": object_id, "_collection": collection})
+        except Exception as e:
+            raise HTTPException(status_code=404, detail=str(e))
