@@ -24,6 +24,7 @@ class StationRouter(APIRouter):
         self.patch("/{identifier}/modify_property")(self.modify_property)
         self.post("/{identifier}/call_method")(self.call_method)
         self.get("/get")(self.get_station)
+        self.delete("/{identifier}/delete")(self.delete_station)
 
     async def construct_station(
         self, args: ObjectConstructionRequest, request: Request
@@ -53,3 +54,7 @@ class StationRouter(APIRouter):
             station_obj = self.lab_service.get_object_by_name(identifier, COLLECTION)
 
         return convert_to_data_model(station_obj)
+    
+    async def delete_station(self, identifier: str):
+        self.lab_service.delete_object(identifier, COLLECTION)
+        return {"message": "Station deleted successfully"}
