@@ -16,6 +16,25 @@ for parent in current_path.parents:
         WORKSPACE_ROOT = parent
 LOG_DIR = WORKSPACE_ROOT / "ochra_logs"
 
+# Dictionary to configure logging
+LOGGING_CONFIG_DICT = {
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    # Formatters
+    "formatters": {
+        "simple": {  # log level - message
+            "format": "%(levelname)s - %(message)s"
+        },
+        "standard": {  # ISO-8601 timestamp - log level - logger name - message
+            "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+        },
+        "detailed": {  # timestamp - log level - logger name - function: line number - message
+            "format": "%(asctime)s - %(levelname)s - %(name)s - Line: %(lineno)d - %(message)s"
+        },
+    },
+
+
 _default_getLogger = logging.getLogger()
 _device_logger_cache = {}
 
@@ -84,6 +103,3 @@ def custom_getLogger(name=None):
     _device_logger_cache[logger_name] = device_logger
 
     return device_logger
-
-    
-
