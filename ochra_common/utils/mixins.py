@@ -53,10 +53,7 @@ class RestProxyMixin:
     def _cleanup(self) -> None:
         """ Clean up the data model instance by deleting it from the database."""
         lab: LabConnection = LabConnection()
-        if self._endpoint is not None:
-            lab.delete_object(self._endpoint, self.id)
-        else:
-            lab.delete_object(self.collection,self.id)
+        lab.delete_object(self._endpoint, self.id)
 
 
 class RestProxyMixinReadOnly:
