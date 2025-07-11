@@ -224,9 +224,9 @@ def _get_device_module():
         # Traverse up the call stack to find the device module
         caller_frame = frame.f_back
         while caller_frame:
-            # Only accept modules that contain "handler" in their name
+            # Only accept modules that end with ".handler"
             module_name = caller_frame.f_globals.get("__name__")
-            if module_name and "handler" in module_name:
+            if module_name and module_name.endswith(".handler"):
                 return module_name
             caller_frame = caller_frame.f_back
     finally:
@@ -265,8 +265,12 @@ def custom_getLogger(name=None):
 
     # Check if the logger is already cached
     logger_name = _get_device_module()
-    if logger_name in _device_logger_cache:
+    if logger_name and logger_name in _device_logger_cache:
         return _device_logger_cache[logger_name]
+
+    # Use the default logger if no device module found,
+    if logger_name is None:
+        return _default_getLogger("name")
 
     # Extract device name from module for the log file
     parts = logger_name.split(".")
