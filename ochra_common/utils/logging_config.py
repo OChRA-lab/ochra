@@ -170,7 +170,42 @@ LOGGING_CONFIG_DICT = {
             "handlers": ["scheduler_handler"],
             "propagate": True,
         },
-        "routers": {
+        "device_router": {
+            "level": "DEBUG",
+            "handlers": ["routers_handler"],
+            "propagate": True,
+        },
+        "lab_router": {
+            "level": "DEBUG",
+            "handlers": ["routers_handler"],
+            "propagate": True,
+        },
+        "operation_results_router": {
+            "level": "DEBUG",
+            "handlers": ["routers_handler"],
+            "propagate": True,
+        },
+        "operation_router": {
+            "level": "DEBUG",
+            "handlers": ["routers_handler"],
+            "propagate": True,
+        },
+        "robot_router": {
+            "level": "DEBUG",
+            "handlers": ["routers_handler"],
+            "propagate": True,
+        },
+        "station_router": {
+            "level": "DEBUG",
+            "handlers": ["routers_handler"],
+            "propagate": True,
+        },
+        "storage_router": {
+            "level": "DEBUG",
+            "handlers": ["routers_handler"],
+            "propagate": True,
+        },
+        "ui_router": {
             "level": "DEBUG",
             "handlers": ["routers_handler"],
             "propagate": True,
