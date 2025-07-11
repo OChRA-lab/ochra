@@ -135,7 +135,7 @@ LOGGING_CONFIG_DICT = {
             "class": "logging.handlers.TimedRotatingFileHandler",
             "level": "DEBUG",
             "formatter": "standard",
-            "filename": str(LOG_DIR / "db_connection.log"),
+            "filename": str(LOG_DIR / "lab_connection.log"),
             "when": "midnight",
             "backupCount": 7,
         },
