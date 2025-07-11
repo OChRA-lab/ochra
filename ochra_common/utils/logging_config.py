@@ -163,51 +163,51 @@ LOGGING_CONFIG_DICT = {
         "lab_server": {
             "level": "DEBUG",
             "handlers": ["lab_server_handler"],
-            "propagate": False,
+            "propagate": True,
         },
         "scheduler": {
             "level": "DEBUG",
             "handlers": ["scheduler_handler"],
-            "propagate": False,
+            "propagate": True,
         },
         "routers": {
             "level": "DEBUG",
             "handlers": ["routers_handler"],
-            "propagate": False,
+            "propagate": True,
         },
         "db_connection": {
             "level": "DEBUG",
             "handlers": ["db_connection_handler"],
-            "propagate": False,
+            "propagate": True,
         },
         "station_connection": {
             "level": "DEBUG",
             "handlers": ["station_connection_handler"],
-            "propagate": False,
+            "propagate": True,
         },
 
         # Station server loggers
         "station_server": {
             "level": "DEBUG",
             "handlers": ["station_server_handler"],
-            "propagate": False,
+            "propagate": True,
         },
         "lab_connection": {
             "level": "DEBUG",
             "handlers": ["lab_connection_handler"],
-            "propagate": False,
+            "propagate": True,
         },
         "ochra_device": {
             "level": "DEBUG",
             "handlers": [],
-            "propagate": False,
+            "propagate": True,
         },
         
         # Client devices loggers
         "experiment": {
             "level": "DEBUG",
             "handlers": ["experiment_handler"],
-            "propagate": False,
+            "propagate": True,
         },
     },
 }
