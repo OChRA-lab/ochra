@@ -24,13 +24,14 @@ class Station(Station, RestProxyMixin):
             locked=None,
         )
         self.port = port
-        inventory = Inventory(
-            owner=self.get_base_model(), containers_max_capacity=100
-        )
-        self.inventory = inventory.get_base_model()
+
         self._mixin_hook("stations", self.id)
-        if self.inventory.id != inventory.id:
-            self._lab_conn.delete_object("storage/inventories", inventory.id)
+        if self.inventory is None or self.inventory == []:
+            
+            inventory = Inventory(
+                owner=self.get_base_model(), containers_max_capacity=100
+            )
+            self.inventory = inventory.get_base_model()
 
     def add_device(self, device: Type[Device]):
         device.owner_station = self.id
