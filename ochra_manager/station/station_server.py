@@ -130,7 +130,7 @@ class StationServer:
         """
 
         # TODO: str instead of pure uuid
-        self._devices[device.id] = device
+        self._devices[str(device.id)] = device
         if self._station_proxy:
             self._station_proxy.add_device(device)
 
@@ -289,7 +289,7 @@ class StationServer:
                     raise HTTPException(403, detail="Station is locked by another user")
 
             if op.entity_type != "station":
-                device = self._devices[op.entity_id]
+                device = self._devices[str(op.entity_id)]
                 method = getattr(device, op.method)
             else:
                 method = getattr(self._station_proxy, op.method)
