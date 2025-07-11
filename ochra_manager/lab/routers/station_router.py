@@ -10,7 +10,7 @@ from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 import json
 
-logger = logging.getLogger("routers")
+logger = logging.getLogger("station_router")
 COLLECTION = "stations"
 logger.info("Test message")
 

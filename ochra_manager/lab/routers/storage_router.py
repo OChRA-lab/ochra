@@ -8,7 +8,7 @@ from ochra_common.connections.api_models import (
 from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
-logger = logging.getLogger("routers")
+logger = logging.getLogger("storage_router")
 COLLECTIONS = ["consumables", "containers", "inventories", "reagents"]
 logger.info("Test message")
 

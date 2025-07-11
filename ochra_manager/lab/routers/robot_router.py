@@ -9,7 +9,7 @@ from ochra_common.connections.api_models import (
 from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
-logger = logging.getLogger("routers")
+logger = logging.getLogger("robot_router")
 COLLECTION = "robots"
 logger.info("Test message")
 
