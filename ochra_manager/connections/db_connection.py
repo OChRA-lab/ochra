@@ -23,6 +23,7 @@ class DbConnection(metaclass=SingletonMeta):
         """
         self.db_adapter: MongoAdapter = MongoAdapter(hostname, db_name, logger)
         self._logger = logger
+        self._logger.info("Test message")
 
     def create(self, db_data, doc):
         """Create a new document in the specified collection."""
