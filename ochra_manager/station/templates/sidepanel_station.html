@@ -5,13 +5,13 @@
 	</svg>
 </a>
 
-<div class="border-b-[0.5px] border-text dark:border-dark-text flex flex-col justify-between relative">
+<div class="border-text dark:border-dark-text flex flex-col justify-between relative">
 	<div class="p-6">
-		<h1 class="text-primary dark:text-dark-primary text-4xl">{{station._name}}</h1>
-		<p>Devices</p>
+		<h1 class="text-primary dark:text-dark-primary text-4xl">{{station._name}} Devices</h1>
+		<!-- <p>Devices</p> -->
 	</div>
 
-	<div class="text-lg text-center  absolute bottom-0 w-full">
+	<!-- <div class="text-lg text-center  absolute bottom-0 w-full">
 		<ul class="flex px-6 pb-1 gap-4">
 			<li class="text-primary">
 				<a class="hover:cursor-pointer" hx-trigger="click" hx-target="#sidepanel" hx-swap="innerHTML"
@@ -24,13 +24,13 @@
 			</li>
 			{% endfor %}
 		</ul>
-	</div>
+	</div> -->
 
 </div>
 
 <div class="flex-1 px-6 py-2 overflow-y-auto">
 	<div class="mt-6 space-y-4">
-		<h3>Devices</h3>
+		<!-- <h3>Devices</h3> -->
 		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
 			<!--State Chips-->
 			{% for k,d in station._devices.items() %}

@@ -1,7 +1,8 @@
 {% extends "zzmain_layout.html" %}
 
 {% block content %}
-<div {% if sidepanel_view %} class="hidden lg:flex flex-col flex-1" {% endif %} class="flex flex-col flex-1">
+<div class="flex flex-col flex-1 {% if sidepanel_view %}h-full overflow-hidden lg:flex{% endif %}">
+
 
 	<!--Banner-->
 	<div class="flex w-full p-6 border-b-[0.5px] border-text dark:border-dark-text justify-between">
@@ -51,14 +52,23 @@
 
 <div id="SIDEPANEL_CONTAINER" 
 	{% if not sidepanel_view %} 
-		class="hidden relative lg:block w-full lg:w-90" 
+		class="hidden relative lg:block w-7 lg:w-7" 
 	{% else %}
-		class="w-full relative lg:w-90" 
+		class="w-full relative lg:w-90"
 	{% endif %}
 >
-	<div class="absolute hidden lg:block top-0 left-0 z-40 h-screen w-2 hover:cursor-e-resize" id="RESIZER"></div>
+	<button 
+		id="TOGGLE_BUTTON"
+		class="absolute left-0 top-0.5 z-50 -translate-y-0.5 text-text dark:text-dark-text text-xl px-2 py-2 rounded-r hover:cursor-pointer"
+	>
+		▶
+	</button>
+	<div class="absolute hidden lg:block top-0 left-0 z-40 h-screen w-2 hover:cursor-e-resize" id="RESIZER">
+		
+	</div>
 		{% include "/components/sidepanel.html"%}
 	<script src="/static/js/resize.js"></script> 
+	<script src="/static/js/expand.js"></script> 
 </div>
 
 {% endblock %}
