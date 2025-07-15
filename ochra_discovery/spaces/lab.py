@@ -6,13 +6,14 @@ from typing import List, Type, Union
 
 
 class Lab(Lab):
-    def __init__(self, hostname: str):
+    def __init__(self, hostname: str, experiment_id = None):
         """Connects to the lab and provides access to the stations and robots.
 
         Args:
             hostname (str): Ip address and port of the lab server.
+            experiment_id (str, optional): ID of the experiment. Defaults to None.
         """
-        self._lab_conn: LabConnection = LabConnection(hostname)
+        self._lab_conn: LabConnection = LabConnection(hostname,experiment_id)
 
     def get_station(
         self, station_name: str
