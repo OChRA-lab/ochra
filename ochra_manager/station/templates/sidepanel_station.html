@@ -34,7 +34,7 @@
 		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
 			<!--State Chips-->
 			{% for k,d in station._devices.items() %}
-			<a hx-trigger="click" hx-target="#sidepanel" hx-swap="innerHTML" hx-push-url="true"
+			<a hx-trigger="click" hx-target="#MainContent" hx-swap="innerHTML" hx-push-url="true"
 				hx-get="/app/stations/{{station.id}}/devices/{{d.id}}">
 				<div
 					class="flex justify-center items-center p-3 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral

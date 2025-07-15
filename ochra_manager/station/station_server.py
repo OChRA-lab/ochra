@@ -29,6 +29,8 @@ from ..proxy_models.equipment.operation_result import OperationResult
 from ..proxy_models.space.station import Station
 
 import ast
+from jinja2 import Environment, FileSystemLoader
+
 
 def _is_path(obj: Any) -> bool:
     """Check if an object is a path.
@@ -102,8 +104,6 @@ class StationServer:
 
         self.MODULE = Path(__file__).resolve().parent
         self.TEMPLATES = self.MODULE / "templates"
-
-
 
         self._app.get("/ping")(self.ping)
 
@@ -200,7 +200,7 @@ class StationServer:
             raise HTTPException(status_code=404, detail="Device does not exist")
 
         return self._templates.TemplateResponse(
-                "sidepanel_device.html",
+                "device_view.html",
                 {
                     "request":request, 
                     "station": self, 
@@ -208,12 +208,6 @@ class StationServer:
                     "device_html": device.to_html(),
                 }
         )
-    #
-    #
-    #
-    #
-    #######################################################
-
 
     async def get_device(self, request: Request, device_id: str):
         device: Optional[Device] = self._devices.get(device_id)

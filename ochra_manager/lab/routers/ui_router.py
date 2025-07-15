@@ -188,14 +188,13 @@ class WebAppRouter(APIRouter):
                 return HTMLResponse(content=decoded_html)
             else:
                 return self.templates.TemplateResponse(
-                    "zzzstations.html", 
+                    "zzzdevice.html", 
 
                     context={
                         "request": request, 
                         "active_link": self.prefix + "/", 
                         "table_fields": table_fields,
-                        "station_html": decoded_html,
-                        "sidepanel_view": True
+                        "device_html": decoded_html,
                     }
                 )
 
@@ -298,7 +297,8 @@ class WebAppRouter(APIRouter):
         return Response(
             content=station_response.content,
             status_code=station_response.status_code,
-            headers=station_response.headers
+            headers=station_response.headers,
+            
         )
 
     async def get_settings(self, request:Request, edit: bool = False):
