@@ -26,6 +26,7 @@ class LabConnection(metaclass=SingletonMeta):
 
     def __init__(
         self,
+        experiment_id: str,
         hostname: str = "127.0.0.1:8000",
         api_key: str = "",
         ssl_verify: bool = False,
@@ -45,7 +46,10 @@ class LabConnection(metaclass=SingletonMeta):
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger
         )
-        self._session_id = uuid4()
+        if experiment_id is None:
+            self._session_id = uuid4()
+        else:
+            self._session_id = experiment_id
 
     def load_from_data_model(self, model: DataModel) -> Any:
         """load object from data model
