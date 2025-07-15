@@ -261,8 +261,8 @@ class WebAppRouter(APIRouter):
             collection="operations",
             entity_id=device_id,
             entity_type="devices",
-            method=str(""),
-            args={},
+            method=str(form.get("task_name", "")),
+            args=args_dict,
             status = OperationStatus.CREATED,
             start_timestamp = datetime.now(),
         )

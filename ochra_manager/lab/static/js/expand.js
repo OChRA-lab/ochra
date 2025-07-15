@@ -18,3 +18,11 @@ container.style.width = '2.45rem';
 toggleButton.textContent = '▶';
 
 toggleButton.addEventListener('click', toggleSidePanel);
+
+
+document.body.addEventListener('htmx:afterSwap', function (e) {
+  if (e.target && e.target.id === 'sidepanel') {
+    container.style.width = '32rem';  // or whatever your expanded width is
+    toggleButton.textContent = '◀';
+  }
+});

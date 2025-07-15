@@ -28,7 +28,7 @@ from ochra_common.equipment.operation import Operation
 from ..proxy_models.equipment.operation_result import OperationResult
 from ..proxy_models.space.station import Station
 
-import json
+import ast
 
 def _is_path(obj: Any) -> bool:
     """Check if an object is a path.
@@ -249,12 +249,22 @@ class StationServer:
         method_exists = hasattr(device, command_name)
         if not method_exists:
             raise HTTPException(status_code=400, detail=f"Method does note xist")
-
+        
+        if {args.get("args") == "" or args.get("args") is None}:
+            args["args"] = {}
+        # Only convert if it's a string
+        if isinstance(args.get("args"), str):
+            try:
+                args["args"] = ast.literal_eval(args["args"])
+            except (ValueError, SyntaxError):
+                raise ValueError("Invalid dictionary string in args['args']")
+            
         try:
             method = getattr(device, command_name)
             print(method)
             print(args)
             print(f"[DEBUG] Type of args: {type(args)}")
+            print(f"[DEBUG] Type of args: {type(args['args'])}")
             method(**args)
             return 
         except Exception as e:
