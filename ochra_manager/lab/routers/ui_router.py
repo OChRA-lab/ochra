@@ -167,7 +167,7 @@ class WebAppRouter(APIRouter):
         headers = dict(request.headers)
         method = request.method
         url=f"http://{s['station_ip']}:{s['port']}/hypermedia/devices/{device_id}"
-
+        station_url=f"http://{s['station_ip']}:{s['port']}/hypermedia"
         stations = self.lab_service.get_all_objects(STATIONS)
         table_fields = [
                 { 
@@ -183,6 +183,9 @@ class WebAppRouter(APIRouter):
         async with httpx.AsyncClient(timeout=50.0) as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
+
+            station_response = await client.request(method, station_url, headers=headers, data=body)
+            decoded_station_html = response.content.decode("utf-8")
             
             if self.isHXRequest(request):
                 return HTMLResponse(content=decoded_html)
@@ -195,6 +198,7 @@ class WebAppRouter(APIRouter):
                         "active_link": self.prefix + "/", 
                         "table_fields": table_fields,
                         "device_html": decoded_html,
+                        "station_html": decoded_station_html
                     }
                 )
 

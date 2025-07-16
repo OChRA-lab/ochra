@@ -30,7 +30,9 @@ from ..proxy_models.space.station import Station
 
 import ast
 from jinja2 import Environment, FileSystemLoader
-
+from fastapi.staticfiles import StaticFiles
+from ochra_manager.lab.auth.auth_middleware import UserSessionMiddleware
+import httpx
 
 def _is_path(obj: Any) -> bool:
     """Check if an object is a path.
@@ -87,14 +89,16 @@ class StationServer:
         self._app = FastAPI()
         self._router = APIRouter()
 
-        module_dir = Path(__file__).resolve().parent
+        station_templates = Path(__file__).resolve().parent / "templates"
+        lab_templates = Path(__file__).resolve().parents[1] / "lab" / "templates"
 
+        env = Environment(loader=FileSystemLoader([str(station_templates), str(lab_templates)]))
+        self._templates = Jinja2Templates(env=env)
 
-        templates_dir = module_dir / "templates"
-        self._templates=Jinja2Templates(directory=templates_dir)
+        lab_static = Path(__file__).resolve().parents[1] / "lab" / "static"
+        self._app.mount("/static", StaticFiles(directory=str(lab_static)), name="static")
 
         self._router.add_api_route("/process_op", self.process_op, methods=["POST"])
-
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
 
         #TODO: Look into the manual adding of routes in fastapi
@@ -102,20 +106,16 @@ class StationServer:
 
         self._app.include_router(self._router)
 
-        self.MODULE = Path(__file__).resolve().parent
-        self.TEMPLATES = self.MODULE / "templates"
-
         self._app.get("/ping")(self.ping)
-
         self._app.get("/")(self.get_station)
         self._app.get("/devices")(self.get_station_devices)
         self._app.get("/devices/{device_id}")(self.get_device)
         self._app.post("/devices/{device_id}/commands")(self.perform_device_operation)
 
         self._app.get("/hypermedia")(self.get_pannel)
-        self._app.get("/hypermedia/devices/{device_id}")(self.get_pannel_device)
+        self._app.get("/hypermedia/devices/{device_id}")(self.get_device_view)
 
-        self._templates=Jinja2Templates(directory=self.TEMPLATES)
+        self._app.add_middleware(UserSessionMiddleware)
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
 
     def add_device(self, device):
@@ -192,12 +192,14 @@ class StationServer:
                     "station": self, 
                 }
         )
-
-
-    async def get_pannel_device(self, request: Request, device_id: str):
+        
+    async def get_device_view(self, request: Request, device_id: str):
         device: Optional[Device] = self._devices.get(device_id)
         if not device:
             raise HTTPException(status_code=404, detail="Device does not exist")
+        
+        sidepanel = await self.get_pannel(request)
+        sidepanel_html = sidepanel.body.decode("utf-8")
 
         return self._templates.TemplateResponse(
                 "device_view.html",
@@ -206,6 +208,8 @@ class StationServer:
                     "station": self, 
                     "device": device,
                     "device_html": device.to_html(),
+                    "station_html": sidepanel_html,
+                    "sidepanel_view": True
                 }
         )
 
