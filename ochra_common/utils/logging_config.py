@@ -248,8 +248,8 @@ LOGGING_CONFIG_DICT = {
 }
 
 
+# Store the original getLogger function
 _default_getLogger = logging.getLogger
-_device_logger_cache = {}
 
 
 def _get_device_module():
@@ -269,43 +269,18 @@ def _get_device_module():
     return None
 
 
-def _create_device_handler(device_name):
-    """Dynamically create a handler for a specific device."""
-    # Sanitise device name and create log file path
-    safe_device_name = "".join(
-        c for c in device_name if c.isalnum() or c in ("_", "-")
-    ).rstrip()
-    devices_log_dir = LOG_DIR / "devices"
-    devices_log_dir.mkdir(parents=True, exist_ok=True)
-    log_file = devices_log_dir / f"{safe_device_name}.log"
-
-    # Create and configure the handler
-    handler = logging.handlers.TimedRotatingFileHandler(
-        filename=str(log_file), when="midnight", backupCount=7
-    )
-    handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter(
-        "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-    )
-    handler.setFormatter(formatter)
-
-    return handler
-
-
 def custom_getLogger(name=None):
     """ Replace the default getLogger to handle OChRA devices."""
     # Use the default logger if not an OChRA device
     if name != "ochra_device":
         return _default_getLogger(name)
 
-    # Check if the logger is already cached
+    # Get the device module name from the call stack
     logger_name = _get_device_module()
-    if logger_name and logger_name in _device_logger_cache:
-        return _device_logger_cache[logger_name]
-
-    # Use the default logger if no device module found,
+    
+    # Use the default logger if no device module found
     if logger_name is None:
-        return _default_getLogger("name")
+        return _default_getLogger(name)
 
     # Extract device name from module for the log file
     parts = logger_name.split(".")
@@ -314,18 +289,43 @@ def custom_getLogger(name=None):
     else:
         device_name = logger_name
 
-    # Get device logger and add a handler
-    device_logger = _default_getLogger(logger_name)
-    if not device_logger.handlers:
-        handler = _create_device_handler(device_name)
-        device_logger.addHandler(handler)
-        device_logger.setLevel(logging.DEBUG)
-        device_logger.propagate = False
+    # Sanitise device name and create log file path and handler name
+    safe_device_name = "".join(
+        c for c in device_name if c.isalnum() or c in ("_", "-")
+    ).rstrip()
+    devices_log_dir = LOG_DIR / "devices"
+    devices_log_dir.mkdir(parents=True, exist_ok=True)
+    log_file = devices_log_dir / f"{safe_device_name}.log"
+    handler_name = f"{safe_device_name}_handler"
 
-    # Cache the logger
-    _device_logger_cache[logger_name] = device_logger
+    # Add the handler to the config dict if it doesn't exist
+    if handler_name not in LOGGING_CONFIG_DICT["handlers"]:
+        LOGGING_CONFIG_DICT["handlers"][handler_name] = {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": str(log_file),
+            "when": "midnight",
+            "backupCount": 7,
+        }
 
-    return device_logger
+    # Add the logger to the config dict if it doesn't exist
+    if logger_name not in LOGGING_CONFIG_DICT["loggers"]:
+        LOGGING_CONFIG_DICT["loggers"][logger_name] = {
+            "handlers": [
+                "console_handler",
+                "info_handler",
+                "error_handler",
+                handler_name,
+            ],
+            "level": "DEBUG",
+            "propagate": True,
+        }
+        # Reconfigure logging with the updated configuration
+        logging.config.dictConfig(LOGGING_CONFIG_DICT)
+
+    # Return the configured logger
+    return _default_getLogger(logger_name)
 
 
 def configure_logging():
