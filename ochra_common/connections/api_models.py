@@ -7,7 +7,7 @@ from ..utils.enum import PatchType
 
 class ObjectCallRequest(BaseModel):
     method: str
-    caller_id: UUID
+    caller_id: str
     args: Union[Dict, None] = None
 
 
