@@ -15,7 +15,6 @@ class StationConnection:
             hostname, api_key, ssl_verify, logger
         )
         self._logger = logger
-        self._logger.info("Test message")
 
     def execute_op(self, op: Operation, endpoint: str):
         data = {

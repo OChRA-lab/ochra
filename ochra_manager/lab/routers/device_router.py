@@ -11,7 +11,6 @@ from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
 logger = logging.getLogger(__name__)
 COLLECTION = "devices"
-logger.info("Test message")
 
 class DeviceRouter(APIRouter):
     def __init__(self, scheduler):

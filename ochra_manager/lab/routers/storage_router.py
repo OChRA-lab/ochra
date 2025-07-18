@@ -10,7 +10,6 @@ from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
 logger = logging.getLogger(__name__)
 COLLECTIONS = ["consumables", "containers", "inventories", "reagents"]
-logger.info("Test message")
 
 class StorageRouter(APIRouter):
     def __init__(self):

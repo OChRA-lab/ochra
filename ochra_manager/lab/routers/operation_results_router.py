@@ -17,7 +17,6 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 COLLECTION = "operation_results"
-logger.info("Test message")
 
 class OperationResultRouter(APIRouter):
     def __init__(self, folderpath: str):
