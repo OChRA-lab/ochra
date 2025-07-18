@@ -13,7 +13,7 @@ class Operation(DataModel):
     whenever an agent/device performs an action.
 
     Attributes:
-        caller_id (uuid.UUID): The unique identifier of the caller.
+        caller_id (str): The unique identifier of the caller.
         method (str): The method name that was called.
         args (Dict[str, Any]): A dictionary of arguments passed to the method.
         status (Enum): The current status of the operation. Defaulted to CREATED
@@ -22,7 +22,7 @@ class Operation(DataModel):
         result (List[OperationResult]): A list of results from the operation.
     """
 
-    caller_id: uuid.UUID
+    caller_id: str
     entity_id: uuid.UUID
     entity_type: str
     method: str
