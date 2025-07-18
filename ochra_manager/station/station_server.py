@@ -64,7 +64,7 @@ class StationServer:
         station_type: StationType,
         station_ip: str = "0.0.0.0",
         station_port: int = 8000,
-        logger: logging.Logger = logging.getLogger("station_server")
+        logger: logging.Logger = logging.getLogger(__name__)
     ):
         """initialize the station server
 

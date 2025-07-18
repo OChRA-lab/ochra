@@ -27,7 +27,7 @@ class LabServer:
         port: int,
         folderpath: str,
         template_path: Optional[Path] = None,
-        logger: logging.Logger = logging.getLogger("lab_server")
+        logger: logging.Logger = logging.getLogger(__name__)
     ) -> None:
         """Setup a lab server with the given host and port optionally storing data in folderpath
 

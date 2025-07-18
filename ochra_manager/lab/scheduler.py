@@ -13,7 +13,7 @@ class Scheduler:
         self.op_queue = []
         self._db_conn: DbConnection = DbConnection()
         self._stop = False
-        self._logger = logging.getLogger("scheduler")
+        self._logger = logging.getLogger(__name__)
         self._logger.info("Test message")
 
         # create operation queue in db

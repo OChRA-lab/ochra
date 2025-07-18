@@ -11,7 +11,7 @@ class DbConnection(metaclass=SingletonMeta):
         self,
         hostname: str = "127.0.0.1:27017",
         db_name: str = "ochra_test_db",
-        logger: logging.Logger = logging.getLogger("db_connection"),
+        logger: logging.Logger = logging.getLogger(__name__),
     ) -> Self:
         """Constructor for DbConnection
 

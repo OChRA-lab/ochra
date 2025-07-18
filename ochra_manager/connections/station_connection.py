@@ -9,7 +9,7 @@ class StationConnection:
         hostname: str = "10.24.57.154:8000",
         api_key: str = "",
         ssl_verify: bool = False,
-        logger: logging.Logger = logging.getLogger("station_connection"),
+        logger: logging.Logger = logging.getLogger(__name__),
     ):
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger
