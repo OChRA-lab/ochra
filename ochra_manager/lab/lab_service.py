@@ -60,7 +60,7 @@ class LabService:
             self.db_conn.read({"id": object_id, "_collection": collection})
             logger.debug(f"got Object {object_id}")
         except Exception as e:
-            logger.info(f"{object_id} does not exist")
+            logger.debug(f"{object_id} does not exist")
             raise HTTPException(status_code=404, detail=str(e))
         try:
             logger.debug(
@@ -73,7 +73,7 @@ class LabService:
                 file=file,
             )
 
-            logger.info(f"changed {set_req.property} to {set_req.property_value}")
+            logger.debug(f"changed {set_req.property} to {set_req.property_value}")
 
         except Exception as e:
             logger.error(e)
@@ -108,7 +108,7 @@ class LabService:
             )
 
         self.db_conn.create({"_collection": collection}, object_dict)
-        logger.info(f"constructed object of type {object_dict.get('cls')}")
+        logger.debug(f"constructed object of type {object_dict.get('cls')}")
         return object_dict.get("id")
 
     def call_on_object(
