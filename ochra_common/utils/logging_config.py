@@ -1,6 +1,5 @@
 import logging
 import logging.config
-import logging.handlers
 import inspect
 from pathlib import Path
 
@@ -154,7 +153,7 @@ LOGGING_CONFIG_DICT = {
     # Loggers
     "root": {
         "level": "NOTSET",
-        "handlers": ["console_handler", "info_handler", "error_handler"],
+        "handlers": ["info_handler", "error_handler"],
         "propagate": False,
     },
     "loggers": {
@@ -162,86 +161,86 @@ LOGGING_CONFIG_DICT = {
         # Lab server loggers
         "lab_server": {
             "level": "DEBUG",
-            "handlers": ["lab_server_handler"],
+            "handlers": ["console_handler", "lab_server_handler"],
             "propagate": True,
         },
         "scheduler": {
             "level": "DEBUG",
-            "handlers": ["scheduler_handler"],
+            "handlers": ["console_handler", "scheduler_handler"],
             "propagate": True,
         },
         "device_router": {
             "level": "DEBUG",
-            "handlers": ["routers_handler"],
+            "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
         "lab_router": {
             "level": "DEBUG",
-            "handlers": ["routers_handler"],
+            "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
         "operation_results_router": {
             "level": "DEBUG",
-            "handlers": ["routers_handler"],
+            "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
         "operation_router": {
             "level": "DEBUG",
-            "handlers": ["routers_handler"],
+            "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
         "robot_router": {
             "level": "DEBUG",
-            "handlers": ["routers_handler"],
+            "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
         "station_router": {
             "level": "DEBUG",
-            "handlers": ["routers_handler"],
+            "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
         "storage_router": {
             "level": "DEBUG",
-            "handlers": ["routers_handler"],
+            "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
         "ui_router": {
             "level": "DEBUG",
-            "handlers": ["routers_handler"],
+            "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
         "db_connection": {
             "level": "DEBUG",
-            "handlers": ["db_connection_handler"],
+            "handlers": ["console_handler", "db_connection_handler"],
             "propagate": True,
         },
         "station_connection": {
             "level": "DEBUG",
-            "handlers": ["station_connection_handler"],
+            "handlers": ["console_handler", "station_connection_handler"],
             "propagate": True,
         },
 
         # Station server loggers
         "station_server": {
             "level": "DEBUG",
-            "handlers": ["station_server_handler"],
+            "handlers": ["console_handler", "station_server_handler"],
             "propagate": True,
         },
         "lab_connection": {
             "level": "DEBUG",
-            "handlers": ["lab_connection_handler"],
+            "handlers": ["console_handler", "lab_connection_handler"],
             "propagate": True,
         },
         "ochra_device": {
             "level": "DEBUG",
-            "handlers": [],
+            "handlers": ["console_handler"],
             "propagate": True,
         },
         
         # Client devices loggers
         "experiment": {
             "level": "DEBUG",
-            "handlers": ["experiment_handler"],
+            "handlers": ["console_handler", "experiment_handler"],
             "propagate": True,
         },
     },
