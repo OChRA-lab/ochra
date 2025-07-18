@@ -108,5 +108,6 @@ class LabServer:
 
     def run(self) -> None:
         """launches the server on the initialized host and port"""
+        self._logger.info("Starting lab server...")
         app = self.get_caller_variable_name()
         uvicorn.run(app, host=self.host, port=self.port, workers=8)
