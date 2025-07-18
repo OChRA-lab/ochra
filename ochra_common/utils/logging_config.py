@@ -1,6 +1,6 @@
+import inspect
 import logging
 import logging.config
-import inspect
 from pathlib import Path
 
 
@@ -24,7 +24,6 @@ LOG_DIR = WORKSPACE_ROOT / "ochra_logs"
 LOGGING_CONFIG_DICT = {
     "version": 1,
     "disable_existing_loggers": False,
-
     # Formatters
     "formatters": {
         "simple": {  # log level - message
@@ -37,14 +36,12 @@ LOGGING_CONFIG_DICT = {
             "format": "%(asctime)s - %(levelname)s - %(name)s - Line: %(lineno)d - %(message)s"
         },
     },
-
     # Filters
     "filters": {
         "info_pass_filter": {
             "()": InfoPassFilter,
         },
     },
-
     # Handlers
     "handlers": {
         "console_handler": {
@@ -79,7 +76,6 @@ LOGGING_CONFIG_DICT = {
         #    "toaddrs": ["recipient@example.com"],
         #    "subject": "Critical error in OChRA framework"
         # },
-
         # Lab server handlers
         "lab_server_handler": {
             "class": "logging.handlers.TimedRotatingFileHandler",
@@ -146,7 +142,6 @@ LOGGING_CONFIG_DICT = {
             "when": "midnight",
             "backupCount": 7,
         },
-
         # Client handlers
         "experiment_handler": {
             "class": "logging.handlers.TimedRotatingFileHandler",
@@ -157,7 +152,6 @@ LOGGING_CONFIG_DICT = {
             "backupCount": 7,
         },
     },
-
     # Loggers
     "root": {
         "level": "NOTSET",
@@ -165,7 +159,6 @@ LOGGING_CONFIG_DICT = {
         "propagate": False,
     },
     "loggers": {
-
         # Lab server loggers
         "ochra_manager.lab.lab_server": {
             "level": "DEBUG",
@@ -232,7 +225,6 @@ LOGGING_CONFIG_DICT = {
             "handlers": ["console_handler", "station_connection_handler"],
             "propagate": True,
         },
-
         # Station server loggers
         "ochra_manager.station.station_server": {
             "level": "DEBUG",
@@ -249,7 +241,6 @@ LOGGING_CONFIG_DICT = {
             "handlers": ["console_handler"],
             "propagate": True,
         },
-        
         # Client devices loggers
         "experiment": {
             "level": "DEBUG",
@@ -282,14 +273,14 @@ def _get_device_module():
 
 
 def custom_getLogger(name=None):
-    """ Replace the default getLogger to handle OChRA devices."""
+    """Replace the default getLogger to handle OChRA devices."""
     # Use the default logger if not an OChRA device
     if name != "ochra_device":
         return _default_getLogger(name)
 
     # Get the device module name from the call stack
     logger_name = _get_device_module()
-    
+
     # Use the default logger if no device module found
     if logger_name is None:
         return _default_getLogger(name)
@@ -325,6 +316,7 @@ def custom_getLogger(name=None):
     if logger_name not in LOGGING_CONFIG_DICT["loggers"]:
         LOGGING_CONFIG_DICT["loggers"][logger_name] = {
             "handlers": [
+                "console_handler",
                 handler_name,
             ],
             "level": "DEBUG",
