@@ -39,7 +39,6 @@ class Device(DataModel):
         
         cls._ui_states = []
         cls._ui_forms = []
-        print(cls._ui_states)
 
         # Collect from all parent classes (except Device itself)
         for base in cls.__bases__:
@@ -143,7 +142,6 @@ class HypermediaBuilder:
 
     def build(self) -> str:
         template = self.env.get_template("device_base.html")
-        print(self._get_form_context())
         
         context = {
             "states": self._get_state_context(),
