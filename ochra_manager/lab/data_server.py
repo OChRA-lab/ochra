@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI
 import uvicorn
 import inspect
@@ -5,7 +6,13 @@ from .routers import operation_results_router
 
 
 class DataServer:
-    def __init__(self, host: str, port: int, folderpath: str = None) -> None:
+    def __init__(
+        self,
+        host: str,
+        port: int,
+        folderpath: str = None,
+        logger: logging.Logger = logging.getLogger(__name__),
+    ) -> None:
         """Setup a data server with the given host and port optionally storing data in folderpath
 
         Args:
@@ -16,7 +23,7 @@ class DataServer:
         self.host = host
         self.port = port
         self.app = FastAPI()
-
+        self._logger = logger
         self.app.include_router(operation_results_router(folderpath))
 
     def get_caller_variable_name(self):
@@ -35,7 +42,7 @@ class DataServer:
         return fileNameSplit[-1] + ":" + variableName + ".app"
 
     def run(self) -> None:
-        """launches the server on the initialized host and port
-        """        
+        """launches the server on the initialized host and port"""
+        self._logger.info("Starting data server...")
         app = self.get_caller_variable_name()
         uvicorn.run(app, host=self.host, port=self.port, workers=8)
