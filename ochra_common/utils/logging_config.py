@@ -89,6 +89,14 @@ LOGGING_CONFIG_DICT = {
             "when": "midnight",
             "backupCount": 7,
         },
+        "lab_service_handler": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "level": "DEBUG",
+            "formatter": "standard",
+            "filename": str(LOG_DIR / "lab_service.log"),
+            "when": "midnight",
+            "backupCount": 7,
+        },
         "scheduler_handler": {
             "class": "logging.handlers.TimedRotatingFileHandler",
             "level": "DEBUG",
@@ -159,74 +167,79 @@ LOGGING_CONFIG_DICT = {
     "loggers": {
 
         # Lab server loggers
-        "lab_server": {
+        "ochra_manager.lab.lab_server": {
             "level": "DEBUG",
             "handlers": ["console_handler", "lab_server_handler"],
             "propagate": True,
         },
-        "scheduler": {
+        "ochra_manager.lab.lab_service": {
+            "level": "DEBUG",
+            "handlers": ["console_handler", "lab_service_handler"],
+            "propagate": True,
+        },
+        "ochra_manager.lab.scheduler": {
             "level": "DEBUG",
             "handlers": ["console_handler", "scheduler_handler"],
             "propagate": True,
         },
-        "device_router": {
+        "ochra_manager.lab.routers.device_router": {
             "level": "DEBUG",
             "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
-        "lab_router": {
+        "ochra_manager.lab.routers.lab_router": {
             "level": "DEBUG",
             "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
-        "operation_results_router": {
+        "ochra_manager.lab.routers.operation_results_router": {
             "level": "DEBUG",
             "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
-        "operation_router": {
+        "ochra_manager.lab.routers.operation_router": {
             "level": "DEBUG",
             "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
-        "robot_router": {
+        "ochra_manager.lab.routers.robot_router": {
             "level": "DEBUG",
             "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
-        "station_router": {
+        "ochra_manager.lab.routers.station_router": {
             "level": "DEBUG",
             "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
-        "storage_router": {
+        "ochra_manager.lab.routers.storage_router": {
             "level": "DEBUG",
             "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
-        "ui_router": {
+        "ochra_manager.lab.routers.ui_router": {
             "level": "DEBUG",
             "handlers": ["console_handler", "routers_handler"],
             "propagate": True,
         },
-        "db_connection": {
+        "ochra_manager.connections.db_connection": {
             "level": "DEBUG",
             "handlers": ["console_handler", "db_connection_handler"],
             "propagate": True,
         },
-        "station_connection": {
+        "ochra_manager.connections.station_connection": {
             "level": "DEBUG",
             "handlers": ["console_handler", "station_connection_handler"],
             "propagate": True,
         },
 
         # Station server loggers
-        "station_server": {
+        "ochra_manager.station.station_server": {
             "level": "DEBUG",
             "handlers": ["console_handler", "station_server_handler"],
             "propagate": True,
         },
-        "lab_connection": {
+        "ochra_common.connections.lab_connection": {
             "level": "DEBUG",
             "handlers": ["console_handler", "lab_connection_handler"],
             "propagate": True,
@@ -312,9 +325,6 @@ def custom_getLogger(name=None):
     if logger_name not in LOGGING_CONFIG_DICT["loggers"]:
         LOGGING_CONFIG_DICT["loggers"][logger_name] = {
             "handlers": [
-                "console_handler",
-                "info_handler",
-                "error_handler",
                 handler_name,
             ],
             "level": "DEBUG",
