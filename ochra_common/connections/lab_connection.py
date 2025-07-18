@@ -10,7 +10,6 @@ from .api_models import (
 from uuid import UUID, uuid4
 import logging
 from typing import Any, Type, TypeVar, Union, List
-from typing import Any, Type, TypeVar, Union, List
 import importlib
 from ..equipment.operation import Operation
 from ..utils.enum import OperationStatus, PatchType
@@ -47,7 +46,7 @@ class LabConnection(metaclass=SingletonMeta):
             hostname, api_key, ssl_verify, logger
         )
         if experiment_id is None:
-            self._session_id = uuid4()
+            self._session_id = str(uuid4())
         else:
             self._session_id = experiment_id
 
