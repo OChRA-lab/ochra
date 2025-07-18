@@ -6,7 +6,7 @@ from typing import List, Type, Union
 
 
 class Lab(Lab):
-    def __init__(self, hostname: str, experiment_id = None):
+    def __init__(self, hostname: str, experiment_id: str = None):
         """Connects to the lab and provides access to the stations and robots.
 
         Args:
