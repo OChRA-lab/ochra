@@ -22,12 +22,13 @@ engine = create_engine(AUTH_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def init_user_db():
-    print("Create all tables in the database.")
+    # Create all tables in the database.
     inspector = inspect(engine)
     if not inspector.has_table('your_table_name'):  # You should specify a table name here
         Base.metadata.create_all(bind=engine)
     else:
-        print("Tables already exist, skipping creation.")
+        # Tables already exist, skipping creation.
+        pass
 
 def get_db():
     """Dependency for accessing the database."""
