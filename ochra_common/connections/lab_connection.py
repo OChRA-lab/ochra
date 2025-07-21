@@ -25,8 +25,8 @@ class LabConnection(metaclass=SingletonMeta):
 
     def __init__(
         self,
-        experiment_id: str,
         hostname: str = "127.0.0.1:8000",
+        experiment_id: str = None,
         api_key: str = "",
         ssl_verify: bool = False,
         logger: logging.Logger = None,
