@@ -246,8 +246,9 @@ class StationServer:
         if not isinstance(command_name, str):
             raise HTTPException(status_code=422, detail=f"Missing required parameter {command_name}")
 
+        
         # Get the args and remove the command one
-        args = dict(form_data)
+        args = form_data._dict
         args.pop("command")
 
         # check if the method is on the device if not raise an error
