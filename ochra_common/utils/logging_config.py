@@ -74,14 +74,6 @@ LOGGING_CONFIG_DICT = {
             "when": "midnight",
             "backupCount": 7,
         },
-        "lab_service_handler": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "level": "DEBUG",
-            "formatter": "standard",
-            "filename": str(LOG_DIR / "lab_service.log"),
-            "when": "midnight",
-            "backupCount": 7,
-        },
         "scheduler_handler": {
             "class": "logging.handlers.TimedRotatingFileHandler",
             "level": "DEBUG",
@@ -156,7 +148,7 @@ LOGGING_CONFIG_DICT = {
         },
         "ochra_manager.lab.lab_service": {
             "level": "DEBUG",
-            "handlers": ["console_handler", "lab_service_handler"],
+            "handlers": ["console_handler", "lab_server_handler"],
             "propagate": True,
         },
         "ochra_manager.lab.scheduler": {
