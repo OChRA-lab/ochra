@@ -50,6 +50,12 @@ LOGGING_CONFIG_DICT = {
             "formatter": "simple",
             "stream": "ext://sys.stdout",
         },
+        "console_error_handler": {
+            "class": "logging.StreamHandler",
+            "level": "WARNING",
+            "formatter": "detailed",
+            "stream": "ext://sys.stdout",
+        },
         # "critical_handler": {
         #    "level": "CRITICAL",
         #    "formatter": "detailed",
@@ -138,7 +144,7 @@ LOGGING_CONFIG_DICT = {
     # Loggers
     "root": {
         "level": "NOTSET",
-        "handlers": [],
+        "handlers": ["console_error_handler"],
         "propagate": False,
     },
     "loggers": {
