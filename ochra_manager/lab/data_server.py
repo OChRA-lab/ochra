@@ -11,7 +11,6 @@ class DataServer:
         host: str,
         port: int,
         folderpath: str = None,
-        logger: logging.Logger = logging.getLogger(__name__),
     ) -> None:
         """Setup a data server with the given host and port optionally storing data in folderpath
 
@@ -20,11 +19,12 @@ class DataServer:
             port (int): port to open the server on
             folderpath (str): path to store data in
         """
+        self._logger = logging.getLogger(__name__)
         self.host = host
         self.port = port
         self.app = FastAPI()
-        self._logger = logger
         self.app.include_router(operation_results_router(folderpath))
+        
 
     def get_caller_variable_name(self):
         """Find the name of the variable that called this function

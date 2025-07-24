@@ -64,7 +64,6 @@ class StationServer:
         station_type: StationType,
         station_ip: str = "0.0.0.0",
         station_port: int = 8000,
-        logger: logging.Logger = logging.getLogger(__name__)
     ):
         """initialize the station server
 
@@ -73,15 +72,14 @@ class StationServer:
             location (Location): location of the station
             station_ip (str, optional): station ip to run the server on. Defaults to "127.0.0.1".
             station_port (int, optional): port to oopen the station on. Defaults to 8000.
-            logger (logging.Logger, optional): logger to use for the station server. Defaults to logging.getLogger("station_server").
         """
+        self._logger = logging.getLogger(__name__)
         self._name = name
         self._location = location
         self._type = station_type
         self._ip = station_ip
         self.port = station_port
         self._devices: dict[str, Device] = {}
-        self._logger = logger
 
 
     def setup(self, lab_ip: Optional[str] = None) -> None:

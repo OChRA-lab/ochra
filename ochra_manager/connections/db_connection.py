@@ -11,18 +11,16 @@ class DbConnection(metaclass=SingletonMeta):
         self,
         hostname: str = "127.0.0.1:27017",
         db_name: str = "ochra_test_db",
-        logger: logging.Logger = logging.getLogger(__name__),
     ) -> Self:
         """Constructor for DbConnection
 
         Args:
             hostname (str, optional): address of db host. Defaults to "127.0.0.1:27017"
             db_name (str, optional): name of the db. Defaults to "ochra_test_db"
-            logger (logging.Logger, optional): logger if you have one.
-                Defaults to None.
         """
-        self.db_adapter: MongoAdapter = MongoAdapter(hostname, db_name, logger)
-        self._logger = logger
+        self._logger = logging.getLogger(__name__)
+        self.db_adapter: MongoAdapter = MongoAdapter(hostname, db_name, self._logger)
+        
 
     def create(self, db_data, doc):
         """Create a new document in the specified collection."""
@@ -30,7 +28,6 @@ class DbConnection(metaclass=SingletonMeta):
 
     def read(self, db_data, property=None, file=False):
         """Read documents from the specified collection that match the query."""
-
         return self.db_adapter.read(db_data, property, file=file)
 
     def update(self, db_data, update, file=False):

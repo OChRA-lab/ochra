@@ -10,11 +10,11 @@ import logging
 
 class Scheduler:
     def __init__(self):
+        self._logger = logging.getLogger(__name__)
         self.op_queue = []
         self._db_conn: DbConnection = DbConnection()
         self._stop = False
-        self._logger = logging.getLogger(__name__)
-
+        
         # create operation queue in db
         self._queue_id = self._db_conn.create(
             {"_collection": "lab"}, {"op_queue": self.op_queue}

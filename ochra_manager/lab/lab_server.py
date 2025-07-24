@@ -27,7 +27,6 @@ class LabServer:
         port: int,
         folderpath: str,
         template_path: Optional[Path] = None,
-        logger: logging.Logger = logging.getLogger(__name__)
     ) -> None:
         """Setup a lab server with the given host and port optionally storing data in folderpath
 
@@ -35,15 +34,15 @@ class LabServer:
             host (str): host ip address
             port (int): port to open the server on
             folderpath (str): path to store data in
-            logger (logging.Logger, optional): logger to use for the lab server.
         """
         MODULE_DIRECTORY = (
             Path(__file__).resolve().parent if not template_path else template_path
         )
+        self._logger = logging.getLogger(__name__)
         self.host = host
         self.port = port
         self.scheduler = Scheduler()
-        self._logger = logger
+        
 
         @asynccontextmanager
         async def lifespan(app: FastAPI):
