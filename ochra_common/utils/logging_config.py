@@ -50,23 +50,6 @@ LOGGING_CONFIG_DICT = {
             "formatter": "simple",
             "stream": "ext://sys.stdout",
         },
-        "info_handler": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "level": "INFO",
-            "filters": ["info_pass_filter"],
-            "formatter": "standard",
-            "filename": str(LOG_DIR / "ochra_info.log"),
-            "when": "midnight",
-            "backupCount": 7,
-        },
-        "error_handler": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "level": "WARNING",
-            "formatter": "detailed",
-            "filename": str(LOG_DIR / "ochra_error.log"),
-            "when": "midnight",
-            "backupCount": 7,
-        },
         # "critical_handler": {
         #    "level": "CRITICAL",
         #    "formatter": "detailed",
@@ -155,7 +138,7 @@ LOGGING_CONFIG_DICT = {
     # Loggers
     "root": {
         "level": "NOTSET",
-        "handlers": ["info_handler", "error_handler"],
+        "handlers": [],
         "propagate": False,
     },
     "loggers": {
