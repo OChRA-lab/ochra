@@ -2,9 +2,9 @@
 {% extends "zzmain_layout.html" %}
 
 {% block content %}
-<div class="flex flex-col flex-1 {% if sidepanel_view %}h-full overflow-hidden lg:flex{% endif %}">
+<div class="h-dvh flex flex-col flex-1 {% if sidepanel_view %}h-full overflow-hidden lg:flex{% endif %}">
     <!--Banner-->
-    <div class="flex w-full p-6 border-b-[0.5px] border-text dark:border-dark-text justify-between">
+    <div class="flex w-full p-6 border-b-[0.5px] border-text dark:border-dark-text justify-between shrink-0">
         <div>
             <h1 class="text-primary dark:text-dark-primary text-4xl">{{station._name}} {{device.name}}</h1>
             <p class="text-text dark:text-dark-text">Logged in as {{request.state.user.username}}</p>
@@ -14,15 +14,16 @@
     </div>
 
     <!--Main Content-->
-    <div class="flex-1 overflow-y-auto">
+    <div class="w-[75%] w-full h-87-dvh flex flex-col overflow-y-auto overflow-x-hidden">
         <a href="/app" class="z-50 absolute left-0 top-0 pl-2 pt-2 lg:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" class="fill-text dark:fill-dark-text" height="24px"
                 viewBox="0 -960 960 960" width="24px">
                 <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
             </svg>
         </a>
-        <br>
-        {{ device_html | safe }}
+        <div class="w-[95%]">
+            {{ device_html | safe }}
+        </div>
     </div>
 </div>
 

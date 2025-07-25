@@ -14,21 +14,26 @@
 
 <div class="flex-1 px-6 py-2 overflow-y-auto">
 	<div class="mt-6 space-y-4">
-		<!-- <h3>Devices</h3> -->
-		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-			<!--State Chips-->
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-3 justify-center">
+			{% if station._devices %}
+			<!-- Device Cards -->
 			{% for k,d in station._devices.items() %}
 			<a hx-trigger="click" hx-target="body" hx-swap="outerHTML" hx-push-url="true"
 				hx-get="/app/stations/{{station.id}}/devices/{{d.id}}">
 				<div
-					class="flex justify-center items-center p-3 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral
-					hover:cursor-pointer transition-transform transform-gpu hover:-translate-y-1 active:bg-primary dark:active:bg-primary actine:outline-none">
+					class="w-full max-w-md p-3 rounded-lg text-center shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral
+					hover:cursor-pointer transition-transform transform-gpu hover:-translate-y-1 active:bg-primary dark:active:bg-primary active:outline-none">
 					<h4 class="text-primary">
 						{{d.name}}
 					</h4>
 				</div>
 			</a>
 			{% endfor %}
+			{% endif %}
+			<!-- No devices found message -->
+			{% if not station._devices %}
+			<p class="text-text dark:text-dark-text">No devices found.</p>
+			{% endif %}
 		</div>
 	</div>
 </div>
