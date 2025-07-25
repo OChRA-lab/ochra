@@ -1,17 +1,22 @@
 <div class="flex-1 px-6 py-2">
 	<!-- Section 1: Device Status Cards -->
 	<div class="mt-6 space-y-4">
-		<h3>{{device.name}}</h3>
+		{% if states %}
+		<h3>Properties</h3>
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
 			{% for state in states %}
 			<!--State Chips-->
 			{{ state_chip(state, device)}}
 			{% endfor %}
 		</div>
+		{% else %}
+		<p class="text-text dark:text-dark-text">No device properties.</p>
+		{% endif %}
 	</div>
 	<!-- Section 2: Form Cards -->
 	<div class="mt-6 space-y-4">
-		<h3>{{device.name}} Controls</h3>
+		{% if forms %}
+		<h3>Controls</h3>
 		<div class="grid grid-cols-1 md:grid-cols-3 mt-8 gap-4">
 			<!--Forms For Device-->
 			{% for form in forms %}
@@ -20,6 +25,9 @@
 			</div>
 			{% endfor %}
 		</div>
+		{% else %}
+		<p class="text-text dark:text-dark-text">No controls available for this device.</p>
+		{% endif %}
 	</div>
 </div>
 
