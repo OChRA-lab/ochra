@@ -1,21 +1,25 @@
-<div class="flex-1 px-6 py-2 overflow-y-auto">
+<div class="flex-1 px-6 py-2">
 	<!-- Section 1: Device Status Cards -->
 	<div class="mt-6 space-y-4">
 		<h3>{{device.name}}</h3>
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-			<!--State Chips-->
 			{% for state in states %}
+			<!--State Chips-->
 			{{ state_chip(state, device)}}
 			{% endfor %}
 		</div>
 	</div>
-
 	<!-- Section 2: Form Cards -->
-	<div class="mt-8 space-y-6">
+	<div class="mt-6 space-y-4">
 		<h3>{{device.name}} Controls</h3>
-		<!--Forms For Device-->
-		{% for form in forms %}
-		{{form_macro(form, device)}}
-		{% endfor %}
+		<div class="grid grid-cols-1 md:grid-cols-3 mt-8 gap-4">
+			<!--Forms For Device-->
+			{% for form in forms %}
+			<div class="w-full">
+				{{form_macro(form, device)}}
+			</div>
+			{% endfor %}
+		</div>
 	</div>
 </div>
+
