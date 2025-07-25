@@ -12,9 +12,9 @@
 	</div>
 </div>
 
-<div class="flex-1 px-6 py-2 overflow-y-auto">
-	<div class="mt-6 space-y-4">
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-3 justify-center">
+<div class="flex-1 px-6 py-2">
+	<div class="mt-6 space-y-4 flex justify-center " >
+		<div class="grid grid-cols-1 gap-3 p-3 w-full max-w-md min-w-fit">
 			{% if station._devices %}
 			<!-- Device Cards -->
 			{% for k,d in station._devices.items() %}
@@ -23,7 +23,7 @@
 				<div
 					class="w-full max-w-md p-3 rounded-lg text-center shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral
 					hover:cursor-pointer transition-transform transform-gpu hover:-translate-y-1 active:bg-primary dark:active:bg-primary active:outline-none">
-					<h4 class="text-primary">
+					<h4 class="text-primary truncate overflow-hidden whitespace-nowrap">
 						{{d.name}}
 					</h4>
 				</div>

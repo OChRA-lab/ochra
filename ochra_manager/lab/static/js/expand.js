@@ -5,7 +5,7 @@ function toggleSidePanel() {
     const isCollapsed = container.style.width === '2.45rem';
 
     if (isCollapsed) {
-        container.style.width = '32rem';  // Expanded 103rem
+        container.style.width = '24rem';  // Expanded 24rem
         toggleButton.textContent = '◀';
     } else {
         container.style.width = '2.45rem';  // Collapsed
@@ -21,6 +21,6 @@ toggleButton.addEventListener('click', toggleSidePanel);
 
 
 document.body.addEventListener('htmx:afterSwap', function (e) {
-    container.style.width = '32rem';  // or whatever your expanded width is
+    container.style.width = '24rem';  // or whatever your expanded width is
     toggleButton.textContent = '◀';
 });
