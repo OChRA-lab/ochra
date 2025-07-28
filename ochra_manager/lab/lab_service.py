@@ -91,8 +91,21 @@ class LabService:
         Returns:
             str: object id of constructed object
         """
-
+        
         object_dict: dict = json.loads(construct_req.object_json)
+        existing_object = self.db_conn.find(
+            {"_collection": collection}, {"name": object_dict.get("name","")}
+        )
+        logger.info(f"existing_object: {existing_object}")
+        if existing_object is not None:
+            object_dict["id"] = existing_object.get("id")
+            obj_inv = existing_object.get("inventory",None)
+            if obj_inv is not None:
+                object_dict["inventory"] = obj_inv
+            self.db_conn.delete(
+                {"id": existing_object.get("id"), "_collection": collection}
+            )
+        
         self.db_conn.create({"_collection": collection}, object_dict)
         logger.info(f"constructed object of type {object_dict.get('cls')}")
         return object_dict.get("id")
@@ -269,3 +282,18 @@ class LabService:
             property="result_data",
             file=True,
         )
+
+    def delete_object(self, object_id: str, collection: str):
+        """delete object from db
+
+        Args:
+            object_id (str): id of object to delete
+            collection (str): collection it is in
+
+        Raises:
+            HTTPException: if object not found
+        """
+        try:
+            self.db_conn.delete({"id": object_id, "_collection": collection})
+        except Exception as e:
+            raise HTTPException(status_code=404, detail=str(e))

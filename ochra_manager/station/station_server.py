@@ -12,6 +12,8 @@ from os import remove
 import datetime
 from starlette.types import Message
 import uvicorn
+import os
+import signal
 
 from ochra_common.connections.lab_connection import LabConnection
 from ochra_common.utils.enum import (
@@ -113,7 +115,10 @@ class StationServer:
         self._app.post("/devices/{device_id}/commands")(self.perform_device_operation)
 
         self._app.get("/hypermedia")(self.get_pannel)
+
         self._app.get("/hypermedia/devices/{device_id}")(self.get_device_view)
+
+        self._app.post("/shutdown")(self.shutdown)
 
         self._app.add_middleware(UserSessionMiddleware)
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
@@ -294,7 +299,7 @@ class StationServer:
                     raise HTTPException(403, detail="Station is locked by another user")
 
             if op.entity_type != "station":
-                device = self._devices[op.entity_id]
+                device = self._devices[str(op.entity_id)]
                 method = getattr(device, op.method)
             else:
                 method = getattr(self._station_proxy, op.method)
@@ -449,3 +454,15 @@ class StationServer:
             # remove the zip file when upload is done
             if delete_archive:
                 remove(result.name)
+
+
+    def shutdown(self):
+        for _, device in self._devices.items():
+            if device.inventory != [] or device.inventory is None:
+                device.inventory._cleanup()
+            device._cleanup()
+        self._station_proxy.inventory._cleanup()
+        self._station_proxy._cleanup()
+        os.kill(os.getpid(),signal.SIGTERM)
+        return 200
+        #shutdown the server

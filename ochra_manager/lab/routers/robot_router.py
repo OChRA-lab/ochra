@@ -24,6 +24,7 @@ class RobotRouter(APIRouter):
         self.patch("/{identifier}/modify_property")(self.modify_property)
         self.post("/{identifier}/call_method")(self.call_robot)
         self.get("/get")(self.get_robot)
+        self.delete("/{identifier}/delete")(self.delete_robot)
 
     async def construct_robot(self, args: ObjectConstructionRequest):
         return self.lab_service.construct_object(args, COLLECTION)
@@ -46,3 +47,7 @@ class RobotRouter(APIRouter):
             robot_obj = self.lab_service.get_object_by_name(identifier, COLLECTION)
 
         return convert_to_data_model(robot_obj)
+
+    async def delete_robot(self, identifier: str):
+        self.lab_service.delete_object(identifier, COLLECTION)
+        return {"message": "Robot deleted successfully"}

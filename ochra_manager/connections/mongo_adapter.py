@@ -142,9 +142,10 @@ class MongoAdapter:
 
         return collection.update_many(query, update)
 
-    def delete(self, collection: str, query: dict):
+    def delete(self, db_data):
         """Delete documents from the specified collection that match the query."""
-        collection = self._db_client[self._db_name][collection]
+        collection = self._db_client[self._db_name][db_data["_collection"]]
+        query = {"id": db_data["id"]}
         return collection.delete_many(query)
 
     def find(self, db_data, search_params):
