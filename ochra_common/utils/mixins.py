@@ -16,7 +16,7 @@ class RestProxyMixin:
         # add lab connection and construct object on the endpoint
         self._lab_conn = LabConnection()
         if self._override_id is None:
-            self._lab_conn.construct_object(endpoint, self)
+            self.id = self._lab_conn.construct_object(endpoint, self)
         else:
             self.id = self._override_id
 
@@ -49,6 +49,11 @@ class RestProxyMixin:
         instance.id = object_id
         cls._override_id = None
         return instance
+    
+    def _cleanup(self) -> None:
+        """ Clean up the data model instance by deleting it from the database."""
+        lab: LabConnection = LabConnection()
+        lab.delete_object(self._endpoint, self.id)
 
 
 class RestProxyMixinReadOnly:

@@ -146,7 +146,7 @@ class LabConnection(metaclass=SingletonMeta):
         Returns:
             Any: response from the lab
         """
-        result: Result = self.rest_adapter.delete(f"/{type}/delete/{str(id)}")
+        result: Result = self.rest_adapter.delete(f"/{type}/{str(id)}/delete")
         return result.data
 
     def call_on_object(self, type: str, id: UUID, method: str, args: dict) -> Operation:
