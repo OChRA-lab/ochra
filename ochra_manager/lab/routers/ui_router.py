@@ -142,7 +142,7 @@ class WebAppRouter(APIRouter):
                 for station in stations
         ]
         
-        async with httpx.AsyncClient(timeout=50.0) as client:
+        async with httpx.AsyncClient() as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
 
@@ -180,7 +180,7 @@ class WebAppRouter(APIRouter):
                 for station in stations
         ]
         
-        async with httpx.AsyncClient(timeout=50.0) as client:
+        async with httpx.AsyncClient() as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
 
@@ -270,7 +270,7 @@ class WebAppRouter(APIRouter):
             start_timestamp = datetime.now(),
         )
 
-        async with httpx.AsyncClient(timeout=50.0) as client:
+        async with httpx.AsyncClient() as client:
             headers = {
                 key: value for key, value in request.headers.items()
                 if key.lower() not in ("content-length", "content-type")
