@@ -252,8 +252,9 @@ class StationServer:
         method_exists = hasattr(device, command_name)
         if not method_exists:
             raise HTTPException(status_code=400, detail=f"Method does note xist")
-        
-        if {args.get("args") == "" or args.get("args") is None}:
+        print(args)
+       
+        if args.get("args") == "":
             args["args"] = {}
         # Only convert if it's a string
         if isinstance(args.get("args"), str):
@@ -265,9 +266,8 @@ class StationServer:
         try:
             method = getattr(device, command_name)
             print(method)
-            print(args)
+            print(f"[DEBUG] args: {args}")
             print(f"[DEBUG] Type of args: {type(args)}")
-            print(f"[DEBUG] Type of args: {type(args['args'])}")
             method(**args)
             return 
         except Exception as e:
