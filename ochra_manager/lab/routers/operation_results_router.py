@@ -49,7 +49,7 @@ class OperationResultRouter(APIRouter):
 
     async def get_data(self, identifier: str):
         value = self.lab_service.get_file(identifier, COLLECTION)
-        response = Response(value)
+        response = FileResponse(value)
         return response
 
     async def put_data(self, identifier: str, file: UploadFile = File(...)):
