@@ -1,6 +1,8 @@
 import logging
 from typing import Any, List, Dict, Optional
 from typing import Any, List, Dict, Optional
+
+from fastapi.responses import FileResponse
 from ..connections.station_connection import StationConnection
 from ochra_common.equipment.operation import Operation
 from fastapi import HTTPException
@@ -239,15 +241,26 @@ class LabService:
             collection (str): collection object is in
             result_data (bytestring): data to update it with
         """
-        self.db_conn.update(
-            {"id": object_id, "_collection": collection},
-            update={"result_data": result_data},
-            file=True,
+        # self.db_conn.update(
+        #     {"id": object_id, "_collection": collection},
+        #     update={"result_data": result_data},
+        #     file=True,
+        # )
+        parent_op = self.db_conn.find(
+            {"_collection": "operations"}, {"result": object_id}
         )
-
+        entity_id = self.db_conn.read(
+            {"id": parent_op["id"], "_collection": "operations"}, property="entity_id"
+        )
+        entity_type = self.db_conn.read(
+            {"id": parent_op["id"], "_collection": "operations"}, property="entity_type"
+        )
+        entity_name = self.db_conn.read(
+            {"id": entity_id, "_collection": f"{entity_type}s"}, property="name"
+        )
         if self.folderpath != None:
             # create folder with the operation id
-            path = self.folderpath / object_id
+            path = self.folderpath / entity_name
             path.mkdir(exist_ok=True)
 
             # create the file within the folder
@@ -265,7 +278,7 @@ class LabService:
                 == "folder"
             ):
                 shutil.unpack_archive(filename, filename.with_suffix(""), "zip")
-                remove(filename)
+                
 
     def get_file(self, object_id: str, collection: str):
         """get file from db
@@ -277,6 +290,24 @@ class LabService:
         Returns:
             bytestring: file data
         """
+        parent_op = self.db_conn.find(
+            {"_collection": "operations"}, {"result": object_id}
+        )
+        entity_id = self.db_conn.read(
+            {"id": parent_op["id"], "_collection": "operations"}, property="entity_id"
+        )
+        entity_type = self.db_conn.read(
+            {"id": parent_op["id"], "_collection": "operations"}, property="entity_type"
+        )
+        entity_name = self.db_conn.read(
+            {"id": entity_id, "_collection": f"{entity_type}s"}, property="name"
+        )
+        
+        return Path(self.folderpath/ entity_name / self.db_conn.read(
+            {"id": object_id, "_collection": collection}, property="data_file_name"
+        ))
+        
+        
         return self.db_conn.read(
             {"id": object_id, "_collection": collection},
             property="result_data",
