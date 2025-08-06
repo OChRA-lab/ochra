@@ -1,6 +1,7 @@
 import logging
+from os import remove
 import uuid
-from fastapi import APIRouter
+from fastapi import APIRouter, BackgroundTasks
 from fastapi import File, UploadFile
 
 # this is temp
@@ -47,9 +48,11 @@ class OperationResultRouter(APIRouter):
         
         return convert_to_data_model(result_obj)
 
-    async def get_data(self, identifier: str):
-        value = self.lab_service.get_file(identifier, COLLECTION)
+    async def get_data(self, identifier: str, background_tasks: BackgroundTasks):
+        value, delete = self.lab_service.get_file(identifier, COLLECTION)
         response = FileResponse(value)
+        if delete:
+            background_tasks.add_task(remove, value)
         return response
 
     async def put_data(self, identifier: str, file: UploadFile = File(...)):
