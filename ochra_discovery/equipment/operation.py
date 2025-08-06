@@ -1,5 +1,5 @@
 from ochra_common.equipment.operation import Operation
-from ochra_common.equipment.operation_result import OperationResult
+from ochra_discovery.equipment.operation_result import OperationResult
 from ochra_common.utils.mixins import RestProxyMixinReadOnly
 from uuid import UUID
 
@@ -20,7 +20,7 @@ class Operation(Operation, RestProxyMixinReadOnly):
         Returns:
             OperationResult: The result of the operation
         """
-        return OperationResult(id=self.result)
+        return OperationResult(id=UUID(self.result))
 
     def get_result_data(self, path: str = None) -> bytes:
         """Get the data of the operation result, optionally saving it to a file.
@@ -31,5 +31,5 @@ class Operation(Operation, RestProxyMixinReadOnly):
             path (str): The path to save the data to. If None, does not save the data.
         """
         if path is not None:
-            self.get_result().save_data(path)
+            self.get_result_object().save_data(path)
         return self._lab_conn.get_data("operation_results", self.result)
