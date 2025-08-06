@@ -24,8 +24,7 @@ logger = logging.getLogger(__name__)
 
 class LabService:
     def __init__(self, folderpath: Optional[str] = None) -> None:
-        """Labservice object serves the common functionality within routers to avoid code duplication
-        """
+        """Labservice object serves the common functionality within routers to avoid code duplication"""
         self.db_conn: DbConnection = DbConnection()
 
         # TODO: split this to check if the string is an actual directory to return some form of error message
@@ -67,7 +66,7 @@ class LabService:
             logger.debug(
                 f"attempting to update {set_req.property} to {set_req.property_value}"
             )  # noqa
-            
+
             self.db_conn.update(
                 {"id": object_id, "_collection": collection},
                 set_req.model_dump(),
@@ -93,26 +92,28 @@ class LabService:
         Returns:
             str: object id of constructed object
         """
-        
+
         object_dict: dict = json.loads(construct_req.object_json)
         existing_object = self.db_conn.find(
-            {"_collection": collection}, {"name": object_dict.get("name","")}
+            {"_collection": collection}, {"name": object_dict.get("name", "")}
         )
         logger.info(f"existing_object: {existing_object}")
         if existing_object is not None:
             object_dict["id"] = existing_object.get("id")
-            obj_inv = existing_object.get("inventory",None)
+            obj_inv = existing_object.get("inventory", None)
             if obj_inv is not None:
                 object_dict["inventory"] = obj_inv
             self.db_conn.delete(
                 {"id": existing_object.get("id"), "_collection": collection}
             )
-        
+
         self.db_conn.create({"_collection": collection}, object_dict)
         logger.info(f"constructed object of type {object_dict.get('cls')}")
         return object_dict.get("id")
 
-    def call_on_object(self, object_id: str, object_type: str, call_req: ObjectCallRequest) -> Operation:
+    def call_on_object(
+        self, object_id: str, object_type: str, call_req: ObjectCallRequest
+    ) -> Operation:
         """call method of object on object
 
         Args:
@@ -186,9 +187,7 @@ class LabService:
             HTTPException: if object not found
         """
         try:
-            return self.db_conn.find(
-                {"_collection": collection}, {"name": name}
-            )
+            return self.db_conn.find({"_collection": collection}, {"name": name})
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
@@ -206,9 +205,7 @@ class LabService:
             HTTPException: if object not found
         """
         try:
-            return self.db_conn.find(
-                {"_collection": collection}, {"id": object_id}
-            )
+            return self.db_conn.find({"_collection": collection}, {"id": object_id})
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
@@ -227,9 +224,7 @@ class LabService:
             HTTPException: if object not found
         """
         try:
-            return self.db_conn.find_all(
-                {"_collection": collection}, query_dict
-            )
+            return self.db_conn.find_all({"_collection": collection}, query_dict)
         except Exception as e:
             raise HTTPException(status_code=404, detail=str(e))
 
@@ -278,7 +273,7 @@ class LabService:
                 == "folder"
             ):
                 shutil.unpack_archive(filename, filename.with_suffix(""), "zip")
-                
+                remove(filename)
 
     def get_file(self, object_id: str, collection: str):
         """get file from db
@@ -302,17 +297,26 @@ class LabService:
         entity_name = self.db_conn.read(
             {"id": entity_id, "_collection": f"{entity_type}s"}, property="name"
         )
-        
-        return Path(self.folderpath/ entity_name / self.db_conn.read(
-            {"id": object_id, "_collection": collection}, property="data_file_name"
-        ))
-        
-        
-        return self.db_conn.read(
-            {"id": object_id, "_collection": collection},
-            property="result_data",
-            file=True,
-        )
+        # TODO: zip up folder and delete for returns
+        if self.folderpath != None:
+            delete = False
+            # get the file path
+            file_path: Path = (
+                self.folderpath
+                / entity_name
+                / self.db_conn.read(
+                    {"id": object_id, "_collection": collection},
+                    property="data_file_name",
+                )
+            )
+            if file_path.suffix == ".zip":
+                # if the file is a directory, zip it up
+                delete = True
+                shutil.make_archive(str(file_path)[:-4], "zip", str(file_path)[:-4])
+            return file_path, delete
+        else:
+            # if no folderpath is set, return None
+            raise HTTPException(status_code=404, detail="Folder path not set")
 
     def delete_object(self, object_id: str, collection: str):
         """delete object from db
