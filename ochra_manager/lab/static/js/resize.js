@@ -15,7 +15,7 @@ function startDrag(e) {
 	const newWidth = (container.offsetLeft + container.offsetWidth) - e.clientX;
 
 	// Optionally, add a minimum width:
-	if (newWidth > 50 && newWidth <= 1001) {
+	if (newWidth > 5 && newWidth <= 1001) {
 		container.style.width = newWidth + 'px';
 	}
 }

@@ -54,18 +54,17 @@ class WebAppRouter(APIRouter):
     def isHXRequest(self, request: Request) -> bool:
         return request.headers.get("HX-Request") == "true"
     
-    async def get_stations(self, request:Request):
+    def build_table_fields(self) -> list[dict]:
         stations = self.lab_service.get_all_objects(STATIONS)
-        table_fields = [
-                { 
-                     "name": station["name"], 
-                     "status": station["status"], 
-                     "device_count": len(station["devices"]), 
-                     "active_routine": "",
-                     "station_id": station["id"]
-                } 
-                for station in stations
-        ]
+        return [{
+            "name": s["name"],
+            "status": s["status"],
+            "device_count": len(s["devices"]),
+            "active_routine": "",
+            "station_id": s["id"]
+        } for s in stations]
+    async def get_stations(self, request:Request):
+        table_fields = self.build_table_fields()
         
         return self.templates.TemplateResponse("zzzstations.html",
                     {
@@ -107,12 +106,16 @@ class WebAppRouter(APIRouter):
 
         session_token = SessionToken.create_session_token(user.username, db)
         response = JSONResponse({"message": "success"})
-        response.set_cookie(key="session_token", value=session_token, httponly=True)
+        response.set_cookie(key="session_token", value=session_token, httponly=True, secure=True)
         response.headers["HX-Location"] = "/app"
         return response
 
     async def post_logout(self, request: Request, db: Session = Depends(get_db)):
-        session = SessionToken.get_session(db, request.cookies["session_token"])
+        session_token = request.cookies.get("session_token")
+        if not session_token:
+            raise HTTPException(status_code=401, detail="No session token found")
+
+        session = SessionToken.get_session(db, session_token)
         if session != None:
             db.delete(session)
             db.commit()
@@ -131,18 +134,9 @@ class WebAppRouter(APIRouter):
 
 
         stations = self.lab_service.get_all_objects(STATIONS)
-        table_fields = [
-                { 
-                     "name": station["name"], 
-                     "status": station["status"], 
-                     "device_count": len(station["devices"]), 
-                     "active_routine": "",
-                     "station_id": station["id"]
-                } 
-                for station in stations
-        ]
+        table_fields = self.build_table_fields()
         
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=50.0) as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
 
@@ -169,23 +163,14 @@ class WebAppRouter(APIRouter):
         url=f"http://{s['station_ip']}:{s['port']}/hypermedia/devices/{device_id}"
         station_url=f"http://{s['station_ip']}:{s['port']}/hypermedia"
         stations = self.lab_service.get_all_objects(STATIONS)
-        table_fields = [
-                { 
-                     "name": station["name"], 
-                     "status": station["status"], 
-                     "device_count": len(station["devices"]), 
-                     "active_routine": "",
-                     "station_id": station["id"],
-                } 
-                for station in stations
-        ]
-        
-        async with httpx.AsyncClient() as client:
+        table_fields = self.build_table_fields()
+
+        async with httpx.AsyncClient(timeout=50.0) as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
 
             station_response = await client.request(method, station_url, headers=headers, data=body)
-            decoded_station_html = response.content.decode("utf-8")
+            decoded_station_html = station_response.content.decode("utf-8")
             
             if self.isHXRequest(request):
                 return HTMLResponse(content=decoded_html)
@@ -270,7 +255,7 @@ class WebAppRouter(APIRouter):
             start_timestamp = datetime.now(),
         )
 
-        async with httpx.AsyncClient() as client:
+        async with httpx.AsyncClient(timeout=50.0) as client:
             headers = {
                 key: value for key, value in request.headers.items()
                 if key.lower() not in ("content-length", "content-type")
@@ -290,12 +275,20 @@ class WebAppRouter(APIRouter):
                     opp.collection
             )
 
-            return Response(
-                    status_code=status.HTTP_202_ACCEPTED,
-                    headers={
-                        "HX-Location": f"/app/stations/{station['id']}/devices/{device_id}"
-                    }
-            )
+            async with httpx.AsyncClient(timeout=50.0) as client:
+                headers = {
+                    key: value for key, value in request.headers.items()
+                    if key.lower() not in ("content-length", "content-type")
+                }
+
+                # re-fetch the updated device HTML
+                refreshed_device_html = await client.get(
+                    f"http://{station['station_ip']}:{station['port']}/hypermedia/devices/{device_id}",
+                    headers=headers
+                )
+
+            decoded_html = refreshed_device_html.content.decode("utf-8")
+            return HTMLResponse(content=decoded_html)
 
         # 3. Propagate station errors
         return Response(
@@ -304,7 +297,28 @@ class WebAppRouter(APIRouter):
             headers=station_response.headers,
             
         )
+    async def get_device_view(self, request: Request, station_id: str, device_id: str):
+        s = self.lab_service.get_object_by_id(station_id, "stations")
+        body = await request.body()
+        headers = dict(request.headers)
+        method = request.method
+        url=f"http://{s['station_ip']}:{s['port']}/hypermedia/devices/{device_id}"
 
+        async with httpx.AsyncClient(timeout=50.0) as client:
+            response = await client.request(method, url, headers=headers, data=body)
+            decoded_html = response.content.decode("utf-8")
+
+            if self.isHXRequest(request):
+                return HTMLResponse(content=decoded_html)
+            else:
+                return self.templates.TemplateResponse(
+                    "zzzdevice.html", 
+                    context={
+                        "request": request, 
+                        "active_link": self.prefix + "/", 
+                        "device_html": decoded_html
+                    }
+                )
     async def get_settings(self, request:Request, edit: bool = False):
         return self.templates.TemplateResponse(
                 "zzzsettings.html",
@@ -316,13 +330,13 @@ class WebAppRouter(APIRouter):
             )
 
     async def put_settings(self, request:Request, username: str = Form(...), email: str = Form(...), db: Session = Depends(get_db)):
-        user: Optional[User] = User.fetch_user(db, request.state.user.username)
 
-        if not user:
-            HTTPException(status_code=404, detail=f"User not found")
-        else:
-            user.username = username
-            user.email = email
+        if not hasattr(request.state, "user"):
+            raise HTTPException(401, detail="Unauthorized")
+        
+        user: Optional[User] = User.fetch_user(db, request.state.user.username)
+        user.username = username
+        user.email = email
 
         db.commit()
         request.state.user = user

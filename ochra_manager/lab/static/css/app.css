@@ -707,6 +707,12 @@
   .h-87-dvh {
     height: 87dvh;
   }
+  .h-90-dvh {
+    height: 90dvh;
+  }
+  .h-95-dvh {
+    height: 95dvh;
+  }
   .h-90{
     height: 90%;
   }
@@ -1265,6 +1271,10 @@
     transition-timing-function:cubic-bezier(0.4,0,0.2,1);
     transition-duration:150ms
   }
+  .duration-300 {
+    --tw-duration: 300ms;
+    transition-duration: 300ms;
+  }
   .duration-600 {
     --tw-duration: 600ms;
     transition-duration: 600ms;
@@ -1740,4 +1750,7 @@ html[data-theme="light"] .bg-dotted {
 @property --tw-ease {
   syntax: "*";
   inherits: false;
+}
+#SIDEPANEL_CONTAINER {
+	transition: width 0.3s ease;
 }

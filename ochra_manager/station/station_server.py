@@ -33,7 +33,7 @@ from ..proxy_models.space.station import Station
 import ast
 from jinja2 import Environment, FileSystemLoader
 from fastapi.staticfiles import StaticFiles
-from ochra_manager.lab.auth.auth_middleware import UserSessionMiddleware
+
 import httpx
 
 def _is_path(obj: Any) -> bool:
@@ -120,7 +120,6 @@ class StationServer:
 
         self._app.post("/shutdown")(self.shutdown)
 
-        self._app.add_middleware(UserSessionMiddleware)
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
 
     def add_device(self, device):
