@@ -215,7 +215,7 @@
 		{% endfor %}
 	</select>
 </div>
-{% else %}
+{% else %}\
 <h1> Invalid Input </h1>
 {% endif %}
 {%- endmacro %}
@@ -225,7 +225,7 @@
 {% macro form_macro(form, device) -%}
 <div class="p-4 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
 	<h4 class="text-sm font-semibold  mb-3"> {{form.call | replace("_", " ") | capitalize()}} </h4>
-	<form class="space-y-3" hx-boost="true" action="{{device.id}}/commands" method="{{form.method}}">
+	<form class="space-y-3" hx-boost="true" hx-target="#MainContentBodyDiv" action="{{device.id}}/commands" method="{{form.method}}" hx-swap="innerHTML" hx-push-url="true">
 		<input type="hidden" name="command" value="{{form.call}}" />
 		{% for param in form.params.values() %}
 		{{ input(param)}}
