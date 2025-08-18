@@ -248,7 +248,7 @@ class WebAppRouter(APIRouter):
             raise HTTPException(status_code=400, detail=f"Invalid args format: {e}")
         
         opp = Operation(
-            caller_id=uuid.uuid4(),
+            caller_id=str(uuid.uuid4()),
             collection="operations",
             entity_id=device_id,
             entity_type="devices",

@@ -704,8 +704,20 @@
   .h-dvh {
     height: 100dvh;
   }
+  .h-11-dvh {
+    height: 11dvh;
+  }
+  .h-12-dvh {
+    height: 12dvh;
+  }
   .h-87-dvh {
     height: 87dvh;
+  }
+  .h-88-dvh {
+    height: 88dvh;
+  }
+  .h-89-dvh {
+    height: 89dvh;
   }
   .h-90-dvh {
     height: 90dvh;
@@ -767,8 +779,20 @@
   .w-80 {
     width: calc(var(--spacing) * 80);
   }
+  .w-\[65\%\] {
+    width: 65%;
+  }
+  .w-\[70\%\] {
+    width: 70%;
+  }
+  .w-\[80\%\] {
+    width: 80%;
+  }
   .w-\[75\%\] {
     width: 75%;
+  }
+  .w-\[85\%\] {
+    width: 85%;
   }
   .w-\[95\%\] {
     width: 95%;

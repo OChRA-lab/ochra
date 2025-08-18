@@ -11,7 +11,7 @@
 			{% if station._devices %}
 			<!-- Device Cards -->
 			{% for k,d in station._devices.items() %}
-			<a hx-trigger="click" hx-target="#MainContentBodyDiv" hx-swap="outerHTML" hx-push-url="true"
+			<a hx-trigger="click" hx-target="#MainContentBodyDiv" hx-swap="innerHTML" hx-push-url="true"
 				hx-get="/app/stations/{{station.id}}/devices/{{d.id}}">
 				<div
 					class="w-full max-w-md p-3 rounded-lg text-center shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral
