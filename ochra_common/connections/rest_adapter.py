@@ -3,6 +3,7 @@ import requests.packages
 from typing import List, Dict
 from json import JSONDecodeError
 import logging
+from fastapi.responses import FileResponse
 # from ochra_common import Station
 
 
@@ -116,8 +117,11 @@ class RestAdapter:
         try:
             data_out = response.json()
         except (ValueError, JSONDecodeError) as e:
-            self._logger.error(msg=log_line_post.format(False, None, e))
-            raise LabEngineException(f"Bad JSON in response: {e}")
+            if response is FileResponse:
+                data_out = response
+            else:
+                self._logger.error(msg=log_line_post.format(False, None, e))
+                raise LabEngineException(f"Bad JSON in response: {e}")
 
         # if sucess return result else raise exception
         is_success = 299 >= response.status_code >= 200

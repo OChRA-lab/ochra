@@ -10,7 +10,6 @@ from .api_models import (
 from uuid import UUID, uuid4
 import logging
 from typing import Any, Type, TypeVar, Union, List
-from typing import Any, Type, TypeVar, Union, List
 import importlib
 from ..equipment.operation import Operation
 from ..utils.enum import OperationStatus, PatchType
@@ -27,6 +26,7 @@ class LabConnection(metaclass=SingletonMeta):
     def __init__(
         self,
         hostname: str = "127.0.0.1:8000",
+        experiment_id: str = None,
         api_key: str = "",
         ssl_verify: bool = False,
         logger: logging.Logger = None,
@@ -45,7 +45,10 @@ class LabConnection(metaclass=SingletonMeta):
         self.rest_adapter: RestAdapter = RestAdapter(
             hostname, api_key, ssl_verify, logger
         )
-        self._session_id = uuid4()
+        if experiment_id is None:
+            self._session_id = str(uuid4())
+        else:
+            self._session_id = experiment_id
 
     def load_from_data_model(self, model: DataModel) -> Any:
         """load object from data model
