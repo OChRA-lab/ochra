@@ -349,10 +349,10 @@ class StationServer:
                     data_status = ResultDataStatus.UNAVAILABLE
                     if result.is_file():
                         data_type = "file"
-                        data_file_name = result.name
+                        data_file_name = f"{op.caller_id}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}_{result.name}"
                     else:
                         data_type = "folder"
-                        data_file_name = result.name + ".zip"
+                        data_file_name = f"{op.caller_id}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}_{result.name}.zip"
                 else:
                     success = True
                     result_data = result

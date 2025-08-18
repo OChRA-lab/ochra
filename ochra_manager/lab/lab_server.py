@@ -27,7 +27,7 @@ class LabServer:
         self,
         host: str,
         port: int,
-        folderpath: str = None,
+        folderpath: str,
         template_path: Optional[Path] = None,
     ) -> None:
         """Setup a lab server with the given host and port optionally storing data in folderpath
