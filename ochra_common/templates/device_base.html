@@ -1,9 +1,10 @@
 <div id="MainContentBodyDiv">
 	<div class="flex-1 px-6 py-2">
+		<p class="font-bold text-4xl">{{ device.name }} - [{{ device.cls }}]</p>
 		<!-- Section 1: Device Status Cards -->
 		<div class="mt-6 space-y-4">
 			{% if states %}
-			<h3>Properties</h3>
+			<h3 class="font-bold text-2xl">Properties</h3>
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-3">
 				{% for state in states %}
 				<!--State Chips-->
@@ -17,12 +18,12 @@
 		<!-- Section 2: Form Cards -->
 		<div class="mt-6 space-y-4">
 			{% if forms %}
-			<h3>Controls</h3>
+			<h3 class="font-bold text-2xl">Controls</h3>
 			<div class="grid grid-cols-1 md:grid-cols-3 mt-8 gap-4">
 				<!--Forms For Device-->
 				{% for form in forms %}
 				<div class="w-full">
-					{{form_macro(form, device)}}
+					{{form_macro(form, device, station_id)|safe}}
 				</div>
 				{% endfor %}
 			</div>

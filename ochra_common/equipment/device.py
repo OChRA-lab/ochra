@@ -148,7 +148,8 @@ class HypermediaBuilder:
         context = {
             "states": self._get_state_context(),
             "forms": self._get_form_context(),
-            "device": self.device  # Pass full device instance for custom templates
+            "device": self.device,  # Pass full device instance for custom templates
+            "station_id": self.device.owner_station  # Assuming that the oewner_station is set
         }
         
         return template.render(context)
