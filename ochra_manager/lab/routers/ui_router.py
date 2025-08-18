@@ -136,7 +136,7 @@ class WebAppRouter(APIRouter):
         stations = self.lab_service.get_all_objects(STATIONS)
         table_fields = self.build_table_fields()
         
-        async with httpx.AsyncClient(timeout=50.0) as client:
+        async with httpx.AsyncClient() as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
 
@@ -163,9 +163,10 @@ class WebAppRouter(APIRouter):
         url=f"http://{s['station_ip']}:{s['port']}/hypermedia/devices/{device_id}"
         station_url=f"http://{s['station_ip']}:{s['port']}/hypermedia"
         stations = self.lab_service.get_all_objects(STATIONS)
+        station = self.lab_service.get_object_by_id(station_id, "stations")
         table_fields = self.build_table_fields()
 
-        async with httpx.AsyncClient(timeout=50.0) as client:
+        async with httpx.AsyncClient() as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
 
@@ -183,7 +184,9 @@ class WebAppRouter(APIRouter):
                         "active_link": self.prefix + "/", 
                         "table_fields": table_fields,
                         "device_html": decoded_html,
-                        "station_html": decoded_station_html
+                        "station_html": decoded_station_html,
+                        "station_id": station_id,
+                        "station_name": station["name"],
                     }
                 )
 
@@ -255,7 +258,7 @@ class WebAppRouter(APIRouter):
             start_timestamp = datetime.now(),
         )
 
-        async with httpx.AsyncClient(timeout=50.0) as client:
+        async with httpx.AsyncClient() as client:
             headers = {
                 key: value for key, value in request.headers.items()
                 if key.lower() not in ("content-length", "content-type")
@@ -275,7 +278,7 @@ class WebAppRouter(APIRouter):
                     opp.collection
             )
 
-            async with httpx.AsyncClient(timeout=50.0) as client:
+            async with httpx.AsyncClient() as client:
                 headers = {
                     key: value for key, value in request.headers.items()
                     if key.lower() not in ("content-length", "content-type")
@@ -288,7 +291,17 @@ class WebAppRouter(APIRouter):
                 )
 
             decoded_html = refreshed_device_html.content.decode("utf-8")
-            return HTMLResponse(content=decoded_html)
+            return self.templates.TemplateResponse(
+                "zzzdevice.html",
+                context={
+                    "request": request,
+                    "active_link": self.prefix + "/",
+                    "device_html": decoded_html,
+                    "decoded_html": decoded_html,
+                    "station_id": station_id,
+                    "station_name": station["name"],
+                }
+            )
 
         # 3. Propagate station errors
         return Response(
@@ -303,10 +316,13 @@ class WebAppRouter(APIRouter):
         headers = dict(request.headers)
         method = request.method
         url=f"http://{s['station_ip']}:{s['port']}/hypermedia/devices/{device_id}"
+        print(station_id)
+        station = self.lab_service.get_object_by_id(station_id, "stations")
 
-        async with httpx.AsyncClient(timeout=50.0) as client:
+        async with httpx.AsyncClient() as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
+            print(station_id)
 
             if self.isHXRequest(request):
                 return HTMLResponse(content=decoded_html)
@@ -316,7 +332,9 @@ class WebAppRouter(APIRouter):
                     context={
                         "request": request, 
                         "active_link": self.prefix + "/", 
-                        "device_html": decoded_html
+                        "device_html": decoded_html,
+                        "station_id": station_id,
+                        "station_name": station["name"],
                     }
                 )
     async def get_settings(self, request:Request, edit: bool = False):
