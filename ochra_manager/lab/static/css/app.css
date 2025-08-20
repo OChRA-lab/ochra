@@ -1363,14 +1363,6 @@
     --tw-translate-y:-0.25rem
   }
 
-  
-  .focus\:outline {
-    &:focus {
-      outline-style: var(--tw-outline-style);
-      outline-width: 1px;
-    }
-  }
-
   .focus\:outline-none {
     &:focus {
       --tw-outline-style: none;
@@ -1383,6 +1375,42 @@
       @media (hover: hover) {
         background-color: var(--color-dark-neutral);
         color: var(--color-dark-text)
+      }
+    }
+  }
+
+  .focus\:outline:focus {
+    &:focus {
+      @media (hover: hover) {
+        outline-style: var(--tw-outline-style);
+        outline-width: 3px;
+        outline-color: var(--colour-dark-neutral);
+      }
+    }
+  }
+
+  .dark\:focus\:outline {
+    &:where([data-theme=dark], [data-theme=dark] *) {
+      &:focus {
+        @media (hover: hover) {
+          outline-style: var(--tw-outline-style);
+          outline-width: 3px;
+          outline-color: var(--color-neutral);
+          &:hover {
+            animation: var(--animate-spin);
+          }
+        }
+      }
+    }
+  }
+
+  .dark\:focus\:bg-neutral {
+    &:where([data-theme=dark], [data-theme=dark] *) {
+      &:focus {
+        @media (hover: hover) {
+          background-color: var(--color-dark-neutral);
+          color: var(--color-dark-text);
+        }
       }
     }
   }
