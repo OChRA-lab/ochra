@@ -231,7 +231,7 @@
 		{{ input(param)}}
 		{% endfor %}
 		<button type="submit" class="w-full bg-primary px-4 py-2 rounded-md hover:cursor-pointer transition-transform transform-gpu hover:-translate-y-1
-		hover:outline dark:hover:outline active:bg-neutral dark:active:bg-neutral active:outline-none">
+		hover:outline dark:hover:outline active:bg-neutral dark:active:bg-neutral focus:outline dark:focus:outline dark:focus:bg-neutral">
 			{{form.call | replace("_", " ") | capitalize()}}
 		</button>
 	</form>
