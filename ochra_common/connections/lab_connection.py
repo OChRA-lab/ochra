@@ -82,7 +82,7 @@ class LabConnection(metaclass=SingletonMeta):
         """
         req = ObjectConstructionRequest(object_json=object.model_dump_json())
         result: Result = self.rest_adapter.put(
-            f"/{type}/construct", data=req.model_dump(mode="json")
+            f"/{type}/", data=req.model_dump(mode="json")
         )
         try:
             id = UUID(result.data)
@@ -106,7 +106,7 @@ class LabConnection(metaclass=SingletonMeta):
             Any: instance of the class
         """
         result: Result = self.rest_adapter.get(
-            f"/{type}/get", {"identifier": str(identifier)}
+            f"/{type}/", {"identifier": str(identifier)}
         )
         try:
             base_model = convert_to_data_model(result.data)
@@ -128,7 +128,7 @@ class LabConnection(metaclass=SingletonMeta):
         Returns:
             List[Any]: list of instances of the class
         """
-        result: Result = self.rest_adapter.get(f"/{type}/get_all")
+        result: Result = self.rest_adapter.get(f"/{type}/all")
         try:
             base_models = [
                 convert_to_data_model(model_dict) for model_dict in result.data
@@ -149,7 +149,7 @@ class LabConnection(metaclass=SingletonMeta):
         Returns:
             Any: response from the lab
         """
-        result: Result = self.rest_adapter.delete(f"/{type}/{str(id)}/delete")
+        result: Result = self.rest_adapter.delete(f"/{type}/{str(id)}/")
         return result.data
 
     def call_on_object(self, type: str, id: UUID, method: str, args: dict) -> Operation:
@@ -169,7 +169,7 @@ class LabConnection(metaclass=SingletonMeta):
         """
         req = ObjectCallRequest(method=method, args=args, caller_id=self._session_id)
         result: Result = self.rest_adapter.post(
-            f"/{type}/{str(id)}/call_method", data=req.model_dump(mode="json")
+            f"/{type}/{str(id)}/method", data=req.model_dump(mode="json")
         )
         try:
             base_model = convert_to_data_model(result.data)
@@ -196,7 +196,7 @@ class LabConnection(metaclass=SingletonMeta):
         """
         req = ObjectPropertyGetRequest(property=property)
         result: Result = self.rest_adapter.get(
-            f"/{type}/{str(id)}/get_property", data=req.model_dump(mode="json")
+            f"/{type}/{str(id)}/property", data=req.model_dump(mode="json")
         )
         if result.status_code == 404:
             raise LabEngineException(f"Property {property} not found for {type} {id}")
@@ -251,7 +251,7 @@ class LabConnection(metaclass=SingletonMeta):
 
         req = ObjectPropertyPatchRequest(property=property, property_value=value)
         result: Result = self.rest_adapter.patch(
-            f"/{type}/{str(id)}/modify_property", data=req.model_dump(mode="json")
+            f"/{type}/{str(id)}/property", data=req.model_dump(mode="json")
         )
         return result.data
 
@@ -287,7 +287,7 @@ class LabConnection(metaclass=SingletonMeta):
             patch_args=patch_args,
         )
         result: Result = self.rest_adapter.patch(
-            f"/{type}/{str(id)}/modify_property", data=req.model_dump(mode="json")
+            f"/{type}/{str(id)}/property", data=req.model_dump(mode="json")
         )
         return result.data
 
@@ -304,7 +304,7 @@ class LabConnection(metaclass=SingletonMeta):
         Returns:
             UUID: id of the object
         """
-        result: Result = self.rest_adapter.get(f"/{type}/get", {"identifier": name})
+        result: Result = self.rest_adapter.get(f"/{type}/", {"identifier": name})
         try:
             return UUID(result.data["id"])
         except ValueError:
@@ -324,7 +324,7 @@ class LabConnection(metaclass=SingletonMeta):
             UUID: id of the object
         """
         result: Result = self.rest_adapter.patch(
-            f"/{type}/{str(id)}/put_data", files=result_data
+            f"/{type}/{str(id)}/data", files=result_data
         )
         return result.message
 
@@ -339,6 +339,6 @@ class LabConnection(metaclass=SingletonMeta):
             bytes: raw bytes of the data
         """
         result: Result = self.rest_adapter.get(
-            f"/{type}/{str(id)}/get_data", jsonify=False
+            f"/{type}/{str(id)}/data", jsonify=False
         )
         return result.content
