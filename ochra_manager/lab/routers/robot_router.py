@@ -19,12 +19,12 @@ class RobotRouter(APIRouter):
         self._logger = logging.getLogger(__name__)
         self.scheduler = scheduler
         self.lab_service = LabService()
-        self.put("/construct")(self.construct_robot)
-        self.get("/{identifier}/get_property")(self.get_property)
-        self.patch("/{identifier}/modify_property")(self.modify_property)
-        self.post("/{identifier}/call_method")(self.call_robot)
-        self.get("/get")(self.get_robot)
-        self.delete("/{identifier}/delete")(self.delete_robot)
+        self.put("/")(self.construct_robot)
+        self.get("/{identifier}/property")(self.get_property)
+        self.patch("/{identifier}/property")(self.modify_property)
+        self.post("/{identifier}/method")(self.call_robot)
+        self.get("/")(self.get_robot)
+        self.delete("/{identifier}/")(self.delete_robot)
 
     async def construct_robot(self, args: ObjectConstructionRequest):
         self._logger.debug(f"Constructing robot with args: {args}")

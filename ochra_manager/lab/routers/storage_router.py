@@ -19,15 +19,15 @@ class StorageRouter(APIRouter):
         self.lab_service = LabService()
 
         # routes for containers
-        self.put("/{object_type}/construct")(self.construct_storage_item)
-        self.get("/{object_type}/{identifier}/get_property")(
+        self.put("/{object_type}/")(self.construct_storage_item)
+        self.get("/{object_type}/{identifier}/property")(
             self.get_storage_item_property
         )
-        self.patch("/{object_type}/{identifier}/modify_property")(
+        self.patch("/{object_type}/{identifier}/property")(
             self.modify_storage_item_property
         )
-        self.get("/{object_type}/get")(self.get_storage_item)
-        self.delete("/{object_type}/{identifier}/delete")(self.delete_storage_item)
+        self.get("/{object_type}/")(self.get_storage_item)
+        self.delete("/{object_type}/{identifier}/")(self.delete_storage_item)
 
     async def construct_storage_item(
         self, object_type: str, args: ObjectConstructionRequest
