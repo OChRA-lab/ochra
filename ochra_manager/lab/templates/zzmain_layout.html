@@ -1,15 +1,41 @@
 <!-- home.html -->
 {% extends "zbase.html" %}
 
-{% block title %}OCHRA{% endblock %}
-
 {% block body %}
 <div>
 	{% include "/components/navbar.html"%}
 </div>
 <main id="MainContent" class="flex-1">
-	<div class="flex min-h-dvh">
-		{% block content %}{% endblock %}
+	<div class="flex h-dvh">
+		<div  class="flex flex-col flex-1 h-full overflow-hidden flex-1">
+			<div id="MainContentBody">
+				<!--Banner-->
+				<div id="MainContentBanner" class="flex w-full p-4 border-b-[0.5px] border-text dark:border-dark-text justify-between shrink-0">
+					<div>{% block banner_title %}
+						{% endblock %}
+					</div>
+					<div class="w-1.5 h-1.5 rounded-full bg-success dark:bg-dark-success animate-pulse"></div>
+				</div>
+				<!--Main Content-->	
+				<div id="MainContentBodyDiv">
+					{% block content %}{% endblock %}
+				</div>
+			</div>
+		</div>
+		<div id="SIDEPANEL_CONTAINER" class="relative transition-all duration-300 overflow-hidden">
+			<!-- Sidepanel Toggle Button -->
+			<button 
+				id="TOGGLE_BUTTON"
+				class="absolute left-0 top-0.5 z-50 -translate-y-0.5 text-text dark:text-dark-text text-xl px-2 py-2 rounded-r hover:cursor-pointer"
+			>
+				▶
+			</button>
+
+			<div class="absolute hidden lg:block top-0 left-0 z-40 h-screen w-2 hover:cursor-e-resize" id="RESIZER"></div>
+			{% include "/components/sidepanel.html" %}
+			<script src="/static/js/resize.js"></script> 
+			<script src="/static/js/expand.js"></script> 
+			</div>
 	</div>
 </main>
 {% endblock %}

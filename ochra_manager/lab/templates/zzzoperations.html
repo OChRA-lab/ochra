@@ -1,4 +1,9 @@
 {% extends "zzmain_layout.html" %}
+{% block banner_title %}
+<h1 class="text-primary dark:text-dark-primary text-4xl">Stations</h1>
+<p class="text-text dark:text-dark-text">Logged in as {{request.state.user.username}}</p>
+{% endblock %}
+
 
 {% block content %}
 <div {% if sidepanel_view %} class="hidden lg:flex flex-col flex-1" {% endif %} class="flex flex-col flex-1">

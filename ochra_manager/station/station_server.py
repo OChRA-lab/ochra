@@ -30,6 +30,11 @@ from ochra_common.equipment.operation import Operation
 from ..proxy_models.equipment.operation_result import OperationResult
 from ..proxy_models.space.station import Station
 
+import ast
+from jinja2 import Environment, FileSystemLoader
+from fastapi.staticfiles import StaticFiles
+
+import httpx
 
 def _is_path(obj: Any) -> bool:
     """Check if an object is a path.
@@ -86,14 +91,16 @@ class StationServer:
         self._app = FastAPI()
         self._router = APIRouter()
 
-        module_dir = Path(__file__).resolve().parent
+        station_templates = Path(__file__).resolve().parent / "templates"
+        lab_templates = Path(__file__).resolve().parents[1] / "lab" / "templates"
 
+        env = Environment(loader=FileSystemLoader([str(station_templates), str(lab_templates)]))
+        self._templates = Jinja2Templates(env=env)
 
-        templates_dir = module_dir / "templates"
-        self._templates=Jinja2Templates(directory=templates_dir)
+        lab_static = Path(__file__).resolve().parents[1] / "lab" / "static"
+        self._app.mount("/static", StaticFiles(directory=str(lab_static)), name="static")
 
         self._router.add_api_route("/process_op", self.process_op, methods=["POST"])
-
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
 
         #TODO: Look into the manual adding of routes in fastapi
@@ -101,24 +108,18 @@ class StationServer:
 
         self._app.include_router(self._router)
 
-        self.MODULE = Path(__file__).resolve().parent
-        self.TEMPLATES = self.MODULE / "templates"
-
-
-
         self._app.get("/ping")(self.ping)
-
         self._app.get("/")(self.get_station)
         self._app.get("/devices")(self.get_station_devices)
         self._app.get("/devices/{device_id}")(self.get_device)
         self._app.post("/devices/{device_id}/commands")(self.perform_device_operation)
 
         self._app.get("/hypermedia")(self.get_pannel)
-        self._app.get("/hypermedia/devices/{device_id}")(self.get_pannel_device)
-        
+
+        self._app.get("/hypermedia/devices/{device_id}")(self.get_device_view)
+
         self._app.post("/shutdown")(self.shutdown)
 
-        self._templates=Jinja2Templates(directory=self.TEMPLATES)
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
 
     def add_device(self, device):
@@ -195,28 +196,26 @@ class StationServer:
                     "station": self, 
                 }
         )
-
-
-    async def get_pannel_device(self, request: Request, device_id: str):
+        
+    async def get_device_view(self, request: Request, device_id: str):
         device: Optional[Device] = self._devices.get(device_id)
         if not device:
             raise HTTPException(status_code=404, detail="Device does not exist")
+        
+        sidepanel = await self.get_pannel(request)
+        sidepanel_html = sidepanel.body.decode("utf-8")
 
         return self._templates.TemplateResponse(
-                "sidepanel_device.html",
+                "device_view.html",
                 {
                     "request":request, 
                     "station": self, 
                     "device": device,
                     "device_html": device.to_html(),
+                    "station_html": sidepanel_html,
+                    "sidepanel_view": True
                 }
         )
-    #
-    #
-    #
-    #
-    #######################################################
-
 
     async def get_device(self, request: Request, device_id: str):
         device: Optional[Device] = self._devices.get(device_id)
@@ -244,20 +243,30 @@ class StationServer:
         if not isinstance(command_name, str):
             raise HTTPException(status_code=422, detail=f"Missing required parameter {command_name}")
 
-        
         # Get the args and remove the command one
-        args = form_data._dict
+        args = dict(form_data)
         args.pop("command")
 
         # check if the method is on the device if not raise an error
         method_exists = hasattr(device, command_name)
         if not method_exists:
             raise HTTPException(status_code=400, detail=f"Method does note xist")
-
+        print(args)
+       
+        if args.get("args") == "":
+            args["args"] = {}
+        # Only convert if it's a string
+        if isinstance(args.get("args"), str):
+            try:
+                args["args"] = ast.literal_eval(args["args"])
+            except (ValueError, SyntaxError):
+                raise ValueError("Invalid dictionary string in args['args']")
+            
         try:
             method = getattr(device, command_name)
             print(method)
-            print(args)
+            print(f"[DEBUG] args: {args}")
+            print(f"[DEBUG] Type of args: {type(args)}")
             method(**args)
             return 
         except Exception as e:
