@@ -164,7 +164,8 @@
 {% elif param.type == "reset" %}
 <div>
 	<label class="block text-sm font-medium  mb-1">Reset Form</label>
-	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="reset" value="Reset Form" />
+	<input class="w-full p-2 rounded-md bg-primary hover:cursor-pointer transition-transform transform-gpu hover:outline dark:hover:outline 
+	hover:-translate-y-1 active:bg-neutra dark:active:bg-neutral active:outline-none" type="reset" value="Reset Form" />
 </div>
 {% elif param.type == "tel" %}
 <div>
@@ -203,22 +204,34 @@
 </div>
 {% elif param.type == "custom_circular_range" %}
 {{ circular_range(param)}}
-{% else %}
+{% elif param.type == "select" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<select class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-neutral dark:bg-dark-neutral text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" name="{{ param.name }}">
+		{% for option in param.attrs.options %}
+		<option value="{{ option }}" {% if option == param.variable_binding %}selected{% endif %}>
+			{{ option }}
+		</option>
+		{% endfor %}
+	</select>
+</div>
+{% else %}\
 <h1> Invalid Input </h1>
 {% endif %}
 {%- endmacro %}
 
 
 
-{% macro form_macro(form, device) -%}
+{% macro form_macro(form, device, station_id) -%}
 <div class="p-4 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
 	<h4 class="text-sm font-semibold  mb-3"> {{form.call | replace("_", " ") | capitalize()}} </h4>
-	<form class="space-y-3" hx-boost="true" action="{{device.id}}/commands" method="{{form.method}}">
+	<form class="space-y-3" hx-boost="true" hx-target="#MainContentBodyDiv" action="/app/stations/{{ station_id }}/devices/{{ device.id }}/commands" method="{{form.method}}" hx-swap="innerHTML" hx-push-url="true">
 		<input type="hidden" name="command" value="{{form.call}}" />
 		{% for param in form.params.values() %}
 		{{ input(param)}}
 		{% endfor %}
-		<button type="submit" class="w-full bg-primary  px-4 py-2 rounded-md">
+		<button type="submit" class="w-full bg-primary px-4 py-2 rounded-md hover:cursor-pointer transition-transform transform-gpu hover:-translate-y-1
+		hover:outline dark:hover:outline active:bg-neutral dark:active:bg-neutral focus:outline dark:focus:outline dark:focus:bg-neutral">
 			{{form.call | replace("_", " ") | capitalize()}}
 		</button>
 	</form>
