@@ -19,12 +19,12 @@ class DeviceRouter(APIRouter):
         super().__init__(prefix=prefix)
         self.scheduler = scheduler
         self.lab_service = LabService()
-        self.put("/construct")(self.construct_device)
-        self.get("/{identifier}/get_property")(self.get_device_property)
-        self.patch("/{identifier}/modify_property")(self.modify_device_property)
-        self.post("/{identifier}/call_method")(self.call_device)
-        self.get("/get")(self.get_device)
-        self.delete("/{identifier}/delete")(self.delete_device)
+        self.put("/")(self.construct_device)
+        self.get("/{identifier}/property")(self.get_device_property)
+        self.patch("/{identifier}/property")(self.modify_device_property)
+        self.post("/{identifier}/method")(self.call_device)
+        self.get("/")(self.get_device)
+        self.delete("/{identifier}/")(self.delete_device)
 
     async def construct_device(self, args: ObjectConstructionRequest):
         # TODO: we need to assign the object to the station somehow

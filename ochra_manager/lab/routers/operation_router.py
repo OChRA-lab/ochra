@@ -17,10 +17,10 @@ class OperationRouter(APIRouter):
         prefix = f"/{COLLECTION}"
         super().__init__(prefix=prefix)
         self.lab_service = LabService()
-        self.put("/construct")(self.construct_op)
-        self.get("/{identifier}/get_property")(self.get_op_property)
-        self.patch("/{identifier}/modify_property")(self.modify_op_property)
-        self.get("/get")(self.get_op)
+        self.put("/")(self.construct_op)
+        self.get("/{identifier}/property")(self.get_op_property)
+        self.patch("/{identifier}/property")(self.modify_op_property)
+        self.get("/")(self.get_op)
 
     async def construct_op(self, args: ObjectConstructionRequest):
         # TODO: we need to assign the object to the station somehow

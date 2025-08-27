@@ -24,12 +24,12 @@ class OperationResultRouter(APIRouter):
         prefix = f"/{COLLECTION}"
         super().__init__(prefix=prefix)
         self.lab_service = LabService(folderpath)
-        self.put("/construct")(self.construct_result)
-        self.get("/{identifier}/get_property")(self.get_property)
-        self.patch("/{identifier}/modify_property")(self.modify_property)
-        self.get("/get")(self.get_result)
-        self.get("/{identifier}/get_data/")(self.get_data)
-        self.patch("/{identifier}/put_data/")(self.put_data)
+        self.put("/")(self.construct_result)
+        self.get("/{identifier}/property")(self.get_property)
+        self.patch("/{identifier}/property")(self.modify_property)
+        self.get("/")(self.get_result)
+        self.get("/{identifier}/data/")(self.get_data)
+        self.patch("/{identifier}/data/")(self.put_data)
 
     async def construct_result(self, args: ObjectConstructionRequest):
         return self.lab_service.construct_object(args, COLLECTION)

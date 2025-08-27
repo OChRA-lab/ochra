@@ -12,8 +12,8 @@ class LabRouter(APIRouter):
         prefix = "/lab"
         super().__init__(prefix=prefix)
         self.lab_service = LabService()
-        self.get("/{object_type}/get")(self.get_lab_object)
-        self.get("/{object_type}/get_all")(self.get_lab_objects)
+        self.get("/{object_type}/")(self.get_lab_object)
+        self.get("/{object_type}/all")(self.get_lab_objects)
 
     async def get_lab_object(self, object_type: str, identifier: str):
         collection = object_type if object_type in COLLECTIONS else None

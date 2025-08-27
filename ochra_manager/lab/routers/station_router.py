@@ -19,12 +19,12 @@ class StationRouter(APIRouter):
         super().__init__(prefix=f"/{COLLECTION}")
         self.scheduler = scheduler
         self.lab_service = LabService()
-        self.put("/construct")(self.construct_station)
-        self.get("/{identifier}/get_property")(self.get_station_property)
-        self.patch("/{identifier}/modify_property")(self.modify_property)
-        self.post("/{identifier}/call_method")(self.call_method)
-        self.get("/get")(self.get_station)
-        self.delete("/{identifier}/delete")(self.delete_station)
+        self.put("/")(self.construct_station)
+        self.get("/{identifier}/property")(self.get_station_property)
+        self.patch("/{identifier}/property")(self.modify_property)
+        self.post("/{identifier}/method")(self.call_method)
+        self.get("/")(self.get_station)
+        self.delete("/{identifier}/")(self.delete_station)
 
     async def construct_station(
         self, args: ObjectConstructionRequest, request: Request
