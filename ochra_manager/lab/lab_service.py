@@ -19,13 +19,12 @@ from pathlib import Path
 import shutil
 from os import remove
 
-logger = logging.getLogger(__name__)
-
 
 class LabService:
     def __init__(self, folderpath: Optional[str] = None) -> None:
         """Labservice object serves the common functionality within routers to avoid code duplication"""
         self.db_conn: DbConnection = DbConnection()
+        self._logger = logging.getLogger(__name__)
 
         # TODO: split this to check if the string is an actual directory to return some form of error message
         if folderpath and Path(folderpath).is_dir:
@@ -58,12 +57,12 @@ class LabService:
 
         try:
             self.db_conn.read({"id": object_id, "_collection": collection})
-            logger.debug(f"got Object {object_id}")
+            self._logger.debug(f"got Object {object_id}")
         except Exception as e:
-            logger.debug(f"{object_id} does not exist")
+            self._logger.debug(f"{object_id} does not exist")
             raise HTTPException(status_code=404, detail=str(e))
         try:
-            logger.debug(
+            self._logger.debug(
                 f"attempting to update {set_req.property} to {set_req.property_value}"
             )  # noqa
 
@@ -73,10 +72,10 @@ class LabService:
                 file=file,
             )
 
-            logger.debug(f"changed {set_req.property} to {set_req.property_value}")
+            self._logger.debug(f"changed {set_req.property} to {set_req.property_value}")
 
         except Exception as e:
-            logger.error(e)
+            self._logger.error(e)
             raise HTTPException(status_code=500, detail=e)
         return True
 
@@ -97,7 +96,7 @@ class LabService:
         existing_object = self.db_conn.find(
             {"_collection": collection}, {"name": object_dict.get("name", "")}
         )
-        logger.info(f"existing_object: {existing_object}")
+        self._logger.info(f"existing_object: {existing_object}")
         if existing_object is not None:
             object_dict["id"] = existing_object.get("id")
             obj_inv = existing_object.get("inventory", None)
@@ -108,7 +107,7 @@ class LabService:
             )
 
         self.db_conn.create({"_collection": collection}, object_dict)
-        logger.debug(f"constructed object of type {object_dict.get('cls')}")
+        self._logger.debug(f"constructed object of type {object_dict.get('cls')}")
         return object_dict.get("id")
 
     def call_on_object(
@@ -147,7 +146,7 @@ class LabService:
             raise
 
         except Exception as e:
-            logger.error(e)
+            self._logger.error(e)
             raise HTTPException(status_code=500, detail=str(e))
 
     def get_object_property(
