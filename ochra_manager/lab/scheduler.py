@@ -21,6 +21,7 @@ class Scheduler:
         )
 
     def add_operation(self, operation: Operation):
+        self._logger.debug(f"Adding operation {operation.id} to queue")
         self.op_queue.append(operation)
 
     def run(self):
@@ -59,6 +60,7 @@ class Scheduler:
                             args=(operation, station_id),
                             daemon=True,
                         )
+                        self._logger.debug(f"Starting operation execution for {operation.id}")
                         op_thread.start()
                         sleep(1)  # needed to allow the station to update its status
             # update queue in db and sleep

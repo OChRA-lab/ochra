@@ -269,7 +269,6 @@ class StationServer:
         method_exists = hasattr(device, command_name)
         if not method_exists:
             raise HTTPException(status_code=400, detail=f"Method does note xist")
-        print(args)
 
         if args.get("args") == "":
             args["args"] = {}
@@ -282,19 +281,17 @@ class StationServer:
 
         try:
             method = getattr(device, command_name)
-            print(method)
-            print(f"[DEBUG] args: {args}")
-            print(f"[DEBUG] Type of args: {type(args)}")
+            self._logger.debug(f"Calling method {command_name} on device {device_id} with args: {args}")
             method(**args)
             return
         except Exception as e:
-            traceback.print_exception(e)
+            self._logger.error(f"Error occurred while calling method {command_name} on device {device_id}: {e}")
             raise HTTPException(
                 status_code=500, detail="Unexpected error in running method"
             )
 
     def ping(self):
-        print("ping from station")
+        self._logger.info("ping from station")
 
     def process_op(self, op: Operation):
         """retrieve the device from the device dict and execute the method
@@ -472,6 +469,7 @@ class StationServer:
                 remove(result.name)
 
     def shutdown(self):
+        self._logger.info("Shutting down station server...")
         for _, device in self._devices.items():
             if device.inventory != [] or device.inventory is None:
                 device.inventory._cleanup()
