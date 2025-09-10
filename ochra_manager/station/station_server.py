@@ -64,7 +64,7 @@ class StationServer:
         name: str,
         location: Location,
         station_type: StationType,
-        logging_path: str,
+        logging_path: str = ".",
         station_ip: str = "0.0.0.0",
         station_port: int = 8000,
     ):
@@ -76,10 +76,11 @@ class StationServer:
             station_ip (str, optional): station ip to run the server on. Defaults to "127.0.0.1".
             station_port (int, optional): port to oopen the station on. Defaults to 8000.
         """
-        configure_station_logging(log_root_path=logging_path)
-
-        self._logging_path = logging_path
+        self._logging_path = Path(logging_path).resolve()
+        
+        configure_station_logging(log_root_path=self._logging_path)
         self._logger = logging.getLogger(__name__)
+
         self._name = name
         self._location = location
         self._type = station_type

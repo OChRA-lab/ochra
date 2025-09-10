@@ -9,15 +9,15 @@ from ochra_common.utils.logging_config import (
 )
 
 
-def configure_station_logging(log_root_path: str, console_log_level: int = logging.INFO):
+def configure_station_logging(log_root_path: Path, console_log_level: int = logging.INFO):
     """
     Configures logging for the lab management system.
 
     Args:
-        log_root_path (str): The root directory where log files will be stored.
+        log_root_path (Path): The root directory where log files will be stored.
         log_level (int): The logging level (e.g., logging.INFO, logging.DEBUG).
     """
-    logging_dir = Path(log_root_path).joinpath("logs")
+    logging_dir = log_root_path.joinpath("logs")
     logging_dir.mkdir(parents=True, exist_ok=True)
 
     # Dictionary to configure logging
@@ -64,16 +64,16 @@ def configure_station_logging(log_root_path: str, console_log_level: int = loggi
 
     logging.config.dictConfig(logging_config_dict)
 
-def configure_device_logger(log_root_path: str, device_module_path: str, device_name: str, console_log_level: int = logging.INFO):
+def configure_device_logger(log_root_path: Path, device_module_path: str, device_name: str, console_log_level: int = logging.INFO):
     """
     Configures a logger for a specific device.
 
     Args:
-        log_root_path (str): The root directory where log files will be stored.
+        log_root_path (Path): The root directory where log files will be stored.
         device_name (str): The name of the device for which the logger is being configured.
         console_log_level (int): The logging level for console output (e.g., logging.INFO, logging.DEBUG).
     """
-    logging_dir = Path(log_root_path).joinpath("logs/devices")
+    logging_dir = log_root_path.joinpath("logs/devices")
     logging_dir.mkdir(parents=True, exist_ok=True)
 
     logger_name = device_module_path
