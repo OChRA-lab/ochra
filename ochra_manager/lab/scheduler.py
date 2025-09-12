@@ -5,20 +5,23 @@ from time import sleep
 from ochra_common.utils.enum import ActivityStatus, PatchType
 from fastapi import HTTPException
 from ..connections.station_connection import StationConnection
+import logging
 
 
 class Scheduler:
     def __init__(self):
+        self._logger = logging.getLogger(__name__)
         self.op_queue = []
         self._db_conn: DbConnection = DbConnection()
         self._stop = False
-
+        
         # create operation queue in db
         self._queue_id = self._db_conn.create(
             {"_collection": "lab"}, {"op_queue": self.op_queue}
         )
 
     def add_operation(self, operation: Operation):
+        self._logger.debug(f"Adding operation {operation.id} to queue")
         self.op_queue.append(operation)
 
     def run(self):
@@ -57,6 +60,7 @@ class Scheduler:
                             args=(operation, station_id),
                             daemon=True,
                         )
+                        self._logger.debug(f"Starting operation execution for {operation.id}")
                         op_thread.start()
                         sleep(1)  # needed to allow the station to update its status
             # update queue in db and sleep

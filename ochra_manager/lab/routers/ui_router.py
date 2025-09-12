@@ -20,16 +20,16 @@ from ochra_common.utils.enum import OperationStatus
 from ochra_manager.lab.auth.auth import SessionToken, User, get_db
 from ..lab_service import LabService
 
-logger = logging.getLogger(__name__)
 STATIONS = "stations"
+
 
 class WebAppRouter(APIRouter):
     def __init__(self, templates: Jinja2Templates):
         self.prefix = "/app"
         super().__init__(prefix=self.prefix)
+        self._logger = logging.getLogger(__name__)
         self.lab_service = LabService()
         self.templates = templates
-
 
         self.get("/")(self.get_stations)
 
@@ -49,44 +49,67 @@ class WebAppRouter(APIRouter):
         self.get("/stations")(self.get_stations)
         self.get("/stations/{station_id}")(self.get_station)
         self.get("/stations/{station_id}/devices/{device_id}")(self.get_device)
-        self.post("/stations/{station_id}/devices/{device_id}/commands")(self.post_command)
+        self.post("/stations/{station_id}/devices/{device_id}/commands")(
+            self.post_command
+        )
 
     def isHXRequest(self, request: Request) -> bool:
         return request.headers.get("HX-Request") == "true"
-    
+
     def build_table_fields(self) -> list[dict]:
         stations = self.lab_service.get_all_objects(STATIONS)
-        return [{
-            "name": s["name"],
-            "status": s["status"],
-            "device_count": len(s["devices"]),
-            "active_routine": "",
-            "station_id": s["id"]
-        } for s in stations]
-    async def get_stations(self, request:Request):
+        return [
+            {
+                "name": s["name"],
+                "status": s["status"],
+                "device_count": len(s["devices"]),
+                "active_routine": "",
+                "station_id": s["id"],
+            }
+            for s in stations
+        ]
+
+    async def get_stations(self, request: Request):
         table_fields = self.build_table_fields()
-        
-        return self.templates.TemplateResponse("zzzstations.html",
-                    {
-                     "request":request, 
-                     "active_link": self.prefix + "/", 
-                     "table_fields": table_fields,
-                     "sidepanel_view": False
-                     })
+        self._logger.debug(f"Rendering station overview with {len(table_fields)} stations")
+        return self.templates.TemplateResponse(
+            "zzzstations.html",
+            {
+                "request": request,
+                "active_link": self.prefix + "/",
+                "table_fields": table_fields,
+                "sidepanel_view": False,
+            },
+        )
 
     async def get_register(self, request: Request):
-        return self.templates.TemplateResponse(name="zregister.html", request=request, context={})
+        self._logger.debug("Rendering registration page")
+        return self.templates.TemplateResponse(
+            name="zregister.html", request=request, context={}
+        )
 
-    async def post_register(self, username: str = Form(...), email: str = Form(...), password: str = Form(...), confirm: str = Form(...), db: Session = Depends(get_db)):
+    async def post_register(
+        self,
+        username: str = Form(...),
+        email: str = Form(...),
+        password: str = Form(...),
+        confirm: str = Form(...),
+        db: Session = Depends(get_db),
+    ):
         if password != confirm:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Passwords did not match")
-        
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Passwords did not match",
+            )
+
         existing_user = User.fetch_user(db, username)
         if existing_user:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Username already taken")
-        
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Username already taken"
+            )
+
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
-        new_user = User( username=username, password=hashed_password, email=email)
+        new_user = User(username=username, password=hashed_password, email=email)
 
         db.add(new_user)
         db.commit()
@@ -97,16 +120,29 @@ class WebAppRouter(APIRouter):
         return response
 
     async def get_login(self, request: Request):
-        return self.templates.TemplateResponse(name="zlogin.html", request=request, context={})
+        self._logger.debug("Rendering login page")
+        return self.templates.TemplateResponse(
+            name="zlogin.html", request=request, context={}
+        )
 
-    async def post_login(self, username: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
+    async def post_login(
+        self,
+        username: str = Form(...),
+        password: str = Form(...),
+        db: Session = Depends(get_db),
+    ):
         user = User.authenticate_user(username, password, db)
         if not user:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid username or password")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid username or password",
+            )
 
         session_token = SessionToken.create_session_token(user.username, db)
         response = JSONResponse({"message": "success"})
-        response.set_cookie(key="session_token", value=session_token, httponly=True, secure=True)
+        response.set_cookie(
+            key="session_token", value=session_token, httponly=True, secure=True
+        )
         response.headers["HX-Location"] = "/app"
         return response
 
@@ -123,19 +159,21 @@ class WebAppRouter(APIRouter):
             response.headers["HX-Location"] = "/app/login"
             return response
 
-        raise HTTPException(status_code=404, detail=f"User session {request.cookies['session_token']} not found")
+        raise HTTPException(
+            status_code=404,
+            detail=f"User session {request.cookies['session_token']} not found",
+        )
 
-    async def get_station(self, request:Request, station_id: str):
+    async def get_station(self, request: Request, station_id: str):
         s = self.lab_service.get_object_by_id(station_id, "stations")
         body = await request.body()
         headers = dict(request.headers)
         method = request.method
-        url=f"http://{s['station_ip']}:{s['port']}/hypermedia"
-
+        url = f"http://{s['station_ip']}:{s['port']}/hypermedia"
 
         stations = self.lab_service.get_all_objects(STATIONS)
         table_fields = self.build_table_fields()
-        
+
         async with httpx.AsyncClient() as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
@@ -144,24 +182,23 @@ class WebAppRouter(APIRouter):
                 return HTMLResponse(content=decoded_html)
             else:
                 return self.templates.TemplateResponse(
-                    "zzzstations.html", 
-
+                    "zzzstations.html",
                     context={
-                        "request": request, 
-                        "active_link": self.prefix + "/", 
+                        "request": request,
+                        "active_link": self.prefix + "/",
                         "table_fields": table_fields,
                         "station_html": decoded_html,
-                        "sidepanel_view": True
-                    }
+                        "sidepanel_view": True,
+                    },
                 )
 
-    async def get_device(self, request:Request, station_id: str, device_id: str):
+    async def get_device(self, request: Request, station_id: str, device_id: str):
         s = self.lab_service.get_object_by_id(station_id, "stations")
         body = await request.body()
         headers = dict(request.headers)
         method = request.method
-        url=f"http://{s['station_ip']}:{s['port']}/hypermedia/devices/{device_id}"
-        station_url=f"http://{s['station_ip']}:{s['port']}/hypermedia"
+        url = f"http://{s['station_ip']}:{s['port']}/hypermedia/devices/{device_id}"
+        station_url = f"http://{s['station_ip']}:{s['port']}/hypermedia"
         stations = self.lab_service.get_all_objects(STATIONS)
         station = self.lab_service.get_object_by_id(station_id, "stations")
         table_fields = self.build_table_fields()
@@ -170,24 +207,25 @@ class WebAppRouter(APIRouter):
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
 
-            station_response = await client.request(method, station_url, headers=headers, data=body)
+            station_response = await client.request(
+                method, station_url, headers=headers, data=body
+            )
             decoded_station_html = station_response.content.decode("utf-8")
-            
+
             if self.isHXRequest(request):
                 return HTMLResponse(content=decoded_html)
             else:
                 return self.templates.TemplateResponse(
-                    "zzzdevice.html", 
-
+                    "zzzdevice.html",
                     context={
-                        "request": request, 
-                        "active_link": self.prefix + "/", 
+                        "request": request,
+                        "active_link": self.prefix + "/",
                         "table_fields": table_fields,
                         "device_html": decoded_html,
                         "station_html": decoded_station_html,
                         "station_id": station_id,
                         "station_name": station["name"],
-                    }
+                    },
                 )
 
     async def post_command(self, request: Request, station_id: str, device_id: str):
@@ -199,11 +237,11 @@ class WebAppRouter(APIRouter):
 
         def sanitize_dict_string(s: str) -> str:
             # Quote unquoted keys
-            s = re.sub(r'([{,]\s*)(\w+)\s*:', r'\1"\2":', s)
+            s = re.sub(r"([{,]\s*)(\w+)\s*:", r'\1"\2":', s)
             # Quote unquoted string values (words that are not True/False/None/numbers)
-            s = re.sub(r':\s*([a-zA-Z_]\w*)\s*([,}])', r':"\1"\2', s)
+            s = re.sub(r":\s*([a-zA-Z_]\w*)\s*([,}])", r':"\1"\2', s)
             return s
-        
+
         def convert_colon_string_to_dict(s: str) -> dict:
             result = {}
             if not s:
@@ -226,7 +264,7 @@ class WebAppRouter(APIRouter):
                 return result
             except Exception as e:
                 raise ValueError(f"Failed to convert string to dict: {e}")
-                    
+
         try:
             if args_raw == "":
                 args_dict = {}
@@ -241,12 +279,12 @@ class WebAppRouter(APIRouter):
                         args_dict = ast.literal_eval(quoted)
                     except Exception:
                         args_dict = convert_colon_string_to_dict(args_raw)
-                
+
             if not isinstance(args_dict, dict):
                 raise ValueError("Parsed args is not a dictionary.")
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Invalid args format: {e}")
-        
+
         opp = Operation(
             caller_id=str(uuid.uuid4()),
             collection="operations",
@@ -254,40 +292,38 @@ class WebAppRouter(APIRouter):
             entity_type="devices",
             method=str(form.get("task_name", "")),
             args=args_dict,
-            status = OperationStatus.CREATED,
-            start_timestamp = datetime.now(),
+            status=OperationStatus.CREATED,
+            start_timestamp=datetime.now(),
         )
 
         async with httpx.AsyncClient() as client:
             headers = {
-                key: value for key, value in request.headers.items()
+                key: value
+                for key, value in request.headers.items()
                 if key.lower() not in ("content-length", "content-type")
             }
 
-            station_response = await client.post(
-                proxy_url,
-                headers = headers,
-                data=form
-            )
+            station_response = await client.post(proxy_url, headers=headers, data=form)
 
         if station_response.is_success:
             opp.end_timestamp = datetime.now()
 
             self.lab_service.construct_object(
-                    ObjectConstructionRequest(object_json=opp.model_dump_json()),
-                    opp.collection
+                ObjectConstructionRequest(object_json=opp.model_dump_json()),
+                opp.collection,
             )
 
             async with httpx.AsyncClient() as client:
                 headers = {
-                    key: value for key, value in request.headers.items()
+                    key: value
+                    for key, value in request.headers.items()
                     if key.lower() not in ("content-length", "content-type")
                 }
 
                 # re-fetch the updated device HTML
                 refreshed_device_html = await client.get(
                     f"http://{station['station_ip']}:{station['port']}/hypermedia/devices/{device_id}",
-                    headers=headers
+                    headers=headers,
                 )
 
             decoded_html = refreshed_device_html.content.decode("utf-8")
@@ -300,7 +336,7 @@ class WebAppRouter(APIRouter):
                     "decoded_html": decoded_html,
                     "station_id": station_id,
                     "station_name": station["name"],
-                }
+                },
             )
 
         # 3. Propagate station errors
@@ -308,50 +344,54 @@ class WebAppRouter(APIRouter):
             content=station_response.content,
             status_code=station_response.status_code,
             headers=station_response.headers,
-            
         )
+
     async def get_device_view(self, request: Request, station_id: str, device_id: str):
         s = self.lab_service.get_object_by_id(station_id, "stations")
         body = await request.body()
         headers = dict(request.headers)
         method = request.method
-        url=f"http://{s['station_ip']}:{s['port']}/hypermedia/devices/{device_id}"
-        print(station_id)
+        url = f"http://{s['station_ip']}:{s['port']}/hypermedia/devices/{device_id}"
         station = self.lab_service.get_object_by_id(station_id, "stations")
 
         async with httpx.AsyncClient() as client:
             response = await client.request(method, url, headers=headers, data=body)
             decoded_html = response.content.decode("utf-8")
-            print(station_id)
 
             if self.isHXRequest(request):
                 return HTMLResponse(content=decoded_html)
             else:
                 return self.templates.TemplateResponse(
-                    "zzzdevice.html", 
+                    "zzzdevice.html",
                     context={
-                        "request": request, 
-                        "active_link": self.prefix + "/", 
+                        "request": request,
+                        "active_link": self.prefix + "/",
                         "device_html": decoded_html,
                         "station_id": station_id,
                         "station_name": station["name"],
-                    }
+                    },
                 )
-    async def get_settings(self, request:Request, edit: bool = False):
+
+    async def get_settings(self, request: Request, edit: bool = False):
         return self.templates.TemplateResponse(
-                "zzzsettings.html",
-                {
-                    "request":request, 
-                    "active_link": self.prefix + "/settings", 
-                    "edit": edit
-                }
-            )
+            "zzzsettings.html",
+            {
+                "request": request,
+                "active_link": self.prefix + "/settings",
+                "edit": edit,
+            },
+        )
 
-    async def put_settings(self, request:Request, username: str = Form(...), email: str = Form(...), db: Session = Depends(get_db)):
-
+    async def put_settings(
+        self,
+        request: Request,
+        username: str = Form(...),
+        email: str = Form(...),
+        db: Session = Depends(get_db),
+    ):
         if not hasattr(request.state, "user"):
             raise HTTPException(401, detail="Unauthorized")
-        
+
         user: Optional[User] = User.fetch_user(db, request.state.user.username)
         user.username = username
         user.email = email
@@ -359,7 +399,17 @@ class WebAppRouter(APIRouter):
         db.commit()
         request.state.user = user
 
-        return self.templates.TemplateResponse("zzzsettings.html",{"request":request, "active_link": self.prefix + "/settings", "edit": False})
+        return self.templates.TemplateResponse(
+            "zzzsettings.html",
+            {
+                "request": request,
+                "active_link": self.prefix + "/settings",
+                "edit": False,
+            },
+        )
 
-    async def get_workflows(self, request:Request):
-        return self.templates.TemplateResponse("zzzworkflows.html",{"request":request, "active_link": self.prefix + "/workflows"})
+    async def get_workflows(self, request: Request):
+        return self.templates.TemplateResponse(
+            "zzzworkflows.html",
+            {"request": request, "active_link": self.prefix + "/workflows"},
+        )

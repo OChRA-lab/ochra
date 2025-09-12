@@ -17,9 +17,8 @@ from .routers.lab_router import LabRouter
 from .routers.storage_router import StorageRouter
 from .routers.operation_results_router import OperationResultRouter
 from .scheduler import Scheduler
+from .lab_logging import configure_lab_logging
 import inspect
-
-logger = logging.getLogger(__name__)
 
 
 class LabServer:
@@ -40,6 +39,11 @@ class LabServer:
         MODULE_DIRECTORY = (
             Path(__file__).resolve().parent if not template_path else template_path
         )
+
+        configure_lab_logging(log_root_path=folderpath)
+
+        self._logger = logging.getLogger(__name__)
+        self._logger.info("Initializing lab server...")
         self.host = host
         self.port = port
         self.scheduler = Scheduler()
@@ -107,6 +111,6 @@ class LabServer:
 
     def run(self) -> None:
         """launches the server on the initialized host and port"""
-        logger.info("started server")
+        self._logger.info("Starting lab server...")
         app = self.get_caller_variable_name()
         uvicorn.run(app, host=self.host, port=self.port, workers=8)

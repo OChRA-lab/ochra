@@ -1,7 +1,7 @@
+import logging
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from fastapi.templating import Jinja2Templates
 
-from fastapi.templating import Jinja2Templates
 
 from pydantic import BaseModel
 from typing import Dict, Optional, Type, Any
@@ -29,12 +29,14 @@ from ochra_common.equipment.mobile_robot import MobileRobot
 from ochra_common.equipment.operation import Operation
 from ..proxy_models.equipment.operation_result import OperationResult
 from ..proxy_models.space.station import Station
+from .station_logging import configure_station_logging, configure_device_logger
 
 import ast
 from jinja2 import Environment, FileSystemLoader
 from fastapi.staticfiles import StaticFiles
 
 import httpx
+
 
 def _is_path(obj: Any) -> bool:
     """Check if an object is a path.
@@ -62,6 +64,7 @@ class StationServer:
         name: str,
         location: Location,
         station_type: StationType,
+        logging_path: str = ".",
         station_ip: str = "0.0.0.0",
         station_port: int = 8000,
     ):
@@ -73,13 +76,17 @@ class StationServer:
             station_ip (str, optional): station ip to run the server on. Defaults to "127.0.0.1".
             station_port (int, optional): port to oopen the station on. Defaults to 8000.
         """
+        self._logging_path = Path(logging_path).resolve()
+        
+        configure_station_logging(log_root_path=self._logging_path)
+        self._logger = logging.getLogger(__name__)
+
         self._name = name
         self._location = location
         self._type = station_type
         self._ip = station_ip
         self.port = station_port
         self._devices: dict[str, Device] = {}
-
 
     def setup(self, lab_ip: Optional[str] = None) -> None:
         """
@@ -94,16 +101,20 @@ class StationServer:
         station_templates = Path(__file__).resolve().parent / "templates"
         lab_templates = Path(__file__).resolve().parents[1] / "lab" / "templates"
 
-        env = Environment(loader=FileSystemLoader([str(station_templates), str(lab_templates)]))
+        env = Environment(
+            loader=FileSystemLoader([str(station_templates), str(lab_templates)])
+        )
         self._templates = Jinja2Templates(env=env)
 
         lab_static = Path(__file__).resolve().parents[1] / "lab" / "static"
-        self._app.mount("/static", StaticFiles(directory=str(lab_static)), name="static")
+        self._app.mount(
+            "/static", StaticFiles(directory=str(lab_static)), name="static"
+        )
 
         self._router.add_api_route("/process_op", self.process_op, methods=["POST"])
         self._router.add_api_route("/ping", self.ping, methods=["GET"])
 
-        #TODO: Look into the manual adding of routes in fastapi
+        # TODO: Look into the manual adding of routes in fastapi
         # self._router.add_route("/ui", self.station_ui, methods=["GET"] )
 
         self._app.include_router(self._router)
@@ -131,6 +142,11 @@ class StationServer:
         """
 
         # TODO: str instead of pure uuid
+        configure_device_logger(
+            log_root_path=self._logging_path,
+            device_module_path=device.__module__,
+            device_name=device.name,
+        )
         self._devices[str(device.id)] = device
         if self._station_proxy:
             self._station_proxy.add_device(device)
@@ -139,6 +155,7 @@ class StationServer:
         """
         start the server
         """
+        self._logger.info(f"Starting station server {self._name} on {self._ip}:{self.port}")
         uvicorn.run(self._app, host=self._ip, port=self.port)
 
     @property
@@ -154,35 +171,32 @@ class StationServer:
         self._lab_conn = LabConnection(lab_ip)
         return Station(self._name, self._type, self._location, self.port)
 
-
-
     async def get_station(self, request: Request):
         return self._templates.TemplateResponse(
-                "station.html",
-                {
-                    "request":request, 
-                    "station_id": self.id, 
-                    "station_name": self._name,
-                }
+            "station.html",
+            {
+                "request": request,
+                "station_id": self.id,
+                "station_name": self._name,
+            },
         )
 
     async def get_station_devices(self, request: Request):
         return self._templates.TemplateResponse(
-                "devices.html",
-                {
-                    "request":request, 
-                    "station_id": self.id, 
-                    "station_name": self._name,
-                    "devices": [
-                        {
-                            "uri": f"/gateway/stations/{self.id}/devices/{d.id}", 
-                            "name": d.name
-                        }
-                        for d in self._devices.values()
-                    ]
-                }
+            "devices.html",
+            {
+                "request": request,
+                "station_id": self.id,
+                "station_name": self._name,
+                "devices": [
+                    {
+                        "uri": f"/gateway/stations/{self.id}/devices/{d.id}",
+                        "name": d.name,
+                    }
+                    for d in self._devices.values()
+                ],
+            },
         )
-
 
     #######################################################
     #
@@ -190,31 +204,31 @@ class StationServer:
     #
     async def get_pannel(self, request: Request):
         return self._templates.TemplateResponse(
-                "sidepanel_station.html",
-                {
-                    "request":request, 
-                    "station": self, 
-                }
+            "sidepanel_station.html",
+            {
+                "request": request,
+                "station": self,
+            },
         )
-        
+
     async def get_device_view(self, request: Request, device_id: str):
         device: Optional[Device] = self._devices.get(device_id)
         if not device:
             raise HTTPException(status_code=404, detail="Device does not exist")
-        
+
         sidepanel = await self.get_pannel(request)
         sidepanel_html = sidepanel.body.decode("utf-8")
 
         return self._templates.TemplateResponse(
-                "device_view.html",
-                {
-                    "request":request, 
-                    "station": self, 
-                    "device": device,
-                    "device_html": device.to_html(),
-                    "station_html": sidepanel_html,
-                    "sidepanel_view": True
-                }
+            "device_view.html",
+            {
+                "request": request,
+                "station": self,
+                "device": device,
+                "device_html": device.to_html(),
+                "station_html": sidepanel_html,
+                "sidepanel_view": True,
+            },
         )
 
     async def get_device(self, request: Request, device_id: str):
@@ -223,36 +237,40 @@ class StationServer:
             raise HTTPException(status_code=404, detail="Device does not exist")
 
         return self._templates.TemplateResponse(
-                "device.html",
-                {
-                    "request":request, 
-                    "station_id": self.id, 
-                    "station_name": self._name,
-                    "html_response": device.to_html()
-                }
+            "device.html",
+            {
+                "request": request,
+                "station_id": self.id,
+                "station_name": self._name,
+                "html_response": device.to_html(),
+            },
         )
-    
+
     async def perform_device_operation(self, request: Request, device_id: str):
         form_data = await request.form()
 
         device: Optional[Device] = self._devices.get(device_id)
         if not device:
-            raise HTTPException(status_code=404, detail=f"Device {device_id} does not exist",)
+            raise HTTPException(
+                status_code=404,
+                detail=f"Device {device_id} does not exist",
+            )
 
         command_name = form_data.get("command")
         if not isinstance(command_name, str):
-            raise HTTPException(status_code=422, detail=f"Missing required parameter {command_name}")
+            raise HTTPException(
+                status_code=422, detail=f"Missing required parameter {command_name}"
+            )
 
         # Get the args and remove the command one
-        args = dict(form_data)
+        args = form_data._dict
         args.pop("command")
 
         # check if the method is on the device if not raise an error
         method_exists = hasattr(device, command_name)
         if not method_exists:
             raise HTTPException(status_code=400, detail=f"Method does note xist")
-        print(args)
-       
+
         if args.get("args") == "":
             args["args"] = {}
         # Only convert if it's a string
@@ -261,23 +279,20 @@ class StationServer:
                 args["args"] = ast.literal_eval(args["args"])
             except (ValueError, SyntaxError):
                 raise ValueError("Invalid dictionary string in args['args']")
-            
+
         try:
             method = getattr(device, command_name)
-            print(method)
-            print(f"[DEBUG] args: {args}")
-            print(f"[DEBUG] Type of args: {type(args)}")
+            self._logger.debug(f"Calling method {command_name} on device {device_id} with args: {args}")
             method(**args)
-            return 
+            return
         except Exception as e:
-            traceback.print_exception(e)
-            raise HTTPException(status_code=500,detail="Unexpected error in running method")
-
-
-
+            self._logger.error(f"Error occurred while calling method {command_name} on device {device_id}: {e}")
+            raise HTTPException(
+                status_code=500, detail="Unexpected error in running method"
+            )
 
     def ping(self):
-        print("ping from station")
+        self._logger.info("ping from station")
 
     def process_op(self, op: Operation):
         """retrieve the device from the device dict and execute the method
@@ -454,14 +469,14 @@ class StationServer:
             if delete_archive:
                 remove(result.name)
 
-
     def shutdown(self):
+        self._logger.info("Shutting down station server...")
         for _, device in self._devices.items():
             if device.inventory != [] or device.inventory is None:
                 device.inventory._cleanup()
             device._cleanup()
         self._station_proxy.inventory._cleanup()
         self._station_proxy._cleanup()
-        os.kill(os.getpid(),signal.SIGTERM)
+        os.kill(os.getpid(), signal.SIGTERM)
         return 200
-        #shutdown the server
+        # shutdown the server
