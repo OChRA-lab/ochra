@@ -28,7 +28,6 @@ class RestProxyMixin:
                     return self._lab_conn.get_property(endpoint, self.id, name)
 
                 def setter(self, value, name=field):
-                    print(f"set {name} to {value}")
                     return self._lab_conn.set_property(endpoint, self.id, name, value)
 
                 # Set the property on the class with the custom getter and setter
