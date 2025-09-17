@@ -141,7 +141,7 @@ class WebAppRouter(APIRouter):
         session_token = SessionToken.create_session_token(user.username, db)
         response = JSONResponse({"message": "success"})
         response.set_cookie(
-            key="session_token", value=session_token, httponly=True, secure=True
+            key="session_token", value=session_token, httponly=True
         )
         response.headers["HX-Location"] = "/app"
         return response
