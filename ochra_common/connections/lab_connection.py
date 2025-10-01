@@ -9,7 +9,7 @@ from .api_models import (
 )
 from uuid import UUID, uuid4
 import logging
-from typing import Any, Type, TypeVar, Union, List
+from typing import Any, Type, Union, List
 import importlib
 from ..equipment.operation import Operation
 from ..utils.enum import OperationStatus, PatchType

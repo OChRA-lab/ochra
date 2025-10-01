@@ -1,6 +1,5 @@
 from typing import Dict, Any, Optional
 from pydantic import BaseModel, Field
-from uuid import UUID
 from typing import Union
 from ..utils.enum import PatchType
 

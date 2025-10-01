@@ -1,6 +1,5 @@
 from uuid import UUID
 from typing import Dict, Any
-from pathlib import Path
 from ..base import DataModel
 
 
