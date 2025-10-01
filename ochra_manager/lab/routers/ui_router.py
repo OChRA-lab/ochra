@@ -7,7 +7,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Form, HTTPException, Request, Response, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session, context
+from sqlalchemy.orm import Session
 
 import httpx
 import re
@@ -152,7 +152,7 @@ class WebAppRouter(APIRouter):
             raise HTTPException(status_code=401, detail="No session token found")
 
         session = SessionToken.get_session(db, session_token)
-        if session != None:
+        if session is not None:
             db.delete(session)
             db.commit()
             response = JSONResponse({"message": "logout successfull"})
@@ -171,7 +171,7 @@ class WebAppRouter(APIRouter):
         method = request.method
         url = f"http://{s['station_ip']}:{s['port']}/hypermedia"
 
-        stations = self.lab_service.get_all_objects(STATIONS)
+        # stations = self.lab_service.get_all_objects(STATIONS)
         table_fields = self.build_table_fields()
 
         async with httpx.AsyncClient() as client:

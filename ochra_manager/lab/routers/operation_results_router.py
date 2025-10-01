@@ -1,11 +1,10 @@
 import logging
 from os import remove
-import uuid
 from fastapi import APIRouter, BackgroundTasks
 from fastapi import File, UploadFile
 
 # this is temp
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import FileResponse
 from ochra_common.connections.api_models import (
     ObjectPropertyPatchRequest,
     ObjectConstructionRequest,
@@ -13,7 +12,6 @@ from ochra_common.connections.api_models import (
 )
 from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
-from typing import Any
 
 COLLECTION = "operation_results"
 

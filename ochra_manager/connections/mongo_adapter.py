@@ -1,7 +1,6 @@
 from mongoengine import connect, Document
 import logging
 import json
-from bson import ObjectId
 import gridfs
 from ochra_common.utils.enum import PatchType
 

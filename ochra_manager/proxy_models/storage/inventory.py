@@ -1,7 +1,6 @@
 from ochra_common.storage.inventory import Inventory
 from ochra_common.utils.mixins import RestProxyMixin
 from ochra_common.base import DataModel
-from typing import Literal
 
 
 class Inventory(Inventory, RestProxyMixin):
