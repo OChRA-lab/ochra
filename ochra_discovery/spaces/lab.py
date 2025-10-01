@@ -2,7 +2,7 @@ from ochra_common.spaces.lab import Lab
 from ochra_common.spaces.station import Station
 from ochra_common.equipment.robot import Robot
 from ochra_common.connections.lab_connection import LabConnection
-from typing import List, Type, Union
+from typing import List, Type
 
 
 class Lab(Lab):

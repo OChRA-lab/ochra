@@ -26,7 +26,7 @@ class OperationResult(OperationResult, RestProxyMixinReadOnly):
             bool: True if the data is saved.
         """
         data = self._lab_conn.get_data("operation_results", self.id)
-        if path == None:
+        if path is None:
             path = self._lab_conn.get_property(
                 "operation_results", self.id, "data_file_name"
             )
