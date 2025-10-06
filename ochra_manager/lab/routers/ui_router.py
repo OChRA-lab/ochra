@@ -14,7 +14,7 @@ import re
 import ast
 
 from ochra_common.connections.api_models import ObjectConstructionRequest
-from ochra_common.equipment.device import Operation
+from ochra_common.equipment.operation import Operation
 from ochra_common.utils.enum import OperationStatus
 
 from ochra_manager.lab.auth.auth import SessionToken, User, get_db
