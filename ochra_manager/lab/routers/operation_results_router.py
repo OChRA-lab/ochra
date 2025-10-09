@@ -1,11 +1,10 @@
 import logging
 from os import remove
-import uuid
 from fastapi import APIRouter, BackgroundTasks
 from fastapi import File, UploadFile
 
 # this is temp
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import FileResponse
 from ochra_common.connections.api_models import (
     ObjectPropertyPatchRequest,
     ObjectConstructionRequest,
@@ -13,7 +12,6 @@ from ochra_common.connections.api_models import (
 )
 from ..lab_service import LabService
 from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
-from typing import Any
 
 COLLECTION = "operation_results"
 
@@ -24,12 +22,12 @@ class OperationResultRouter(APIRouter):
         super().__init__(prefix=prefix)
         self._logger = logging.getLogger(__name__)
         self.lab_service = LabService(folderpath)
-        self.put("/construct")(self.construct_result)
-        self.get("/{identifier}/get_property")(self.get_property)
-        self.patch("/{identifier}/modify_property")(self.modify_property)
-        self.get("/get")(self.get_result)
-        self.get("/{identifier}/get_data/")(self.get_data)
-        self.patch("/{identifier}/put_data/")(self.put_data)
+        self.put("/")(self.construct_result)
+        self.get("/{identifier}/property")(self.get_property)
+        self.patch("/{identifier}/property")(self.modify_property)
+        self.get("/")(self.get_result)
+        self.get("/{identifier}/data/")(self.get_data)
+        self.patch("/{identifier}/data/")(self.put_data)
 
     async def construct_result(self, args: ObjectConstructionRequest):
         self._logger.debug(f"Constructing operation result with args: {args}")

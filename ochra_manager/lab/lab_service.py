@@ -1,9 +1,6 @@
 import logging
 from typing import Any, List, Dict, Optional
-from typing import Any, List, Dict, Optional
 
-from fastapi.responses import FileResponse
-from ..connections.station_connection import StationConnection
 from ochra_common.equipment.operation import Operation
 from fastapi import HTTPException
 from ochra_common.connections.api_models import (
@@ -12,7 +9,6 @@ from ochra_common.connections.api_models import (
     ObjectConstructionRequest,
     ObjectPropertyGetRequest,
 )
-from ochra_common.utils.misc import is_data_model, convert_to_data_model
 from ..connections.db_connection import DbConnection
 import json
 from pathlib import Path
@@ -252,7 +248,7 @@ class LabService:
         entity_name = self.db_conn.read(
             {"id": entity_id, "_collection": f"{entity_type}s"}, property="name"
         )
-        if self.folderpath != None:
+        if self.folderpath is not None:
             # create folder with the operation id
             path = self.folderpath / entity_name
             path.mkdir(exist_ok=True)
@@ -297,7 +293,7 @@ class LabService:
             {"id": entity_id, "_collection": f"{entity_type}s"}, property="name"
         )
         # TODO: zip up folder and delete for returns
-        if self.folderpath != None:
+        if self.folderpath is not None:
             delete = False
             # get the file path
             file_path: Path = (

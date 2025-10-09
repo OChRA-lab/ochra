@@ -4,13 +4,11 @@ from fastapi.templating import Jinja2Templates
 
 
 from pydantic import BaseModel
-from typing import Dict, Optional, Type, Any
+from typing import Dict, Optional, Any
 from pathlib import Path, PurePath
 import shutil
-import traceback
 from os import remove
 import datetime
-from starlette.types import Message
 import uvicorn
 import os
 import signal
@@ -35,7 +33,6 @@ import ast
 from jinja2 import Environment, FileSystemLoader
 from fastapi.staticfiles import StaticFiles
 
-import httpx
 
 
 def _is_path(obj: Any) -> bool:
@@ -269,7 +266,7 @@ class StationServer:
         # check if the method is on the device if not raise an error
         method_exists = hasattr(device, command_name)
         if not method_exists:
-            raise HTTPException(status_code=400, detail=f"Method does note xist")
+            raise HTTPException(status_code=400, detail="Method does note xist")
 
         if args.get("args") == "":
             args["args"] = {}

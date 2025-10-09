@@ -7,9 +7,8 @@ import hashlib
 from sqlalchemy import Column, String
 from sqlalchemy.orm import Session
 
-import hashlib
-from sqlalchemy import Column, String, Integer, ForeignKey
-from sqlalchemy.orm import Session, relationship
+from sqlalchemy import Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from datetime import datetime
 
 Base = declarative_base()
