@@ -9,7 +9,6 @@ from ..equipment.robot import Robot
 from .location import Location
 from ..utils.enum import ActivityStatus, StationType
 from ..storage.inventory import Inventory
-from uuid import UUID
 from typing import Optional
 
 class Station(DataModel):

@@ -1,10 +1,9 @@
 from pydantic import Field
 from jinja2 import Environment, PackageLoader, select_autoescape
-from typing import Annotated, Optional, Tuple, get_args, get_origin, List
+from typing import Annotated, Optional, Tuple, get_args, get_origin
 from uuid import UUID
 import inspect
 from ..base import DataModel
-from .operation import Operation
 from ..utils.enum import ActivityStatus
 from ..storage.inventory import Inventory
 
