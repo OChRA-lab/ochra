@@ -12,15 +12,18 @@ class LabEngineException(Exception):
 
 
 class Result:
-    """Result dataclass for json to python instances"""
+    """
+    A class representing the result of an HTTP request, including status code, message, and data.
+    """
 
     def __init__(self, status_code: int, message: str = "", data: List[Dict] = None):
-        """constructer for result class
+        """
+        Initializes a Result instance.
 
         Args:
-            status_code (int): HTTP statuscode
-            message (str, optional): Message returned from request. Defaults to ''.
-            data (List[Dict], optional): Data return from request. Defaults to None.
+            status_code (int): HTTP status code.
+            message (str, optional): Message returned from the request. Defaults to "".
+            data (List[Dict], optional): Data returned from the request. Defaults to None.
         """
         self.status_code = int(status_code)
         self.message = str(message)
@@ -28,7 +31,7 @@ class Result:
 
 
 class RestAdapter:
-    """Rest API adapter class"""
+    """Adapter class for interacting with RESTful APIs."""
 
     def __init__(
         self,
@@ -37,15 +40,14 @@ class RestAdapter:
         ssl_verify: bool = True,
         logger: logging.Logger = None,
     ):
-        """Constructor for RestAdapter
+        """
+        Initializes the RestAdapter for interacting with a RESTful API.
 
         Args:
-            hostname (str): address of api
-            api_key (str, optional): authentication string. Defaults to ''.
-            ssl_verify (bool, optional): if we need to verify ssl.
-                Defaults to True.
-            logger (logging.Logger, optional): logger if you have one.
-                Defaults to None.
+            hostname (str): The hostname or IP address of the API server.
+            api_key (str, optional): API key for authentication. Defaults to ''.
+            ssl_verify (bool, optional): Whether to verify SSL certificates. Defaults to True.
+            logger (logging.Logger, optional): Custom logger instance. If None, a default logger is used.
         """
         self.url = f"http://{hostname}/"
         self._api_key = api_key
@@ -63,25 +65,24 @@ class RestAdapter:
         data: Dict = None,
         files=None,
         jsonify=True,
-    ) -> Result:
-        """Does a request of type based on the method passed in http_method
+    ) -> Result | requests.Response:
+        """
+        Executes an HTTP request using the specified method and parameters.
 
         Args:
-            http_method (str): GET POST or DELETE
-            endpoint (str): endpoint in api to do the request to
-            ep_params (Dict, optional): end point parameters if exist.
-                Defaults to None.
-            data (Dict, optional): data body (json). Defaults to None.
-            files (Any): files to be sent over the API
-            jsonify (Bool): flag to jsonify the output
+            http_method (str): The HTTP method to use (e.g., 'GET', 'POST', 'PUT', 'PATCH', 'DELETE').
+            endpoint (str): The API endpoint to send the request to.
+            ep_params (Dict, optional): Query parameters for the endpoint. Defaults to None.
+            data (Dict, optional): JSON body to include in the request. Defaults to None.
+            files (Any, optional): Files to upload with the request. Defaults to None.
+            jsonify (bool, optional): If True, attempts to parse the response as JSON. If False, returns the raw response.
 
         Raises:
-            LabEngineException: Request failure
-            LabEngineException: Bad Json
-            LabEngineException: Some other response
+            LabEngineException: If the request fails, the response contains invalid JSON, or the response status code indicates an error.
 
         Returns:
-            Result: Data from request in the form of a Result instances
+            Result: An object containing the status code, message, and data from the response if successful.
+            requests.Response: The raw response object if jsonify is False.
         """
         full_url = self.url + endpoint
         headers = {"x-api-key": self._api_key}
@@ -138,16 +139,19 @@ class RestAdapter:
 
     def get(
         self, endpoint: str, ep_params: Dict = None, data: Dict = None, jsonify=True
-    ) -> Result:
-        """do a get request to endpoint using _do
+    ) -> Result | requests.Response:
+        """
+        Performs a GET request to the specified endpoint.
 
         Args:
-            endpoint (str): Endpoint to request
-            ep_params (Dict, optional): end point parameters if exist. Defaults to None.
-            jsonify (Bool): Flag to jsonify the response
+            endpoint (str): The API endpoint to send the GET request to.
+            ep_params (Dict, optional): Query parameters for the endpoint. Defaults to None.
+            data (Dict, optional): JSON body to include in the request. Defaults to None.
+            jsonify (bool, optional): If True, parses the response as JSON. If False, returns the raw response.
 
         Returns:
-            Result: Data from request in the form of a Result instances
+            Result: An object containing the status code, message, and data from the response if successful.
+            requests.Response: The raw response object if jsonify is False.
         """
         return self._do(
             http_method="GET",
@@ -158,30 +162,32 @@ class RestAdapter:
         )
 
     def put(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
-        """Do a put request to endpoint using _do
+        """
+        Performs a PUT request to the specified endpoint.
 
         Args:
-            endpoint (str): Endpoint to request
-            ep_params (Dict, optional): end point parameters if exist. Defaults to None.
-            data (Dict, optional): data body (json). Defaults to None.
+            endpoint (str): The API endpoint to send the PUT request to.
+            ep_params (Dict, optional): Query parameters for the endpoint. Defaults to None.
+            data (Dict, optional): JSON body to include in the request. Defaults to None.
 
         Returns:
-            Result: Data from request in the form of a Result instances
+            Result: An object containing the status code, message, and data from the response if successful.
         """
         return self._do(
             http_method="PUT", endpoint=endpoint, ep_params=ep_params, data=data
         )
 
     def post(self, endpoint: str, ep_params: Dict = None, data: Dict = None) -> Result:
-        """Do a Post request to endpoint using _do
+        """
+        Performs a POST request to the specified endpoint.
 
         Args:
-            endpoint (str): Endpoint to request
-            ep_params (Dict, optional): end point parameters if exist. Defaults to None.
-            data (Dict, optional): data body (json). Defaults to None.
+            endpoint (str): The API endpoint to send the POST request to.
+            ep_params (Dict, optional): Query parameters for the endpoint. Defaults to None.
+            data (Dict, optional): JSON body to include in the request. Defaults to None.
 
         Returns:
-            Result: Data from request in the form of a Result instances
+            Result: An object containing the status code, message, and data from the response if successful.
         """
         return self._do(
             http_method="POST", endpoint=endpoint, ep_params=ep_params, data=data
@@ -190,15 +196,17 @@ class RestAdapter:
     def patch(
         self, endpoint: str, ep_params: Dict = None, data: Dict = None, files=None
     ) -> Result:
-        """Do a Patch request to endpoint using _do
+        """
+        Performs a PATCH request to the specified endpoint.
 
         Args:
-            endpoint (str): Endpoint to request
-            ep_params (Dict, optional): end point parameters if exist. Defaults to None.
-            data (Dict, optional): data body (json). Defaults to None.
+            endpoint (str): The API endpoint to send the PATCH request to.
+            ep_params (Dict, optional): Query parameters for the endpoint. Defaults to None.
+            data (Dict, optional): JSON body to include in the request. Defaults to None.
+            files (Any, optional): Files to upload with the request. Defaults to None.
 
         Returns:
-            Result: Data from request in the form of a Result instances
+            Result: An object containing the status code, message, and data from the response if successful.
         """
         return self._do(
             http_method="PATCH",
@@ -211,15 +219,16 @@ class RestAdapter:
     def delete(
         self, endpoint: str, ep_params: Dict = None, data: Dict = None
     ) -> Result:
-        """Do a delete request to endpoint using _do
+        """
+        Performs a DELETE request to the specified endpoint.
 
         Args:
-            endpoint (str): Endpoint to request
-            ep_params (Dict, optional): end point parameters if exist. Defaults to None.
-            data (Dict, optional): data body (json). Defaults to None.
+            endpoint (str): The API endpoint to send the DELETE request to.
+            ep_params (Dict, optional): Query parameters for the endpoint. Defaults to None.
+            data (Dict, optional): JSON body to include in the request. Defaults to None.
 
         Returns:
-            Result: Data from request in the form of a Result instances
+            Result: An object containing the status code, message, and data from the response if successful.
         """
         return self._do(
             http_method="DELETE", endpoint=endpoint, ep_params=ep_params, data=data

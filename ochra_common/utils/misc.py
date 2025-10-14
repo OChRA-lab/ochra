@@ -19,7 +19,7 @@ def is_valid_uuid(string: str) -> bool:
         return False
 
 
-def is_data_model(obj: Any) -> bool:
+def is_data_model(obj: Dict) -> bool:
     """Check if an dict is a DataModel.
 
     Args:

@@ -3,11 +3,11 @@ from ..base import DataModel
 
 class Consumable(DataModel):
     """
-    Abstract class for lab consumables, such as caps, needles, etc.
+    Data model for laboratory consumables (e.g., caps, needles).
 
     Attributes:
-        type (str): The type of the consumable.
-        quantity (int): The quantity of the consumable.
+        type (str): Consumable category or name.
+        quantity (int): Available quantity in inventory.
     """
 
     type: str

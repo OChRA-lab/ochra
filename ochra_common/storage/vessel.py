@@ -6,11 +6,11 @@ from .reagent import Reagent
 
 class Vessel(Container):
     """
-    Vessel Abstract class, any container that can hold reagents.
+    Represents a specialized container designed to store chemical reagents.
 
     Attributes:
-        capacity_unit (str): The unit of measurement for the vessel's capacity.
-        reagents (List[Reagent]): A list of reagents contained in the vessel. Defaults to an empty list.
+        capacity_unit (str): Unit of measurement for the vessel's capacity (e.g., 'mL', 'L').
+        reagents (List[Reagent]): Collection of reagents currently held in the vessel.
     """
 
     capacity_unit: str

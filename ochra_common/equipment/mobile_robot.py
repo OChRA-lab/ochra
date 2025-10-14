@@ -5,10 +5,10 @@ from ..utils.enum import MobileRobotState
 
 class MobileRobot(Robot):
     """
-    Abstract mobile platform robot that can move.
+    Abstract class to represent a mobile robot that can move.
 
     Attributes:
-        state (MobileRobotState): State of the mobile robot. Defaulted to AVAILABLE
+        state (MobileRobotState): State of the mobile robot. Defaults to AVAILABLE
     """
 
     state: MobileRobotState = MobileRobotState.AVAILABLE

@@ -5,10 +5,10 @@ from .container import Container
 
 class Holder(Container):
     """
-    Abstract holder class, any container that can hold other containers.
+    Represents a container capable of holding other containers, such as a rack of vials.
 
     Attributes:
-        containers (List[Container]): A list of containers held by this holder. Defaults to an empty list.
+        containers (List[Type[Container]]): List of containers currently held by this holder. Defaults to an empty list.
     """
 
     containers: List[Type[Container]] = Field(default_factory=list)
@@ -18,7 +18,7 @@ class Holder(Container):
         Add a container to the holder.
 
         Args:
-            container (Container): The container to be added.
+            container (Type[Container]): The container to be added.
         """
         raise NotImplementedError
 
@@ -27,6 +27,6 @@ class Holder(Container):
         Remove a container from the holder.
 
         Args:
-            container (Container): The container to be removed.
+            container (Type[Container]): The container to be removed.
         """
         raise NotImplementedError

@@ -6,15 +6,15 @@ from ..utils.enum import ResultDataStatus
 
 class OperationResult(DataModel):
     """
-    Abstract result class to keep results formatted and structured.
+    Represents the outcome of an equipment operation, including its status and any associated data.
 
     Attributes:
-        success (bool): The outcome of the operation.
-        error (str): The error if the operation failed. Defaulted to ""
-        result_data (Any): Data of the result. Can be any data
-        data_file_name (str): The original file type of the result includes the filetype (e.g. .txt, .jpg). Leave as "" if the data_type is defined below
-        data_type (str): the python data model ()
-        data_status (ResultDataStatus): The current status of the data. Defaulted to UNAVAILABLE
+        success (bool): True if the operation completed successfully; otherwise, False.
+        error (str): Description of the error if the operation failed; empty if successful.
+        result_data (Any): The data produced by the operation, if any.
+        data_file_name (str): Name of the file containing the result data, including its extension. Leave empty if not applicable.
+        data_type (str): Type or format of the result data (e.g., "image", "text", "json").
+        data_status (ResultDataStatus): Current availability status of the result data. Defaults to UNAVAILABLE.
     """
 
     success: bool

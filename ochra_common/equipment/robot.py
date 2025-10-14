@@ -4,7 +4,7 @@ from .device import Device
 
 class Robot(Device):
     """
-    Abstract robot class to represent a generic robot.
+    Abstract class to represent a generic robot.
 
     Attributes:
         available_tasks (List[str]): A list of tasks available for execution by the robot.
@@ -16,12 +16,13 @@ class Robot(Device):
 
     def execute(self, task_name: str, args: Dict[str, Any]) -> bool:
         """
-        Execute a given robot task.
+        Executes a specified task on the robot.
 
         Args:
-            robot_task (RobotTask): The task to be executed.
+            task_name (str): The name of the task to execute.
+            args (Dict[str, Any]): Arguments required for the task execution.
 
         Returns:
-            bool: True if the task was executed successfully
+            bool: True if the task was executed successfully, False otherwise.
         """
         raise NotImplementedError

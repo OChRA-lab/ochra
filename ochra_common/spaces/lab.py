@@ -6,10 +6,14 @@ from uuid import UUID
 
 class Lab:
     """
-    Abstract Lab class that represents a laboratory.
+    Represents a laboratory containing stations and robots.
+
+    Usage:
+    This class provides methods to retrieve and manage stations and robots
+    within the laboratory environment.
     """
 
-    def get_stations(self) -> List[Type[Station]]:
+    def get_stations(self) -> List[Station]:
         """
         Retrieve all stations in the lab.
 
@@ -18,7 +22,7 @@ class Lab:
         """
         raise NotImplementedError
 
-    def get_station(self, station_name: str) -> Type[Station]:
+    def get_station(self, station_name: str) -> Station:
         """
         Retrieve a specific station from the lab.
 
@@ -35,11 +39,11 @@ class Lab:
         Retrieve all robots in the lab.
 
         Returns:
-            List[Robot]: A list of robots in the lab.
+            List[Type[Robot]]: A list of robots in the lab.
         """
         raise NotImplementedError
 
-    def get_robot(self, robot: Union[str, Type[Robot], UUID]) -> Type[Robot]:
+    def get_robot(self, robot: str | Type[Robot] | UUID) -> Type[Robot]:
         """
         Retrieve a specific robot from the lab.
 
@@ -47,6 +51,6 @@ class Lab:
             robot (str | type | UUID): The name, type, or UUID of the robot.
 
         Returns:
-            Robot: The retrieved robot.
+            Type[Robot]: The retrieved robot.
         """
         raise NotImplementedError

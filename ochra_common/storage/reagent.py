@@ -6,14 +6,14 @@ from typing import Any, Dict
 
 class Reagent(DataModel):
     """
-    Abstract Reagent class to represent any chemicals used.
+    Represents a chemical reagent with associated metadata.
 
     Attributes:
-        name (str): The name of the reagent.
-        amount (float): The amount of the reagent.
-        unit (str): The unit of measurement for the amount.
-        physical_state (Enum): The physical state of the reagent (e.g., solid, liquid, gas). Defaults to UNKNOWN.
-        properties (Dict[str, Any]): A dictionary of additional properties of the reagent.
+        name (str): Name of the reagent.
+        amount (float): Quantity of the reagent.
+        unit (str): Unit of measurement for the amount (e.g., g, mL).
+        physical_state (PhysicalState): Physical state of the reagent (solid, liquid, gas, etc.). Defaults to UNKNOWN.
+        properties (Dict[str, Any]): Additional properties and metadata for the reagent.
     """
 
     name: str

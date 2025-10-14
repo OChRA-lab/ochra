@@ -3,8 +3,10 @@ from typing import Any
 
 
 class SingletonMeta(type):
-    """
-    ThreadSafe Singleton
+    """Thread-safe Singleton metaclass.
+
+    Ensures that only one instance of a class exists,
+    even in multi-threaded environments.
     """
 
     _instances = {}
@@ -12,7 +14,8 @@ class SingletonMeta(type):
     _lock: Lock = Lock()
 
     def __call__(self, *args: Any, **kwds: Any) -> Any:
-        """create an instance of singleton if one exists return that
+        """
+        create an instance of singleton if one exists return that instance
 
         Returns:
             Any: singleton instance

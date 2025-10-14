@@ -13,17 +13,17 @@ from typing import Optional
 
 class Station(DataModel):
     """
-    Abstract station class that contains information all stations will have.
+    Represents a laboratory station containing devices, robots, and inventory.
 
     Attributes:
-        name (str): The name of the station.
-        location (Location): The location of the station.
-        type (StationType): The type of the station.
-        status (ActiveStatus): The status of the station (e.g., idle, busy). Defaults to IDLE.
-        inventory (Inventory): The inventory associated with the station.
-        devices (List[Device]): A list of devices associated with the workstation.
-        operation_record (List[Operation]): Record of the operations assigned to the station.
-        locked (UUID): The session ID of the user that has locked the station.
+        name (str): Station name.
+        location (Location): Physical location of the station.
+        type (StationType): Station category/type.
+        status (ActivityStatus): Current operational status (default: IDLE).
+        inventory (Inventory): Inventory associated with the station.
+        devices (List[Device]): Devices associated with the station.
+        operation_record (List[Operation]): History of operations performed.
+        locked (Optional[UUID]): Session ID of the user who has locked the station, if any.
     """
 
     name: str
@@ -37,33 +37,41 @@ class Station(DataModel):
 
     _endpoint = "stations"  # associated endpoint for all stations
 
-    def get_device(self, device_identifier: Union[str, UUID]) -> Type[Device]:
+    def get_device(self, device_identifier: str| UUID) -> Type[Device]:
         """
-        Retrieve a device from the workstation.
+        Retrieve a device from the station.
 
         Args:
-            device_identifier (str | UUID): The device name or its UUID.
+            device_identifier (str | UUID): The device name or its unique identifier.
 
         Returns:
-            Device: The retrieved device.
+            Type[Device]: The retrieved device.
         """
         raise NotImplementedError
 
-    def get_robot(self, robot_identifier: Union[str, UUID]) -> Type[Robot]:
+    def get_robot(self, robot_identifier: str| UUID) -> Type[Robot]:
         """
-        Retrieve a robot from the workstation.
+        Retrieve a robot from the station.
 
         Args:
-            robot_identifier (str | UUID): The robot name or its UUID.
+            robot_identifier (str | UUID): The robot name or its unique identifier.
 
         Returns:
-            Robot: The retrieved robot.
+            Type[Robot]: The retrieved robot.
         """
         raise NotImplementedError
 
 
     def lock(self, session_id: UUID):
-        """Lock the device for the given session."""
+        """
+        Lock the station for the given session.
+
+        Args:
+            session_id (UUID): The session ID requesting the lock.
+
+        Raises:
+            Exception: If the station is already locked by another session.
+        """
         if self.locked == []:
             self.locked = session_id
         elif self.locked != session_id:
@@ -73,7 +81,15 @@ class Station(DataModel):
             
 
     def unlock(self, session_id: UUID):
-        """Unlock the device for the given session."""
+        """
+        Unlock the station for the given session.
+
+        Args:
+            session_id (UUID): The session ID requesting the unlock.
+
+        Raises:
+            Exception: If the session does not hold the lock and is not ADMIN.
+        """
         if session_id == "ADMIN":
             self.locked = None
         if self.locked != session_id:

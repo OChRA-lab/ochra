@@ -7,13 +7,15 @@ from .container import Container
 
 class Inventory(DataModel):
     """
-    Abstract class for inventory, contains containers and consumables.
+    Inventory model representing a collection of containers and consumables.
+
+    An inventory is typically associated with a station or device in the framework.
 
     Attributes:
-        owner (DataModel): The owner of the inventory.
-        containers_max_capacity (int): The maximum capacity of containers in the inventory.
-        containers (List[Container]): A list of containers in the inventory. Defaults to an empty list.
-        consumables (List[Consumable]): A list of consumables in the inventory. Defaults to an empty list.
+        owner (DataModel): Reference to the entity that owns the inventory.
+        containers_max_capacity (int): Maximum number of containers allowed.
+        containers (List[Type[Container]]): List of container instances in the inventory.
+        consumables (List[Consumable]): List of consumable items in the inventory.
     """
 
     owner: DataModel
@@ -28,7 +30,7 @@ class Inventory(DataModel):
         Add a container to the inventory.
 
         Args:
-            container (Container): The container to be added.
+            container (Type[Container]): The container to be added.
         """
         raise NotImplementedError
 
@@ -37,7 +39,7 @@ class Inventory(DataModel):
         Remove a container from the inventory.
 
         Args:
-            container (Container): The container to be removed.
+            container (Type[Container]): The container to be removed.
         """
         raise NotImplementedError
 

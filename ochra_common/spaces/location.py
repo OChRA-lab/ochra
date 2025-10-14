@@ -5,12 +5,14 @@ from ..base import DataModel
 
 class Location(DataModel):
     """
-    Abstract location to correspond to a physical location.
+    Represents a physical location within a laboratory environment.
 
     Attributes:
-        name (str): The name of the location.
-        map (str): The map associated with the location.
-        map_id (int): The identifier for the location on the map.
+        lab (str): Name of the laboratory.
+        room (str): Specific room or area within the laboratory.
+        place (str): Precise spot within the room (e.g., bench, shelf, cabinet).
+        landmarks (List[str]): Distinctive features or markers to help identify the location.
+        additional_metadata (Dict[str, Any]): Supplementary metadata or contextual information about the location.
     """
 
     lab: str

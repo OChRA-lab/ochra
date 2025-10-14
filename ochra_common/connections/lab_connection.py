@@ -18,9 +18,11 @@ import time
 
 # TODO change the return types of get_property and get_all_objects to be more specific
 
+
 class LabConnection(metaclass=SingletonMeta):
-    """lab adapter built on top of RestAdapter,
-    heavily coupled to lab engine api
+    """
+    Class that provides a high-level interface for interacting with the lab engine API,
+    utilizing RestAdapter for communication. This class is tightly integrated with the lab engine's API structure.
     """
 
     def __init__(
@@ -30,14 +32,15 @@ class LabConnection(metaclass=SingletonMeta):
         api_key: str = "",
         ssl_verify: bool = False,
     ):
-        """constructor for labAdapter class
+        """
+        Constructor for LabConnection class.
 
         Args:
-            hostname (_type_, optional): address of lap api.
-                Defaults to "127.0.0.1:8000".
-            api_key (str, optional): api key if exists. Defaults to ''.
-            ssl_verify (bool, optional): if we need to verify ssl.
-                Defaults to False.
+            hostname (str): Address of lab API. Defaults to "127.0.0.1:8000".
+            experiment_id (str, optional): ID of the experiment associated with this connection.
+                If None, a new UUID will be generated. Defaults to None.
+            api_key (str, optional): API key if exists. Defaults to ''.
+            ssl_verify (bool, optional): If we need to verify SSL. Defaults to False.
         """
         self._logger = logging.getLogger(__name__)
         self.rest_adapter: RestAdapter = RestAdapter(
@@ -49,13 +52,17 @@ class LabConnection(metaclass=SingletonMeta):
             self._session_id = experiment_id
 
     def load_from_data_model(self, model: DataModel) -> Any:
-        """load object from data model
+        """
+        Instantiates an object from a given DataModel.
+
         Args:
-            model (DataModel): data model to load
+            model (DataModel): The data model containing class and module information.
+
         Raises:
-            LabEngineException: if there is an error in loading object
+            LabEngineException: If the class cannot be imported or instantiated.
+
         Returns:
-            Any: instance of the class
+            Any: An instance of the specified class, loaded using its ID.
         """
         try:
             module = importlib.import_module(model.module_path)
@@ -66,17 +73,18 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(f"Unexpected error in importing class: {e}")
 
     def construct_object(self, type: str, object: Type[DataModel]) -> UUID:
-        """construct object on the lab
+        """
+        Constructs an object on the lab engine.
 
         Args:
-            type (str): type of the object to construct
-            object (Type[DataModel]): object to be constructed
+            type (str): The type of the object to construct.
+            object (Type[DataModel]): The data model instance representing the object to be constructed.
 
         Raises:
-            LabEngineException: if there is an error in constructing object
+            LabEngineException: If there is an error during object construction or response parsing.
 
         Returns:
-            UUID: id of the constructed object
+            UUID: The unique identifier of the constructed object.
         """
         req = ObjectConstructionRequest(object_json=object.model_dump_json())
         result: Result = self.rest_adapter.put(
@@ -90,18 +98,19 @@ class LabConnection(metaclass=SingletonMeta):
         except Exception as e:
             raise LabEngineException(f"Unexpected error: {e}")
 
-    def get_object(self, type: str, identifier: Union[str, UUID]) -> Any:
-        """get object from lab
+    def get_object(self, type: str, identifier: str | UUID) -> Any:
+        """
+        Retrieve an object from the lab engine by its identifier.
 
         Args:
-            type (str): type of the object to get
-            identifier (Union[str, UUID]): id or name of the object
+            type (str): The type of the object to retrieve.
+            identifier (str | UUID): The unique ID or name of the object.
 
         Raises:
-            LabEngineException: if there is an error in getting object
+            LabEngineException: If the object cannot be retrieved or parsed.
 
         Returns:
-            Any: instance of the class
+            Any: An instance of the requested object, loaded from its data model.
         """
         result: Result = self.rest_adapter.get(
             f"/{type}/", {"identifier": str(identifier)}
@@ -115,16 +124,17 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(f"Unexpected error: {e}")
 
     def get_all_objects(self, type: str) -> List[Any]:
-        """returns a list of all objects of a certain type
+        """
+        Retrieve all objects of a specified type from the lab engine.
 
         Args:
-            type (str): the type of the object to get
+            type (str): The type of objects to retrieve.
 
         Raises:
-            LabEngineException: if there is an error in getting objects
+            LabEngineException: If retrieval or parsing fails.
 
         Returns:
-            List[Any]: list of instances of the class
+            List[Any]: List of instantiated objects corresponding to the specified type.
         """
         result: Result = self.rest_adapter.get(f"/{type}/all")
         try:
@@ -138,32 +148,37 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(f"Unexpected error: {e}")
 
     def delete_object(self, type: str, id: UUID):
-        """delete object from lab
+        """
+        Deletes an object from the lab engine.
 
         Args:
-            type (str): type of the object
-            id (UUID): id of the object
+            type (str): The type of the object to delete.
+            id (UUID): The unique identifier of the object.
+
+        Raises:
+            LabEngineException: If deletion fails.
 
         Returns:
-            Any: response from the lab
+            Any: Response from the lab engine.
         """
         result: Result = self.rest_adapter.delete(f"/{type}/{str(id)}/")
         return result.data
 
     def call_on_object(self, type: str, id: UUID, method: str, args: dict) -> Operation:
-        """make a request for the lab to run a function on an object
+        """
+        Initiates a method call on a specified object within the lab engine.
 
         Args:
-            type (str): type of the object to call function on
-            id (UUID): id of the object to run the function on
-            method (str): name of the function to run
-            args (dict): arguments to pass to the function
+            type (str): The type of the object to invoke the method on.
+            id (UUID): The unique identifier of the target object.
+            method (str): The name of the method to execute.
+            args (dict): Arguments to pass to the method.
 
         Raises:
-            LabEngineException: if there is an error in calling the function
+            LabEngineException: If the method invocation fails or the response cannot be parsed.
 
         Returns:
-            ObjectQueryResponse: object information, id, cls, module_path
+            Operation: An Operation instance representing the status and result of the method call.
         """
         req = ObjectCallRequest(method=method, args=args, caller_id=self._session_id)
         result: Result = self.rest_adapter.post(
@@ -179,18 +194,19 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(f"Unexpected error: {e}")
 
     def get_property(self, type: str, id: UUID, property: str) -> Any:
-        """get a property of an object on the lab
+        """
+        Retrieves the value of a specified property from an object on the lab engine.
 
         Args:
-            type (str): type of the object
-            id (UUID): id of the object
-            property (str): name of the property to get
+            type (str): The type of the object.
+            id (UUID): The unique identifier of the object.
+            property (str): The name of the property to retrieve.
 
         Raises:
-            LabEngineException: if there is an error in getting the property
+            LabEngineException: If the property cannot be retrieved or parsed.
 
         Returns:
-            Any: value of the property
+            Any: The value of the requested property, which may be a primitive, DataModel instance, list, or dict.
         """
         req = ObjectPropertyGetRequest(property=property)
         result: Result = self.rest_adapter.get(
@@ -223,16 +239,20 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(f"Unexpected error: {e}")
 
     def set_property(self, type: str, id: UUID, property: str, value: Any):
-        """set a property of an object on the lab
+        """
+        Sets the value of a specified property on an object in the lab engine.
 
         Args:
-            type (str): type of the object to set property on
-            id (UUID): id of the object
-            property (str): name of the property to set
-            value (Any): value to set the property to
+            type (str): The type of the object to update.
+            id (UUID): The unique identifier of the object.
+            property (str): The name of the property to set.
+            value (Any): The value to assign to the property.
 
         Returns:
-            Any: response from the lab
+            Any: The response from the lab engine after setting the property.
+
+        Raises:
+            LabEngineException: If the property update fails.
         """
         if isinstance(value, DataModel):
             value = value.get_base_model()
@@ -262,18 +282,22 @@ class LabConnection(metaclass=SingletonMeta):
         patch_type: PatchType,
         patch_args: dict = None,
     ) -> Any:
-        """set a property of an object on the lab
+        """
+        Applies a patch operation to a specified property of an object in the lab engine.
 
         Args:
-            type (str): type of the object to set property on
-            id (UUID): id of the object
-            property (str): name of the property to set
-            value (Any): value to set the property to
-            patch_type (PatchType): type of patch to apply
-            patch_args (dict, optional): arguments for the patch. Defaults to None.
+            type (str): The type of the object whose property will be patched.
+            id (UUID): The unique identifier of the object.
+            property (str): The name of the property to patch.
+            value (Any): The value to apply in the patch operation.
+            patch_type (PatchType): The type of patch operation (e.g., ADD, REMOVE, REPLACE).
+            patch_args (dict, optional): Additional arguments for the patch operation. Defaults to None.
 
         Returns:
-            Any: response from the lab
+            Any: The response from the lab engine after applying the patch.
+
+        Raises:
+            LabEngineException: If the patch operation fails.
         """
         if isinstance(value, DataModel):
             value = value.get_base_model()
@@ -290,17 +314,18 @@ class LabConnection(metaclass=SingletonMeta):
         return result.data
 
     def get_object_id(self, type: str, name: str) -> UUID:
-        """get object id from lab given name
+        """
+        Retrieves the unique identifier (UUID) of an object from the lab engine using its name.
 
         Args:
-            type (str): type of the object to get
-            name (str): name of the object
+            type (str): The type of the object to retrieve.
+            name (str): The name of the object.
 
         Raises:
-            LabEngineException: if there is an error in getting the object id
+            LabEngineException: If the object cannot be found or the response is invalid.
 
         Returns:
-            UUID: id of the object
+            UUID: The unique identifier of the object.
         """
         result: Result = self.rest_adapter.get(f"/{type}/", {"identifier": name})
         try:
@@ -311,15 +336,19 @@ class LabConnection(metaclass=SingletonMeta):
             raise LabEngineException(f"Unexpected error: {e}")
 
     def put_data(self, type: str, id: str, result_data) -> UUID:
-        """put data into a results data object
+        """
+        Uploads data to a OperationResult object in the lab engine.
 
         Args:
-            type (str): type of the object to put data into
-            id (str): id of the object to put data into
-            result_data (Any): data to put into the object
+            type (str): The type of the object to upload data to.
+            id (str): The unique identifier of the object.
+            result_data (Any): The data to upload (e.g., file-like object, bytes, or dict).
 
         Returns:
-            UUID: id of the object
+            UUID: The unique identifier of the object after data upload.
+
+        Raises:
+            LabEngineException: If the upload fails or the response is invalid.
         """
         result: Result = self.rest_adapter.patch(
             f"/{type}/{str(id)}/data", files=result_data
@@ -327,16 +356,18 @@ class LabConnection(metaclass=SingletonMeta):
         return result.message
 
     def get_data(self, type: str, id: str) -> bytes:
-        """get data from a results data object
+        """
+        Retrieves raw data from a results data object in the lab engine.
 
         Args:
-            type (str): type of the object to get data from
-            id (str): id of the object to get data from
+            type (str): The type of the object to retrieve data from.
+            id (str): The unique identifier of the object.
 
         Returns:
-            bytes: raw bytes of the data
+            bytes: The raw bytes of the object's data.
+
+        Raises:
+            LabEngineException: If data retrieval fails.
         """
-        result: Result = self.rest_adapter.get(
-            f"/{type}/{str(id)}/data", jsonify=False
-        )
+        result: Result = self.rest_adapter.get(f"/{type}/{str(id)}/data", jsonify=False)
         return result.content
