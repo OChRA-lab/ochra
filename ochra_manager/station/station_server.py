@@ -1,6 +1,8 @@
 import logging
 from fastapi import FastAPI, APIRouter, Request, HTTPException
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+
 
 
 from pydantic import BaseModel
@@ -56,6 +58,10 @@ class operationExecute(BaseModel):
 
 
 class StationServer:
+    """
+    A class to represent the station server.
+    """
+
     def __init__(
         self,
         name: str,
@@ -65,13 +71,16 @@ class StationServer:
         station_ip: str = "0.0.0.0",
         station_port: int = 8000,
     ):
-        """initialize the station server
+        """
+        Initialize the StationServer instance.
 
         Args:
-            name (str): name of the station, used to identify and connect on the frontend
-            location (Location): location of the station
-            station_ip (str, optional): station ip to run the server on. Defaults to "127.0.0.1".
-            station_port (int, optional): port to oopen the station on. Defaults to 8000.
+            name (str): Unique name of the station for identification and frontend connection.
+            location (Location): Physical or logical location of the station.
+            station_type (StationType): Type of the station.
+            logging_path (str, optional): Directory path for logging. Defaults to current directory.
+            station_ip (str, optional): IP address to bind the server. Defaults to "0.0.0.0".
+            station_port (int, optional): Port to run the server on. Defaults to 8000.
         """
         self._logging_path = Path(logging_path).resolve()
         
@@ -130,7 +139,7 @@ class StationServer:
 
         self._station_proxy = self._connect_to_lab(lab_ip) if lab_ip else None
 
-    def add_device(self, device):
+    def add_device(self, device: Device) -> None:
         """
         add a device to the station dict
 
@@ -159,7 +168,7 @@ class StationServer:
     def id(self):
         return self._station_proxy.id
 
-    def _connect_to_lab(self, lab_ip: str):
+    def _connect_to_lab(self, lab_ip: str) -> Station:
         """connects to the lab server and creates a station model on the db
 
         Args:
@@ -168,7 +177,16 @@ class StationServer:
         self._lab_conn = LabConnection(lab_ip)
         return Station(self._name, self._type, self._location, self.port)
 
-    async def get_station(self, request: Request):
+    async def get_station(self, request: Request) -> HTMLResponse:
+        """
+        get the station html page
+        
+        Args:
+            request (Request): fastapi request object
+
+        Returns:
+            HTMLResponse: the station html page
+        """
         return self._templates.TemplateResponse(
             "station.html",
             {
@@ -178,7 +196,16 @@ class StationServer:
             },
         )
 
-    async def get_station_devices(self, request: Request):
+    async def get_station_devices(self, request: Request) -> HTMLResponse:
+        """
+        get the station devices html page
+        
+        Args:
+            request (Request): fastapi request object
+
+        Returns:
+            HTMLResponse: the station devices html page
+        """
         return self._templates.TemplateResponse(
             "devices.html",
             {
@@ -199,7 +226,16 @@ class StationServer:
     #
     #
     #
-    async def get_pannel(self, request: Request):
+    async def get_pannel(self, request: Request) -> HTMLResponse:
+        """
+        get the station side pannel html page
+
+        Args:
+            request (Request): fastapi request object
+
+        Returns:
+            HTMLResponse: the station side pannel html page
+        """
         return self._templates.TemplateResponse(
             "sidepanel_station.html",
             {
@@ -208,7 +244,17 @@ class StationServer:
             },
         )
 
-    async def get_device_view(self, request: Request, device_id: str):
+    async def get_device_view(self, request: Request, device_id: str) -> HTMLResponse:
+        """
+        get the device view html page
+
+        Args:
+            request (Request): fastapi request object
+            device_id (str): id of the device to get the view for
+
+        Returns:
+            HTMLResponse: the device view html page
+        """
         device: Optional[Device] = self._devices.get(device_id)
         if not device:
             raise HTTPException(status_code=404, detail="Device does not exist")
@@ -228,7 +274,17 @@ class StationServer:
             },
         )
 
-    async def get_device(self, request: Request, device_id: str):
+    async def get_device(self, request: Request, device_id: str) -> HTMLResponse:
+        """
+        get the device html page
+
+        Args:
+            request (Request): fastapi request object
+            device_id (str): id of the device to get the view for
+
+        Returns:
+            HTMLResponse: the device html page
+        """
         device: Optional[Device] = self._devices.get(device_id)
         if not device:
             raise HTTPException(status_code=404, detail="Device does not exist")
@@ -243,7 +299,15 @@ class StationServer:
             },
         )
 
-    async def perform_device_operation(self, request: Request, device_id: str):
+    async def perform_device_operation(self, request: Request, device_id: str) -> None:
+        """
+        perform a device operation from the UI
+
+        Args:
+            request (Request): fastapi request object
+            device_id (str): id of the device to perform the operation on
+
+        """
         form_data = await request.form()
 
         device: Optional[Device] = self._devices.get(device_id)
@@ -291,14 +355,15 @@ class StationServer:
     def ping(self):
         self._logger.info("ping from station")
 
-    def process_op(self, op: Operation):
-        """retrieve the device from the device dict and execute the method
+    def process_op(self, op: Operation) -> None:
+        """
+        Processes an operation by retrieving the target device or station and executing the specified method.
 
         Args:
-            op (Operation): operation to be processed
+            op (Operation): The operation to be processed.
 
         Raises:
-            HTTPException: If the entity type is not found
+            HTTPException: If the entity type or device is not found, or if the station is locked by another user.
         """
         try:
             # check if the station is not locked
@@ -427,12 +492,13 @@ class StationServer:
         except Exception as e:
             raise HTTPException(500, detail=str(e))
 
-    def _upload_result_data(self, result: PurePath, operation_result: OperationResult):
-        """upload the result data to the lab server
+    def _upload_result_data(self, result: PurePath, operation_result: OperationResult) -> None:
+        """
+        Uploads result data (file or directory) to the lab server.
 
         Args:
-            result (PurePath): path to the result data
-            operation_result (OperationResult): operation result model
+            result (PurePath): Path to the result data (file or directory).
+            operation_result (OperationResult): Operation result model instance.
         """
         # TODO to deal with nonsequential data upload
         # if result is a directory, zip it up and convert to a file
@@ -466,7 +532,13 @@ class StationServer:
             if delete_archive:
                 remove(result.name)
 
-    def shutdown(self):
+    def shutdown(self) -> int:
+        """
+        Shutdown the station server and remove its entry from the lab server.
+
+        Returns:
+            int: HTTP status code indicating success (200).
+        """
         self._logger.info("Shutting down station server...")
         for _, device in self._devices.items():
             if device.inventory != [] or device.inventory is None:
