@@ -1,12 +1,18 @@
 import logging
 from fastapi import APIRouter
+from typing import List, Type
 from ..lab_service import LabService
+from ochra_common.base import DataModel
 from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
-COLLECTIONS = ["stations", "robots", "scientists"]
+COLLECTIONS = ["stations", "robots"]
 
 
 class LabRouter(APIRouter):
+    """
+    LabRouter is responsible for handling lab-related API endpoints.
+    """
+
     def __init__(self):
         prefix = "/lab"
         super().__init__(prefix=prefix)
@@ -15,7 +21,20 @@ class LabRouter(APIRouter):
         self.get("/{object_type}/")(self.get_lab_object)
         self.get("/{object_type}/all")(self.get_lab_objects)
 
-    async def get_lab_object(self, object_type: str, identifier: str):
+    async def get_lab_object(self, object_type: str, identifier: str) -> Type[DataModel]:
+        """
+        Get a specific lab object by its identifier.
+
+        Args:
+            object_type (str): The type of the lab object (e.g., "stations").
+            identifier (str): The unique identifier of the lab object (UUID or name).
+
+        Returns:
+            dict: The lab object data.
+
+        Raises:
+            HTTPException: If the lab object is not found (404).
+        """
         collection = object_type if object_type in COLLECTIONS else None
         if is_valid_uuid(identifier):
             lab_obj = self.lab_service.get_object_by_id(identifier, collection)
@@ -24,7 +43,19 @@ class LabRouter(APIRouter):
         self._logger.debug(f"Getting lab object with identifier: {identifier}")
         return convert_to_data_model(lab_obj)
 
-    async def get_lab_objects(self, object_type: str):
+    async def get_lab_objects(self, object_type: str) -> List[Type[DataModel]]:
+        """
+        Get all lab objects of a specific type.
+        
+        Args:
+            object_type (str): The type of the lab objects (e.g., "stations").
+        
+        Returns:
+            list: A list of lab object data.
+
+        Raises:
+            HTTPException: If no lab objects are found (404).
+        """
         collection = object_type if object_type in COLLECTIONS else None
         lab_objs = self.lab_service.get_all_objects(collection)
         self._logger.debug(f"Getting all lab objects of type: {object_type}")

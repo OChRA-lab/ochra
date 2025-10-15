@@ -54,9 +54,24 @@ class WebAppRouter(APIRouter):
         )
 
     def isHXRequest(self, request: Request) -> bool:
+        """
+        Checks if the request is an HTMX request.
+
+        Args:
+            request (Request): The incoming HTTP request.
+
+        Returns:
+            bool: True if the request is an HTMX request, False otherwise.
+        """
         return request.headers.get("HX-Request") == "true"
 
     def build_table_fields(self) -> list[dict]:
+        """
+        Constructs a list of station information for rendering in the UI.
+        
+        Returns:
+            list[dict]: A list of dictionaries containing station information.
+        """
         stations = self.lab_service.get_all_objects(STATIONS)
         return [
             {
@@ -69,7 +84,16 @@ class WebAppRouter(APIRouter):
             for s in stations
         ]
 
-    async def get_stations(self, request: Request):
+    async def get_stations(self, request: Request) -> HTMLResponse:
+        """
+        Handles GET requests to retrieve stations information.
+
+        Args:
+            request (Request): The incoming HTTP request.
+
+        Returns:
+            HTMLResponse: The rendered HTML response containing station information.
+        """
         table_fields = self.build_table_fields()
         self._logger.debug(f"Rendering station overview with {len(table_fields)} stations")
         return self.templates.TemplateResponse(
@@ -82,7 +106,16 @@ class WebAppRouter(APIRouter):
             },
         )
 
-    async def get_register(self, request: Request):
+    async def get_register(self, request: Request) -> HTMLResponse:
+        """
+        Renders the registration page.
+        
+        Args:
+            request (Request): The incoming HTTP request.
+
+        Returns:
+            HTMLResponse: The rendered HTML response for the registration page.
+        """
         self._logger.debug("Rendering registration page")
         return self.templates.TemplateResponse(
             name="zregister.html", request=request, context={}
@@ -95,7 +128,23 @@ class WebAppRouter(APIRouter):
         password: str = Form(...),
         confirm: str = Form(...),
         db: Session = Depends(get_db),
-    ):
+    ) -> JSONResponse:
+        """
+        Handles user registration.
+        
+        Args:
+            username (str): The desired username.
+            email (str): The user's email address.
+            password (str): The desired password.
+            confirm (str): Password confirmation.
+            db (Session): Database session.
+        
+        Returns:
+            JSONResponse: A JSON response indicating success or failure.
+
+        Raises:
+            HTTPException: If passwords do not match or username is already taken.
+        """
         if password != confirm:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -119,7 +168,15 @@ class WebAppRouter(APIRouter):
         response.headers["HX-Location"] = "/app"
         return response
 
-    async def get_login(self, request: Request):
+    async def get_login(self, request: Request) -> HTMLResponse:
+        """
+        Renders the login page.
+        Args:
+            request (Request): The incoming HTTP request.
+
+        Returns:
+            HTMLResponse: The rendered HTML response for the login page.
+        """
         self._logger.debug("Rendering login page")
         return self.templates.TemplateResponse(
             name="zlogin.html", request=request, context={}
@@ -130,7 +187,21 @@ class WebAppRouter(APIRouter):
         username: str = Form(...),
         password: str = Form(...),
         db: Session = Depends(get_db),
-    ):
+    ) -> JSONResponse:
+        """
+        Handles user login.
+        
+        Args:
+            username (str): The username.
+            password (str): The password.
+            db (Session): Database session.
+        
+        Returns:
+            JSONResponse: A JSON response indicating success or failure.
+        
+        Raises:
+            HTTPException: If authentication fails.
+        """
         user = User.authenticate_user(username, password, db)
         if not user:
             raise HTTPException(
@@ -146,7 +217,20 @@ class WebAppRouter(APIRouter):
         response.headers["HX-Location"] = "/app"
         return response
 
-    async def post_logout(self, request: Request, db: Session = Depends(get_db)):
+    async def post_logout(self, request: Request, db: Session = Depends(get_db)) -> JSONResponse:
+        """
+        Handles user logout by deleting the session token.
+        
+        Args:
+            request (Request): The incoming HTTP request.
+            db (Session): Database session.
+
+        Returns:
+            JSONResponse: A JSON response indicating successful logout.
+        
+        Raises:
+            HTTPException: If no session token is found or session does not exist.
+        """
         session_token = request.cookies.get("session_token")
         if not session_token:
             raise HTTPException(status_code=401, detail="No session token found")
@@ -164,7 +248,17 @@ class WebAppRouter(APIRouter):
             detail=f"User session {request.cookies['session_token']} not found",
         )
 
-    async def get_station(self, request: Request, station_id: str):
+    async def get_station(self, request: Request, station_id: str) -> HTMLResponse:
+        """
+        Handles GET requests to retrieve a specific station's information.
+        
+        Args:
+            request (Request): The incoming HTTP request.
+            station_id (str): The ID of the station to retrieve.
+
+        Returns:
+            HTMLResponse: The rendered HTML response containing the station's information.
+        """
         s = self.lab_service.get_object_by_id(station_id, "stations")
         body = await request.body()
         headers = dict(request.headers)
@@ -192,7 +286,18 @@ class WebAppRouter(APIRouter):
                     },
                 )
 
-    async def get_device(self, request: Request, station_id: str, device_id: str):
+    async def get_device(self, request: Request, station_id: str, device_id: str) -> HTMLResponse:
+        """
+        Handles GET requests to retrieve a specific device's information.
+
+        Args:
+            request (Request): The incoming HTTP request.
+            station_id (str): The ID of the station the device belongs to.
+            device_id (str): The ID of the device to retrieve.
+
+        Returns:
+            HTMLResponse: The rendered HTML response containing the device's information.
+        """
         s = self.lab_service.get_object_by_id(station_id, "stations")
         body = await request.body()
         headers = dict(request.headers)
@@ -228,7 +333,21 @@ class WebAppRouter(APIRouter):
                     },
                 )
 
-    async def post_command(self, request: Request, station_id: str, device_id: str):
+    async def post_command(self, request: Request, station_id: str, device_id: str) -> Response:
+        """
+        Handles POST requests to send a command to a specific device.
+
+        Args:
+            request (Request): The incoming HTTP request.
+            station_id (str): The ID of the station the device belongs to.
+            device_id (str): The ID of the device to send the command to.
+
+        Returns:
+            Response: The response indicating the result of the command.
+
+        Raises:
+            HTTPException: If the args format is invalid.
+        """
         station = self.lab_service.get_object_by_id(station_id, "stations")
         proxy_url = f"http://{station['station_ip']}:{station['port']}/devices/{device_id}/commands"
         form = await request.form()
@@ -346,7 +465,18 @@ class WebAppRouter(APIRouter):
             headers=station_response.headers,
         )
 
-    async def get_device_view(self, request: Request, station_id: str, device_id: str):
+    async def get_device_view(self, request: Request, station_id: str, device_id: str) -> HTMLResponse:
+        """
+        Handles GET requests to retrieve a specific device's information.
+
+        Args:
+            request (Request): The incoming HTTP request.
+            station_id (str): The ID of the station the device belongs to.
+            device_id (str): The ID of the device to retrieve.
+
+        Returns:
+            HTMLResponse: The rendered HTML response containing the device's information.
+        """
         s = self.lab_service.get_object_by_id(station_id, "stations")
         body = await request.body()
         headers = dict(request.headers)
@@ -372,7 +502,17 @@ class WebAppRouter(APIRouter):
                     },
                 )
 
-    async def get_settings(self, request: Request, edit: bool = False):
+    async def get_settings(self, request: Request, edit: bool = False) -> HTMLResponse:
+        """
+        Renders the settings page.
+
+        Args:
+            request (Request): The incoming HTTP request.
+            edit (bool): Flag to indicate if the settings are in edit mode. Default is False.
+
+        Returns:
+            HTMLResponse: The rendered HTML response for the settings page.
+        """
         return self.templates.TemplateResponse(
             "zzzsettings.html",
             {
@@ -388,7 +528,22 @@ class WebAppRouter(APIRouter):
         username: str = Form(...),
         email: str = Form(...),
         db: Session = Depends(get_db),
-    ):
+    ) -> HTMLResponse:
+        """
+        Handles updating user settings.
+
+        Args:
+            request (Request): The incoming HTTP request.
+            username (str): The new username.
+            email (str): The new email address.
+            db (Session): Database session. Defaults to a dependency injection of get_db.
+
+        Returns:
+            HTMLResponse: The rendered HTML response for the settings page.
+
+        Raises:
+            HTTPException: If the user is not authenticated or not found.
+        """
         if not hasattr(request.state, "user"):
             raise HTTPException(401, detail="Unauthorized")
 
@@ -408,7 +563,16 @@ class WebAppRouter(APIRouter):
             },
         )
 
-    async def get_workflows(self, request: Request):
+    async def get_workflows(self, request: Request) -> HTMLResponse:
+        """
+        Renders the workflows page.
+
+        Args:
+            request (Request): The incoming HTTP request.
+
+        Returns:
+            HTMLResponse: The rendered HTML response for the workflows page.
+        """
         return self.templates.TemplateResponse(
             "zzzworkflows.html",
             {"request": request, "active_link": self.prefix + "/workflows"},
