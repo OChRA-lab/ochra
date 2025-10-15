@@ -9,13 +9,13 @@ from ochra_common.utils.logging_config import (
 )
 
 
-def configure_lab_logging(log_root_path: str, console_log_level: int = logging.INFO):
+def configure_lab_logging(log_root_path: str, console_log_level: int = logging.INFO) -> None:
     """
     Configures logging for the lab management system.
 
     Args:
         log_root_path (str): The root directory where log files will be stored.
-        log_level (int): The logging level (e.g., logging.INFO, logging.DEBUG).
+        console_log_level (int): The logging level for the console output (e.g., logging.INFO, logging.DEBUG).
     """
     logging_dir = Path(log_root_path).joinpath("logs")
     logging_dir.mkdir(parents=True, exist_ok=True)
