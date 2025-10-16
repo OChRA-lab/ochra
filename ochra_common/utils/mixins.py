@@ -8,12 +8,11 @@ import inspect
 
 class RestProxyMixin:
     """
-    This mixin transparently proxies attribute access and mutation for model fields via REST API calls to a lab engine.
+    Mixin that changes class behavior such that its properties are accessed via REST API calls to a lab engine. This proxies both getters and setters.
 
     Usage:
     When used in a class, it replaces field getters and setters (except 'id' and 'cls') with property accessors that interact with the backend through
-    LabConnection. This ensures property access is always synchronized with the remote data source. Utility methods are provided for
-    constructing instances from remote IDs and for deleting remote objects.
+    LabConnection. This ensures property access is always synchronized with the remote data source.
     """
 
     _override_id = None
@@ -81,12 +80,12 @@ class RestProxyMixin:
 
 
 class RestProxyMixinReadOnly:
-    """ 
-    This mixin transparently proxies attribute access only (no mutation) for model fields via REST API calls to a lab engine.
+    """
+    Mixin that changes class behavior such that its properties are accessed via REST API calls to a lab engine. This proxies only getters.
 
     Usage:
     When used in a class, it replaces field getters (except 'id' and 'cls') with property accessors that interact with the backend through
-    LabConnection. This ensures property access is always synchronized with the remote data source.s
+    LabConnection. This ensures property access is always synchronized with the remote data source.
     """
 
     def __new__(cls, *args, **kwargs):
