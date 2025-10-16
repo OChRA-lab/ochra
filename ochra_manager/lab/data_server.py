@@ -5,18 +5,22 @@ from .routers import operation_results_router
 
 
 class DataServer:
+    """
+    A class to represent the data server to handle results data.
+    """
     def __init__(
         self,
         host: str,
         port: int,
         folderpath: str = None,
     ) -> None:
-        """Setup a data server with the given host and port optionally storing data in folderpath
+        """
+        Initializes the DataServer instance.
 
         Args:
-            host (str): host ip address
-            port (int): port to open the server on
-            folderpath (str): path to store data in
+            host (str): The IP address to bind the server.
+            port (int): The port number to listen on.
+            folderpath (str, optional): Directory path for storing data. Defaults to None.
         """
         self._logger = logging.getLogger(__name__)
         self.host = host
@@ -41,7 +45,9 @@ class DataServer:
         return fileNameSplit[-1] + ":" + variableName + ".app"
 
     def run(self) -> None:
-        """launches the server on the initialized host and port"""
+        """
+        launches the server on the initialized host and port
+        """
         self._logger.info("Starting data server...")
         app = self.get_caller_variable_name()
         uvicorn.run(app, host=self.host, port=self.port, workers=8)

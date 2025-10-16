@@ -9,6 +9,12 @@ import logging
 
 
 class Scheduler:
+    """
+    A class to manage and schedule operations in the lab.
+
+    Attributes:
+        op_queue (list): A list to hold the queued operations.
+    """
     def __init__(self):
         self._logger = logging.getLogger(__name__)
         self.op_queue = []
@@ -20,15 +26,27 @@ class Scheduler:
             {"_collection": "lab"}, {"op_queue": self.op_queue}
         )
 
-    def add_operation(self, operation: Operation):
+    def add_operation(self, operation: Operation) -> None:
+        """
+            Adds an operation to the scheduling queue.
+
+            Args:
+                operation (Operation): The operation to be added to the queue.
+        """
         self._logger.debug(f"Adding operation {operation.id} to queue")
         self.op_queue.append(operation)
 
-    def run(self):
+    def run(self) -> None:
+        """
+        Starts the scheduling thread.
+        """
         self.thread = Thread(target=self._schedule, daemon=False)
         self.thread.start()
 
-    def _schedule(self):
+    def _schedule(self) -> None:
+        """
+        The main scheduling loop that processes operations in the queue.
+        """
         while not self._stop:
             queue = self.op_queue.copy()
             for operation in queue:
@@ -79,11 +97,21 @@ class Scheduler:
                 )
             sleep(1)
 
-    def stop(self):
+    def stop(self) -> None:
+        """
+        Stops the scheduling thread.
+        """
         self._stop = True
         self.thread.join()
 
-    def _execute_op(self, operation, station_id):
+    def _execute_op(self, operation: Operation, station_id: str) -> None:
+        """
+        Executes the given operation on the specified station.
+
+        Args:
+            operation (Operation): The operation to be executed.
+            station_id (str): The ID of the station where the operation will be executed.
+        """
         # establish connection with station
         station_ip = self._db_conn.read(
             {"id": station_id, "_collection": "stations"}, "station_ip"
@@ -108,7 +136,16 @@ class Scheduler:
             },
         )
 
-    def _resolve_station_id(self, op: Operation):
+    def _resolve_station_id(self, op: Operation) -> str:
+        """
+        Resolves the station ID for the given operation.
+
+        Args:
+            op (Operation): The operation for which to resolve the station ID.
+        
+        Returns:
+            str: The resolved station ID.
+        """
         target_entity_id = str(op.entity_id)
         target_entity_type = op.entity_type
         if target_entity_type == "device" or target_entity_type == "robot":

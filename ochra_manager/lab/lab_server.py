@@ -1,6 +1,6 @@
 from pathlib import Path
 from contextlib import asynccontextmanager
-from typing import Optional
+from typing import Optional, Callable
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -22,6 +22,9 @@ import inspect
 
 
 class LabServer:
+    """
+    A class to represent the lab server.
+    """
     def __init__(
         self,
         host: str,
@@ -29,12 +32,14 @@ class LabServer:
         folderpath: str,
         template_path: Optional[Path] = None,
     ) -> None:
-        """Setup a lab server with the given host and port optionally storing data in folderpath
+        """
+        Initialize the LabServer instance.
 
         Args:
-            host (str): host ip address
-            port (int): port to open the server on
-            folderpath (str): path to store data in
+            host (str): The IP address to bind the server to.
+            port (int): The port number to listen on.
+            folderpath (str): Directory path for storing lab data and logs.
+            template_path (Path, optional): Optional path for Jinja2 templates and static files. Default is None.
         """
         MODULE_DIRECTORY = (
             Path(__file__).resolve().parent if not template_path else template_path
@@ -76,7 +81,14 @@ class LabServer:
         init_user_db()
         #########################################
 
-    async def auth_middleware(self, request: Request, call_next):
+    async def auth_middleware(self, request: Request, call_next: Callable):
+        """
+        Middleware to handle authentication for the web app.
+
+        Args:
+            request (Request): The incoming HTTP request.
+            call_next (Callable): Function to call the next middleware or route handler.
+        """
         with next(get_db()) as database:
             if request.url.path.startswith("/app") and request.url.path not in [
                 "/app/login",
@@ -110,7 +122,9 @@ class LabServer:
         return fileNameSplit[-1] + ":" + variableName + ".app"
 
     def run(self) -> None:
-        """launches the server on the initialized host and port"""
+        """
+        launches the server on the initialized host and port
+        """
         self._logger.info("Starting lab server...")
         app = self.get_caller_variable_name()
         uvicorn.run(app, host=self.host, port=self.port, workers=8)

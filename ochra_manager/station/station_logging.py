@@ -15,7 +15,7 @@ def configure_station_logging(log_root_path: Path, console_log_level: int = logg
 
     Args:
         log_root_path (Path): The root directory where log files will be stored.
-        log_level (int): The logging level (e.g., logging.INFO, logging.DEBUG).
+        console_log_level (int): The logging level for the console output (e.g., logging.INFO, logging.DEBUG).
     """
     logging_dir = log_root_path.joinpath("logs")
     logging_dir.mkdir(parents=True, exist_ok=True)

@@ -1,9 +1,13 @@
-from ochra_common.connections.rest_adapter import RestAdapter
+from ochra_common.connections.rest_adapter import RestAdapter, Result
 from ochra_common.equipment.operation import Operation
 import logging
 
 
 class StationConnection:
+    """
+    Class that provides a high-level interface for interacting with a remote station, utilizing RestAdapter for communication.
+    """
+
     def __init__(
         self,
         hostname: str = "10.24.57.154:8000",
@@ -16,7 +20,16 @@ class StationConnection:
         )
         
 
-    def execute_op(self, op: Operation, endpoint: str):
+    def execute_op(self, op: Operation, endpoint: str) -> Result:
+        """
+        Execute an operation on the remote station.
+
+        Args:
+            op (Operation): The operation to be executed.
+            endpoint (str): The API endpoint for executing the operation.
+        Returns:
+            Result: The response from the remote station after executing the operation.
+        """
         data = {
             "id": str(op.id),
             "collection": op.collection,
