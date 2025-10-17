@@ -9,8 +9,7 @@ import inspect
 class RestProxyMixin:
     """
     Mixin that changes class behavior such that its properties are accessed via REST API calls to a lab engine. This proxies both getters and setters.
-
-    Usage:
+    
     When used in a class, it replaces field getters and setters (except 'id' and 'cls') with property accessors that interact with the backend through
     LabConnection. This ensures property access is always synchronized with the remote data source.
     """
@@ -82,8 +81,7 @@ class RestProxyMixin:
 class RestProxyMixinReadOnly:
     """
     Mixin that changes class behavior such that its properties are accessed via REST API calls to a lab engine. This proxies only getters.
-
-    Usage:
+    
     When used in a class, it replaces field getters (except 'id' and 'cls') with property accessors that interact with the backend through
     LabConnection. This ensures property access is always synchronized with the remote data source.
     """

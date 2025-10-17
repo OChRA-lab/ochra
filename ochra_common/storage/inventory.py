@@ -8,20 +8,20 @@ from .container import Container
 class Inventory(DataModel):
     """
     Inventory model representing a collection of containers and consumables.
-
     An inventory is typically associated with a station or device in the framework.
-
-    Attributes:
-        owner (DataModel): Reference to the entity that owns the inventory.
-        containers_max_capacity (int): Maximum number of containers allowed.
-        containers (List[Type[Container]]): List of container instances in the inventory.
-        consumables (List[Consumable]): List of consumable items in the inventory.
     """
 
     owner: DataModel
+    """Reference to the entity that owns the inventory."""
+
     containers_max_capacity: int
+    """Maximum number of containers allowed."""
+
     containers: List[Type[Container]] = Field(default_factory=list)
+    """List of container instances in the inventory."""
+    
     consumables: List[Consumable] = Field(default_factory=list)
+    """List of consumable items in the inventory."""
 
     _endpoint = "storage/inventories"  # associated endpoint for all inventories
 

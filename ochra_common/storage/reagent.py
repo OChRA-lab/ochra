@@ -7,20 +7,22 @@ from typing import Any, Dict
 class Reagent(DataModel):
     """
     Represents a chemical reagent with associated metadata.
-
-    Attributes:
-        name (str): Name of the reagent.
-        amount (float): Quantity of the reagent.
-        unit (str): Unit of measurement for the amount (e.g., g, mL).
-        physical_state (PhysicalState): Physical state of the reagent (solid, liquid, gas, etc.). Defaults to UNKNOWN.
-        properties (Dict[str, Any]): Additional properties and metadata for the reagent.
     """
 
     name: str
+    """Name of the reagent."""
+
     amount: float
+    """Quantity of the reagent."""
+    
     unit: str
+    """Unit of measurement for the amount (e.g., g, mL)."""
+    
     physical_state: PhysicalState = PhysicalState.UNKNOWN
+    """Physical state of the reagent (solid, liquid, gas, etc.). Defaults to UNKNOWN."""
+
     properties: Dict[str, Any] = Field(default_factory=dict)
+    """Additional properties and metadata for the reagent."""
 
     _endpoint = "storage/reagents"  # associated endpoint for all reagents
 

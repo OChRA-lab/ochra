@@ -14,26 +14,31 @@ from typing import Optional
 class Station(DataModel):
     """
     Represents a laboratory station containing devices, robots, and inventory.
-
-    Attributes:
-        name (str): Station name.
-        location (Location): Physical location of the station.
-        type (StationType): Station category/type.
-        status (ActivityStatus): Current operational status (default: IDLE).
-        inventory (Inventory): Inventory associated with the station.
-        devices (List[Device]): Devices associated with the station.
-        operation_record (List[Operation]): History of operations performed.
-        locked (Optional[UUID]): Session ID of the user who has locked the station, if any.
     """
 
     name: str
+    """Station name."""
+
     location: Location
+    """Physical location of the station."""
+
     type: StationType
+    """Station category/type."""
+
     status: ActivityStatus = ActivityStatus.IDLE
+    """Current operational status (default: IDLE)."""
+
     inventory: Inventory = Field(default=None)
+    """Inventory associated with the station."""
+
     devices: List[Type[Device]] = Field(default_factory=list)
+    """Devices associated with the station."""
+
     operation_record: List[Operation] = Field(default_factory=list)
-    locked: Optional[UUID] = Field(defualt=None)
+    """History of operations performed."""
+
+    locked: Optional[UUID] = Field(default=None)
+    """Session ID of the user who has locked the station, if any."""
 
     _endpoint = "stations"  # associated endpoint for all stations
 

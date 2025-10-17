@@ -5,12 +5,10 @@ from .device import Device
 class Robot(Device):
     """
     Abstract class to represent a generic robot.
-
-    Attributes:
-        available_tasks (List[str]): A list of tasks available for execution by the robot.
     """
 
     available_tasks: List[str]
+    """A list of tasks available for execution by the robot."""
 
     _endpoint = "robots"  # associated endpoint for all robots
 

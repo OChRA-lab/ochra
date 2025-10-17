@@ -5,18 +5,19 @@ from typing import Union
 class Container(DataModel):
     """
     Abstract base class for a storage container that can hold other containers or reagents.
-
-    Attributes:
-        type (str): Type of the container (e.g., rack, vial, jar).
-        max_capacity (int | float): Maximum capacity of the container.
-        physical_id (int, optional): Unique physical identifier for the container. Defaults to None.
-        is_used (bool, optional): Flag indicating if the container is in use. Defaults to False.
     """
 
     type: str
+    """Type of the container (e.g., rack, vial, jar)."""
+    
     max_capacity: int | float
+    """Maximum capacity of the container."""
+
     physical_id: int = None
+    """Unique physical identifier for the container. Defaults to None."""
+
     is_used: bool = False
+    """Flag indicating if the container is in use. Defaults to False."""
 
     _endpoint = "storage/containers"  # associated endpoint for all containers
 

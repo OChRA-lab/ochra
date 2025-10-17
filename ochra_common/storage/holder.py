@@ -6,12 +6,10 @@ from .container import Container
 class Holder(Container):
     """
     Represents a container capable of holding other containers, such as a rack of vials.
-
-    Attributes:
-        containers (List[Type[Container]]): List of containers currently held by this holder. Defaults to an empty list.
     """
 
     containers: List[Type[Container]] = Field(default_factory=list)
+    """List of containers currently held by this holder. Defaults to an empty list."""
 
     def add_container(self, container: Type[Container]) -> None:
         """

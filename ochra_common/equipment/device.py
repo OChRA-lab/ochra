@@ -15,18 +15,20 @@ from ..storage.inventory import Inventory
 class Device(DataModel):
     """
     Base class for all devices, providing common attributes. Instruments and robots are considered devices in our framework.
-
-    Attributes:
-        name (str): Device name.
-        inventory (Inventory): Associated inventory object.
-        status (ActivityStatus): Current operational status of the device (e.g., idle, busy), defaults to IDLE.
-        owner_station (UUID): Station ID to which the device belongs.
     """
 
     name: str
+    """Device name."""
+
     inventory: Inventory = Field(default=None)
+    """Associated inventory object."""
+
     status: ActivityStatus = ActivityStatus.IDLE
+    """Current operational status of the device (e.g., idle, busy), defaults to IDLE."""
+
     owner_station: UUID = Field(default=None)
+    """Station ID to which the device belongs."""
+
     _endpoint = "devices"
     _ui_states = []
     _ui_forms = []
@@ -73,14 +75,7 @@ class Device(DataModel):
 class HTMLAttribute:
     """
     Meta class for annotating variables to generate HTML attributes in UI rendering on the web app.
-
-    Args:
-        label (str): Human-readable label for the UI element.
-        element (str): Type of HTML element (e.g., 'input', 'div', 'select').
-        **attrs: Additional HTML attributes (e.g., placeholder, class, style).
-
-    Usage:
-        Use as metadata in Annotated type hints to describe how a field should appear in the UI.
+    Use as metadata in Annotated type hints to describe how a field should appear in the UI.
     """
 
     def __init__(self, label: str, element: str, **attrs):
@@ -101,15 +96,7 @@ class HTMLAttribute:
 class HTMLInput:
     """
     Meta class for annotating function arguments to generate HTML inputs in UI rendering on the web app.
-
-    Attributes:
-        label (str): The label for the input element.
-        type (str): The type of the input element (e.g., 'text', 'number').
-        variable_binding (str): Optional variable binding for the input element.
-        attrs (dict): Additional HTML attributes for the input element.
-
-    Usage:
-        Use as metadata in Annotated type hints to describe how a field should appear in the UI.
+    Use as metadata in Annotated type hints to describe how a field should appear in the UI.
     """
 
     def __init__(self, label: str, type: str, variable_binding: str = "", **attrs):
@@ -154,11 +141,6 @@ class CircularRangeInput(HTMLInput):
 class HTMLForm:
     """
     Decorator class to annotate methods as HTML forms for UI rendering on the web app.
-
-    Attributes:
-        call (str): The endpoint or action to call when the form is submitted.
-        method (str): The HTTP method to use (e.g., 'POST', 'GET').
-        action (str): Optional action URL for the form submission.
     """
 
     def __init__(self, call: str, method: str, action: str = ""):
@@ -198,12 +180,15 @@ class HTMLForm:
 class HypermediaBuilder:
     """
     Builds HTML representation of a Device instance using Jinja2 templates.
-    
-    Attributes:
-        device (Device): The device instance to be represented.
-        env (Environment): Jinja2 environment for template rendering.
     """
+
     def __init__(self, device: Device):
+        """
+        Initializes the HypermediaBuilder with a Device instance.
+
+        Args:
+            device (Device): The device instance to render.
+        """
         self.device = device
         self.env = Environment(
             # Loads templates from "templates" directory
@@ -263,7 +248,7 @@ class HypermediaBuilder:
     def _get_form_context(self) -> List[Dict]:
         """
         Builds the context for rendering device forms.
-        
+
         Returns:
             List[Dict]: A list of dictionaries representing form metadata and parameters.
         """

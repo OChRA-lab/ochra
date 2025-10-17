@@ -4,119 +4,127 @@ from enum import IntEnum
 class StationType(IntEnum):
     """
     An enumeration representing different types of stations.
-    
-    Attributes:
-        STORAGE_STATION (int): Represents a storage station that does not have any devices (value: 0).
-        WORK_STATION (int): Represents a work station (value: 1).
-        MOBILE_ROBOT_STATION (int): Represents a mobile robot station (value: 2).
     """
 
     STORAGE_STATION = 0
+    """Represents a storage station that does not have any devices"""
+
     WORK_STATION = 1
+    """Represents a work station"""
+
     MOBILE_ROBOT_STATION = 2
+    """Represents a mobile robot station"""
 
 
 class PhysicalState(IntEnum):
     """
     An enumeration representing different physical states of matter.
-    
-    Attributes:
-        UNKNOWN (int): Represents an unknown physical state (value: -1).
-        SOLID (int): Represents a solid state (value: 0).
-        LIQUID (int): Represents a liquid state (value: 1).
-        GAS (int): Represents a gas state (value: 2).
     """
 
     UNKNOWN = -1
+    """Represents an unknown physical state"""
+
     SOLID = 0
+    """Represents a solid physical state"""
+
     LIQUID = 1
+    """Represents a liquid physical state"""
+
     GAS = 2
+    """Represents a gas physical state"""
 
 
 class ActivityStatus(IntEnum):
     """
     An enumeration representing different activity statuses for devices and stations.
-    
-    Attributes:
-        ERROR (int): Represents an error state (value: -1).
-        IDLE (int): Represents an idle state (value: 0).
-        BUSY (int): Represents a busy state (value: 1).
     """
 
     ERROR = -1
+    """Represents an error state."""
+
     IDLE = 0
+    """Represents an idle state."""
+
     BUSY = 1
+    """Represents a busy state."""
 
 
 class MobileRobotState(IntEnum):
     """
     An enumeration representing different states of a mobile robot.
-    
-    Attributes:
-        ERROR (int): Represents an error state (value: -1).
-        AVAILABLE (int): Robot is available for operation (value: 0).
-        MANIPULATING (int): Robot is manipulating an object (value: 1).
-        NAVIGATING (int): Robot is navigating through the environment (value: 2).
-        CHARGING (int): Robot is charging its battery (value: 3).
     """
 
     ERROR = -1
+    """Represents an error state."""
+
     AVAILABLE = 0
+    """Robot is available for operation."""
+
     MANIPULATING = 1
+    """Robot is manipulating an object."""
+
     NAVIGATING = 2
+    """Robot is navigating through the environment."""
+
     CHARGING = 3
+    """Robot is charging its battery."""
 
 
 class OperationStatus(IntEnum):
     """
     An enumeration representing different statuses of an operation.
-    
-    Attributes:
-        CREATED (int): Operation has been created (value: 0).
-        ASSIGNED (int): Operation has been assigned to a device or station (value: 1).
-        IN_PROGRESS (int): Operation is currently in progress (value: 2).
-        COMPLETED (int): Operation has been completed (value: 3).
     """
 
     CREATED = 0
+    """Operation has been created."""
+
     ASSIGNED = 1
+    """Operation has been assigned to a device or station."""
+
     COMPLETED = 3
+    """Operation has been completed."""
+
     IN_PROGRESS = 2
+    """Operation is currently in progress."""
 
 
 class ResultDataStatus(IntEnum):
     """
     An enumeration representing different statuses of result data.
-    
-    Attributes:
-        UNAVAILABLE (int): Result data is unavailable yet(value: -1).
-        UPLOADING (int): Result data is currently uploading (value: 0).
-        AVAILABLE (int): Result data is available (value: 1).
     """
 
     UNAVAILABLE = -1
+    """Result data is unavailable yet."""
+
     UPLOADING = 0
+    """Result data is currently uploading."""
+
     AVAILABLE = 1
+    """Result data is available."""
 
 
 class PatchType(IntEnum):
     """
     An enumeration representing different types of patches for modifying data structures.
-    
-    Attributes:
-        SET (int): Represents a set operation (value: 1).
-        LIST_APPEND (int): Represents an append operation for lists (value: 2).
-        LIST_POP (int): Represents a pop operation for lists (value: 3).
-        LIST_INSERT (int): Represents an insert operation for lists (value: 4).
-        LIST_DELETE (int): Represents a delete operation for lists (value: 5).
-        DICT_INSERT (int): Represents an insert operation for dictionaries (value: 6).
-        DICT_DELETE (int): Represents a delete operation for dictionaries (value: 7).
     """
 
     SET = 1
+    """Represents a set operation."""
+
     LIST_APPEND = 2
+    """Represents an append operation for lists."""
+
     LIST_POP = 3
+    """Represents a pop operation for lists."""
+
     LIST_INSERT = 4
+    """Represents an insert operation for lists."""
+
     LIST_DELETE = 5
+    """Represents a delete operation for lists."""
+
     DICT_INSERT = 6
+    """Represents an insert operation for dictionaries."""
+
     DICT_DELETE = 7
+    """Represents a delete operation for dictionaries."""

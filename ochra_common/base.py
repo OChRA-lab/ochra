@@ -6,18 +6,19 @@ from pydantic import BaseModel, Field
 class DataModel(BaseModel):
     """
     DataModel class that serves as a base for all dataclasses that are to be stored in the database.
-
-    Attributes:
-        id (uuid.UUID): Unique identifier for the data model instance.
-        collection (str): The name of the collection where the data model will be stored.
-        cls (str): The class name of the data model.
-        module_path(str): The module path of the data model.
     """
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
+    """Unique identifier for the data model instance."""
+    
     collection: str = Field(default=None)
+    """The name of the collection where the data model will be stored."""
+
     cls: str = Field(default=None)
+    """The class name of the data model."""
+
     module_path: str = Field(default=None)
+    """The module path of the data model."""
 
     def model_post_init(self, __context: Any) -> None:
         # retrieve the class name in addition to its import path

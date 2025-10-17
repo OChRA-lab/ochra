@@ -8,7 +8,6 @@ class Lab:
     """
     Represents a laboratory containing stations and robots.
 
-    Usage:
     This class provides methods to retrieve and manage stations and robots
     within the laboratory environment.
     """

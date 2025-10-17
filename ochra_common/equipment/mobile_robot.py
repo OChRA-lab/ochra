@@ -6,12 +6,10 @@ from ..utils.enum import MobileRobotState
 class MobileRobot(Robot):
     """
     Abstract class to represent a mobile robot that can move.
-
-    Attributes:
-        state (MobileRobotState): State of the mobile robot. Defaults to AVAILABLE
     """
 
     state: MobileRobotState = MobileRobotState.AVAILABLE
+    """State of the mobile robot. Defaults to AVAILABLE"""
 
     def go_to(self, args: Dict[str, Any]) -> bool:
         """
