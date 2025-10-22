@@ -50,7 +50,7 @@ def _is_path(obj: Any) -> bool:
     except (TypeError, ValueError):
         return False
 
-
+#TODO what is the point of this class
 class operationExecute(BaseModel):
     operation: str
     deviceName: str
