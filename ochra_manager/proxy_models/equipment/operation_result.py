@@ -5,6 +5,10 @@ from typing import Any
 
 
 class OperationResult(OperationResult, RestProxyMixin):
+    """
+    Represents the outcome of an equipment operation, including its status and any associated data.
+    """
+
     def __init__(
         self,
         success: bool,

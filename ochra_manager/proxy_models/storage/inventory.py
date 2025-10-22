@@ -4,6 +4,11 @@ from ochra_common.base import DataModel
 
 
 class Inventory(Inventory, RestProxyMixin):
+    """
+    Inventory model representing a collection of containers and consumables.
+    An inventory is typically associated with a station or device in the framework.
+    """
+
     def __init__(
         self,
         owner: DataModel,

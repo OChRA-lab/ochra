@@ -11,8 +11,15 @@ from ..storage.inventory import Inventory
 
 
 class Station(Station, RestProxyMixin):
+    """
+    Represents a laboratory station containing devices, robots, and inventory.
+    """
+
     devices: List[UUID] = Field(default_factory=list)
+    """List of device IDs associated with the station."""
+
     port: int = Field(default=None)
+    """Network port number for the station."""
 
     def __init__(self, name: str, type: StationType, location: Location, port: int):
         super().__init__(
@@ -33,9 +40,21 @@ class Station(Station, RestProxyMixin):
             )
             self.inventory = inventory.get_base_model()
 
-    def add_device(self, device: Type[Device]):
+    def add_device(self, device: Type[Device]) -> None:
+        """
+        Add a device to the station's list of devices
+        
+        Args:
+            device (Type[Device]): The device to add to the station
+        """
         device.owner_station = self.id
         self._lab_conn.patch_property(self._endpoint, self.id, "devices", device.id, PatchType.LIST_APPEND)
 
-    def add_operation(self, op: Operation):
+    def add_operation(self, op: Operation) -> None:
+        """
+        Add an operation to the station's list of operations
+
+        Args:
+            op (Operation): The operation to add to the station
+        """
         self._lab_conn.patch_property(self._endpoint, self.id, "operation_record", op, PatchType.LIST_APPEND)

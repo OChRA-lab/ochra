@@ -12,10 +12,6 @@ class DbConnection(metaclass=SingletonMeta):
     
     Attributes:
         db_adapter (MongoAdapter): Adapter for MongoDB operations. This can be replaced with any other database adapter that follows the same interface.
-        hostname (str, optional): Address of the database host. Defaults to "127.0.0.1:27017".
-        db_name (str, optional): Name of the database. Defaults to "ochra_test_db".
-    
-
     """
 
     def __init__(
