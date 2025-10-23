@@ -1,8 +1,8 @@
 import logging
 from fastapi import APIRouter
 from typing import List, Type
-from ..lab_service import LabService
-from ochra_common.base import DataModel
+from ..utils.lab_service import LabService
+from ochra_common.base.data_model import DataModel
 from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
 
 COLLECTIONS = ["stations", "robots"]

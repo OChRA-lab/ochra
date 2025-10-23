@@ -9,7 +9,7 @@ from ochra_common.connections.api_models import (
     ObjectConstructionRequest,
     ObjectPropertyGetRequest,
 )
-from ..connections.db_connection import DbConnection
+from ...connections.db_connection import DbConnection
 import json
 from pathlib import Path
 import shutil

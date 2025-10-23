@@ -18,7 +18,7 @@ from ochra_common.equipment.operation import Operation
 from ochra_common.utils.enum import OperationStatus
 
 from ochra_manager.lab.auth.auth import SessionToken, User, get_db
-from ..lab_service import LabService
+from ..utils.lab_service import LabService
 
 STATIONS = "stations"
 

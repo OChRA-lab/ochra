@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock, patch
-from ochra_manager.lab.lab_service import LabService
+from ochra_manager.lab.utils.lab_service import LabService
 from typing import Dict, Any
 from fastapi import HTTPException
 import json

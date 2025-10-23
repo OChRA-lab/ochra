@@ -9,15 +9,15 @@ import uvicorn
 import logging
 from ochra_manager.lab.auth.auth import SessionToken, get_db, init_user_db
 from ochra_manager.lab.routers.ui_router import WebAppRouter
-from .routers.device_router import DeviceRouter
-from .routers.station_router import StationRouter
-from .routers.robot_router import RobotRouter
-from .routers.operation_router import OperationRouter
-from .routers.lab_router import LabRouter
-from .routers.storage_router import StorageRouter
-from .routers.operation_results_router import OperationResultRouter
-from .scheduler import Scheduler
-from .lab_logging import configure_lab_logging
+from ..routers.device_router import DeviceRouter
+from ..routers.station_router import StationRouter
+from ..routers.robot_router import RobotRouter
+from ..routers.operation_router import OperationRouter
+from ..routers.lab_router import LabRouter
+from ..routers.storage_router import StorageRouter
+from ..routers.operation_results_router import OperationResultRouter
+from ..utils.scheduler import Scheduler
+from ..utils.lab_logging import configure_lab_logging
 import inspect
 
 

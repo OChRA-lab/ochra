@@ -4,7 +4,7 @@ from threading import Thread
 from time import sleep
 from ochra_common.utils.enum import ActivityStatus, PatchType
 from fastapi import HTTPException
-from ..connections.station_connection import StationConnection
+from ...connections.station_connection import StationConnection
 import logging
 
 
