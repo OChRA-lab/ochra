@@ -2,7 +2,7 @@ from pydantic import Field
 import uuid
 from datetime import datetime
 from typing import Dict, Any
-from ..base import DataModel
+from ..base.data_model import DataModel
 from ..utils.enum import OperationStatus
 from .operation_result import OperationResult
 

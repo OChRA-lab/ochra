@@ -1,6 +1,6 @@
 from pydantic import Field
 from typing import List, Type
-from ..base import DataModel
+from ..base.data_model import DataModel
 from .consumable import Consumable
 from .container import Container
 

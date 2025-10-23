@@ -1,5 +1,5 @@
 from pydantic import Field
-from ..base import DataModel
+from ..base.data_model import DataModel
 from ..utils.enum import PhysicalState
 from typing import Any, Dict
 

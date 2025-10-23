@@ -1,6 +1,6 @@
 from pydantic import Field
 from typing import Any
-from ..base import DataModel
+from ..base.data_model import DataModel
 from ..utils.enum import ResultDataStatus
 
 

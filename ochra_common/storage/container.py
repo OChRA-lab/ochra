@@ -1,4 +1,4 @@
-from ..base import DataModel
+from ..base.data_model import DataModel
 from typing import Union
 
 

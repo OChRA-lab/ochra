@@ -1,6 +1,6 @@
 from uuid import UUID
 from typing import Dict, Any
-from ..base import DataModel
+from ..base.data_model import DataModel
 
 
 def is_valid_uuid(string: str) -> bool:

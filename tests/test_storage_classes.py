@@ -1,4 +1,4 @@
-from ochra_common.base import DataModel
+from ochra_common.base.data_model import DataModel
 from ochra_common.storage.inventory import Inventory
 from ochra_common.storage.consumable import Consumable
 from ochra_common.storage.container import Container

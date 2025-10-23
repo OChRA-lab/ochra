@@ -3,7 +3,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from typing import Annotated, Optional, List, Dict, Tuple, get_args, get_origin
 from uuid import UUID
 import inspect
-from ..base import DataModel
+from ..base.data_model import DataModel
 from ..utils.enum import ActivityStatus
 from ..storage.inventory import Inventory
 

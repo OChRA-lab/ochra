@@ -1,5 +1,5 @@
 from ..utils.singleton_meta import SingletonMeta
-from ..base import DataModel
+from ..base.data_model import DataModel
 from .rest_adapter import RestAdapter, Result, LabEngineException
 from .api_models import (
     ObjectConstructionRequest,

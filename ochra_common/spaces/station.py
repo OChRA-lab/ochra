@@ -2,7 +2,7 @@ from pydantic import Field
 from uuid import UUID
 from typing import List, Type, Union
 
-from ..base import DataModel
+from ..base.data_model import DataModel
 from ..equipment.device import Device
 from ..equipment.operation import Operation
 from ..equipment.robot import Robot

@@ -1,4 +1,4 @@
-from ochra_common.base import DataModel
+from ochra_common.base.data_model import DataModel
 
 
 def test_base_model():
