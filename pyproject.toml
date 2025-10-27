@@ -30,7 +30,7 @@ classifiers = [
     "Programming Language :: Python",
     ]
 
-[project.option-dependencies]
+[project.optional-dependencies]
 manager = [
     "fastapi==0.111.1",
     "uvicorn==0.30.1",
