@@ -1,0 +1,47 @@
+<!-- register.html -->
+{% extends "zbase.html" %}
+
+{% block title %}Register - OCHRA{% endblock %}
+
+{% block body %}
+<main id="MainContent" class="flex w-full min-h-dvh justify-center items-center">
+	<!--FORM BOX-->
+	<div class="flex flex-col gap-4">
+		<p class="text-3xl font-medium">Register</p>
+		<form class="flex flex-col gap-4 w-72" hx-boost="true" method="POST">
+			<label>
+				<span class="font-light dark:text-slate-200">Username</span>
+				<input class="mt-0.5 border w-full py-2 px-3 focus:outline-none focus:shadow-outline" type="text"
+					placeholder="John" name="username" value="" />
+			</label>
+			<label>
+				<span class="font-light dark:text-slate-200">Email</span>
+				<input class="mt-0.5 border w-full py-2 px-3 focus:outline-none focus:shadow-outline" type="email"
+					placeholder="john.doe@liverpool.ac.uk" name="email" value="" />
+			</label>
+			<label>
+				<span class="font-light dark:text-slate-200">Password</span>
+				<input class="mt-0.5 border w-full py-2 px-3 focus:outline-none focus:shadow-outline" type="password"
+					placeholder="********" name="password" value="" />
+			</label>
+			<label>
+				<span class="font-light dark:text-slate-200">Confirm Password</span>
+				<input class="mt-0.5 border w-full py-2 px-3 focus:outline-none focus:shadow-outline" type="password"
+					placeholder="********" name="confirm" value="" />
+			</label>
+			<div>
+				<span class="font-light dark:text-slate-200 text-center">By continuing, you agree to do not bow down to our AI overlords.</span>
+				<button
+					class="hover:cursor-pointer mt-0.5 w-full bg-primary dark:bg-dark-primary text-text dark:text-dark-text font-bold py-2 px-3 focus:outline
+					hover:outline transition-transform transform-gpu hover:-translate-y-1 dark:hover:outline active:bg-neutral dark:active:bg-neutral active:outline-none"
+					type="submit">
+					Register
+				</button>
+			</div>
+		</form>
+		<div class="w-full flex flex-col gap-3 items-center font-light ">
+			<p>Have an account? <span class="underline"><a href="/app/login">Login</a></span></p>
+		</div>
+	</div>
+</main>
+{% endblock %}

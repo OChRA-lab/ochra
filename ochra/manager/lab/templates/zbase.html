@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{theme: 'dark'}" x-bind:data-theme="theme">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,height=device-height initial-scale=1">
+	<link id="favicon" rel="icon" type="image/x-icon" href="{{url_for('static',path='/favicon.ico')}}">
+	<title>{% block title %}My Website{% endblock %}</title>
+	<link href="{{url_for('static',path='/css/app.css')}}" rel="stylesheet" />
+	<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+	<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+	<script src="https://unpkg.com/@leanacht/webcomponent-flow@0.1.7/dist/webcomponent-flow.umd.js"></script>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=arrow_back" />
+</head>
+
+<body class="bg-base dark:bg-dark-base font-poppins text-text dark:text-dark-text">
+	<div class="w-full h-dvh flex">
+		{% block body %}{% endblock %}
+	</div>
+</body>
+
+</html>
