@@ -44,4 +44,4 @@ keywords = ["OChRA", "chemistry", "lab", "framework", "automated"]
 Repository = "https://github.com/OChRA-lab/ochra"
 
 [tool.hatch.build.targets.wheel]
-package = "ochra"
+packages = ["ochra"]
