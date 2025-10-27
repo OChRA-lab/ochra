@@ -4,7 +4,7 @@ from typing import List, Dict
 from json import JSONDecodeError
 import logging
 from fastapi.responses import FileResponse
-# from ochra_common import Station
+# from ochra.common import Station
 
 
 class LabEngineException(Exception):

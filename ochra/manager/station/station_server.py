@@ -15,18 +15,18 @@ import uvicorn
 import os
 import signal
 
-from ochra_common.connections.lab_connection import LabConnection
-from ochra_common.utils.enum import (
+from ochra.common.connections.lab_connection import LabConnection
+from ochra.common.utils.enum import (
     StationType,
     ActivityStatus,
     OperationStatus,
     ResultDataStatus,
     MobileRobotState,
 )
-from ochra_common.spaces.location import Location
-from ochra_common.equipment.device import Device
-from ochra_common.equipment.mobile_robot import MobileRobot
-from ochra_common.equipment.operation import Operation
+from ochra.common.spaces.location import Location
+from ochra.common.equipment.device import Device
+from ochra.common.equipment.mobile_robot import MobileRobot
+from ochra.common.equipment.operation import Operation
 from ..proxy_models.equipment.operation_result import OperationResult
 from ..proxy_models.space.station import Station
 from .station_logging import configure_station_logging, configure_device_logger

@@ -1,15 +1,15 @@
 import logging
 from fastapi import APIRouter
 from typing import Any, Dict
-from ochra_common.connections.api_models import (
+from ochra.common.connections.api_models import (
     ObjectCallRequest,
     ObjectPropertyPatchRequest,
     ObjectConstructionRequest,
     ObjectPropertyGetRequest,
 )
 from ..utils.lab_service import LabService
-from ochra_common.base.data_model import DataModel
-from ochra_common.utils.misc import is_valid_uuid, convert_to_data_model
+from ochra.common.base.data_model import DataModel
+from ochra.common.utils.misc import is_valid_uuid, convert_to_data_model
 
 COLLECTION = "robots"
 

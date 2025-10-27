@@ -1,6 +1,6 @@
-from ochra_common.equipment.operation import Operation
-from ochra_discovery.equipment.operation_result import OperationResult
-from ochra_common.utils.mixins import RestProxyMixinReadOnly
+from ochra.common.equipment.operation import Operation
+from ochra.discovery.equipment.operation_result import OperationResult
+from ochra.common.utils.mixins import RestProxyMixinReadOnly
 from uuid import UUID
 
 

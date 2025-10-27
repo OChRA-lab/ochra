@@ -1,9 +1,9 @@
-from ochra_common.spaces.location import Location
-from ochra_common.equipment.device import Device
-from ochra_common.equipment.operation import Operation
-from ochra_common.spaces.station import Station
-from ochra_common.utils.mixins import RestProxyMixin
-from ochra_common.utils.enum import StationType, PatchType
+from ochra.common.spaces.location import Location
+from ochra.common.equipment.device import Device
+from ochra.common.equipment.operation import Operation
+from ochra.common.spaces.station import Station
+from ochra.common.utils.mixins import RestProxyMixin
+from ochra.common.utils.enum import StationType, PatchType
 from typing import List, Type
 from uuid import UUID
 from pydantic import Field
@@ -27,7 +27,7 @@ class Station(Station, RestProxyMixin):
             name=name,
             type=type,
             location=location,
-            module_path="ochra_discovery.spaces.station",
+            module_path="ochra.discovery.spaces.station",
             locked=None,
         )
         self.port = port

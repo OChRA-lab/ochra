@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from ochra_common.utils.logging_config import (
+from ochra.common.utils.logging_config import (
     get_standard_format,
     get_detailed_format,
     get_console_handler,
@@ -58,67 +58,67 @@ def configure_lab_logging(log_root_path: str, console_log_level: int = logging.I
             "propagate": False,
         },
         "loggers": {
-            "ochra_manager.lab.lab_server": get_logger_config(
+            "ochra.manager.lab.lab_server": get_logger_config(
                 handlers=["console_handler", "lab_server_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.lab.lab_service": get_logger_config(
+            "ochra.manager.lab.lab_service": get_logger_config(
                 handlers=["console_handler", "lab_server_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.lab.scheduler": get_logger_config(
+            "ochra.manager.lab.scheduler": get_logger_config(
                 handlers=["console_handler", "scheduler_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.lab.routers.device_router": get_logger_config(
+            "ochra.manager.lab.routers.device_router": get_logger_config(
                 handlers=["console_handler", "routers_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.lab.routers.lab_router": get_logger_config(
+            "ochra.manager.lab.routers.lab_router": get_logger_config(
                 handlers=["console_handler", "routers_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.lab.routers.operation_results_router": get_logger_config(
+            "ochra.manager.lab.routers.operation_results_router": get_logger_config(
                 handlers=["console_handler", "routers_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.lab.routers.operation_router": get_logger_config(
+            "ochra.manager.lab.routers.operation_router": get_logger_config(
                 handlers=["console_handler", "routers_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.lab.routers.robot_router": get_logger_config(
+            "ochra.manager.lab.routers.robot_router": get_logger_config(
                 handlers=["console_handler", "routers_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.lab.routers.station_router": get_logger_config(
+            "ochra.manager.lab.routers.station_router": get_logger_config(
                 handlers=["console_handler", "routers_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.lab.routers.storage_router": get_logger_config(
+            "ochra.manager.lab.routers.storage_router": get_logger_config(
                 handlers=["console_handler", "routers_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.lab.routers.ui_router": get_logger_config(
+            "ochra.manager.lab.routers.ui_router": get_logger_config(
                 handlers=["console_handler", "routers_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.connections.db_connection": get_logger_config(
+            "ochra.manager.connections.db_connection": get_logger_config(
                 handlers=["console_handler", "db_connection_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_manager.connections.station_connection": get_logger_config(
+            "ochra.manager.connections.station_connection": get_logger_config(
                 handlers=["console_handler", "station_connection_handler"],
                 level=logging.DEBUG,
                 propagate=False,

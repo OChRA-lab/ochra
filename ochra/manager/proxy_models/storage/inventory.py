@@ -1,6 +1,6 @@
-from ochra_common.storage.inventory import Inventory
-from ochra_common.utils.mixins import RestProxyMixin
-from ochra_common.base.data_model import DataModel
+from ochra.common.storage.inventory import Inventory
+from ochra.common.utils.mixins import RestProxyMixin
+from ochra.common.base.data_model import DataModel
 
 
 class Inventory(Inventory, RestProxyMixin):
@@ -18,6 +18,6 @@ class Inventory(Inventory, RestProxyMixin):
             collection="inventories",
             owner=owner,
             containers_max_capacity=containers_max_capacity,
-            module_path="ochra_discovery.storage.inventory",
+            module_path="ochra.discovery.storage.inventory",
         )
         self._mixin_hook(self._endpoint, self.id)

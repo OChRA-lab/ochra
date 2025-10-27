@@ -3,7 +3,7 @@ from typing import Any, Dict
 import logging
 import json
 import gridfs
-from ochra_common.utils.enum import PatchType
+from ochra.common.utils.enum import PatchType
 
 
 class MongoAdapter:

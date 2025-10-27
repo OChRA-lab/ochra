@@ -1,4 +1,4 @@
-from ochra_common.utils.singleton_meta import SingletonMeta
+from ochra.common.utils.singleton_meta import SingletonMeta
 from .mongo_adapter import MongoAdapter
 import logging
 from typing_extensions import Self, Dict, Any

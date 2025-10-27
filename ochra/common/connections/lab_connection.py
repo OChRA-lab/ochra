@@ -72,13 +72,13 @@ class LabConnection(metaclass=SingletonMeta):
         except Exception as e:
             raise LabEngineException(f"Unexpected error in importing class: {e}")
 
-    def construct_object(self, type: str, object: Type[DataModel]) -> UUID:
+    def construct_object(self, type: str, object: DataModel) -> UUID:
         """
         Constructs an object on the lab engine.
 
         Args:
             type (str): The type of the object to construct.
-            object (Type[DataModel]): The data model instance representing the object to be constructed.
+            object (DataModel): The data model instance representing the object to be constructed.
 
         Raises:
             LabEngineException: If there is an error during object construction or response parsing.

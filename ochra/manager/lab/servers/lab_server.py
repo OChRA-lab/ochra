@@ -7,8 +7,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import uvicorn
 import logging
-from ochra_manager.lab.auth.auth import SessionToken, get_db, init_user_db
-from ochra_manager.lab.routers.ui_router import WebAppRouter
+from ochra.manager.lab.auth.auth import SessionToken, get_db, init_user_db
+from ochra.manager.lab.routers.ui_router import WebAppRouter
 from ..routers.device_router import DeviceRouter
 from ..routers.station_router import StationRouter
 from ..routers.robot_router import RobotRouter
@@ -61,9 +61,9 @@ class LabServer:
 
         self.app = FastAPI(lifespan=lifespan)
 
-        self.templates = Jinja2Templates(directory=MODULE_DIRECTORY / "templates")
+        self.templates = Jinja2Templates(directory=MODULE_DIRECTORY / ".." / "templates")
         self.app.mount(
-            "/static", StaticFiles(directory=MODULE_DIRECTORY / "static"), name="static"
+            "/static", StaticFiles(directory=MODULE_DIRECTORY / ".." / "static"), name="static"
         )
 
         self.app.include_router(LabRouter())

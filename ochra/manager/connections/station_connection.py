@@ -1,5 +1,5 @@
-from ochra_common.connections.rest_adapter import RestAdapter, Result
-from ochra_common.equipment.operation import Operation
+from ochra.common.connections.rest_adapter import RestAdapter, Result
+from ochra.common.equipment.operation import Operation
 import logging
 
 

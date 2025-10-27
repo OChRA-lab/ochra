@@ -193,7 +193,7 @@ class HypermediaBuilder:
         self.env = Environment(
             # Loads templates from "templates" directory
             # inside "your_package_name" Python package
-            loader=PackageLoader("ochra_common", "templates"),
+            loader=PackageLoader("ochra.common", "templates"),
             # Auto-escape HTML for safety
             autoescape=select_autoescape(),
         )

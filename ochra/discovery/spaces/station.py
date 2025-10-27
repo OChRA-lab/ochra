@@ -1,7 +1,7 @@
-from ochra_common.equipment.device import Device
-from ochra_common.equipment.robot import Robot
-from ochra_common.spaces.station import Station
-from ochra_common.utils.mixins import RestProxyMixinReadOnly
+from ochra.common.equipment.device import Device
+from ochra.common.equipment.robot import Robot
+from ochra.common.spaces.station import Station
+from ochra.common.utils.mixins import RestProxyMixinReadOnly
 from uuid import UUID
 from typing import Type, Union
 
