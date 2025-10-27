@@ -21,7 +21,7 @@ class LabRouter(APIRouter):
         self.get("/{object_type}/")(self.get_lab_object)
         self.get("/{object_type}/all")(self.get_lab_objects)
 
-    async def get_lab_object(self, object_type: str, identifier: str) -> Type[DataModel]:
+    async def get_lab_object(self, object_type: str, identifier: str) -> DataModel:
         """
         Get a specific lab object by its identifier.
 
@@ -43,7 +43,7 @@ class LabRouter(APIRouter):
         self._logger.debug(f"Getting lab object with identifier: {identifier}")
         return convert_to_data_model(lab_obj)
 
-    async def get_lab_objects(self, object_type: str) -> List[Type[DataModel]]:
+    async def get_lab_objects(self, object_type: str) -> List[DataModel]:
         """
         Get all lab objects of a specific type.
         
