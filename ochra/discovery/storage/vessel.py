@@ -1,7 +1,7 @@
-from ochra_common.storage.vessel import Vessel
-from ochra_common.utils.mixins import RestProxyMixin
-from ochra_common.storage.reagent import Reagent
-from ochra_common.utils.enum import PatchType
+from ochra.common.storage.vessel import Vessel
+from ochra.common.utils.mixins import RestProxyMixin
+from ochra.common.storage.reagent import Reagent
+from ochra.common.utils.enum import PatchType
 
 
 class Vessel(Vessel, RestProxyMixin):
@@ -18,7 +18,7 @@ class Vessel(Vessel, RestProxyMixin):
             max_capacity=max_capacity,
             capacity_unit=capacity_unit,
             collection="containers",
-            module_path="ochra_discovery.storage.vessel",
+            module_path="ochra.discovery.storage.vessel",
         )
         self._mixin_hook(self._endpoint, self.id)
 

@@ -1,6 +1,6 @@
-from ochra_common.storage.reagent import Reagent
-from ochra_common.utils.mixins import RestProxyMixin
-from ochra_common.utils.enum import PatchType
+from ochra.common.storage.reagent import Reagent
+from ochra.common.utils.mixins import RestProxyMixin
+from ochra.common.utils.enum import PatchType
 from typing import Any
 
 
@@ -18,7 +18,7 @@ class Reagent(Reagent, RestProxyMixin):
             amount=amount,
             unit=unit,
             collection="reagents",
-            module_path="ochra_discovery.storage.reagent",
+            module_path="ochra.discovery.storage.reagent",
         )
         self._mixin_hook(self._endpoint, self.id)
 

@@ -1,9 +1,9 @@
 import logging
 from typing import Any, List, Dict, Optional, Tuple
 
-from ochra_common.equipment.operation import Operation
+from ochra.common.equipment.operation import Operation
 from fastapi import HTTPException
-from ochra_common.connections.api_models import (
+from ochra.common.connections.api_models import (
     ObjectCallRequest,
     ObjectPropertyPatchRequest,
     ObjectConstructionRequest,
@@ -155,7 +155,7 @@ class LabService:
                 method=call_req.method,
                 args=call_req.args,
                 collection="operations",
-                module_path="ochra_discovery.equipment.operation",
+                module_path="ochra.discovery.equipment.operation",
             )
 
             # TODO change to use a proxy for operation instead of accessing db directly

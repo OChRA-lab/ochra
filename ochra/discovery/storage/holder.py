@@ -1,7 +1,7 @@
-from ochra_common.storage.holder import Holder
-from ochra_common.storage.container import Container
-from ochra_common.utils.mixins import RestProxyMixin
-from ochra_common.utils.enum import PatchType
+from ochra.common.storage.holder import Holder
+from ochra.common.storage.container import Container
+from ochra.common.utils.mixins import RestProxyMixin
+from ochra.common.utils.enum import PatchType
 from typing import Type
 
 
@@ -17,7 +17,7 @@ class Holder(Holder, RestProxyMixin):
             type=type,
             max_capacity=max_capacity,
             collection="containers",
-            module_path="ochra_discovery.storage.holder",
+            module_path="ochra.discovery.storage.holder",
         )
         self._mixin_hook(self._endpoint, self.id)
 

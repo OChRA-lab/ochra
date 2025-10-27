@@ -1,9 +1,9 @@
-from ochra_common.base import DataModel
-from ochra_common.storage.inventory import Inventory
-from ochra_common.utils.mixins import RestProxyMixin
-from ochra_common.storage.container import Container
-from ochra_common.storage.consumable import Consumable
-from ochra_common.utils.enum import PatchType
+from ochra.common.base.data_model import DataModel
+from ochra.common.storage.inventory import Inventory
+from ochra.common.utils.mixins import RestProxyMixin
+from ochra.common.storage.container import Container
+from ochra.common.storage.consumable import Consumable
+from ochra.common.utils.enum import PatchType
 from typing import Type
 
 
@@ -26,7 +26,7 @@ class Inventory(Inventory, RestProxyMixin):
             owner=owner,
             containers_max_capacity=containers_max_capacity,
             collection="inventories",
-            module_path="ochra_discovery.storage.inventory",
+            module_path="ochra.discovery.storage.inventory",
         )
         self._mixin_hook(self._endpoint, self.id)
 

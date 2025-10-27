@@ -1,8 +1,8 @@
-from ochra_manager.connections.db_connection import DbConnection
-from ochra_common.equipment.operation import Operation
+from ochra.manager.connections.db_connection import DbConnection
+from ochra.common.equipment.operation import Operation
 from threading import Thread
 from time import sleep
-from ochra_common.utils.enum import ActivityStatus, PatchType
+from ochra.common.utils.enum import ActivityStatus, PatchType
 from fastapi import HTTPException
 from ...connections.station_connection import StationConnection
 import logging

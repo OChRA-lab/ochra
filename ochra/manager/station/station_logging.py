@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from ochra_common.utils.logging_config import (
+from ochra.common.utils.logging_config import (
     get_standard_format,
     get_detailed_format,
     get_console_handler,
@@ -49,12 +49,12 @@ def configure_station_logging(log_root_path: Path, console_log_level: int = logg
         },
         "loggers": {
             # Station server loggers
-            "ochra_manager.station.station_server": get_logger_config(
+            "ochra.manager.station.station_server": get_logger_config(
                 handlers=["console_handler", "station_server_handler"],
                 level=logging.DEBUG,
                 propagate=False,
             ),
-            "ochra_common.connections.lab_connection": get_logger_config(
+            "ochra.common.connections.lab_connection": get_logger_config(
                 handlers=["console_handler", "lab_connection_handler"],
                 level=logging.DEBUG,
                 propagate=False,
