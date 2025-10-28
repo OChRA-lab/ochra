@@ -189,6 +189,8 @@ class LabConnection(metaclass=SingletonMeta):
             op: Operation = self.load_from_data_model(base_model)
             while op.status != OperationStatus.COMPLETED:
                 time.sleep(5)
+            if self.get_property("operation_results",op.result,"success") is False:
+                raise LabEngineException(self.get_property("operation_results",op.result,"error"))
             return op
         except Exception as e:
             raise LabEngineException(f"Unexpected error: {e}")
