@@ -1,0 +1,239 @@
+{% macro state_macro(state, device) -%}
+<{{ state.meta.element }} class="{{ state.meta.attrs.get('class', '') }}" {% for k,v in state.meta.attrs.items() if k
+	!='class' %} {{ k }}="{{ v }}" {% endfor %}>
+	{{state.meta.label}} : {{ state.value }}
+</{{ state.meta.element }}>
+{%- endmacro %}
+
+
+{% macro state_chip(state, device) -%}
+<!-- Small Status Card 1 -->
+<div class="p-3 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
+	<div class="flex items-center gap-2">
+		<div class="p-1 bg-primary rounded-full">
+			{{state.icon}}
+		</div>
+		<h4 class="text-sm font-medium ">
+			{% if state.meta.label %}
+			{{state.meta.label}}
+			{% else %}
+			{{state.name}}
+			{% endif %}
+		</h4>
+	</div>
+	<p class="mt-1 text-xl font-semibold ">
+		{{state.value}}
+		<span class="text-sm font-normal ml-1">{{state.meta.unit}}</span>
+	</p>
+</div>
+{%- endmacro %}
+
+
+
+{% macro circular_range(param) -%}
+<div class="flex items-center justify-center px-2 md:px-4 lg:px-6" x-data="{
+         min: {{ param.attrs.min | default(0) }},
+         max: {{ param.attrs.max | default(100) }},
+         step: {{ param.attrs.step | default(1) }},
+         custom_value: {{param.variable_binding | default(0)}},
+         isDragging: false,
+         updateDial(event) {
+           const rect = this.$refs.dial.getBoundingClientRect();
+           const centerX = rect.left + rect.width / 2;
+           const centerY = rect.top + rect.height / 2;
+           
+           // Handle both touch and mouse events
+           const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+           const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+           
+           let angle = Math.atan2(clientY - centerY, clientX - centerX) + Math.PI / 2;
+           angle = angle < 0 ? angle + Math.PI * 2 : angle;
+           
+           let rawValue = this.min + (angle / (2 * Math.PI)) * (this.max - this.min);
+           let newValue = Math.round(rawValue / this.step) * this.step;
+           newValue = Math.max(this.min, Math.min(newValue, this.max));
+           this.custom_value = newValue;
+         },
+         get percent() {
+           return Math.round(((this.custom_value - this.min) / (this.max - this.min)) * 100);
+         }
+       }">
+	<input x-ref="input" class="hidden" type="range" x-model="custom_value" :min="min" :max="max" :step="step"
+		name="{{ param.name }}" />
+	<div x-ref="dial" @mousedown="isDragging = true; updateDial($event)"
+		@mousemove.window="if(isDragging) updateDial($event)" @mouseup.window="isDragging = false"
+		@touchstart="isDragging = true; updateDial($event)"
+		@touchmove.window="if(isDragging) updateDial($event)" @touchend.window="isDragging = false"
+		class="touch-none flex justify-center items-center w-full aspect-square rounded-full transition-all duration-600 border-[0.5px] border-text dark:border-dark-text"
+		:style="`background-image: conic-gradient(#3b82f6 ${percent}%, #ffffff00 0)`">
+		<div
+			class="touch-none select-none text-sm font-medium flex flex-col uppercase font-bold justify-center items-center w-[95%] aspect-square rounded-full bg-base dark:bg-dark-base border-[0.5px] border-text dark:border-dark-text">
+			<span class="text-xl"
+				x-text="custom_value.toLocaleString(undefined, { maximumFractionDigits: 2 })"></span>
+			{{param.label|default('unit')}}
+		</div>
+	</div>
+</div>
+{%- endmacro %}
+
+
+
+{% macro input(param) -%}
+{% if param.type == "checkbox" %}
+<fieldset>
+	<legend class="block text-sm font-medium  mb-1">{{param.label}}</legend>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="checkbox"
+		name="{{ param.name }}" {% for k, v in param.attrs.items() %} {{ k }}="{{ v }}" {% endfor %} />
+</fieldset>
+{% elif param.type == "radio" %}
+<fieldset>
+	<legend class="block text-sm font-medium  mb-1">{{param.label}}</legend>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="radio"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{
+		k}}="{{ v }}" {% endfor %} />
+</fieldset>
+{% elif param.type == "color" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="color"
+		name="{{ param.name }}" {% for k, v in param.attrs.items() %} {{ k }}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "date" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="date"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "datetime-local" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="datetime-local"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "email" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="email"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "file" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="file"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "image" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="image"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "month" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="month"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "number" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="number"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "password" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="password"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "range" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="range"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "reset" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">Reset Form</label>
+	<input class="w-full p-2 rounded-md bg-primary hover:cursor-pointer transition-transform transform-gpu hover:outline dark:hover:outline 
+	hover:-translate-y-1 active:bg-neutra dark:active:bg-neutral active:outline-none" type="reset" value="Reset Form" />
+</div>
+{% elif param.type == "tel" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="tel" name="{{ param.name }}"
+		value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k }}="{{ v }}" {% endfor
+		%} />
+</div>
+{% elif param.type == "text" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="text"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "time" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="time"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "url" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="url" name="{{ param.name }}"
+		value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k }}="{{ v }}" {% endfor
+		%} />
+</div>
+{% elif param.type == "week" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<input class="w-full p-2 border border-text dark:border-dark-text rounded-md" type="week"
+		name="{{ param.name }}" value="{{param.variable_binding}}" {% for k, v in param.attrs.items() %} {{ k
+		}}="{{ v }}" {% endfor %} />
+</div>
+{% elif param.type == "custom_circular_range" %}
+{{ circular_range(param)}}
+{% elif param.type == "select" %}
+<div>
+	<label class="block text-sm font-medium  mb-1">{{param.label}}</label>
+	<select class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-neutral dark:bg-dark-neutral text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" name="{{ param.name }}">
+		{% for option in param.attrs.options %}
+		<option value="{{ option }}" {% if option == param.variable_binding %}selected{% endif %}>
+			{{ option }}
+		</option>
+		{% endfor %}
+	</select>
+</div>
+{% else %}\
+<h1> Invalid Input </h1>
+{% endif %}
+{%- endmacro %}
+
+
+
+{% macro form_macro(form, device, station_id) -%}
+<div class="p-4 rounded-lg shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral">
+	<h4 class="text-sm font-semibold  mb-3"> {{form.call | replace("_", " ") | capitalize()}} </h4>
+	<form class="space-y-3" hx-boost="true" hx-target="#MainContentBodyDiv" action="/app/stations/{{ station_id }}/devices/{{ device.id }}/commands" method="{{form.method}}" hx-swap="innerHTML" hx-push-url="true">
+		<input type="hidden" name="command" value="{{form.call}}" />
+		{% for param in form.params.values() %}
+		{{ input(param)}}
+		{% endfor %}
+		<button type="submit" class="w-full bg-primary px-4 py-2 rounded-md hover:cursor-pointer transition-transform transform-gpu hover:-translate-y-1
+		hover:outline dark:hover:outline active:bg-neutral dark:active:bg-neutral focus:outline dark:focus:outline dark:focus:bg-neutral">
+			{{form.call | replace("_", " ") | capitalize()}}
+		</button>
+	</form>
+</div>
+{%- endmacro %}
