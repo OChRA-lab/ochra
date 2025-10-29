@@ -1,0 +1,32 @@
+<div class="border-b-[0.5px] border-text dark:border-dark-text flex flex-col justify-between relative">
+	<div class="p-4">
+		<h1 class="text-primary dark:text-dark-primary text-4xl">{{station._name}}</h1>
+		<p>Devices</p>
+	</div>
+</div>
+
+<div class="flex-1 px-3 py-1">
+	<div class="mt-6 space-y-4 flex justify-center " >
+		<div class="grid grid-cols-1 gap-3 p-3 w-full max-w-md min-w-fit">
+			{% if station._devices %}
+			<!-- Device Cards -->
+			{% for k,d in station._devices.items() %}
+			<a hx-trigger="click" hx-target="#MainContentBodyDiv" hx-swap="innerHTML" hx-push-url="true"
+				hx-get="/app/stations/{{station.id}}/devices/{{d.id}}">
+				<div
+					class="w-full max-w-md p-3 rounded-lg text-center shadow-sm border border-text dark:border-dark-text bg-neutral dark:bg-dark-neutral
+					hover:cursor-pointer transition-transform transform-gpu hover:-translate-y-1 active:bg-primary dark:active:bg-primary active:outline-none">
+					<h4 class="text-primary truncate overflow-hidden whitespace-nowrap">
+						{{d.name}}
+					</h4>
+				</div>
+			</a>
+			{% endfor %}
+			{% endif %}
+			<!-- No devices found message -->
+			{% if not station._devices %}
+			<p class="text-text dark:text-dark-text">No devices found.</p>
+			{% endif %}
+		</div>
+	</div>
+</div>

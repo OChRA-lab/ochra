@@ -1,0 +1,55 @@
+{% extends "zzmain_layout.html" %}
+{% block banner_title %}
+<h1 class="text-primary dark:text-dark-primary text-4xl">Stations</h1>
+<p class="text-text dark:text-dark-text">Logged in as {{request.state.user.username}}</p>
+{% endblock %}
+
+
+{% block content %}
+<div {% if sidepanel_view %} class="hidden lg:flex flex-col flex-1" {% endif %} class="flex flex-col flex-1">
+
+	<!--Banner-->
+	<div class="flex w-full p-6 border-b-[0.5px] border-text dark:border-dark-text justify-between">
+		<div>
+			<h1 class="text-primary dark:text-dark-primary text-4xl">Stations</h1>
+			<p class="text-text dark:text-dark-text">Logged in as {{request.state.user.username}}</p>
+		</div>
+		<div class="w-1.5 h-1.5 rounded-full bg-success dark:bg-dark-success animate-pulse">
+		</div>
+	</div>
+
+
+	<!--Main Content-->
+	<div class="flex-1 overflow-y-auto">
+		<div class="p-3 border-b-[0.5px] border-text dark:border-dark-text">
+		</div>
+		<!--TABLE-->
+		<div class="overflow-x-scroll max-w-screen">
+			<!--TABLE FIELS IS FALSEY IF EMPTY-->
+			{% if table_fields %}
+			<table class="w-full text-left">
+				<tr class="bg-neutral dark:bg-dark-neutral border-b-[0.5px] border-text dark:border-dark-text">
+					<th class="p-3">Station Name</th>
+					<th class="p-3">Status</th>
+					<th class="p-3">No. Devices</th>
+					<th class="p-3">Active Routine</th>
+				</tr>
+				{% for station in table_fields %}
+				<!--TODO:ADD BACK IN PUSH URL-->
+				<tr hx-trigger="click" hx-get="/app/stations/{{station.station_id}}" hx-target="#sidepanel" hx-swap="innerHTML" hx-push-url="true" class="border-b-[0.5px] border-text dark:border-dark-text hover:bg-neutral dark:hover:bg-dark-neutral hover:cursor-pointer">
+					<td class="p-3">{{station.name}}</td>
+					{% if station.status == 0 %}
+					<td class="p-3 text-success">Available</td>
+					{% else %}
+					<td class="p-3 text-idle">Busy</td>
+					{% endif %}
+					<td class="p-3">{{station.device_count}}</td>
+					<td class="p-3">{{station.active_routine}}</td>
+				</tr>
+				{% endfor %}
+			</table>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}
