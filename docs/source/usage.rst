@@ -80,7 +80,7 @@ This is where you define the common data structure and shared methods for your d
 
 This abstract class can be as comprehensive as you like but its ultimately just a data structure and template. For our example IKA plate, its abstract file::
 
-    from ochra_common.equipment.device import Device
+    from ochra.common.equipment.device import Device
     from pydantic import Field
 
     class IkaPlateAbstract(Device):
@@ -93,13 +93,13 @@ Handler
 
 This class represents an OChRA wrapper for the device's driver so its functionalities can be exposed in the framework.
 
-First, import and inherit from the `abstract` class defined as previously described and `RestProxyMixin` class from `ochra_common`.  
+First, import and inherit from the `abstract` class defined as previously described and `RestProxyMixin` class from `ochra.common`.  
 Define `__init__` method; the first call should always be the superclass init with the `name` field passed through.  
 The module path will be `"YOUR_MODULE.device"` and collection `"devices"`.
 ::
 
     from .abstract import IkaPlateAbstract
-    from ochra_common.utils.mixins import RestProxyMixin
+    from ochra.common.utils.mixins import RestProxyMixin
 
     class IkaPlate(IkaPlateAbstract, RestProxyMixin):
 
@@ -138,7 +138,7 @@ That's it for the handler. You can define as many methods as you like here, and 
 Device
 ##################
 
-This class provides an interface for the device so that any OChRA user can operate the device via the `ochra_discovery` package when developing a workflow.
+This class provides an interface for the device so that any OChRA user can operate the device via the `discovery` package when developing a workflow.
 
 Similar to the handler class, import and inherit from the `abstract` class but this time inherit from `RestProxyMixinReadOnly` instead.  
 You are required to provide the `name` as part of the init method, as this will be used to find the corresponding device handler when executing issued commands.  
@@ -146,7 +146,7 @@ No other things are required for initialization, but if you want to add a logger
 ::
 
     from .abstract import IkaPlateAbstract
-    from ochra_common.utils.mixins import RestProxyMixinReadOnly
+    from ochra.common.utils.mixins import RestProxyMixinReadOnly
 
     class IkaPlate(IkaPlateAbstract, RestProxyMixinReadOnly):
         def __init__(self, name):
@@ -176,12 +176,12 @@ Lab setup
 ************************
 In OChRA framework, each lab would have a single lab server that handles the lab's data and manages its stations and their operation execution.
 
-Setting up a lab is quick and easy. Use a short script similar to [my_lab.py](https://github.com/OChRA-lab/ochra_examples/blob/main/my_lab.py) to initialize your lab server and then run it.  
+Setting up a lab is quick and easy. Use a short script similar to [Example_lab.py](https://github.com/OChRA-lab/ochra/blob/main/examples/Example_lab.py) to initialize your lab server and then run it.  
 You can customize the server's hostname and port with `uvicorn`. For debugging and testing, we also delete the OChRA DB on startup, but you can skip this if you don't need to. See below:
 ::
 
-    from ochra_manager.connections.db_connection import DbConnection
-    from ochra_manager.lab.lab_server import LabServer
+    from ochra.manager.connections.db_connection import DbConnection
+    from ochra.manager.lab.lab_server import LabServer
     import uvicorn
 
     db = DbConnection()
@@ -237,30 +237,17 @@ Firstly, you should run the lab script, this will setup your database and you sh
 
 Next on the station machine run the station script, this should notify the lab that the station is online and allow users to send requests via the lab to the station.
 
-The setup is now complete and you can move on to designing and executing workflows using ochra_discovery package.
+The setup is now complete and you can move on to designing and executing workflows using discovery package.
 
 Writing and executing a workflow
 ---------------------------------------
 
 Assuming you already have a lab and stations set up, and now you want to write a workflow:
 
-First install ochra_discovery by cloning with the command
-::
-
-    git clone https://github.com/OChRA-lab/ochra_discovery.git
-
-and installing to your environment with
-::
-
-    pip install ./ochra_discovery
-
-
-Then begin making your workflow script.
-
 The first step in any workflow script is to connect to the lab using the discovery lab class.
 ::
 
-    from ochra_discovery.spaces.lab import Lab
+    from ochra.discovery.spaces.lab import Lab
 
     lab = Lab("lab_ip:8001")
 
@@ -306,7 +293,7 @@ The returned operation object contains the following attributes:
 
 To see the data produced by an operation, look at the `OperationResult` object:
 ::
-    
+
     stop_op = ika_plate.stop_stir()
     result = OperationResult(id=UUID(stop_op.result)) 
     # Currently, retrieving the result gets its id. In the near future, we will fix this to get the complete result object back 
