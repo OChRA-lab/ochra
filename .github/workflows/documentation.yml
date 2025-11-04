@@ -8,9 +8,13 @@ permissions:
 jobs:
   docs:
     runs-on: ubuntu-latest
+    env:
+      python_ver: '3.12.1'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.python-ver }}
       - name: Install dependencies
         run: |
           pip install .[documentation]
