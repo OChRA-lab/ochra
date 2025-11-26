@@ -1,0 +1,424 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ochra.common.spaces &mdash; OChRA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/autodoc_pydantic.css" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ochra.common.storage package" href="storage.html" />
+    <link rel="prev" title="ochra.common.equipment package" href="equipment.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            OChRA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="common.html">ochra.common package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="connections.html">ochra.common.connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="equipment.html">ochra.common.equipment package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ochra.common.spaces</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.spaces.lab">lab</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.spaces.lab.Lab"><code class="docutils literal notranslate"><span class="pre">Lab</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.spaces.location">location</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.spaces.location.Location"><code class="docutils literal notranslate"><span class="pre">Location</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.spaces.station">station</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.spaces.station.Station"><code class="docutils literal notranslate"><span class="pre">Station</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html">ochra.common.storage package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">ochra.common.utils package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html">ochra.common.base</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../manager/manager.html">ochra_manager package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OChRA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="common.html">ochra.common package</a></li>
+      <li class="breadcrumb-item active">ochra.common.spaces</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/common/spaces.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ochra-common-spaces">
+<h1>ochra.common.spaces<a class="headerlink" href="#ochra-common-spaces" title="Link to this heading"></a></h1>
+<section id="module-ochra.common.spaces.lab">
+<span id="lab"></span><h2>lab<a class="headerlink" href="#module-ochra.common.spaces.lab" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.spaces.lab.Lab">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.spaces.lab.</span></span><span class="sig-name descname"><span class="pre">Lab</span></span><a class="headerlink" href="#ochra.common.spaces.lab.Lab" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a laboratory containing stations and robots.</p>
+<p>This class provides methods to retrieve and manage stations and robots
+within the laboratory environment.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.spaces.lab.Lab.get_robot">
+<span class="sig-name descname"><span class="pre">get_robot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">robot</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.spaces.lab.Lab.get_robot" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a specific robot from the lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>robot</strong> (<em>str</em><em> | </em><em>type</em><em> | </em><em>UUID</em>) – The name, type, or UUID of the robot.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The retrieved robot.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Type[<a class="reference internal" href="equipment.html#ochra.common.equipment.robot.Robot" title="ochra.common.equipment.robot.Robot">Robot</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.spaces.lab.Lab.get_robots">
+<span class="sig-name descname"><span class="pre">get_robots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.spaces.lab.Lab.get_robots" title="Link to this definition"></a></dt>
+<dd><p>Retrieve all robots in the lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of robots in the lab.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[Type[<a class="reference internal" href="equipment.html#ochra.common.equipment.robot.Robot" title="ochra.common.equipment.robot.Robot">Robot</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.spaces.lab.Lab.get_station">
+<span class="sig-name descname"><span class="pre">get_station</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">station_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.spaces.lab.Lab.get_station" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a specific station from the lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>station_name</strong> (<em>str</em>) – The name of the station.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The retrieved station.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#ochra.common.spaces.station.Station" title="ochra.common.spaces.station.Station">Station</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.spaces.lab.Lab.get_stations">
+<span class="sig-name descname"><span class="pre">get_stations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.spaces.lab.Lab.get_stations" title="Link to this definition"></a></dt>
+<dd><p>Retrieve all stations in the lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of stations in the lab.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[<a class="reference internal" href="#ochra.common.spaces.station.Station" title="ochra.common.spaces.station.Station">Station</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.spaces.location">
+<span id="location"></span><h2>location<a class="headerlink" href="#module-ochra.common.spaces.location" title="Link to this heading"></a></h2>
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.spaces.location.Location">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.spaces.location.</span></span><span class="sig-name descname"><span class="pre">Location</span></span><a class="headerlink" href="#ochra.common.spaces.location.Location" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataModel</span></code></a></p>
+<p>Represents a physical location within a laboratory environment.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.spaces.location.Location.additional_metadata" title="ochra.common.spaces.location.Location.additional_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">additional_metadata</span> <span class="pre">(Dict[str,</span> <span class="pre">Any])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.spaces.location.Location.lab" title="ochra.common.spaces.location.Location.lab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lab</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.spaces.location.Location.landmarks" title="ochra.common.spaces.location.Location.landmarks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">landmarks</span> <span class="pre">(List[str])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.spaces.location.Location.place" title="ochra.common.spaces.location.Location.place"><code class="xref py py-obj docutils literal notranslate"><span class="pre">place</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.spaces.location.Location.room" title="ochra.common.spaces.location.Location.room"><code class="xref py py-obj docutils literal notranslate"><span class="pre">room</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.location.Location.additional_metadata">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">additional_metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#ochra.common.spaces.location.Location.additional_metadata" title="Link to this definition"></a></dt>
+<dd><p>Supplementary metadata or contextual information about the location.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.location.Location.lab">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lab</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.spaces.location.Location.lab" title="Link to this definition"></a></dt>
+<dd><p>Name of the laboratory.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.location.Location.landmarks">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">landmarks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#ochra.common.spaces.location.Location.landmarks" title="Link to this definition"></a></dt>
+<dd><p>Distinctive features or markers to help identify the location.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.location.Location.place">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">place</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#ochra.common.spaces.location.Location.place" title="Link to this definition"></a></dt>
+<dd><p>Precise spot within the room (e.g., bench, shelf, cabinet).</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.location.Location.room">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">room</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#ochra.common.spaces.location.Location.room" title="Link to this definition"></a></dt>
+<dd><p>Specific room or area within the laboratory.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.spaces.station">
+<span id="station"></span><h2>station<a class="headerlink" href="#module-ochra.common.spaces.station" title="Link to this heading"></a></h2>
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.spaces.station.</span></span><span class="sig-name descname"><span class="pre">Station</span></span><a class="headerlink" href="#ochra.common.spaces.station.Station" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataModel</span></code></a></p>
+<p>Represents a laboratory station containing devices, robots, and inventory.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.spaces.station.Station.devices" title="ochra.common.spaces.station.Station.devices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">devices</span> <span class="pre">(List[Type[ochra.common.equipment.device.Device]])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.spaces.station.Station.inventory" title="ochra.common.spaces.station.Station.inventory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inventory</span> <span class="pre">(ochra.common.storage.inventory.Inventory)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.spaces.station.Station.location" title="ochra.common.spaces.station.Station.location"><code class="xref py py-obj docutils literal notranslate"><span class="pre">location</span> <span class="pre">(ochra.common.spaces.location.Location)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.spaces.station.Station.locked" title="ochra.common.spaces.station.Station.locked"><code class="xref py py-obj docutils literal notranslate"><span class="pre">locked</span> <span class="pre">(uuid.UUID</span> <span class="pre">|</span> <span class="pre">None)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.spaces.station.Station.name" title="ochra.common.spaces.station.Station.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.spaces.station.Station.operation_record" title="ochra.common.spaces.station.Station.operation_record"><code class="xref py py-obj docutils literal notranslate"><span class="pre">operation_record</span> <span class="pre">(List[ochra.common.equipment.operation.Operation])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.spaces.station.Station.status" title="ochra.common.spaces.station.Station.status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">status</span> <span class="pre">(ochra.common.utils.enum.ActivityStatus)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.spaces.station.Station.type" title="ochra.common.spaces.station.Station.type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">type</span> <span class="pre">(ochra.common.utils.enum.StationType)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.devices">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">devices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="equipment.html#ochra.common.equipment.device.Device" title="ochra.common.equipment.device.Device"><span class="pre">Device</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#ochra.common.spaces.station.Station.devices" title="Link to this definition"></a></dt>
+<dd><p>Devices associated with the station.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.inventory">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inventory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="storage.html#ochra.common.storage.inventory.Inventory" title="ochra.common.storage.inventory.Inventory"><span class="pre">Inventory</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.spaces.station.Station.inventory" title="Link to this definition"></a></dt>
+<dd><p>Inventory associated with the station.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.location">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">location</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#ochra.common.spaces.location.Location" title="ochra.common.spaces.location.Location"><span class="pre">Location</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.spaces.station.Station.location" title="Link to this definition"></a></dt>
+<dd><p>Physical location of the station.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.locked">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">locked</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.spaces.station.Station.locked" title="Link to this definition"></a></dt>
+<dd><p>Session ID of the user who has locked the station, if any.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.name">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.spaces.station.Station.name" title="Link to this definition"></a></dt>
+<dd><p>Station name.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.operation_record">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">operation_record</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="equipment.html#ochra.common.equipment.operation.Operation" title="ochra.common.equipment.operation.Operation"><span class="pre">Operation</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#ochra.common.spaces.station.Station.operation_record" title="Link to this definition"></a></dt>
+<dd><p>History of operations performed.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.status">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="utils.html#ochra.common.utils.enum.ActivityStatus" title="ochra.common.utils.enum.ActivityStatus"><span class="pre">ActivityStatus</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">ActivityStatus.IDLE</span></em><a class="headerlink" href="#ochra.common.spaces.station.Station.status" title="Link to this definition"></a></dt>
+<dd><p>Current operational status (default: IDLE).</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="utils.html#ochra.common.utils.enum.StationType" title="ochra.common.utils.enum.StationType"><span class="pre">StationType</span></a></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.spaces.station.Station.type" title="Link to this definition"></a></dt>
+<dd><p>Station category/type.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.get_device">
+<span class="sig-name descname"><span class="pre">get_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.spaces.station.Station.get_device" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a device from the station.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>device_identifier</strong> (<em>str</em><em> | </em><em>UUID</em>) – The device name or its unique identifier.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The retrieved device.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Type[<a class="reference internal" href="equipment.html#ochra.common.equipment.device.Device" title="ochra.common.equipment.device.Device">Device</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.get_robot">
+<span class="sig-name descname"><span class="pre">get_robot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">robot_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.spaces.station.Station.get_robot" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a robot from the station.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>robot_identifier</strong> (<em>str</em><em> | </em><em>UUID</em>) – The robot name or its unique identifier.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The retrieved robot.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Type[<a class="reference internal" href="equipment.html#ochra.common.equipment.robot.Robot" title="ochra.common.equipment.robot.Robot">Robot</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.lock">
+<span class="sig-name descname"><span class="pre">lock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.spaces.station.Station.lock" title="Link to this definition"></a></dt>
+<dd><p>Lock the station for the given session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>session_id</strong> (<em>UUID</em>) – The session ID requesting the lock.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If the station is already locked by another session.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.model_post_init">
+<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.spaces.station.Station.model_post_init" title="Link to this definition"></a></dt>
+<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
+method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<em>BaseModel</em>)</p></li>
+<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.spaces.station.Station.unlock">
+<span class="sig-name descname"><span class="pre">unlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.spaces.station.Station.unlock" title="Link to this definition"></a></dt>
+<dd><p>Unlock the station for the given session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>session_id</strong> (<em>UUID</em>) – The session ID requesting the unlock.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>Exception</strong> – If the session does not hold the lock and is not ADMIN.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="equipment.html" class="btn btn-neutral float-left" title="ochra.common.equipment package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="storage.html" class="btn btn-neutral float-right" title="ochra.common.storage package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, OChRA team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

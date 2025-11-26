@@ -1,0 +1,602 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ochra.common.utils package &mdash; OChRA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/autodoc_pydantic.css" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ochra.common.base" href="base.html" />
+    <link rel="prev" title="ochra.common.storage package" href="storage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            OChRA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="common.html">ochra.common package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="connections.html">ochra.common.connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="equipment.html">ochra.common.equipment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spaces.html">ochra.common.spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html">ochra.common.storage package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ochra.common.utils package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.utils.enum">enum</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.enum.ActivityStatus"><code class="docutils literal notranslate"><span class="pre">ActivityStatus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.enum.MobileRobotState"><code class="docutils literal notranslate"><span class="pre">MobileRobotState</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.enum.OperationStatus"><code class="docutils literal notranslate"><span class="pre">OperationStatus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.enum.PatchType"><code class="docutils literal notranslate"><span class="pre">PatchType</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.enum.PhysicalState"><code class="docutils literal notranslate"><span class="pre">PhysicalState</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.enum.ResultDataStatus"><code class="docutils literal notranslate"><span class="pre">ResultDataStatus</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.enum.StationType"><code class="docutils literal notranslate"><span class="pre">StationType</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.utils.logging_config">logging_config</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.logging_config.get_console_handler"><code class="docutils literal notranslate"><span class="pre">get_console_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.logging_config.get_detailed_format"><code class="docutils literal notranslate"><span class="pre">get_detailed_format()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.logging_config.get_logger_config"><code class="docutils literal notranslate"><span class="pre">get_logger_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.logging_config.get_rotating_file_handler"><code class="docutils literal notranslate"><span class="pre">get_rotating_file_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.logging_config.get_smtp_handler"><code class="docutils literal notranslate"><span class="pre">get_smtp_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.logging_config.get_standard_format"><code class="docutils literal notranslate"><span class="pre">get_standard_format()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.utils.misc">misc</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.misc.convert_to_data_model"><code class="docutils literal notranslate"><span class="pre">convert_to_data_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.misc.is_data_model"><code class="docutils literal notranslate"><span class="pre">is_data_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.misc.is_valid_uuid"><code class="docutils literal notranslate"><span class="pre">is_valid_uuid()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.utils.mixins">mixins</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.mixins.RestProxyMixin"><code class="docutils literal notranslate"><span class="pre">RestProxyMixin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.mixins.RestProxyMixinReadOnly"><code class="docutils literal notranslate"><span class="pre">RestProxyMixinReadOnly</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.utils.singleton_meta">singleton_meta</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.utils.singleton_meta.SingletonMeta"><code class="docutils literal notranslate"><span class="pre">SingletonMeta</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="base.html">ochra.common.base</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../manager/manager.html">ochra_manager package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OChRA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="common.html">ochra.common package</a></li>
+      <li class="breadcrumb-item active">ochra.common.utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/common/utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ochra-common-utils-package">
+<h1>ochra.common.utils package<a class="headerlink" href="#ochra-common-utils-package" title="Link to this heading"></a></h1>
+<section id="module-ochra.common.utils.enum">
+<span id="enum"></span><h2>enum<a class="headerlink" href="#module-ochra.common.utils.enum" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.ActivityStatus">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.utils.enum.</span></span><span class="sig-name descname"><span class="pre">ActivityStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.enum.ActivityStatus" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration representing different activity statuses for devices and stations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.ActivityStatus.BUSY">
+<span class="sig-name descname"><span class="pre">BUSY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#ochra.common.utils.enum.ActivityStatus.BUSY" title="Link to this definition"></a></dt>
+<dd><p>Represents a busy state.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.ActivityStatus.ERROR">
+<span class="sig-name descname"><span class="pre">ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#ochra.common.utils.enum.ActivityStatus.ERROR" title="Link to this definition"></a></dt>
+<dd><p>Represents an error state.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.ActivityStatus.IDLE">
+<span class="sig-name descname"><span class="pre">IDLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#ochra.common.utils.enum.ActivityStatus.IDLE" title="Link to this definition"></a></dt>
+<dd><p>Represents an idle state.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.MobileRobotState">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.utils.enum.</span></span><span class="sig-name descname"><span class="pre">MobileRobotState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.enum.MobileRobotState" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration representing different states of a mobile robot.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.MobileRobotState.AVAILABLE">
+<span class="sig-name descname"><span class="pre">AVAILABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#ochra.common.utils.enum.MobileRobotState.AVAILABLE" title="Link to this definition"></a></dt>
+<dd><p>Robot is available for operation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.MobileRobotState.CHARGING">
+<span class="sig-name descname"><span class="pre">CHARGING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#ochra.common.utils.enum.MobileRobotState.CHARGING" title="Link to this definition"></a></dt>
+<dd><p>Robot is charging its battery.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.MobileRobotState.ERROR">
+<span class="sig-name descname"><span class="pre">ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#ochra.common.utils.enum.MobileRobotState.ERROR" title="Link to this definition"></a></dt>
+<dd><p>Represents an error state.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.MobileRobotState.MANIPULATING">
+<span class="sig-name descname"><span class="pre">MANIPULATING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#ochra.common.utils.enum.MobileRobotState.MANIPULATING" title="Link to this definition"></a></dt>
+<dd><p>Robot is manipulating an object.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.MobileRobotState.NAVIGATING">
+<span class="sig-name descname"><span class="pre">NAVIGATING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#ochra.common.utils.enum.MobileRobotState.NAVIGATING" title="Link to this definition"></a></dt>
+<dd><p>Robot is navigating through the environment.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.OperationStatus">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.utils.enum.</span></span><span class="sig-name descname"><span class="pre">OperationStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.enum.OperationStatus" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration representing different statuses of an operation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.OperationStatus.ASSIGNED">
+<span class="sig-name descname"><span class="pre">ASSIGNED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#ochra.common.utils.enum.OperationStatus.ASSIGNED" title="Link to this definition"></a></dt>
+<dd><p>Operation has been assigned to a device or station.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.OperationStatus.COMPLETED">
+<span class="sig-name descname"><span class="pre">COMPLETED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#ochra.common.utils.enum.OperationStatus.COMPLETED" title="Link to this definition"></a></dt>
+<dd><p>Operation has been completed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.OperationStatus.CREATED">
+<span class="sig-name descname"><span class="pre">CREATED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#ochra.common.utils.enum.OperationStatus.CREATED" title="Link to this definition"></a></dt>
+<dd><p>Operation has been created.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.OperationStatus.IN_PROGRESS">
+<span class="sig-name descname"><span class="pre">IN_PROGRESS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#ochra.common.utils.enum.OperationStatus.IN_PROGRESS" title="Link to this definition"></a></dt>
+<dd><p>Operation is currently in progress.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PatchType">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.utils.enum.</span></span><span class="sig-name descname"><span class="pre">PatchType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.enum.PatchType" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration representing different types of patches for modifying data structures.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PatchType.DICT_DELETE">
+<span class="sig-name descname"><span class="pre">DICT_DELETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#ochra.common.utils.enum.PatchType.DICT_DELETE" title="Link to this definition"></a></dt>
+<dd><p>Represents a delete operation for dictionaries.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PatchType.DICT_INSERT">
+<span class="sig-name descname"><span class="pre">DICT_INSERT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#ochra.common.utils.enum.PatchType.DICT_INSERT" title="Link to this definition"></a></dt>
+<dd><p>Represents an insert operation for dictionaries.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PatchType.LIST_APPEND">
+<span class="sig-name descname"><span class="pre">LIST_APPEND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#ochra.common.utils.enum.PatchType.LIST_APPEND" title="Link to this definition"></a></dt>
+<dd><p>Represents an append operation for lists.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PatchType.LIST_DELETE">
+<span class="sig-name descname"><span class="pre">LIST_DELETE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#ochra.common.utils.enum.PatchType.LIST_DELETE" title="Link to this definition"></a></dt>
+<dd><p>Represents a delete operation for lists.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PatchType.LIST_INSERT">
+<span class="sig-name descname"><span class="pre">LIST_INSERT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#ochra.common.utils.enum.PatchType.LIST_INSERT" title="Link to this definition"></a></dt>
+<dd><p>Represents an insert operation for lists.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PatchType.LIST_POP">
+<span class="sig-name descname"><span class="pre">LIST_POP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#ochra.common.utils.enum.PatchType.LIST_POP" title="Link to this definition"></a></dt>
+<dd><p>Represents a pop operation for lists.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PatchType.SET">
+<span class="sig-name descname"><span class="pre">SET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#ochra.common.utils.enum.PatchType.SET" title="Link to this definition"></a></dt>
+<dd><p>Represents a set operation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PhysicalState">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.utils.enum.</span></span><span class="sig-name descname"><span class="pre">PhysicalState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.enum.PhysicalState" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration representing different physical states of matter.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PhysicalState.GAS">
+<span class="sig-name descname"><span class="pre">GAS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#ochra.common.utils.enum.PhysicalState.GAS" title="Link to this definition"></a></dt>
+<dd><p>Represents a gas physical state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PhysicalState.LIQUID">
+<span class="sig-name descname"><span class="pre">LIQUID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#ochra.common.utils.enum.PhysicalState.LIQUID" title="Link to this definition"></a></dt>
+<dd><p>Represents a liquid physical state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PhysicalState.SOLID">
+<span class="sig-name descname"><span class="pre">SOLID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#ochra.common.utils.enum.PhysicalState.SOLID" title="Link to this definition"></a></dt>
+<dd><p>Represents a solid physical state</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.PhysicalState.UNKNOWN">
+<span class="sig-name descname"><span class="pre">UNKNOWN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#ochra.common.utils.enum.PhysicalState.UNKNOWN" title="Link to this definition"></a></dt>
+<dd><p>Represents an unknown physical state</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.ResultDataStatus">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.utils.enum.</span></span><span class="sig-name descname"><span class="pre">ResultDataStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.enum.ResultDataStatus" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration representing different statuses of result data.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.ResultDataStatus.AVAILABLE">
+<span class="sig-name descname"><span class="pre">AVAILABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#ochra.common.utils.enum.ResultDataStatus.AVAILABLE" title="Link to this definition"></a></dt>
+<dd><p>Result data is available.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.ResultDataStatus.UNAVAILABLE">
+<span class="sig-name descname"><span class="pre">UNAVAILABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#ochra.common.utils.enum.ResultDataStatus.UNAVAILABLE" title="Link to this definition"></a></dt>
+<dd><p>Result data is unavailable yet.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.ResultDataStatus.UPLOADING">
+<span class="sig-name descname"><span class="pre">UPLOADING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#ochra.common.utils.enum.ResultDataStatus.UPLOADING" title="Link to this definition"></a></dt>
+<dd><p>Result data is currently uploading.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.StationType">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.utils.enum.</span></span><span class="sig-name descname"><span class="pre">StationType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.enum.StationType" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>An enumeration representing different types of stations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.StationType.MOBILE_ROBOT_STATION">
+<span class="sig-name descname"><span class="pre">MOBILE_ROBOT_STATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#ochra.common.utils.enum.StationType.MOBILE_ROBOT_STATION" title="Link to this definition"></a></dt>
+<dd><p>Represents a mobile robot station</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.StationType.STORAGE_STATION">
+<span class="sig-name descname"><span class="pre">STORAGE_STATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#ochra.common.utils.enum.StationType.STORAGE_STATION" title="Link to this definition"></a></dt>
+<dd><p>Represents a storage station that does not have any devices</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.common.utils.enum.StationType.WORK_STATION">
+<span class="sig-name descname"><span class="pre">WORK_STATION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#ochra.common.utils.enum.StationType.WORK_STATION" title="Link to this definition"></a></dt>
+<dd><p>Represents a work station</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.utils.logging_config">
+<span id="logging-config"></span><h2>logging_config<a class="headerlink" href="#module-ochra.common.utils.logging_config" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ochra.common.utils.logging_config.get_console_handler">
+<span class="sig-prename descclassname"><span class="pre">ochra.common.utils.logging_config.</span></span><span class="sig-name descname"><span class="pre">get_console_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formatter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.logging_config.get_console_handler" title="Link to this definition"></a></dt>
+<dd><p>Get the console handler configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>formatter</strong> (<em>str</em>) – The formatter to use.</p></li>
+<li><p><strong>level</strong> (<em>int</em><em>, </em><em>optional</em>) – The logging level. Defaults to logging.INFO.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The console handler configuration.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ochra.common.utils.logging_config.get_detailed_format">
+<span class="sig-prename descclassname"><span class="pre">ochra.common.utils.logging_config.</span></span><span class="sig-name descname"><span class="pre">get_detailed_format</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.logging_config.get_detailed_format" title="Link to this definition"></a></dt>
+<dd><p>Get the detailed log message format.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ochra.common.utils.logging_config.get_logger_config">
+<span class="sig-prename descclassname"><span class="pre">ochra.common.utils.logging_config.</span></span><span class="sig-name descname"><span class="pre">get_logger_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handlers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propagate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.logging_config.get_logger_config" title="Link to this definition"></a></dt>
+<dd><p>Get the logger configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handlers</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The list of handlers to use.</p></li>
+<li><p><strong>level</strong> (<em>int</em><em>, </em><em>optional</em>) – The logging level. Defaults to logging.INFO.</p></li>
+<li><p><strong>propagate</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to propagate the log messages. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Dict</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ochra.common.utils.logging_config.get_rotating_file_handler">
+<span class="sig-prename descclassname"><span class="pre">ochra.common.utils.logging_config.</span></span><span class="sig-name descname"><span class="pre">get_rotating_file_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formatter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.logging_config.get_rotating_file_handler" title="Link to this definition"></a></dt>
+<dd><p>Get the rotating file handler configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>formatter</strong> (<em>str</em>) – The formatter to use.</p></li>
+<li><p><strong>file_path</strong> (<em>str</em>) – The path to the log file.</p></li>
+<li><p><strong>level</strong> (<em>int</em><em>, </em><em>optional</em>) – The logging level. Defaults to logging.DEBUG.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rotating file handler configuration.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ochra.common.utils.logging_config.get_smtp_handler">
+<span class="sig-prename descclassname"><span class="pre">ochra.common.utils.logging_config.</span></span><span class="sig-name descname"><span class="pre">get_smtp_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">formatter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mailhost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromaddr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">toaddrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subject</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">credentials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.logging_config.get_smtp_handler" title="Link to this definition"></a></dt>
+<dd><p>Get the SMTP handler configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>formatter</strong> (<em>str</em>) – The formatter to use.</p></li>
+<li><p><strong>mailhost</strong> (<em>str</em>) – The mail server host.</p></li>
+<li><p><strong>fromaddr</strong> (<em>str</em>) – The sender’s email address.</p></li>
+<li><p><strong>toaddrs</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The recipient email addresses.</p></li>
+<li><p><strong>subject</strong> (<em>str</em>) – The email subject.</p></li>
+<li><p><strong>credentials</strong> (<em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>] </em><em>| </em><em>None</em><em>, </em><em>optional</em>) – The SMTP server credentials. Defaults to None.</p></li>
+<li><p><strong>secure</strong> (<em>Tuple</em><em>, </em><em>optional</em>) – The secure connection parameters. Defaults to ().</p></li>
+<li><p><strong>level</strong> (<em>int</em><em>, </em><em>optional</em>) – The logging level. Defaults to logging.DEBUG.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The SMTP handler configuration.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ochra.common.utils.logging_config.get_standard_format">
+<span class="sig-prename descclassname"><span class="pre">ochra.common.utils.logging_config.</span></span><span class="sig-name descname"><span class="pre">get_standard_format</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.logging_config.get_standard_format" title="Link to this definition"></a></dt>
+<dd><p>Get the standard log message format.</p>
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.utils.misc">
+<span id="misc"></span><h2>misc<a class="headerlink" href="#module-ochra.common.utils.misc" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ochra.common.utils.misc.convert_to_data_model">
+<span class="sig-prename descclassname"><span class="pre">ochra.common.utils.misc.</span></span><span class="sig-name descname"><span class="pre">convert_to_data_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.misc.convert_to_data_model" title="Link to this definition"></a></dt>
+<dd><p>Convert a dict to a DataModel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>a_dict</strong> (<em>Dict</em>) – The dict to convert.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The converted DataModel.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel">DataModel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ochra.common.utils.misc.is_data_model">
+<span class="sig-prename descclassname"><span class="pre">ochra.common.utils.misc.</span></span><span class="sig-name descname"><span class="pre">is_data_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.misc.is_data_model" title="Link to this definition"></a></dt>
+<dd><p>Check if an dict is a DataModel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> (<em>Any</em>) – The object to check.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the object is a DataModel, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ochra.common.utils.misc.is_valid_uuid">
+<span class="sig-prename descclassname"><span class="pre">ochra.common.utils.misc.</span></span><span class="sig-name descname"><span class="pre">is_valid_uuid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.misc.is_valid_uuid" title="Link to this definition"></a></dt>
+<dd><p>Check if a string is a valid UUID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>string</strong> (<em>str</em>) – The string to check.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the string is a valid UUID, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.utils.mixins">
+<span id="mixins"></span><h2>mixins<a class="headerlink" href="#module-ochra.common.utils.mixins" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.utils.mixins.RestProxyMixin">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.utils.mixins.</span></span><span class="sig-name descname"><span class="pre">RestProxyMixin</span></span><a class="headerlink" href="#ochra.common.utils.mixins.RestProxyMixin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Mixin that changes class behavior such that its properties are accessed via REST API calls to a lab engine. This proxies both getters and setters.</p>
+<p>When used in a class, it replaces field getters and setters (except ‘id’ and ‘cls’) with property accessors that interact with the backend through
+LabConnection. This ensures property access is always synchronized with the remote data source.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.utils.mixins.RestProxyMixin.from_id">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.mixins.RestProxyMixin.from_id" title="Link to this definition"></a></dt>
+<dd><p>Create an instance of the class by fetching data from the REST API using the provided object ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>object_id</strong> (<em>UUID</em>) – The unique identifier for the model instance.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the class populated with data from the REST API.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.utils.mixins.RestProxyMixinReadOnly">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.utils.mixins.</span></span><span class="sig-name descname"><span class="pre">RestProxyMixinReadOnly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.mixins.RestProxyMixinReadOnly" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Mixin that changes class behavior such that its properties are accessed via REST API calls to a lab engine. This proxies only getters.</p>
+<p>When used in a class, it replaces field getters (except ‘id’ and ‘cls’) with property accessors that interact with the backend through
+LabConnection. This ensures property access is always synchronized with the remote data source.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.utils.mixins.RestProxyMixinReadOnly.from_id">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.utils.mixins.RestProxyMixinReadOnly.from_id" title="Link to this definition"></a></dt>
+<dd><p>Create an instance of the class by fetching data from the REST API using the provided object ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>object_id</strong> (<em>UUID</em>) – The unique identifier for the model instance.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the class populated with data from the REST API.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.utils.singleton_meta">
+<span id="singleton-meta"></span><h2>singleton_meta<a class="headerlink" href="#module-ochra.common.utils.singleton_meta" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.utils.singleton_meta.SingletonMeta">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.utils.singleton_meta.</span></span><span class="sig-name descname"><span class="pre">SingletonMeta</span></span><a class="headerlink" href="#ochra.common.utils.singleton_meta.SingletonMeta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<p>Thread-safe Singleton metaclass.</p>
+<p>Ensures that only one instance of a class exists,
+even in multi-threaded environments.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="storage.html" class="btn btn-neutral float-left" title="ochra.common.storage package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="base.html" class="btn btn-neutral float-right" title="ochra.common.base" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, OChRA team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

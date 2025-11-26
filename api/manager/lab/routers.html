@@ -1,0 +1,1200 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>routers &mdash; OChRA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/autodoc_pydantic.css" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="servers" href="servers.html" />
+    <link rel="prev" title="auth" href="auth.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            OChRA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../common/common.html">ochra.common package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../manager.html">ochra_manager package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../connections.html">ochra.manager.connections</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="lab.html">ochra_manager.lab</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="auth.html">auth</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">routers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-ochra.manager.lab.routers.device_router">device_router</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-ochra.manager.lab.routers.lab_router">lab_router</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-ochra.manager.lab.routers.operation_results_router">operation_results_router</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-ochra.manager.lab.routers.operation_router">operation_router</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-ochra.manager.lab.routers.robot_router">robot_router</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-ochra.manager.lab.routers.station_router">station_router</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-ochra.manager.lab.routers.storage_router">storage_router</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-ochra.manager.lab.routers.ui_router">ui_router</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="servers.html">servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="utils.html">utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../proxy_models/proxy_models.html">ochra_manager.proxy_models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../station/station.html">ochra_manager.station</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OChRA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../manager.html">ochra_manager package</a></li>
+          <li class="breadcrumb-item"><a href="lab.html">ochra_manager.lab</a></li>
+      <li class="breadcrumb-item active">routers</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/api/manager/lab/routers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="routers">
+<h1>routers<a class="headerlink" href="#routers" title="Link to this heading"></a></h1>
+<section id="module-ochra.manager.lab.routers.device_router">
+<span id="device-router"></span><h2>device_router<a class="headerlink" href="#module-ochra.manager.lab.routers.device_router" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.device_router.DeviceRouter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.manager.lab.routers.device_router.</span></span><span class="sig-name descname"><span class="pre">DeviceRouter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheduler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.device_router.DeviceRouter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIRouter</span></code></p>
+<p>DeviceRouter is responsible for handling device-related API endpoints.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.device_router.DeviceRouter.call_device">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">call_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.device_router.DeviceRouter.call_device" title="Link to this definition"></a></dt>
+<dd><p>Call a method on the device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the device.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectCallRequest" title="ochra.common.connections.api_models.ObjectCallRequest"><em>ObjectCallRequest</em></a>) – The method call parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dict representing the Operation model in JSON format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.device_router.DeviceRouter.construct_device">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">construct_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.device_router.DeviceRouter.construct_device" title="Link to this definition"></a></dt>
+<dd><p>Construct a new device in the lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectConstructionRequest" title="ochra.common.connections.api_models.ObjectConstructionRequest"><em>ObjectConstructionRequest</em></a>) – The construction parameters for the device.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ID of the constructed device.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.device_router.DeviceRouter.delete_device">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.device_router.DeviceRouter.delete_device" title="Link to this definition"></a></dt>
+<dd><p>Delete a device by its ID or name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the device.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A message indicating the result of the deletion.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.device_router.DeviceRouter.get_device">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.device_router.DeviceRouter.get_device" title="Link to this definition"></a></dt>
+<dd><p>Get a device by its ID or name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the device.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The device data model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../common/base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel">DataModel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.device_router.DeviceRouter.get_device_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_device_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.device_router.DeviceRouter.get_device_property" title="Link to this definition"></a></dt>
+<dd><p>Get properties of a device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the device.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyGetRequest" title="ochra.common.connections.api_models.ObjectPropertyGetRequest"><em>ObjectPropertyGetRequest</em></a>) – The properties to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The requested properties of the device.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.device_router.DeviceRouter.modify_device_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modify_device_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.device_router.DeviceRouter.modify_device_property" title="Link to this definition"></a></dt>
+<dd><p>Modify properties of a device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the device.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyPatchRequest" title="ochra.common.connections.api_models.ObjectPropertyPatchRequest"><em>ObjectPropertyPatchRequest</em></a>) – The properties to modify.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the modification was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.manager.lab.routers.lab_router">
+<span id="lab-router"></span><h2>lab_router<a class="headerlink" href="#module-ochra.manager.lab.routers.lab_router" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.lab_router.LabRouter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.manager.lab.routers.lab_router.</span></span><span class="sig-name descname"><span class="pre">LabRouter</span></span><a class="headerlink" href="#ochra.manager.lab.routers.lab_router.LabRouter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIRouter</span></code></p>
+<p>LabRouter is responsible for handling lab-related API endpoints.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.lab_router.LabRouter.get_lab_object">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_lab_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.lab_router.LabRouter.get_lab_object" title="Link to this definition"></a></dt>
+<dd><p>Get a specific lab object by its identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object_type</strong> (<em>str</em>) – The type of the lab object (e.g., “stations”).</p></li>
+<li><p><strong>identifier</strong> (<em>str</em>) – The unique identifier of the lab object (UUID or name).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The lab object data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If the lab object is not found (404).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.lab_router.LabRouter.get_lab_objects">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_lab_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.lab_router.LabRouter.get_lab_objects" title="Link to this definition"></a></dt>
+<dd><p>Get all lab objects of a specific type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>object_type</strong> (<em>str</em>) – The type of the lab objects (e.g., “stations”).</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of lab object data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If no lab objects are found (404).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.manager.lab.routers.operation_results_router">
+<span id="operation-results-router"></span><h2>operation_results_router<a class="headerlink" href="#module-ochra.manager.lab.routers.operation_results_router" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_results_router.OperationResultRouter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.manager.lab.routers.operation_results_router.</span></span><span class="sig-name descname"><span class="pre">OperationResultRouter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folderpath</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.operation_results_router.OperationResultRouter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIRouter</span></code></p>
+<p>OperationResultRouter is responsible for handling operation result-related API endpoints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folderpath</strong> (<em>str</em>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_results_router.OperationResultRouter.construct_result">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">construct_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.operation_results_router.OperationResultRouter.construct_result" title="Link to this definition"></a></dt>
+<dd><p>Construct a new operation result in the lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectConstructionRequest" title="ochra.common.connections.api_models.ObjectConstructionRequest"><em>ObjectConstructionRequest</em></a>) – The construction parameters for the operation result.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ID of the constructed operation result.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_results_router.OperationResultRouter.get_data">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_tasks</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.operation_results_router.OperationResultRouter.get_data" title="Link to this definition"></a></dt>
+<dd><p>Get the data file associated with an operation result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID of the operation result.</p></li>
+<li><p><strong>background_tasks</strong> (<em>BackgroundTasks</em>) – Background tasks for cleanup.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The file response containing the data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>FileResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_results_router.OperationResultRouter.get_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.operation_results_router.OperationResultRouter.get_property" title="Link to this definition"></a></dt>
+<dd><p>Get properties of an operation result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID of the operation result.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyGetRequest" title="ochra.common.connections.api_models.ObjectPropertyGetRequest"><em>ObjectPropertyGetRequest</em></a>) – The properties to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The requested properties of the operation result.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_results_router.OperationResultRouter.get_result">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.operation_results_router.OperationResultRouter.get_result" title="Link to this definition"></a></dt>
+<dd><p>Get an operation result by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>identifier</strong> (<em>str</em>) – The ID of the operation result.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The operation result data model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../common/base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel">DataModel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_results_router.OperationResultRouter.modify_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modify_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.operation_results_router.OperationResultRouter.modify_property" title="Link to this definition"></a></dt>
+<dd><p>Modify properties of an operation result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID of the operation result.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyPatchRequest" title="ochra.common.connections.api_models.ObjectPropertyPatchRequest"><em>ObjectPropertyPatchRequest</em></a>) – The properties to modify.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the modification was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_results_router.OperationResultRouter.put_data">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">put_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">File(PydanticUndefined)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.operation_results_router.OperationResultRouter.put_data" title="Link to this definition"></a></dt>
+<dd><p>Upload and associate a data file with an operation result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID of the operation result.</p></li>
+<li><p><strong>file</strong> (<em>UploadFile</em>) – The uploaded file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.manager.lab.routers.operation_router">
+<span id="operation-router"></span><h2>operation_router<a class="headerlink" href="#module-ochra.manager.lab.routers.operation_router" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_router.OperationRouter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.manager.lab.routers.operation_router.</span></span><span class="sig-name descname"><span class="pre">OperationRouter</span></span><a class="headerlink" href="#ochra.manager.lab.routers.operation_router.OperationRouter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIRouter</span></code></p>
+<p>OperationRouter is responsible for handling operation-related API endpoints.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_router.OperationRouter.construct_op">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">construct_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.operation_router.OperationRouter.construct_op" title="Link to this definition"></a></dt>
+<dd><p>Construct a new operation in the lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectConstructionRequest" title="ochra.common.connections.api_models.ObjectConstructionRequest"><em>ObjectConstructionRequest</em></a>) – The construction parameters for the operation.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ID of the constructed operation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_router.OperationRouter.get_op">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_op</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.operation_router.OperationRouter.get_op" title="Link to this definition"></a></dt>
+<dd><p>Get an operation by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>identifier</strong> (<em>str</em>) – The ID of the operation.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The operation data model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../common/base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel">DataModel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_router.OperationRouter.get_op_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_op_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.operation_router.OperationRouter.get_op_property" title="Link to this definition"></a></dt>
+<dd><p>Get properties of an operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID of the operation.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyGetRequest" title="ochra.common.connections.api_models.ObjectPropertyGetRequest"><em>ObjectPropertyGetRequest</em></a>) – The properties to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The requested properties of the operation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.operation_router.OperationRouter.modify_op_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modify_op_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.operation_router.OperationRouter.modify_op_property" title="Link to this definition"></a></dt>
+<dd><p>Modify properties of an operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID of the operation.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyPatchRequest" title="ochra.common.connections.api_models.ObjectPropertyPatchRequest"><em>ObjectPropertyPatchRequest</em></a>) – The properties to modify.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the modification was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.manager.lab.routers.robot_router">
+<span id="robot-router"></span><h2>robot_router<a class="headerlink" href="#module-ochra.manager.lab.routers.robot_router" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.robot_router.RobotRouter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.manager.lab.routers.robot_router.</span></span><span class="sig-name descname"><span class="pre">RobotRouter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheduler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.robot_router.RobotRouter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIRouter</span></code></p>
+<p>RobotRouter is responsible for handling robot-related API endpoints.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.robot_router.RobotRouter.call_robot">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">call_robot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.robot_router.RobotRouter.call_robot" title="Link to this definition"></a></dt>
+<dd><p>Call a method on the robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the robot.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectCallRequest" title="ochra.common.connections.api_models.ObjectCallRequest"><em>ObjectCallRequest</em></a>) – The method call parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dict representing the Operation model in JSON format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.robot_router.RobotRouter.construct_robot">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">construct_robot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.robot_router.RobotRouter.construct_robot" title="Link to this definition"></a></dt>
+<dd><p>Construct a new robot in the lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectConstructionRequest" title="ochra.common.connections.api_models.ObjectConstructionRequest"><em>ObjectConstructionRequest</em></a>) – The construction parameters for the robot.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ID of the constructed robot.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.robot_router.RobotRouter.delete_robot">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_robot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.robot_router.RobotRouter.delete_robot" title="Link to this definition"></a></dt>
+<dd><p>Delete a robot by its ID or name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the robot.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A message indicating the result of the deletion.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.robot_router.RobotRouter.get_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.robot_router.RobotRouter.get_property" title="Link to this definition"></a></dt>
+<dd><p>Get properties of a robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the robot.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyGetRequest" title="ochra.common.connections.api_models.ObjectPropertyGetRequest"><em>ObjectPropertyGetRequest</em></a>) – The properties to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The requested properties of the robot.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.robot_router.RobotRouter.get_robot">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_robot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.robot_router.RobotRouter.get_robot" title="Link to this definition"></a></dt>
+<dd><p>Get a robot by its ID or name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the robot.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The robot data model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../common/base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel">DataModel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.robot_router.RobotRouter.modify_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modify_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.robot_router.RobotRouter.modify_property" title="Link to this definition"></a></dt>
+<dd><p>Modify properties of a robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the robot.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyPatchRequest" title="ochra.common.connections.api_models.ObjectPropertyPatchRequest"><em>ObjectPropertyPatchRequest</em></a>) – The properties to modify.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the modification was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.manager.lab.routers.station_router">
+<span id="station-router"></span><h2>station_router<a class="headerlink" href="#module-ochra.manager.lab.routers.station_router" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.station_router.StationRouter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.manager.lab.routers.station_router.</span></span><span class="sig-name descname"><span class="pre">StationRouter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheduler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.station_router.StationRouter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIRouter</span></code></p>
+<p>StationRouter is responsible for handling station-related API endpoints.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.station_router.StationRouter.call_method">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">call_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.station_router.StationRouter.call_method" title="Link to this definition"></a></dt>
+<dd><p>Call a method on the station.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the station.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectCallRequest" title="ochra.common.connections.api_models.ObjectCallRequest"><em>ObjectCallRequest</em></a>) – The method call parameters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dict representing the Operation model in JSON format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.station_router.StationRouter.construct_station">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">construct_station</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.station_router.StationRouter.construct_station" title="Link to this definition"></a></dt>
+<dd><p>Construct a new station in the lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectConstructionRequest" title="ochra.common.connections.api_models.ObjectConstructionRequest"><em>ObjectConstructionRequest</em></a>) – The construction parameters for the station.</p></li>
+<li><p><strong>request</strong> (<em>Request</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ID of the constructed station.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.station_router.StationRouter.delete_station">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_station</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.station_router.StationRouter.delete_station" title="Link to this definition"></a></dt>
+<dd><p>Delete a station by its ID or name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the station.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A message indicating the result of the deletion.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.station_router.StationRouter.get_station">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_station</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.station_router.StationRouter.get_station" title="Link to this definition"></a></dt>
+<dd><p>Get a station by its ID or name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the station.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The station data model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../common/base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel">DataModel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.station_router.StationRouter.get_station_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_station_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.station_router.StationRouter.get_station_property" title="Link to this definition"></a></dt>
+<dd><p>Get properties of a station.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the station.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyGetRequest" title="ochra.common.connections.api_models.ObjectPropertyGetRequest"><em>ObjectPropertyGetRequest</em></a>) – The properties to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The requested properties of the station.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.station_router.StationRouter.modify_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modify_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.station_router.StationRouter.modify_property" title="Link to this definition"></a></dt>
+<dd><p>Modify properties of a station.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID or name of the station.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyPatchRequest" title="ochra.common.connections.api_models.ObjectPropertyPatchRequest"><em>ObjectPropertyPatchRequest</em></a>) – The properties to modify.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the modification was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.manager.lab.routers.storage_router">
+<span id="storage-router"></span><h2>storage_router<a class="headerlink" href="#module-ochra.manager.lab.routers.storage_router" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.storage_router.StorageRouter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.manager.lab.routers.storage_router.</span></span><span class="sig-name descname"><span class="pre">StorageRouter</span></span><a class="headerlink" href="#ochra.manager.lab.routers.storage_router.StorageRouter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIRouter</span></code></p>
+<p>StorageRouter is responsible for handling storage-related API endpoints.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.storage_router.StorageRouter.construct_storage_item">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">construct_storage_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.storage_router.StorageRouter.construct_storage_item" title="Link to this definition"></a></dt>
+<dd><p>Construct a new storage item in the lab.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectConstructionRequest" title="ochra.common.connections.api_models.ObjectConstructionRequest"><em>ObjectConstructionRequest</em></a>) – The construction parameters for the storage item.</p></li>
+<li><p><strong>object_type</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ID of the constructed storage item.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.storage_router.StorageRouter.delete_storage_item">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_storage_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.storage_router.StorageRouter.delete_storage_item" title="Link to this definition"></a></dt>
+<dd><p>Delete a storage item by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID of the storage item.</p></li>
+<li><p><strong>object_type</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A message indicating the result of the deletion.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.storage_router.StorageRouter.get_storage_item">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_storage_item</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.storage_router.StorageRouter.get_storage_item" title="Link to this definition"></a></dt>
+<dd><p>Get a storage item by its ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID of the storage item.</p></li>
+<li><p><strong>object_type</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The storage item data model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../common/base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel">DataModel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.storage_router.StorageRouter.get_storage_item_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_storage_item_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.storage_router.StorageRouter.get_storage_item_property" title="Link to this definition"></a></dt>
+<dd><p>Get properties of a storage item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID of the storage item.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyGetRequest" title="ochra.common.connections.api_models.ObjectPropertyGetRequest"><em>ObjectPropertyGetRequest</em></a>) – The properties to retrieve.</p></li>
+<li><p><strong>object_type</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The requested properties of the storage item.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.storage_router.StorageRouter.modify_storage_item_property">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">modify_storage_item_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.storage_router.StorageRouter.modify_storage_item_property" title="Link to this definition"></a></dt>
+<dd><p>Modify properties of a storage item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>identifier</strong> (<em>str</em>) – The ID of the storage item.</p></li>
+<li><p><strong>args</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyPatchRequest" title="ochra.common.connections.api_models.ObjectPropertyPatchRequest"><em>ObjectPropertyPatchRequest</em></a>) – The properties to modify.</p></li>
+<li><p><strong>object_type</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the modification was successful, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.manager.lab.routers.ui_router">
+<span id="ui-router"></span><h2>ui_router<a class="headerlink" href="#module-ochra.manager.lab.routers.ui_router" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.manager.lab.routers.ui_router.</span></span><span class="sig-name descname"><span class="pre">WebAppRouter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">templates</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">APIRouter</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>templates</strong> (<em>Jinja2Templates</em>)</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.build_table_fields">
+<span class="sig-name descname"><span class="pre">build_table_fields</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.build_table_fields" title="Link to this definition"></a></dt>
+<dd><p>Constructs a list of station information for rendering in the UI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of dictionaries containing station information.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.get_device">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">station_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.get_device" title="Link to this definition"></a></dt>
+<dd><p>Handles GET requests to retrieve a specific device’s information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>Request</em>) – The incoming HTTP request.</p></li>
+<li><p><strong>station_id</strong> (<em>str</em>) – The ID of the station the device belongs to.</p></li>
+<li><p><strong>device_id</strong> (<em>str</em>) – The ID of the device to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rendered HTML response containing the device’s information.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>HTMLResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.get_device_view">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_device_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">station_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.get_device_view" title="Link to this definition"></a></dt>
+<dd><p>Handles GET requests to retrieve a specific device’s information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>Request</em>) – The incoming HTTP request.</p></li>
+<li><p><strong>station_id</strong> (<em>str</em>) – The ID of the station the device belongs to.</p></li>
+<li><p><strong>device_id</strong> (<em>str</em>) – The ID of the device to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rendered HTML response containing the device’s information.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>HTMLResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.get_login">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.get_login" title="Link to this definition"></a></dt>
+<dd><p>Renders the login page.
+:param request: The incoming HTTP request.
+:type request: Request</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The rendered HTML response for the login page.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>HTMLResponse</p>
+</dd>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>Request</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.get_register">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.get_register" title="Link to this definition"></a></dt>
+<dd><p>Renders the registration page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>Request</em>) – The incoming HTTP request.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rendered HTML response for the registration page.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>HTMLResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.get_settings">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.get_settings" title="Link to this definition"></a></dt>
+<dd><p>Renders the settings page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>Request</em>) – The incoming HTTP request.</p></li>
+<li><p><strong>edit</strong> (<em>bool</em>) – Flag to indicate if the settings are in edit mode. Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rendered HTML response for the settings page.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>HTMLResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.get_station">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_station</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">station_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.get_station" title="Link to this definition"></a></dt>
+<dd><p>Handles GET requests to retrieve a specific station’s information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>Request</em>) – The incoming HTTP request.</p></li>
+<li><p><strong>station_id</strong> (<em>str</em>) – The ID of the station to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rendered HTML response containing the station’s information.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>HTMLResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.get_stations">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_stations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.get_stations" title="Link to this definition"></a></dt>
+<dd><p>Handles GET requests to retrieve stations information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>Request</em>) – The incoming HTTP request.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rendered HTML response containing station information.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>HTMLResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.get_workflows">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_workflows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.get_workflows" title="Link to this definition"></a></dt>
+<dd><p>Renders the workflows page.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>Request</em>) – The incoming HTTP request.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rendered HTML response for the workflows page.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>HTMLResponse</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.isHXRequest">
+<span class="sig-name descname"><span class="pre">isHXRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.isHXRequest" title="Link to this definition"></a></dt>
+<dd><p>Checks if the request is an HTMX request.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>request</strong> (<em>Request</em>) – The incoming HTTP request.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the request is an HTMX request, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.post_command">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">post_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">station_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.post_command" title="Link to this definition"></a></dt>
+<dd><p>Handles POST requests to send a command to a specific device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>Request</em>) – The incoming HTTP request.</p></li>
+<li><p><strong>station_id</strong> (<em>str</em>) – The ID of the station the device belongs to.</p></li>
+<li><p><strong>device_id</strong> (<em>str</em>) – The ID of the device to send the command to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The response indicating the result of the command.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Response</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If the args format is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.post_login">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">post_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Form(PydanticUndefined)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Form(PydanticUndefined)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.post_login" title="Link to this definition"></a></dt>
+<dd><p>Handles user login.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<em>str</em>) – The username.</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – The password.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – Database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A JSON response indicating success or failure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSONResponse</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If authentication fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.post_logout">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">post_logout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.post_logout" title="Link to this definition"></a></dt>
+<dd><p>Handles user logout by deleting the session token.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>Request</em>) – The incoming HTTP request.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – Database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A JSON response indicating successful logout.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSONResponse</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If no session token is found or session does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.post_register">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">post_register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Form(PydanticUndefined)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Form(PydanticUndefined)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Form(PydanticUndefined)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confirm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Form(PydanticUndefined)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.post_register" title="Link to this definition"></a></dt>
+<dd><p>Handles user registration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<em>str</em>) – The desired username.</p></li>
+<li><p><strong>email</strong> (<em>str</em>) – The user’s email address.</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – The desired password.</p></li>
+<li><p><strong>confirm</strong> (<em>str</em>) – Password confirmation.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – Database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A JSON response indicating success or failure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>JSONResponse</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If passwords do not match or username is already taken.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.routers.ui_router.WebAppRouter.put_settings">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">put_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Form(PydanticUndefined)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Form(PydanticUndefined)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.routers.ui_router.WebAppRouter.put_settings" title="Link to this definition"></a></dt>
+<dd><p>Handles updating user settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>request</strong> (<em>Request</em>) – The incoming HTTP request.</p></li>
+<li><p><strong>username</strong> (<em>str</em>) – The new username.</p></li>
+<li><p><strong>email</strong> (<em>str</em>) – The new email address.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – Database session. Defaults to a dependency injection of get_db.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rendered HTML response for the settings page.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>HTMLResponse</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If the user is not authenticated or not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="auth.html" class="btn btn-neutral float-left" title="auth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="servers.html" class="btn btn-neutral float-right" title="servers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, OChRA team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

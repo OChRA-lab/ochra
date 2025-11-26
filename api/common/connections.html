@@ -1,0 +1,770 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ochra.common.connections &mdash; OChRA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/autodoc_pydantic.css" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ochra.common.equipment package" href="equipment.html" />
+    <link rel="prev" title="ochra.common package" href="common.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            OChRA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="common.html">ochra.common package</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ochra.common.connections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.connections.api_models">api_models</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.connections.api_models.ObjectCallRequest"><code class="docutils literal notranslate"><span class="pre">ObjectCallRequest</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.connections.api_models.ObjectCallResponse"><code class="docutils literal notranslate"><span class="pre">ObjectCallResponse</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.connections.api_models.ObjectConstructionRequest"><code class="docutils literal notranslate"><span class="pre">ObjectConstructionRequest</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.connections.api_models.ObjectPropertyGetRequest"><code class="docutils literal notranslate"><span class="pre">ObjectPropertyGetRequest</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.connections.api_models.ObjectPropertyPatchRequest"><code class="docutils literal notranslate"><span class="pre">ObjectPropertyPatchRequest</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.connections.lab_connection">lab_connection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.connections.lab_connection.LabConnection"><code class="docutils literal notranslate"><span class="pre">LabConnection</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.connections.rest_adapter">rest_adapter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException"><code class="docutils literal notranslate"><span class="pre">LabEngineException</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.connections.rest_adapter.RestAdapter"><code class="docutils literal notranslate"><span class="pre">RestAdapter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.connections.rest_adapter.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="equipment.html">ochra.common.equipment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spaces.html">ochra.common.spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html">ochra.common.storage package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">ochra.common.utils package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html">ochra.common.base</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../manager/manager.html">ochra_manager package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OChRA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="common.html">ochra.common package</a></li>
+      <li class="breadcrumb-item active">ochra.common.connections</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/common/connections.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ochra-common-connections">
+<h1>ochra.common.connections<a class="headerlink" href="#ochra-common-connections" title="Link to this heading"></a></h1>
+<section id="module-ochra.common.connections.api_models">
+<span id="api-models"></span><h2>api_models<a class="headerlink" href="#module-ochra.common.connections.api_models" title="Link to this heading"></a></h2>
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectCallRequest">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.connections.api_models.</span></span><span class="sig-name descname"><span class="pre">ObjectCallRequest</span></span><a class="headerlink" href="#ochra.common.connections.api_models.ObjectCallRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Class that represents a request to call a method of an object.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.connections.api_models.ObjectCallRequest.args" title="ochra.common.connections.api_models.ObjectCallRequest.args"><code class="xref py py-obj docutils literal notranslate"><span class="pre">args</span> <span class="pre">(Dict</span> <span class="pre">|</span> <span class="pre">None)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.connections.api_models.ObjectCallRequest.caller_id" title="ochra.common.connections.api_models.ObjectCallRequest.caller_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">caller_id</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.connections.api_models.ObjectCallRequest.method" title="ochra.common.connections.api_models.ObjectCallRequest.method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">method</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectCallRequest.args">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.connections.api_models.ObjectCallRequest.args" title="Link to this definition"></a></dt>
+<dd><p>The arguments to be passed to the method. Defaults to None.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectCallRequest.caller_id">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">caller_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.connections.api_models.ObjectCallRequest.caller_id" title="Link to this definition"></a></dt>
+<dd><p>The unique identifier of the caller.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectCallRequest.method">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">method</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.connections.api_models.ObjectCallRequest.method" title="Link to this definition"></a></dt>
+<dd><p>The name of the method to be called.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectCallResponse">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.connections.api_models.</span></span><span class="sig-name descname"><span class="pre">ObjectCallResponse</span></span><a class="headerlink" href="#ochra.common.connections.api_models.ObjectCallResponse" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Class that represents a response to an object method call.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.connections.api_models.ObjectCallResponse.return_data" title="ochra.common.connections.api_models.ObjectCallResponse.return_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">return_data</span> <span class="pre">(Any)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.connections.api_models.ObjectCallResponse.warnings" title="ochra.common.connections.api_models.ObjectCallResponse.warnings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">warnings</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectCallResponse.return_data">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">return_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.connections.api_models.ObjectCallResponse.return_data" title="Link to this definition"></a></dt>
+<dd><p>The data returned by the method call.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectCallResponse.warnings">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">warnings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.connections.api_models.ObjectCallResponse.warnings" title="Link to this definition"></a></dt>
+<dd><p>Any warnings generated during the method call. Defaults to None.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectConstructionRequest">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.connections.api_models.</span></span><span class="sig-name descname"><span class="pre">ObjectConstructionRequest</span></span><a class="headerlink" href="#ochra.common.connections.api_models.ObjectConstructionRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Class that represents a request to construct a new object.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.connections.api_models.ObjectConstructionRequest.object_json" title="ochra.common.connections.api_models.ObjectConstructionRequest.object_json"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object_json</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectConstructionRequest.object_json">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">object_json</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.connections.api_models.ObjectConstructionRequest.object_json" title="Link to this definition"></a></dt>
+<dd><p>The JSON representation of the object to be constructed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectPropertyGetRequest">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.connections.api_models.</span></span><span class="sig-name descname"><span class="pre">ObjectPropertyGetRequest</span></span><a class="headerlink" href="#ochra.common.connections.api_models.ObjectPropertyGetRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Class that represents a request to get a property of an object.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.connections.api_models.ObjectPropertyGetRequest.property" title="ochra.common.connections.api_models.ObjectPropertyGetRequest.property"><code class="xref py py-obj docutils literal notranslate"><span class="pre">property</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectPropertyGetRequest.property">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">property</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.connections.api_models.ObjectPropertyGetRequest.property" title="Link to this definition"></a></dt>
+<dd><p>The name of the property to be retrieved.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectPropertyPatchRequest">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.connections.api_models.</span></span><span class="sig-name descname"><span class="pre">ObjectPropertyPatchRequest</span></span><a class="headerlink" href="#ochra.common.connections.api_models.ObjectPropertyPatchRequest" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>Class that represents a request to patch a property of an object.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.connections.api_models.ObjectPropertyPatchRequest.patch_args" title="ochra.common.connections.api_models.ObjectPropertyPatchRequest.patch_args"><code class="xref py py-obj docutils literal notranslate"><span class="pre">patch_args</span> <span class="pre">(Dict[str,</span> <span class="pre">Any]</span> <span class="pre">|</span> <span class="pre">None)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.connections.api_models.ObjectPropertyPatchRequest.patch_type" title="ochra.common.connections.api_models.ObjectPropertyPatchRequest.patch_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">patch_type</span> <span class="pre">(ochra.common.utils.enum.PatchType)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.connections.api_models.ObjectPropertyPatchRequest.property" title="ochra.common.connections.api_models.ObjectPropertyPatchRequest.property"><code class="xref py py-obj docutils literal notranslate"><span class="pre">property</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.connections.api_models.ObjectPropertyPatchRequest.property_value" title="ochra.common.connections.api_models.ObjectPropertyPatchRequest.property_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">property_value</span> <span class="pre">(Any)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectPropertyPatchRequest.patch_args">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">patch_args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.connections.api_models.ObjectPropertyPatchRequest.patch_args" title="Link to this definition"></a></dt>
+<dd><p>Additional arguments for the patch operation. Defaults to None.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectPropertyPatchRequest.patch_type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">patch_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="utils.html#ochra.common.utils.enum.PatchType" title="ochra.common.utils.enum.PatchType"><span class="pre">PatchType</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PatchType.SET</span></em><a class="headerlink" href="#ochra.common.connections.api_models.ObjectPropertyPatchRequest.patch_type" title="Link to this definition"></a></dt>
+<dd><p>The type of patch to be applied. Defaults to PatchType.SET.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectPropertyPatchRequest.property">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">property</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.connections.api_models.ObjectPropertyPatchRequest.property" title="Link to this definition"></a></dt>
+<dd><p>The name of the property to be patched.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.connections.api_models.ObjectPropertyPatchRequest.property_value">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">property_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.connections.api_models.ObjectPropertyPatchRequest.property_value" title="Link to this definition"></a></dt>
+<dd><p>The new value to be assigned to the property.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.connections.lab_connection">
+<span id="lab-connection"></span><h2>lab_connection<a class="headerlink" href="#module-ochra.common.connections.lab_connection" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.connections.lab_connection.</span></span><span class="sig-name descname"><span class="pre">LabConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class that provides a high-level interface for interacting with the lab engine API,
+utilizing RestAdapter for communication. This class is tightly integrated with the lab engine’s API structure.</p>
+<p>Constructor for LabConnection class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hostname</strong> (<em>str</em>) – Address of lab API. Defaults to “127.0.0.1:8000”.</p></li>
+<li><p><strong>experiment_id</strong> (<em>str</em><em>, </em><em>optional</em>) – ID of the experiment associated with this connection.
+If None, a new UUID will be generated. Defaults to None.</p></li>
+<li><p><strong>api_key</strong> (<em>str</em><em>, </em><em>optional</em>) – API key if exists. Defaults to ‘’.</p></li>
+<li><p><strong>ssl_verify</strong> (<em>bool</em><em>, </em><em>optional</em>) – If we need to verify SSL. Defaults to False.</p></li>
+<li><p><strong>args</strong> (<em>Any</em>)</p></li>
+<li><p><strong>kwds</strong> (<em>Any</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Any</em></p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.call_on_object">
+<span class="sig-name descname"><span class="pre">call_on_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.call_on_object" title="Link to this definition"></a></dt>
+<dd><p>Initiates a method call on a specified object within the lab engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – The type of the object to invoke the method on.</p></li>
+<li><p><strong>id</strong> (<em>UUID</em>) – The unique identifier of the target object.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The name of the method to execute.</p></li>
+<li><p><strong>args</strong> (<em>dict</em>) – Arguments to pass to the method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If the method invocation fails or the response cannot be parsed.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An Operation instance representing the status and result of the method call.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="equipment.html#ochra.common.equipment.operation.Operation" title="ochra.common.equipment.operation.Operation">Operation</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.construct_object">
+<span class="sig-name descname"><span class="pre">construct_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.construct_object" title="Link to this definition"></a></dt>
+<dd><p>Constructs an object on the lab engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – The type of the object to construct.</p></li>
+<li><p><strong>object</strong> (<a class="reference internal" href="base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel"><em>DataModel</em></a>) – The data model instance representing the object to be constructed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If there is an error during object construction or response parsing.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The unique identifier of the constructed object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>UUID</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.delete_object">
+<span class="sig-name descname"><span class="pre">delete_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.delete_object" title="Link to this definition"></a></dt>
+<dd><p>Deletes an object from the lab engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – The type of the object to delete.</p></li>
+<li><p><strong>id</strong> (<em>UUID</em>) – The unique identifier of the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If deletion fails.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Response from the lab engine.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.get_all_objects">
+<span class="sig-name descname"><span class="pre">get_all_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.get_all_objects" title="Link to this definition"></a></dt>
+<dd><p>Retrieve all objects of a specified type from the lab engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>type</strong> (<em>str</em>) – The type of objects to retrieve.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If retrieval or parsing fails.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of instantiated objects corresponding to the specified type.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.get_data" title="Link to this definition"></a></dt>
+<dd><p>Retrieves raw data from a results data object in the lab engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – The type of the object to retrieve data from.</p></li>
+<li><p><strong>id</strong> (<em>str</em>) – The unique identifier of the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The raw bytes of the object’s data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bytes</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If data retrieval fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.get_object">
+<span class="sig-name descname"><span class="pre">get_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.get_object" title="Link to this definition"></a></dt>
+<dd><p>Retrieve an object from the lab engine by its identifier.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – The type of the object to retrieve.</p></li>
+<li><p><strong>identifier</strong> (<em>str</em><em> | </em><em>UUID</em>) – The unique ID or name of the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If the object cannot be retrieved or parsed.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of the requested object, loaded from its data model.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.get_object_id">
+<span class="sig-name descname"><span class="pre">get_object_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.get_object_id" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the unique identifier (UUID) of an object from the lab engine using its name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – The type of the object to retrieve.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If the object cannot be found or the response is invalid.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The unique identifier of the object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>UUID</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.get_property">
+<span class="sig-name descname"><span class="pre">get_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.get_property" title="Link to this definition"></a></dt>
+<dd><p>Retrieves the value of a specified property from an object on the lab engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – The type of the object.</p></li>
+<li><p><strong>id</strong> (<em>UUID</em>) – The unique identifier of the object.</p></li>
+<li><p><strong>property</strong> (<em>str</em>) – The name of the property to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If the property cannot be retrieved or parsed.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The value of the requested property, which may be a primitive, DataModel instance, list, or dict.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.load_from_data_model">
+<span class="sig-name descname"><span class="pre">load_from_data_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.load_from_data_model" title="Link to this definition"></a></dt>
+<dd><p>Instantiates an object from a given DataModel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>model</strong> (<a class="reference internal" href="base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel"><em>DataModel</em></a>) – The data model containing class and module information.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If the class cannot be imported or instantiated.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of the specified class, loaded using its ID.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.patch_property">
+<span class="sig-name descname"><span class="pre">patch_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.patch_property" title="Link to this definition"></a></dt>
+<dd><p>Applies a patch operation to a specified property of an object in the lab engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – The type of the object whose property will be patched.</p></li>
+<li><p><strong>id</strong> (<em>UUID</em>) – The unique identifier of the object.</p></li>
+<li><p><strong>property</strong> (<em>str</em>) – The name of the property to patch.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value to apply in the patch operation.</p></li>
+<li><p><strong>patch_type</strong> (<a class="reference internal" href="utils.html#ochra.common.utils.enum.PatchType" title="ochra.common.utils.enum.PatchType"><em>PatchType</em></a>) – The type of patch operation (e.g., ADD, REMOVE, REPLACE).</p></li>
+<li><p><strong>patch_args</strong> (<em>dict</em><em>, </em><em>optional</em>) – Additional arguments for the patch operation. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The response from the lab engine after applying the patch.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If the patch operation fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.put_data">
+<span class="sig-name descname"><span class="pre">put_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.put_data" title="Link to this definition"></a></dt>
+<dd><p>Uploads data to a OperationResult object in the lab engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – The type of the object to upload data to.</p></li>
+<li><p><strong>id</strong> (<em>str</em>) – The unique identifier of the object.</p></li>
+<li><p><strong>result_data</strong> (<em>Any</em>) – The data to upload (e.g., file-like object, bytes, or dict).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The unique identifier of the object after data upload.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>UUID</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If the upload fails or the response is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.lab_connection.LabConnection.set_property">
+<span class="sig-name descname"><span class="pre">set_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">property</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.lab_connection.LabConnection.set_property" title="Link to this definition"></a></dt>
+<dd><p>Sets the value of a specified property on an object in the lab engine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> (<em>str</em>) – The type of the object to update.</p></li>
+<li><p><strong>id</strong> (<em>UUID</em>) – The unique identifier of the object.</p></li>
+<li><p><strong>property</strong> (<em>str</em>) – The name of the property to set.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value to assign to the property.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The response from the lab engine after setting the property.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.LabEngineException" title="ochra.common.connections.rest_adapter.LabEngineException"><strong>LabEngineException</strong></a> – If the property update fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.connections.rest_adapter">
+<span id="rest-adapter"></span><h2>rest_adapter<a class="headerlink" href="#module-ochra.common.connections.rest_adapter" title="Link to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="ochra.common.connections.rest_adapter.LabEngineException">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.connections.rest_adapter.</span></span><span class="sig-name descname"><span class="pre">LabEngineException</span></span><a class="headerlink" href="#ochra.common.connections.rest_adapter.LabEngineException" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.connections.rest_adapter.RestAdapter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.connections.rest_adapter.</span></span><span class="sig-name descname"><span class="pre">RestAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hostname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ssl_verify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.rest_adapter.RestAdapter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Adapter class for interacting with RESTful APIs.</p>
+<p>Initializes the RestAdapter for interacting with a RESTful API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hostname</strong> (<em>str</em>) – The hostname or IP address of the API server.</p></li>
+<li><p><strong>api_key</strong> (<em>str</em><em>, </em><em>optional</em>) – API key for authentication. Defaults to ‘’.</p></li>
+<li><p><strong>ssl_verify</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to verify SSL certificates. Defaults to True.</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em><em>, </em><em>optional</em>) – Custom logger instance. If None, a default logger is used.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.rest_adapter.RestAdapter.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ep_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.rest_adapter.RestAdapter.delete" title="Link to this definition"></a></dt>
+<dd><p>Performs a DELETE request to the specified endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endpoint</strong> (<em>str</em>) – The API endpoint to send the DELETE request to.</p></li>
+<li><p><strong>ep_params</strong> (<em>Dict</em><em>, </em><em>optional</em>) – Query parameters for the endpoint. Defaults to None.</p></li>
+<li><p><strong>data</strong> (<em>Dict</em><em>, </em><em>optional</em>) – JSON body to include in the request. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object containing the status code, message, and data from the response if successful.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.Result" title="ochra.common.connections.rest_adapter.Result">Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.rest_adapter.RestAdapter.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ep_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jsonify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.rest_adapter.RestAdapter.get" title="Link to this definition"></a></dt>
+<dd><p>Performs a GET request to the specified endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endpoint</strong> (<em>str</em>) – The API endpoint to send the GET request to.</p></li>
+<li><p><strong>ep_params</strong> (<em>Dict</em><em>, </em><em>optional</em>) – Query parameters for the endpoint. Defaults to None.</p></li>
+<li><p><strong>data</strong> (<em>Dict</em><em>, </em><em>optional</em>) – JSON body to include in the request. Defaults to None.</p></li>
+<li><p><strong>jsonify</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, parses the response as JSON. If False, returns the raw response.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object containing the status code, message, and data from the response if successful.
+requests.Response: The raw response object if jsonify is False.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.Result" title="ochra.common.connections.rest_adapter.Result">Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.rest_adapter.RestAdapter.patch">
+<span class="sig-name descname"><span class="pre">patch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ep_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.rest_adapter.RestAdapter.patch" title="Link to this definition"></a></dt>
+<dd><p>Performs a PATCH request to the specified endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endpoint</strong> (<em>str</em>) – The API endpoint to send the PATCH request to.</p></li>
+<li><p><strong>ep_params</strong> (<em>Dict</em><em>, </em><em>optional</em>) – Query parameters for the endpoint. Defaults to None.</p></li>
+<li><p><strong>data</strong> (<em>Dict</em><em>, </em><em>optional</em>) – JSON body to include in the request. Defaults to None.</p></li>
+<li><p><strong>files</strong> (<em>Any</em><em>, </em><em>optional</em>) – Files to upload with the request. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object containing the status code, message, and data from the response if successful.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.Result" title="ochra.common.connections.rest_adapter.Result">Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.rest_adapter.RestAdapter.post">
+<span class="sig-name descname"><span class="pre">post</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ep_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.rest_adapter.RestAdapter.post" title="Link to this definition"></a></dt>
+<dd><p>Performs a POST request to the specified endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endpoint</strong> (<em>str</em>) – The API endpoint to send the POST request to.</p></li>
+<li><p><strong>ep_params</strong> (<em>Dict</em><em>, </em><em>optional</em>) – Query parameters for the endpoint. Defaults to None.</p></li>
+<li><p><strong>data</strong> (<em>Dict</em><em>, </em><em>optional</em>) – JSON body to include in the request. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object containing the status code, message, and data from the response if successful.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.Result" title="ochra.common.connections.rest_adapter.Result">Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.connections.rest_adapter.RestAdapter.put">
+<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ep_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.rest_adapter.RestAdapter.put" title="Link to this definition"></a></dt>
+<dd><p>Performs a PUT request to the specified endpoint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endpoint</strong> (<em>str</em>) – The API endpoint to send the PUT request to.</p></li>
+<li><p><strong>ep_params</strong> (<em>Dict</em><em>, </em><em>optional</em>) – Query parameters for the endpoint. Defaults to None.</p></li>
+<li><p><strong>data</strong> (<em>Dict</em><em>, </em><em>optional</em>) – JSON body to include in the request. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object containing the status code, message, and data from the response if successful.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#ochra.common.connections.rest_adapter.Result" title="ochra.common.connections.rest_adapter.Result">Result</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.connections.rest_adapter.Result">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.connections.rest_adapter.</span></span><span class="sig-name descname"><span class="pre">Result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status_code</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.connections.rest_adapter.Result" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class representing the result of an HTTP request, including status code, message, and data.</p>
+<p>Initializes a Result instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>status_code</strong> (<em>int</em>) – HTTP status code.</p></li>
+<li><p><strong>message</strong> (<em>str</em><em>, </em><em>optional</em>) – Message returned from the request. Defaults to “”.</p></li>
+<li><p><strong>data</strong> (<em>List</em><em>[</em><em>Dict</em><em>]</em><em>, </em><em>optional</em>) – Data returned from the request. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="common.html" class="btn btn-neutral float-left" title="ochra.common package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="equipment.html" class="btn btn-neutral float-right" title="ochra.common.equipment package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, OChRA team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

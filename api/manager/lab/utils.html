@@ -1,0 +1,477 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>utils &mdash; OChRA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/autodoc_pydantic.css" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="ochra_manager.proxy_models" href="../proxy_models/proxy_models.html" />
+    <link rel="prev" title="servers" href="servers.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            OChRA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../common/common.html">ochra.common package</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../manager.html">ochra_manager package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../connections.html">ochra.manager.connections</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="lab.html">ochra_manager.lab</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="auth.html">auth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="routers.html">routers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="servers.html">servers</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">utils</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-ochra.manager.lab.utils.scheduler">scheduler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-ochra.manager.lab.utils.lab_service">lab_service</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-ochra.manager.lab.utils.lab_logging">lab_logging</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../proxy_models/proxy_models.html">ochra_manager.proxy_models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../station/station.html">ochra_manager.station</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OChRA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../manager.html">ochra_manager package</a></li>
+          <li class="breadcrumb-item"><a href="lab.html">ochra_manager.lab</a></li>
+      <li class="breadcrumb-item active">utils</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/api/manager/lab/utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="utils">
+<h1>utils<a class="headerlink" href="#utils" title="Link to this heading"></a></h1>
+<section id="module-ochra.manager.lab.utils.scheduler">
+<span id="scheduler"></span><h2>scheduler<a class="headerlink" href="#module-ochra.manager.lab.utils.scheduler" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.scheduler.Scheduler">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.manager.lab.utils.scheduler.</span></span><span class="sig-name descname"><span class="pre">Scheduler</span></span><a class="headerlink" href="#ochra.manager.lab.utils.scheduler.Scheduler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to manage and schedule operations in the lab.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.scheduler.Scheduler.op_queue">
+<span class="sig-name descname"><span class="pre">op_queue</span></span><a class="headerlink" href="#ochra.manager.lab.utils.scheduler.Scheduler.op_queue" title="Link to this definition"></a></dt>
+<dd><p>A list to hold the queued operations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.scheduler.Scheduler.add_operation">
+<span class="sig-name descname"><span class="pre">add_operation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">operation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.scheduler.Scheduler.add_operation" title="Link to this definition"></a></dt>
+<dd><p>Adds an operation to the scheduling queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>operation</strong> (<a class="reference internal" href="../../common/equipment.html#ochra.common.equipment.operation.Operation" title="ochra.common.equipment.operation.Operation"><em>Operation</em></a>) – The operation to be added to the queue.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.scheduler.Scheduler.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.scheduler.Scheduler.run" title="Link to this definition"></a></dt>
+<dd><p>Starts the scheduling thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.scheduler.Scheduler.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.scheduler.Scheduler.stop" title="Link to this definition"></a></dt>
+<dd><p>Stops the scheduling thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.manager.lab.utils.lab_service">
+<span id="lab-service"></span><h2>lab_service<a class="headerlink" href="#module-ochra.manager.lab.utils.lab_service" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.manager.lab.utils.lab_service.</span></span><span class="sig-name descname"><span class="pre">LabService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folderpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>LabService provides common functionality for managing laboratory objects and operations,
+abstracting database interactions and file management to avoid code duplication across routers.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.db_conn">
+<span class="sig-name descname"><span class="pre">db_conn</span></span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.db_conn" title="Link to this definition"></a></dt>
+<dd><p>Database connection instance for CRUD operations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../connections.html#ochra.manager.connections.db_connection.DbConnection" title="ochra.manager.connections.db_connection.DbConnection">DbConnection</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.folderpath">
+<span class="sig-name descname"><span class="pre">folderpath</span></span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.folderpath" title="Link to this definition"></a></dt>
+<dd><p>Path to the folder for storing files, if provided.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[Path]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Initialize the LabService with an optional folder path for file storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folderpath</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Path to the folder for storing files. If None, file operations are disabled.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.call_on_object">
+<span class="sig-name descname"><span class="pre">call_on_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">call_req</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.call_on_object" title="Link to this definition"></a></dt>
+<dd><p>Invoke a method on the specified object and record the operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object_id</strong> (<em>str</em>) – ID of the target object.</p></li>
+<li><p><strong>object_type</strong> (<em>str</em>) – Type of the target object.</p></li>
+<li><p><strong>call_req</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectCallRequest" title="ochra.common.connections.api_models.ObjectCallRequest"><em>ObjectCallRequest</em></a>) – Request containing method name, arguments, and caller information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created Operation instance representing the method call.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../../common/equipment.html#ochra.common.equipment.operation.Operation" title="ochra.common.equipment.operation.Operation">Operation</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If the operation cannot be created or stored.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.construct_object">
+<span class="sig-name descname"><span class="pre">construct_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">construct_req</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.construct_object" title="Link to this definition"></a></dt>
+<dd><p>Create or update an object in the specified database collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>construct_req</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectConstructionRequest" title="ochra.common.connections.api_models.ObjectConstructionRequest"><em>ObjectConstructionRequest</em></a>) – Request containing the object’s JSON definition.</p></li>
+<li><p><strong>collection</strong> (<em>str</em>) – Name of the database collection.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ID of the constructed or updated object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If object creation or update fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.delete_object">
+<span class="sig-name descname"><span class="pre">delete_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.delete_object" title="Link to this definition"></a></dt>
+<dd><p>Delete an object from the specified database collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object_id</strong> (<em>str</em>) – Unique identifier of the object to delete.</p></li>
+<li><p><strong>collection</strong> (<em>str</em>) – Name of the database collection containing the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If the object is not found or deletion fails.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.get_all_objects">
+<span class="sig-name descname"><span class="pre">get_all_objects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.get_all_objects" title="Link to this definition"></a></dt>
+<dd><p>Retrieve all objects from the specified collection, optionally filtered by a query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collection</strong> (<em>str</em>) – Name of the database collection containing the objects.</p></li>
+<li><p><strong>query_dict</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>, </em><em>optional</em>) – Dictionary specifying query filters. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of objects represented as JSON dictionaries.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Dict[str, Any]]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If no objects are found or retrieval fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.get_file">
+<span class="sig-name descname"><span class="pre">get_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.get_file" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the file associated with an object from the database and local storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object_id</strong> (<em>str</em>) – Unique identifier of the object whose file is to be retrieved.</p></li>
+<li><p><strong>collection</strong> (<em>str</em>) – Name of the database collection containing the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The file path and a flag indicating if the file should be deleted after use.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple[Path, bool]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If the folder path is not set or the file cannot be found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.get_object_by_id">
+<span class="sig-name descname"><span class="pre">get_object_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.get_object_by_id" title="Link to this definition"></a></dt>
+<dd><p>Retrieve an object by its unique ID from the specified collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object_id</strong> (<em>str</em>) – Unique identifier of the object to retrieve.</p></li>
+<li><p><strong>collection</strong> (<em>str</em>) – The database collection containing the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The object’s JSON representation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If the object is not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.get_object_by_name">
+<span class="sig-name descname"><span class="pre">get_object_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.get_object_by_name" title="Link to this definition"></a></dt>
+<dd><p>Retrieve an object by its name from the specified collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the object to retrieve.</p></li>
+<li><p><strong>collection</strong> (<em>str</em>) – The database collection containing the object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The object’s JSON representation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, Any]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If the object is not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.get_object_property">
+<span class="sig-name descname"><span class="pre">get_object_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.get_object_property" title="Link to this definition"></a></dt>
+<dd><p>Retrieve a specific property value from an object in the given collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object_id</strong> (<em>str</em>) – Unique identifier of the object.</p></li>
+<li><p><strong>collection</strong> (<em>str</em>) – Name of the database collection containing the object.</p></li>
+<li><p><strong>request</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyGetRequest" title="ochra.common.connections.api_models.ObjectPropertyGetRequest"><em>ObjectPropertyGetRequest</em></a>) – Request specifying the property to retrieve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The value of the requested property.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If the object or property is not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.patch_file">
+<span class="sig-name descname"><span class="pre">patch_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.patch_file" title="Link to this definition"></a></dt>
+<dd><p>Update the file associated with an object in the database and manage its storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object_id</strong> (<em>str</em>) – Unique identifier of the object to update.</p></li>
+<li><p><strong>collection</strong> (<em>str</em>) – Name of the database collection containing the object.</p></li>
+<li><p><strong>result_data</strong> (<em>bytes</em>) – Binary data to store as the file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_service.LabService.patch_object">
+<span class="sig-name descname"><span class="pre">patch_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_req</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_service.LabService.patch_object" title="Link to this definition"></a></dt>
+<dd><p>Update properties of an object in the specified collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object_id</strong> (<em>str</em>) – Unique identifier of the object to update.</p></li>
+<li><p><strong>collection</strong> (<em>str</em>) – Name of the database collection containing the object.</p></li>
+<li><p><strong>set_req</strong> (<a class="reference internal" href="../../common/connections.html#ochra.common.connections.api_models.ObjectPropertyPatchRequest" title="ochra.common.connections.api_models.ObjectPropertyPatchRequest"><em>ObjectPropertyPatchRequest</em></a>) – Request containing the property name and new value.</p></li>
+<li><p><strong>file</strong> (<em>bool</em><em>, </em><em>optional</em>) – Indicates if the property being updated is a file. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the update was successful.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – If the object does not exist or the update fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.manager.lab.utils.lab_logging">
+<span id="lab-logging"></span><h2>lab_logging<a class="headerlink" href="#module-ochra.manager.lab.utils.lab_logging" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="ochra.manager.lab.utils.lab_logging.configure_lab_logging">
+<span class="sig-prename descclassname"><span class="pre">ochra.manager.lab.utils.lab_logging.</span></span><span class="sig-name descname"><span class="pre">configure_lab_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_root_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console_log_level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.manager.lab.utils.lab_logging.configure_lab_logging" title="Link to this definition"></a></dt>
+<dd><p>Configures logging for the lab management system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>log_root_path</strong> (<em>str</em>) – The root directory where log files will be stored.</p></li>
+<li><p><strong>console_log_level</strong> (<em>int</em>) – The logging level for the console output (e.g., logging.INFO, logging.DEBUG).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="servers.html" class="btn btn-neutral float-left" title="servers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../proxy_models/proxy_models.html" class="btn btn-neutral float-right" title="ochra_manager.proxy_models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, OChRA team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

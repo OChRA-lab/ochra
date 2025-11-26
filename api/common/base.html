@@ -1,0 +1,210 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ochra.common.base &mdash; OChRA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/autodoc_pydantic.css" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ochra_manager package" href="../manager/manager.html" />
+    <link rel="prev" title="ochra.common.utils package" href="utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            OChRA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="common.html">ochra.common package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="connections.html">ochra.common.connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="equipment.html">ochra.common.equipment package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spaces.html">ochra.common.spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html">ochra.common.storage package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">ochra.common.utils package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ochra.common.base</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ochra.common.base.data_model.DataModel"><code class="docutils literal notranslate"><span class="pre">DataModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.base.data_model.DataModel.cls"><code class="docutils literal notranslate"><span class="pre">DataModel.cls</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.base.data_model.DataModel.collection"><code class="docutils literal notranslate"><span class="pre">DataModel.collection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.base.data_model.DataModel.id"><code class="docutils literal notranslate"><span class="pre">DataModel.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.base.data_model.DataModel.module_path"><code class="docutils literal notranslate"><span class="pre">DataModel.module_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.base.data_model.DataModel.get_base_model"><code class="docutils literal notranslate"><span class="pre">DataModel.get_base_model()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.base.data_model.DataModel.model_post_init"><code class="docutils literal notranslate"><span class="pre">DataModel.model_post_init()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../manager/manager.html">ochra_manager package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OChRA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="common.html">ochra.common package</a></li>
+      <li class="breadcrumb-item active">ochra.common.base</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/common/base.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ochra.common.base.data_model">
+<span id="ochra-common-base"></span><h1>ochra.common.base<a class="headerlink" href="#module-ochra.common.base.data_model" title="Link to this heading"></a></h1>
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.base.data_model.DataModel">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.base.data_model.</span></span><span class="sig-name descname"><span class="pre">DataModel</span></span><a class="headerlink" href="#ochra.common.base.data_model.DataModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>DataModel class that serves as a base for all dataclasses that are to be stored in the database.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.base.data_model.DataModel.cls" title="ochra.common.base.data_model.DataModel.cls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cls</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.base.data_model.DataModel.collection" title="ochra.common.base.data_model.DataModel.collection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">collection</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.base.data_model.DataModel.id" title="ochra.common.base.data_model.DataModel.id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">id</span> <span class="pre">(uuid.UUID)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.base.data_model.DataModel.module_path" title="ochra.common.base.data_model.DataModel.module_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">module_path</span> <span class="pre">(str)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.base.data_model.DataModel.cls">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cls</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.base.data_model.DataModel.cls" title="Link to this definition"></a></dt>
+<dd><p>The class name of the data model.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.base.data_model.DataModel.collection">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collection</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.base.data_model.DataModel.collection" title="Link to this definition"></a></dt>
+<dd><p>The name of the collection where the data model will be stored.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.base.data_model.DataModel.id">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#ochra.common.base.data_model.DataModel.id" title="Link to this definition"></a></dt>
+<dd><p>Unique identifier for the data model instance.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.base.data_model.DataModel.module_path">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">module_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.base.data_model.DataModel.module_path" title="Link to this definition"></a></dt>
+<dd><p>The module path of the data model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.base.data_model.DataModel.get_base_model">
+<span class="sig-name descname"><span class="pre">get_base_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.base.data_model.DataModel.get_base_model" title="Link to this definition"></a></dt>
+<dd><p>Get a base model containing the base information of the model instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A base model containing the base information of the model instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel">DataModel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.base.data_model.DataModel.model_post_init">
+<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_DataModel__context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.base.data_model.DataModel.model_post_init" title="Link to this definition"></a></dt>
+<dd><p>Override this method to perform additional initialization after <cite>__init__</cite> and <cite>model_construct</cite>.
+This is useful if you want to do some validation that requires the entire model to be initialized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>_DataModel__context</strong> (<em>Any</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="utils.html" class="btn btn-neutral float-left" title="ochra.common.utils package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../manager/manager.html" class="btn btn-neutral float-right" title="ochra_manager package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, OChRA team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

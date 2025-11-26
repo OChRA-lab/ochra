@@ -1,0 +1,407 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage &mdash; OChRA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ochra.common package" href="api/common/common.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            OChRA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#terminology">Terminology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#package-overview">Package Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-ochra-is-not">What OChRA is not</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-does-it-work">How Does It Work</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-by-step-execution">Step-by-step Execution</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setup">Setup</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#equipment-setup">Equipment setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#lab-setup">Lab setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#station-setup">Station setup</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#running-your-setup">Running your setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-and-executing-a-workflow">Writing and executing a workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ui-integration">UI Integration</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/common/common.html">ochra.common package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/manager/manager.html">ochra_manager package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">OChRA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h1>
+<section id="terminology">
+<h2>Terminology<a class="headerlink" href="#terminology" title="Link to this heading"></a></h2>
+<p>Key terms used in Ochra:</p>
+<ul class="simple">
+<li><p><strong>Device</strong>: The physical instrument or robot you want to control (e.g., a robot, hotplate, or other scientific equipment).</p></li>
+<li><p><strong>Driver</strong>: The software that controls the device.</p></li>
+<li><p><strong>Handler</strong>: OChRA’s wrapper for a driver, exposing its capabilities to the framework.</p></li>
+<li><p><strong>OChRA Device</strong>: A class that lets users interact with the device through OChRA.</p></li>
+<li><p><strong>Station</strong>: A RESTful server representing a physical location in the lab. It hosts connected devices and processes incoming requests via handlers.</p></li>
+<li><p><strong>Lab</strong>: A RESTful server managing multiple stations. It handles routing, scheduling, and database interactions.</p></li>
+<li><p><strong>Operation</strong>: Represents an request within OChRA.</p></li>
+</ul>
+</section>
+<section id="package-overview">
+<h2>Package Overview<a class="headerlink" href="#package-overview" title="Link to this heading"></a></h2>
+<p>OChRA is a lab integration and automation framework designed to make it easy to control and coordinate diverse scientific equipment. It’s made up of three package:</p>
+<ul class="simple">
+<li><p><strong>common</strong>: Shared utilities and base classes used across all OChRA components.</p></li>
+<li><p><strong>manager</strong>: Tools for building and managing labs and stations. Intended for automation engineers.</p></li>
+<li><p><strong>discovery</strong>: Interfaces for designing and executing workflows. Intended for scientists and experiment designers.</p></li>
+</ul>
+<section id="what-ochra-is-not">
+<h3>What OChRA is not<a class="headerlink" href="#what-ochra-is-not" title="Link to this heading"></a></h3>
+<p>OChRA doesn’t replace device-specific control code. It lets you connect and coordinate many devices from one place.
+In the provided example, we use a driver package called [pylabware](<a class="reference external" href="https://github.com/croningp/pylabware">https://github.com/croningp/pylabware</a>), which handles interactions with equipment for a few of our devices.
+You will need to write your own drivers for any device that don’t have one using any APIs or SDKs provided by the manufacturer.
+We have written a few drivers and can probably help you figure out what you need. Ultimately, all you need for your equipment to be usable in OChRA is to have methods that can be invoked by the handler class.</p>
+</section>
+<section id="how-does-it-work">
+<h3>How Does It Work<a class="headerlink" href="#how-does-it-work" title="Link to this heading"></a></h3>
+<p>In the simplest case, we would have a lab comprised of a single station that has one piece of equipment attached to it. For this, we would have to run two servers:
+- A <strong>lab server</strong> for coordination and data
+- A <strong>station server</strong> for device control</p>
+<p>These servers can be running on the same machine or on different machines connected to the same network.</p>
+</section>
+<section id="step-by-step-execution">
+<h3>Step-by-step Execution<a class="headerlink" href="#step-by-step-execution" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Start Lab Server</strong>:  Launch the lab script to start the lab server and initialize the database.</p></li>
+<li><p><strong>Start Station Server</strong>: Launch the station script to start the station server. It initializes handlers and registers with the lab.</p></li>
+<li><dl>
+<dt><strong>Running a Workflow</strong>: When a user starts a workflow (e.g., a workflow with a single command to start stirring), the process follows this flow:</dt><dd><ol class="arabic simple">
+<li><p><strong>Connect to the Lab:</strong> The user first establishes a connection with the lab.</p></li>
+<li><p><strong>Invoke a Method:</strong> Using the front-end OChRA device class, the user invokes a method (e.g., <cite>start_stir</cite>). This is translated into an HTTP request sent to the lab.</p></li>
+<li><p><strong>Construct an Operation:</strong> The lab constructs an operation and logs it to the database. Next, it determines which station the operation needs to be sent to.</p></li>
+<li><p><strong>Schedule Operation</strong> the operation is passed to the scheduler, which queues operations till the appropriate station is available. Currently, a First In, First Out (FIFO) queue is employed.</p></li>
+<li><p><strong>Forward to Station:</strong> The operation is passed to the appropriate station, which executes the desired method using the handler class.</p></li>
+<li><p><strong>Return Results:</strong> Any results produced by the method invocation are stored as an OperationResult instance and assigned to the original Operation instance. The operation is passed back to the user as a reference.</p></li>
+</ol>
+<p>This workflow allows for seamless communication and control of equipment through OChRA’s framework.</p>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+</section>
+<section id="id1">
+<h2>Usage<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="setup">
+<h3>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h3>
+<p>You can skip this section if you are only interested in running a workflow and someone else has already set up your labs, stations, and equipment.
+We’ll use the IKA plate as an example.</p>
+<section id="equipment-setup">
+<h4>Equipment setup<a class="headerlink" href="#equipment-setup" title="Link to this heading"></a></h4>
+<p>You need to make a package for your equipment and install it so it can be utilised by both discovery and manager users.</p>
+<p>Our equipment packages are structured to be comprised of three files:
+- <cite>abstract.py</cite> contains shared definitions and data model.
+- <cite>handler.py</cite> exposes device functionality through OChRA. Calls the driver of the device.
+- <cite>device.py</cite> contains the front end methods called for execution</p>
+<p>You will need to create these files for every piece of equipment you want to incorporate in OChRA.</p>
+<section id="abstract">
+<h5>Abstract<a class="headerlink" href="#abstract" title="Link to this heading"></a></h5>
+<p>This is where you define the common data structure and shared methods for your device in both the device and handler classes. The only requirement is to inherit from the <cite>Device</cite> class in <cite>common</cite>.</p>
+<p>This abstract class can be as comprehensive as you like but its ultimately just a data structure and template. For our example IKA plate, its abstract file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ochra.common.equipment.device</span> <span class="kn">import</span> <span class="n">Device</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
+
+<span class="k">class</span> <span class="nc">IkaPlateAbstract</span><span class="p">(</span><span class="n">Device</span><span class="p">):</span>
+    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">stir_speed</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="handler">
+<h5>Handler<a class="headerlink" href="#handler" title="Link to this heading"></a></h5>
+<p>This class represents an OChRA wrapper for the device’s driver so its functionalities can be exposed in the framework.</p>
+<p>First, import and inherit from the <cite>abstract</cite> class defined as previously described and <cite>RestProxyMixin</cite> class from <cite>ochra.common</cite>.
+Define <cite>__init__</cite> method; the first call should always be the superclass init with the <cite>name</cite> field passed through.
+The module path will be <cite>“YOUR_MODULE.device”</cite> and collection <cite>“devices”</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">.abstract</span> <span class="kn">import</span> <span class="n">IkaPlateAbstract</span>
+<span class="kn">from</span> <span class="nn">ochra.common.utils.mixins</span> <span class="kn">import</span> <span class="n">RestProxyMixin</span>
+
+<span class="k">class</span> <span class="nc">IkaPlate</span><span class="p">(</span><span class="n">IkaPlateAbstract</span><span class="p">,</span> <span class="n">RestProxyMixin</span><span class="p">):</span>
+</pre></div>
+</div>
+<p>Next, do any necessary initialisation for your driver in order for its methods to be callable inside the OChRA handler.</p>
+<p>For the IKA plate driver, we use <cite>pylabware</cite> package, which provides drivers for various common lab instruments. Using that driver, we carry out the needed initialisation to construct it and connect to the real instrument.
+Any properties you don’t want exposed by the OChRA handler (such as the driver) should be prefixed with an underscore (<cite>_</cite>) to be ignored.</p>
+<p>Add the mixin hook. The <cite>_endpoint</cite> and <cite>id</cite> properties are created by the base device class and generated on creation, so just pass these to the mixin hook. This allows any property changes to be mapped to the device in Ochra’s DB.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">connection_mode</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">module_path</span><span class="o">=</span><span class="s2">&quot;ika_rct_digital.device&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span> <span class="o">=</span> <span class="n">RCTDigitalHotplate</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">connection_mode</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_mixin_hook</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, add the methods you want to expose to the user. In this example, we add <cite>start_stir</cite>, <cite>stop_stir</cite>, and <cite>set_speed</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">start_stir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">start_stirring</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">stop_stir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">stop_stirring</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">set_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">stir_speed</span> <span class="o">=</span> <span class="n">speed</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver</span><span class="o">.</span><span class="n">set_speed</span><span class="p">(</span><span class="n">speed</span><span class="o">=</span><span class="n">speed</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>That’s it for the handler. You can define as many methods as you like here, and they can be as complex or simple as you want. The only requirement is that they have a corresponding ‘caller’ in the device class.</p>
+</section>
+<section id="device">
+<h5>Device<a class="headerlink" href="#device" title="Link to this heading"></a></h5>
+<p>This class provides an interface for the device so that any OChRA user can operate the device via the <cite>discovery</cite> package when developing a workflow.</p>
+<p>Similar to the handler class, import and inherit from the <cite>abstract</cite> class but this time inherit from <cite>RestProxyMixinReadOnly</cite> instead.
+You are required to provide the <cite>name</cite> as part of the init method, as this will be used to find the corresponding device handler when executing issued commands.
+No other things are required for initialization, but if you want to add a logger or something similar, you can do so between the super call and the mixin hook. For the IKA example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">.abstract</span> <span class="kn">import</span> <span class="n">IkaPlateAbstract</span>
+<span class="kn">from</span> <span class="nn">ochra.common.utils.mixins</span> <span class="kn">import</span> <span class="n">RestProxyMixinReadOnly</span>
+
+<span class="k">class</span> <span class="nc">IkaPlate</span><span class="p">(</span><span class="n">IkaPlateAbstract</span><span class="p">,</span> <span class="n">RestProxyMixinReadOnly</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># insert logger here</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mixin_hook</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, add the methods. In the future, these will be auto-generated, but for now, add a method for each handler method you want to expose to the user.
+Use the <cite>_lab_conn</cite> property and the <cite>call_on_object</cite> function, which takes four arguments: <em>an endpoint, an ID, a function to call, and a dictionary containing the arguments for that function</em>. In the context of our IKA example, this looks like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lab_conn</span><span class="o">.</span><span class="n">call_on_object</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                                         <span class="s2">&quot;set_speed&quot;</span><span class="p">,</span>
+                                         <span class="p">{</span><span class="s2">&quot;speed&quot;</span><span class="p">:</span> <span class="n">speed</span><span class="p">})</span>
+
+<span class="k">def</span> <span class="nf">start_stir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lab_conn</span><span class="o">.</span><span class="n">call_on_object</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;start_stir&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+<span class="k">def</span> <span class="nf">stop_stir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lab_conn</span><span class="o">.</span><span class="n">call_on_object</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;stop_stir&quot;</span><span class="p">,</span> <span class="p">{})</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="lab-setup">
+<h4>Lab setup<a class="headerlink" href="#lab-setup" title="Link to this heading"></a></h4>
+<p>In OChRA framework, each lab would have a single lab server that handles the lab’s data and manages its stations and their operation execution.</p>
+<p>Setting up a lab is quick and easy. Use a short script similar to [Example_lab.py](<a class="reference external" href="https://github.com/OChRA-lab/ochra/blob/main/examples/Example_lab.py">https://github.com/OChRA-lab/ochra/blob/main/examples/Example_lab.py</a>) to initialize your lab server and then run it.
+You can customize the server’s hostname and port with <cite>uvicorn</cite>. For debugging and testing, we also delete the OChRA DB on startup, but you can skip this if you don’t need to. See below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ochra.manager.connections.db_connection</span> <span class="kn">import</span> <span class="n">DbConnection</span>
+<span class="kn">from</span> <span class="nn">ochra.manager.lab.lab_server</span> <span class="kn">import</span> <span class="n">LabServer</span>
+<span class="kn">import</span> <span class="nn">uvicorn</span>
+
+<span class="n">db</span> <span class="o">=</span> <span class="n">DbConnection</span><span class="p">()</span>
+<span class="c1"># Clear the DB if it exists</span>
+<span class="n">db</span><span class="o">.</span><span class="n">db_adapter</span><span class="o">.</span><span class="n">delete_database</span><span class="p">()</span>
+
+<span class="c1"># Construct lab server and start running</span>
+<span class="n">lab</span> <span class="o">=</span> <span class="n">LabServer</span><span class="p">(</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span> <span class="mi">8001</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;my_script:lab.app&quot;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;0.0.0.0&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8001</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="station-setup">
+<h4>Station setup<a class="headerlink" href="#station-setup" title="Link to this heading"></a></h4>
+<p>In OChRA framework, a station represents a physical location in the lab that have a number of instruments and robots attached to it that users can operate to run their workflows.</p>
+<p>To start a station, use the <cite>StationServer</cite> class, provide the station’s name, location and its type. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_station</span> <span class="o">=</span> <span class="n">StationServer</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;ika_station&quot;</span><span class="p">,</span>
+    <span class="n">location</span><span class="o">=</span><span class="n">Location</span><span class="p">(</span><span class="n">lab</span><span class="o">=</span><span class="s2">&quot;my_lab&quot;</span><span class="p">,</span> <span class="n">room</span><span class="o">=</span><span class="s2">&quot;main_lab&quot;</span><span class="p">,</span> <span class="n">place</span><span class="o">=</span><span class="s2">&quot;Back left side of the room&quot;</span><span class="p">),</span>
+    <span class="n">station_type</span><span class="o">=</span><span class="n">StationType</span><span class="o">.</span><span class="n">WORK_STATION</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Connect the station to the lab server by calling the <cite>setup</cite> method and passing the lab IP address and port number (set to 8001 in the example above)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_station</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">lab_ip</span><span class="o">=</span><span class="s2">&quot;my_lab_ip:8001&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Next, set up your device handler. Make sure you install the device package as previously instructed. Use the station’s <cite>add_device</cite> method to add the IKA plate to the station’s list of connected devices. Note that a station can have any number of devices so you can add any more handlers that you need to create your station but for this example we are only adding one.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Construct device</span>
+<span class="n">ika</span> <span class="o">=</span> <span class="n">IkaPlate</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;my_ika&quot;</span><span class="p">)</span>
+
+<span class="c1"># Add device to the station server</span>
+<span class="n">my_station</span><span class="o">.</span><span class="n">add_device</span><span class="p">(</span><span class="n">ika</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Run the station with the <cite>run</cite> method.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_station</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="running-your-setup">
+<h3>Running your setup<a class="headerlink" href="#running-your-setup" title="Link to this heading"></a></h3>
+<p>Now you should have 2 scripts, one for your lab and one for your station, so now we need to run them both. In our setup, we have these running on two separate machines so that our lab server is running on a central machine where data can be securely stored, while our station server is running remotely in the lab.</p>
+<p>Firstly, you should run the lab script, this will setup your database and you should be able to access it at the address “YourSetUpIP:8001/docs” and you will see an interface where you could make requests.</p>
+<p>Next on the station machine run the station script, this should notify the lab that the station is online and allow users to send requests via the lab to the station.</p>
+<p>The setup is now complete and you can move on to designing and executing workflows using discovery package.</p>
+</section>
+</section>
+<section id="writing-and-executing-a-workflow">
+<h2>Writing and executing a workflow<a class="headerlink" href="#writing-and-executing-a-workflow" title="Link to this heading"></a></h2>
+<p>Assuming you already have a lab and stations set up, and now you want to write a workflow:</p>
+<p>The first step in any workflow script is to connect to the lab using the discovery lab class.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ochra.discovery.spaces.lab</span> <span class="kn">import</span> <span class="n">Lab</span>
+
+<span class="n">lab</span> <span class="o">=</span> <span class="n">Lab</span><span class="p">(</span><span class="s2">&quot;lab_ip:8001&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To find your target station, use the <cite>get_station</cite> method from the <cite>lab</cite> object, using the station’s name provided when setting it up.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get IKA station</span>
+<span class="n">ika_station</span> <span class="o">=</span> <span class="n">lab</span><span class="o">.</span><span class="n">get_station</span><span class="p">(</span><span class="s2">&quot;ika_station&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, retrieve the needed device. Ensure you have the device package installed in your environment and use the <cite>get_device</cite> method on the <cite>station</cite> object.</p>
+<p>We recommend using type hinting the return object with the correct type to allow your editor to have auto-complete functionalities, making your life easier.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get IKA plate</span>
+<span class="n">ika_plate</span><span class="p">:</span> <span class="n">IkaPlate</span> <span class="o">=</span> <span class="n">ika_station</span><span class="o">.</span><span class="n">get_device</span><span class="p">(</span><span class="s2">&quot;my_ika&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To use one of your device operations, simply call the corresponding method. Each call returns an operation object containing information about what was called and the results.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Call method, discarding operation</span>
+<span class="n">ika_plate</span><span class="o">.</span><span class="n">start_stir</span><span class="p">()</span>
+
+<span class="c1"># Call method with arguments</span>
+<span class="n">ika_plate</span><span class="o">.</span><span class="n">set_speed</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Call method, keeping operation</span>
+<span class="n">stop_op</span> <span class="o">=</span> <span class="n">ika_plate</span><span class="o">.</span><span class="n">stop_stir</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The returned operation object contains the following attributes:</p>
+<ul class="simple">
+<li><p><cite>caller_id: uuid.UUID</cite></p></li>
+<li><p><cite>entity_id: uuid.UUID</cite></p></li>
+<li><p><cite>entity_type: str</cite></p></li>
+<li><p><cite>method: str</cite></p></li>
+<li><p><cite>args: Dict[str, Any]</cite></p></li>
+<li><p><cite>status: OperationStatus = OperationStatus.CREATED</cite></p></li>
+<li><p><cite>start_timestamp: datetime = Field(default=None)</cite></p></li>
+<li><p><cite>end_timestamp: datetime = Field(default=None)</cite></p></li>
+<li><p><cite>result: OperationResult = Field(default=None)</cite></p></li>
+</ul>
+<p>To see the data produced by an operation, look at the <cite>OperationResult</cite> object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stop_op</span> <span class="o">=</span> <span class="n">ika_plate</span><span class="o">.</span><span class="n">stop_stir</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">OperationResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">UUID</span><span class="p">(</span><span class="n">stop_op</span><span class="o">.</span><span class="n">result</span><span class="p">))</span>
+<span class="c1"># Currently, retrieving the result gets its id. In the near future, we will fix this to get the complete result object back</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">result_data</span><span class="p">)</span>
+<span class="c1"># Note: Add a method for this in the operation class</span>
+</pre></div>
+</div>
+<p>For more example setups, please check the <cite>examples</cite> package.</p>
+</section>
+<section id="ui-integration">
+<h2>UI Integration<a class="headerlink" href="#ui-integration" title="Link to this heading"></a></h2>
+<p>There is a way to include UI elements on your servers. This is still a work in progress, but in a nutshell, by using annotated types and decorators, we point variables to Jinja templates and render them as the station starts up.
+This is not a super simple process, and we’re still working on it, so we can’t fully explain everything at this time.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api/common/common.html" class="btn btn-neutral float-right" title="ochra.common package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, OChRA team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

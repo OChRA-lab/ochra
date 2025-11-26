@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ochra.common.equipment package &mdash; OChRA  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/autodoc_pydantic.css" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="ochra.common.spaces" href="spaces.html" />
+    <link rel="prev" title="ochra.common.connections" href="connections.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            OChRA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="common.html">ochra.common package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="connections.html">ochra.common.connections</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ochra.common.equipment package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.equipment.device">device</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.equipment.device.CircularRangeInput"><code class="docutils literal notranslate"><span class="pre">CircularRangeInput</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.equipment.device.Device"><code class="docutils literal notranslate"><span class="pre">Device</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.equipment.device.HTMLAttribute"><code class="docutils literal notranslate"><span class="pre">HTMLAttribute</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.equipment.device.HTMLForm"><code class="docutils literal notranslate"><span class="pre">HTMLForm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.equipment.device.HTMLInput"><code class="docutils literal notranslate"><span class="pre">HTMLInput</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.equipment.device.HypermediaBuilder"><code class="docutils literal notranslate"><span class="pre">HypermediaBuilder</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.equipment.mobile_robot">mobile_robot</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.equipment.mobile_robot.MobileRobot"><code class="docutils literal notranslate"><span class="pre">MobileRobot</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.equipment.operation">operation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.equipment.operation.Operation"><code class="docutils literal notranslate"><span class="pre">Operation</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.equipment.operation_result">operation_result</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.equipment.operation_result.OperationResult"><code class="docutils literal notranslate"><span class="pre">OperationResult</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ochra.common.equipment.robot">robot</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ochra.common.equipment.robot.Robot"><code class="docutils literal notranslate"><span class="pre">Robot</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="spaces.html">ochra.common.spaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html">ochra.common.storage package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">ochra.common.utils package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base.html">ochra.common.base</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../manager/manager.html">ochra_manager package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">OChRA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="common.html">ochra.common package</a></li>
+      <li class="breadcrumb-item active">ochra.common.equipment package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/common/equipment.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ochra-common-equipment-package">
+<h1>ochra.common.equipment package<a class="headerlink" href="#ochra-common-equipment-package" title="Link to this heading"></a></h1>
+<section id="module-ochra.common.equipment.device">
+<span id="device"></span><h2>device<a class="headerlink" href="#module-ochra.common.equipment.device" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.CircularRangeInput">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.equipment.device.</span></span><span class="sig-name descname"><span class="pre">CircularRangeInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unitname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_binding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.device.CircularRangeInput" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ochra.common.equipment.device.HTMLInput" title="ochra.common.equipment.device.HTMLInput"><code class="xref py py-class docutils literal notranslate"><span class="pre">HTMLInput</span></code></a></p>
+<p>Specialized HTMLInput for inputs that are represented as circular range sliders.</p>
+<p>Initializes a CircularRangeInput.
+:param unitname: The label or name of the unit.
+:type unitname: str
+:param min: The minimum value of the range.
+:param max: The maximum value of the range.
+:param step: The step size for the range.
+:param variable_binding: The variable binding associated with the input element. Defaults to “”.
+:type variable_binding: str, optional</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unitname</strong> (<em>str</em>)</p></li>
+<li><p><strong>variable_binding</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.Device">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.equipment.device.</span></span><span class="sig-name descname"><span class="pre">Device</span></span><a class="headerlink" href="#ochra.common.equipment.device.Device" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataModel</span></code></a></p>
+<p>Base class for all devices, providing common attributes. Instruments and robots are considered devices in our framework.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.equipment.device.Device.inventory" title="ochra.common.equipment.device.Device.inventory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">inventory</span> <span class="pre">(ochra.common.storage.inventory.Inventory)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.device.Device.name" title="ochra.common.equipment.device.Device.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.device.Device.owner_station" title="ochra.common.equipment.device.Device.owner_station"><code class="xref py py-obj docutils literal notranslate"><span class="pre">owner_station</span> <span class="pre">(uuid.UUID)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.device.Device.status" title="ochra.common.equipment.device.Device.status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">status</span> <span class="pre">(ochra.common.utils.enum.ActivityStatus)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.Device.inventory">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inventory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="storage.html#ochra.common.storage.inventory.Inventory" title="ochra.common.storage.inventory.Inventory"><span class="pre">Inventory</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.equipment.device.Device.inventory" title="Link to this definition"></a></dt>
+<dd><p>Associated inventory object.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.Device.name">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.equipment.device.Device.name" title="Link to this definition"></a></dt>
+<dd><p>Device name.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.Device.owner_station">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">owner_station</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.equipment.device.Device.owner_station" title="Link to this definition"></a></dt>
+<dd><p>Station ID to which the device belongs.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.Device.status">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="utils.html#ochra.common.utils.enum.ActivityStatus" title="ochra.common.utils.enum.ActivityStatus"><span class="pre">ActivityStatus</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">ActivityStatus.IDLE</span></em><a class="headerlink" href="#ochra.common.equipment.device.Device.status" title="Link to this definition"></a></dt>
+<dd><p>Current operational status of the device (e.g., idle, busy), defaults to IDLE.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.Device.model_post_init">
+<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.device.Device.model_post_init" title="Link to this definition"></a></dt>
+<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
+method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<em>BaseModel</em>)</p></li>
+<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.Device.to_html">
+<span class="sig-name descname"><span class="pre">to_html</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.device.Device.to_html" title="Link to this definition"></a></dt>
+<dd><p>Converts the device instance into an HTML representation.
+:returns: The HTML string representing the device.
+:rtype: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.HTMLAttribute">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.equipment.device.</span></span><span class="sig-name descname"><span class="pre">HTMLAttribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.device.HTMLAttribute" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Meta class for annotating variables to generate HTML attributes in UI rendering on the web app.
+Use as metadata in Annotated type hints to describe how a field should appear in the UI.</p>
+<p>Initialize an HTMLAttribute instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<em>str</em>) – Human-readable label for the UI element.</p></li>
+<li><p><strong>element</strong> (<em>str</em>) – Type of HTML element (e.g., ‘input’, ‘div’, ‘select’).</p></li>
+<li><p><strong>**attrs</strong> – Additional HTML attributes (e.g., placeholder, class, style).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.HTMLForm">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.equipment.device.</span></span><span class="sig-name descname"><span class="pre">HTMLForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">call</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.device.HTMLForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Decorator class to annotate methods as HTML forms for UI rendering on the web app.</p>
+<p>Initialize an HTMLForm instance.
+:param call: The endpoint or action to call when the form is submitted.
+:type call: str
+:param method: The HTTP method to use (e.g., ‘POST’, ‘GET’).
+:type method: str
+:param action: Optional action URL for the form submission. Defaults to “”.
+:type action: str, optional</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>call</strong> (<em>str</em>)</p></li>
+<li><p><strong>method</strong> (<em>str</em>)</p></li>
+<li><p><strong>action</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.HTMLInput">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.equipment.device.</span></span><span class="sig-name descname"><span class="pre">HTMLInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_binding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.device.HTMLInput" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Meta class for annotating function arguments to generate HTML inputs in UI rendering on the web app.
+Use as metadata in Annotated type hints to describe how a field should appear in the UI.</p>
+<p>Initialize an HTMLInput instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<em>str</em>) – The label for the input element.</p></li>
+<li><p><strong>type</strong> (<em>str</em>) – The type of the input element (e.g., ‘text’, ‘number’).</p></li>
+<li><p><strong>variable_binding</strong> (<em>str</em><em>, </em><em>optional</em>) – The variable binding associated with the input element. Defaults to “”.</p></li>
+<li><p><strong>**attrs</strong> – Additional HTML attributes for the input element.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.HypermediaBuilder">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.equipment.device.</span></span><span class="sig-name descname"><span class="pre">HypermediaBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.device.HypermediaBuilder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Builds HTML representation of a Device instance using Jinja2 templates.</p>
+<p>Initializes the HypermediaBuilder with a Device instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>device</strong> (<a class="reference internal" href="#ochra.common.equipment.device.Device" title="ochra.common.equipment.device.Device"><em>Device</em></a>) – The device instance to render.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.device.HypermediaBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.device.HypermediaBuilder.build" title="Link to this definition"></a></dt>
+<dd><p>Renders the HTML representation of the device using Jinja2 templates.
+:returns: The rendered HTML string.
+:rtype: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.equipment.mobile_robot">
+<span id="mobile-robot"></span><h2>mobile_robot<a class="headerlink" href="#module-ochra.common.equipment.mobile_robot" title="Link to this heading"></a></h2>
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.equipment.mobile_robot.MobileRobot">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.equipment.mobile_robot.</span></span><span class="sig-name descname"><span class="pre">MobileRobot</span></span><a class="headerlink" href="#ochra.common.equipment.mobile_robot.MobileRobot" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ochra.common.equipment.robot.Robot" title="ochra.common.equipment.robot.Robot"><code class="xref py py-class docutils literal notranslate"><span class="pre">Robot</span></code></a></p>
+<p>Abstract class to represent a mobile robot that can move.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.equipment.mobile_robot.MobileRobot.state" title="ochra.common.equipment.mobile_robot.MobileRobot.state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">state</span> <span class="pre">(ochra.common.utils.enum.MobileRobotState)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.mobile_robot.MobileRobot.state">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="utils.html#ochra.common.utils.enum.MobileRobotState" title="ochra.common.utils.enum.MobileRobotState"><span class="pre">MobileRobotState</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">MobileRobotState.AVAILABLE</span></em><a class="headerlink" href="#ochra.common.equipment.mobile_robot.MobileRobot.state" title="Link to this definition"></a></dt>
+<dd><p>State of the mobile robot. Defaults to AVAILABLE</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.mobile_robot.MobileRobot.go_to">
+<span class="sig-name descname"><span class="pre">go_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.mobile_robot.MobileRobot.go_to" title="Link to this definition"></a></dt>
+<dd><p>Move the mobile platform to a specified location using given args.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Argument needed for robot navigation to the target location.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the platform successfully moved to the location</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.mobile_robot.MobileRobot.model_post_init">
+<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.mobile_robot.MobileRobot.model_post_init" title="Link to this definition"></a></dt>
+<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
+method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<em>BaseModel</em>)</p></li>
+<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.equipment.operation">
+<span id="operation"></span><h2>operation<a class="headerlink" href="#module-ochra.common.equipment.operation" title="Link to this heading"></a></h2>
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation.Operation">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.equipment.operation.</span></span><span class="sig-name descname"><span class="pre">Operation</span></span><a class="headerlink" href="#ochra.common.equipment.operation.Operation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataModel</span></code></a></p>
+<p>Represents an operation executed by a device.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation.Operation.args" title="ochra.common.equipment.operation.Operation.args"><code class="xref py py-obj docutils literal notranslate"><span class="pre">args</span> <span class="pre">(Dict[str,</span> <span class="pre">Any])</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation.Operation.caller_id" title="ochra.common.equipment.operation.Operation.caller_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">caller_id</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation.Operation.end_timestamp" title="ochra.common.equipment.operation.Operation.end_timestamp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">end_timestamp</span> <span class="pre">(datetime.datetime)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation.Operation.entity_id" title="ochra.common.equipment.operation.Operation.entity_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entity_id</span> <span class="pre">(uuid.UUID)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation.Operation.entity_type" title="ochra.common.equipment.operation.Operation.entity_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entity_type</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation.Operation.method" title="ochra.common.equipment.operation.Operation.method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">method</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation.Operation.result" title="ochra.common.equipment.operation.Operation.result"><code class="xref py py-obj docutils literal notranslate"><span class="pre">result</span> <span class="pre">(ochra.common.equipment.operation_result.OperationResult)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation.Operation.start_timestamp" title="ochra.common.equipment.operation.Operation.start_timestamp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_timestamp</span> <span class="pre">(datetime.datetime)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation.Operation.status" title="ochra.common.equipment.operation.Operation.status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">status</span> <span class="pre">(ochra.common.utils.enum.OperationStatus)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation.Operation.args">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.equipment.operation.Operation.args" title="Link to this definition"></a></dt>
+<dd><p>Arguments passed to the method.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation.Operation.caller_id">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">caller_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.equipment.operation.Operation.caller_id" title="Link to this definition"></a></dt>
+<dd><p>Unique identifier of the caller initiating the operation.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation.Operation.end_timestamp">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">end_timestamp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.equipment.operation.Operation.end_timestamp" title="Link to this definition"></a></dt>
+<dd><p>Timestamp when the operation ended.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation.Operation.entity_id">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">entity_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.equipment.operation.Operation.entity_id" title="Link to this definition"></a></dt>
+<dd><p>Unique identifier of the target entity.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation.Operation.entity_type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">entity_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.equipment.operation.Operation.entity_type" title="Link to this definition"></a></dt>
+<dd><p>Type of the entity (e.g., ‘device’, ‘station’).</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation.Operation.method">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">method</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.equipment.operation.Operation.method" title="Link to this definition"></a></dt>
+<dd><p>Name of the method invoked.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation.Operation.result">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">result</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#ochra.common.equipment.operation_result.OperationResult" title="ochra.common.equipment.operation_result.OperationResult"><span class="pre">OperationResult</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.equipment.operation.Operation.result" title="Link to this definition"></a></dt>
+<dd><p>Result of the operation.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation.Operation.start_timestamp">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start_timestamp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.equipment.operation.Operation.start_timestamp" title="Link to this definition"></a></dt>
+<dd><p>Timestamp when the operation started.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation.Operation.status">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="utils.html#ochra.common.utils.enum.OperationStatus" title="ochra.common.utils.enum.OperationStatus"><span class="pre">OperationStatus</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">OperationStatus.CREATED</span></em><a class="headerlink" href="#ochra.common.equipment.operation.Operation.status" title="Link to this definition"></a></dt>
+<dd><p>Current status of the operation. Defaults to CREATED.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation.Operation.model_post_init">
+<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.operation.Operation.model_post_init" title="Link to this definition"></a></dt>
+<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
+method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<em>BaseModel</em>)</p></li>
+<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.equipment.operation_result">
+<span id="operation-result"></span><h2>operation_result<a class="headerlink" href="#module-ochra.common.equipment.operation_result" title="Link to this heading"></a></h2>
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation_result.OperationResult">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.equipment.operation_result.</span></span><span class="sig-name descname"><span class="pre">OperationResult</span></span><a class="headerlink" href="#ochra.common.equipment.operation_result.OperationResult" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="base.html#ochra.common.base.data_model.DataModel" title="ochra.common.base.data_model.DataModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataModel</span></code></a></p>
+<p>Represents the outcome of an equipment operation, including its status and any associated data.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation_result.OperationResult.data_file_name" title="ochra.common.equipment.operation_result.OperationResult.data_file_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_file_name</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation_result.OperationResult.data_status" title="ochra.common.equipment.operation_result.OperationResult.data_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_status</span> <span class="pre">(ochra.common.utils.enum.ResultDataStatus)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation_result.OperationResult.data_type" title="ochra.common.equipment.operation_result.OperationResult.data_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_type</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation_result.OperationResult.error" title="ochra.common.equipment.operation_result.OperationResult.error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">error</span> <span class="pre">(str)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation_result.OperationResult.result_data" title="ochra.common.equipment.operation_result.OperationResult.result_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">result_data</span> <span class="pre">(Any)</span></code></a></p></li>
+<li><p><a class="reference internal" href="#ochra.common.equipment.operation_result.OperationResult.success" title="ochra.common.equipment.operation_result.OperationResult.success"><code class="xref py py-obj docutils literal notranslate"><span class="pre">success</span> <span class="pre">(bool)</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation_result.OperationResult.data_file_name">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_file_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#ochra.common.equipment.operation_result.OperationResult.data_file_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the file containing the result data, including its extension. Leave empty if not applicable.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation_result.OperationResult.data_status">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="utils.html#ochra.common.utils.enum.ResultDataStatus" title="ochra.common.utils.enum.ResultDataStatus"><span class="pre">ResultDataStatus</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">ResultDataStatus.UNAVAILABLE</span></em><a class="headerlink" href="#ochra.common.equipment.operation_result.OperationResult.data_status" title="Link to this definition"></a></dt>
+<dd><p>Current availability status of the result data. Defaults to UNAVAILABLE.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation_result.OperationResult.data_type">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#ochra.common.equipment.operation_result.OperationResult.data_type" title="Link to this definition"></a></dt>
+<dd><p>Type or format of the result data (e.g., “image”, “text”, “json”).</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation_result.OperationResult.error">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">error</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#ochra.common.equipment.operation_result.OperationResult.error" title="Link to this definition"></a></dt>
+<dd><p>Description of the error if the operation failed; empty if successful.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation_result.OperationResult.result_data">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">result_data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#ochra.common.equipment.operation_result.OperationResult.result_data" title="Link to this definition"></a></dt>
+<dd><p>The data produced by the operation, if any.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation_result.OperationResult.success">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.equipment.operation_result.OperationResult.success" title="Link to this definition"></a></dt>
+<dd><p>True if the operation completed successfully; otherwise, False.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation_result.OperationResult.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.operation_result.OperationResult.get_data" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the processed data from the result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The processed data.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation_result.OperationResult.model_post_init">
+<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.operation_result.OperationResult.model_post_init" title="Link to this definition"></a></dt>
+<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
+method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<em>BaseModel</em>)</p></li>
+<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation_result.OperationResult.put_data">
+<span class="sig-name descname"><span class="pre">put_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.operation_result.OperationResult.put_data" title="Link to this definition"></a></dt>
+<dd><p>Converts the data into bytestring and uploads the results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the data is converted and uploaded</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.operation_result.OperationResult.save_data">
+<span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.operation_result.OperationResult.save_data" title="Link to this definition"></a></dt>
+<dd><p>Gets the data from the server and saves it to path. If path is not provided,
+saves it using the original name at the current directory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – The path to save the data to. If None, saves it to the current directory using original name.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the data is saved.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-ochra.common.equipment.robot">
+<span id="robot"></span><h2>robot<a class="headerlink" href="#module-ochra.common.equipment.robot" title="Link to this heading"></a></h2>
+<dl class="py class pydantic_model">
+<dt class="sig sig-object py" id="ochra.common.equipment.robot.Robot">
+<em class="property"><span class="pre">pydantic</span> <span class="pre">model</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ochra.common.equipment.robot.</span></span><span class="sig-name descname"><span class="pre">Robot</span></span><a class="headerlink" href="#ochra.common.equipment.robot.Robot" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ochra.common.equipment.device.Device" title="ochra.common.equipment.device.Device"><code class="xref py py-class docutils literal notranslate"><span class="pre">Device</span></code></a></p>
+<p>Abstract class to represent a generic robot.</p>
+<p>Create a new model by parsing and validating input data from keyword arguments.</p>
+<p>Raises [<cite>ValidationError</cite>][pydantic_core.ValidationError] if the input data cannot be
+validated to form a valid model.</p>
+<p><cite>self</cite> is explicitly positional-only to allow <cite>self</cite> as a field name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Fields<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference internal" href="#ochra.common.equipment.robot.Robot.available_tasks" title="ochra.common.equipment.robot.Robot.available_tasks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">available_tasks</span> <span class="pre">(List[str])</span></code></a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="ochra.common.equipment.robot.Robot.available_tasks">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">available_tasks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#ochra.common.equipment.robot.Robot.available_tasks" title="Link to this definition"></a></dt>
+<dd><p>A list of tasks available for execution by the robot.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.robot.Robot.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.robot.Robot.execute" title="Link to this definition"></a></dt>
+<dd><p>Executes a specified task on the robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>task_name</strong> (<em>str</em>) – The name of the task to execute.</p></li>
+<li><p><strong>args</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – Arguments required for the task execution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the task was executed successfully, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ochra.common.equipment.robot.Robot.model_post_init">
+<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ochra.common.equipment.robot.Robot.model_post_init" title="Link to this definition"></a></dt>
+<dd><p>We need to both initialize private attributes and call the user-defined model_post_init
+method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>self</strong> (<em>BaseModel</em>)</p></li>
+<li><p><strong>context</strong> (<em>Any</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="connections.html" class="btn btn-neutral float-left" title="ochra.common.connections" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="spaces.html" class="btn btn-neutral float-right" title="ochra.common.spaces" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, OChRA team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
