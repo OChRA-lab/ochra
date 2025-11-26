@@ -23,9 +23,9 @@ from ochra.manager.proxy_models.storage.inventory import Inventory  # noqa: F401
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'ochra'
-copyright = '2025, stoic-roboticist'
-author = 'stoic-roboticist'
+project = 'OChRA'
+copyright = '2025, OChRA team'
+author = 'OChRA team'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
