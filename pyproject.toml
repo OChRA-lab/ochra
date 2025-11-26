@@ -36,7 +36,14 @@ manager = [
     "uvicorn==0.30.1",
     "sqlalchemy",
 ]
-
+documentation = [
+    "sphinx==8.2.3",
+    "sphinx-rtd-theme==3.0.2",
+    "autodoc_pydantic==2.2.0",
+    "fastapi==0.111.1",
+    "uvicorn==0.30.1",
+    "sqlalchemy",
+]
 
 keywords = ["OChRA", "chemistry", "lab", "framework", "automated"]
 

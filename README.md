@@ -11,3 +11,6 @@ The framework is designed to tackle common SDL challenges like hardware integrat
 
 ## Join the Community!
 This is an open-source community effort, and we are actively seeking collaborators!  If you're interested in adding new instrument integrations, developing new features, or using OChRA in your lab, we'd love to hear from you.
+
+## Documentation
+Documentation can be found at https://ochra-lab.github.io/ochra/

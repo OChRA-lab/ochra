@@ -22,6 +22,7 @@ camera_station = my_lab.get_station("camera_station")
 
 # get camera
 try:
+    print("Test getting absent device")
     my_camera: WebCamera = camera_station.get_device("my_horse")
 except Exception as e:
     print(e)
@@ -29,6 +30,7 @@ except Exception as e:
 my_camera: WebCamera = camera_station.get_device("my_camera")
 
 try:
+    print("Executing error operation")
     error_op: Operation = my_camera.error()
 except Exception as e:
     print(e)
