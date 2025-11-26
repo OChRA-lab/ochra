@@ -4,7 +4,7 @@ Usage
 Terminology
 -------------
 
-Key terms used in Ochra:
+Key terms used in OChRA:
 
 - **Device**: The physical instrument or robot you want to control (e.g., a robot, hotplate, or other scientific equipment).
 - **Driver**: The software that controls the device.
@@ -26,7 +26,7 @@ OChRA is a lab integration and automation framework designed to make it easy to 
 What OChRA is not
 ^^^^^^^^^^^^^^^^^^^^^^^
 OChRA doesn't replace device-specific control code. It lets you connect and coordinate many devices from one place.
-In the provided example, we use a driver package called [pylabware](https://github.com/croningp/pylabware), which handles interactions with equipment for a few of our devices.
+In the provided example, we use a driver package called `pylabware <https://github.com/croningp/pylabware>`_, which handles interactions with equipment for a few of our devices.
 You will need to write your own drivers for any device that don't have one using any APIs or SDKs provided by the manufacturer.
 We have written a few drivers and can probably help you figure out what you need. Ultimately, all you need for your equipment to be usable in OChRA is to have methods that can be invoked by the handler class.
 
@@ -176,7 +176,7 @@ Lab setup
 ************************
 In OChRA framework, each lab would have a single lab server that handles the lab's data and manages its stations and their operation execution.
 
-Setting up a lab is quick and easy. Use a short script similar to [Example_lab.py](https://github.com/OChRA-lab/ochra/blob/main/examples/Example_lab.py) to initialize your lab server and then run it.  
+Setting up a lab is quick and easy. Use a short script similar to `Example_lab.py <https://github.com/OChRA-lab/ochra/blob/main/examples/Example_lab.py>`__ to initialize your lab server and then run it.  
 You can customize the server's hostname and port with `uvicorn`. For debugging and testing, we also delete the OChRA DB on startup, but you can skip this if you don't need to. See below:
 ::
 

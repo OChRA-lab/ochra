@@ -1,7 +1,7 @@
 Installation
 =================
 
-There are two ways to install ochra depending on your goals.
+There are two ways to install OChRA depending on your goals.
 
 Lab User Installation
 -----------------------------------
@@ -21,7 +21,7 @@ Similarly, use your favorite environment manager, set up your workspace and clon
 
 You need to install extra dependencies to be able to run the lab and station servers.
 
-First, we need to install [mongoDB](https://www.mongodb.com/docs/manual/installation/).
+First, we need to install `mongoDB <https://www.mongodb.com/docs/manual/installation/>`__.
 Then using your environment install the package::
 
     pip install ./ochra[manager]
