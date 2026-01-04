@@ -13,7 +13,7 @@ import httpx
 import re
 import ast
 
-from ochra.common.connections.api_models import ObjectConstructionRequest
+from ochra.common.connections.api_models import ObjectConstructionRequest, ObjectCallRequest
 from ochra.common.equipment.operation import Operation
 from ochra.common.utils.enum import OperationStatus
 
@@ -404,34 +404,39 @@ class WebAppRouter(APIRouter):
         except Exception as e:
             raise HTTPException(status_code=400, detail=f"Invalid args format: {e}")
 
-        opp = Operation(
-            caller_id=str(uuid.uuid4()),
-            collection="operations",
-            entity_id=device_id,
-            entity_type="devices",
-            method=str(form.get("task_name", "")),
-            args=args_dict,
-            status=OperationStatus.CREATED,
-            start_timestamp=datetime.now(),
-        )
+        # using the call_on_object hook instead of calling it with post requests
+        call_req = ObjectCallRequest(caller_id=str(uuid.uuid4()), method=str(form.get("task_name", "")), args=args_dict)
+        opp = self.lab_service.call_on_object(device_id, "devices", call_req=call_req)
 
-        async with httpx.AsyncClient() as client:
-            headers = {
-                key: value
-                for key, value in request.headers.items()
-                if key.lower() not in ("content-length", "content-type")
-            }
+        # opp = Operation(
+        #     caller_id=str(uuid.uuid4()),
+        #     collection="operations",
+        #     entity_id=device_id,
+        #     entity_type="devices",
+        #     method=str(form.get("task_name", "")),
+        #     args=args_dict,
+        #     status=OperationStatus.CREATED,
+        #     start_timestamp=datetime.now(),
+        # )
 
-            station_response = await client.post(proxy_url, headers=headers, data=form)
+        # async with httpx.AsyncClient() as client:
+        #     headers = {
+        #         key: value
+        #         for key, value in request.headers.items()
+        #         if key.lower() not in ("content-length", "content-type")
+        #     }
 
-        if station_response.is_success:
-            opp.end_timestamp = datetime.now()
+        #     station_response = await client.post(proxy_url, headers=headers, data=form)
 
-            self.lab_service.construct_object(
-                ObjectConstructionRequest(object_json=opp.model_dump_json()),
-                opp.collection,
-            )
+        # if station_response.is_success:
+            # opp.end_timestamp = datetime.now()
 
+            # self.lab_service.construct_object(
+            #     ObjectConstructionRequest(object_json=opp.model_dump_json()),
+            #     opp.collection,
+            # )
+
+        if opp.result.success:
             async with httpx.AsyncClient() as client:
                 headers = {
                     key: value
@@ -459,11 +464,11 @@ class WebAppRouter(APIRouter):
             )
 
         # 3. Propagate station errors
-        return Response(
-            content=station_response.content,
-            status_code=station_response.status_code,
-            headers=station_response.headers,
-        )
+        # return Response(
+        #     content=station_response.content,
+        #     status_code=station_response.status_code,
+        #     headers=station_response.headers,
+        # )
 
     async def get_device_view(self, request: Request, station_id: str, device_id: str) -> HTMLResponse:
         """
