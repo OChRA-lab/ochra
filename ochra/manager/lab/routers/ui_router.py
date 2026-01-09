@@ -24,12 +24,13 @@ STATIONS = "stations"
 
 
 class WebAppRouter(APIRouter):
-    def __init__(self, templates: Jinja2Templates):
+    def __init__(self, templates: Jinja2Templates, scheduler):
         self.prefix = "/app"
         super().__init__(prefix=self.prefix)
         self._logger = logging.getLogger(__name__)
         self.lab_service = LabService()
         self.templates = templates
+        self.scheduler = scheduler
 
         self.get("/")(self.get_stations)
 
@@ -405,38 +406,16 @@ class WebAppRouter(APIRouter):
             raise HTTPException(status_code=400, detail=f"Invalid args format: {e}")
 
         # using the call_on_object hook instead of calling it with post requests
-        call_req = ObjectCallRequest(caller_id=str(uuid.uuid4()), method=str(form.get("task_name", "")), args=args_dict)
-        opp = self.lab_service.call_on_object(device_id, "devices", call_req=call_req)
+        method = str(form.get("command", ""))
+        args = {key: form.getlist(key) if len(form.getlist(key)) > 1 else form.get(key) for key in form}
+        del args['command']
+        
+        call_req = ObjectCallRequest(caller_id=str(uuid.uuid4()), method=method, args=args)
+        opp = self.lab_service.call_on_object(device_id, "device", call_req=call_req)
+        self.scheduler.add_operation(opp)
 
-        # opp = Operation(
-        #     caller_id=str(uuid.uuid4()),
-        #     collection="operations",
-        #     entity_id=device_id,
-        #     entity_type="devices",
-        #     method=str(form.get("task_name", "")),
-        #     args=args_dict,
-        #     status=OperationStatus.CREATED,
-        #     start_timestamp=datetime.now(),
-        # )
-
-        # async with httpx.AsyncClient() as client:
-        #     headers = {
-        #         key: value
-        #         for key, value in request.headers.items()
-        #         if key.lower() not in ("content-length", "content-type")
-        #     }
-
-        #     station_response = await client.post(proxy_url, headers=headers, data=form)
-
-        # if station_response.is_success:
-            # opp.end_timestamp = datetime.now()
-
-            # self.lab_service.construct_object(
-            #     ObjectConstructionRequest(object_json=opp.model_dump_json()),
-            #     opp.collection,
-            # )
-
-        if opp.result.success:
+        # if the operation result exists, means that the operation has been created
+        if opp.result is None:
             async with httpx.AsyncClient() as client:
                 headers = {
                     key: value

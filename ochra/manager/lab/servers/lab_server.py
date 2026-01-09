@@ -75,7 +75,7 @@ class LabServer:
         self.app.include_router(OperationResultRouter(folderpath))
 
         ##NOTE: NEW ADDITIONS ###################
-        self.app.include_router(WebAppRouter(self.templates))
+        self.app.include_router(WebAppRouter(self.templates, self.scheduler))
         self.app.middleware("http")(self.auth_middleware)
 
         init_user_db()
