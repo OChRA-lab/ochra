@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 import hashlib
 import logging
 import uuid
@@ -13,7 +14,7 @@ import httpx
 import re
 import ast
 
-from ochra.common.connections.api_models import ObjectConstructionRequest, ObjectCallRequest
+from ochra.common.connections.api_models import ObjectCallRequest,ObjectPropertyGetRequest
 from ochra.common.equipment.operation import Operation
 from ochra.common.utils.enum import OperationStatus
 
@@ -415,32 +416,36 @@ class WebAppRouter(APIRouter):
         self.scheduler.add_operation(opp)
 
         # if the operation result exists, means that the operation has been created
-        if opp.result is None:
-            async with httpx.AsyncClient() as client:
-                headers = {
-                    key: value
-                    for key, value in request.headers.items()
-                    if key.lower() not in ("content-length", "content-type")
-                }
+        opstatus =  self.lab_service.get_object_property(str(opp.id),opp.collection,ObjectPropertyGetRequest(property="status"))
+        while opstatus != OperationStatus.COMPLETED:
+            time.sleep(5)
+            opstatus =  self.lab_service.get_object_property(str(opp.id),opp.collection,ObjectPropertyGetRequest(property="status"))
+                
+        async with httpx.AsyncClient() as client:
+            headers = {
+                key: value
+                for key, value in request.headers.items()
+                if key.lower() not in ("content-length", "content-type")
+            }
 
-                # re-fetch the updated device HTML
-                refreshed_device_html = await client.get(
-                    f"http://{station['station_ip']}:{station['port']}/hypermedia/devices/{device_id}",
-                    headers=headers,
-                )
-
-            decoded_html = refreshed_device_html.content.decode("utf-8")
-            return self.templates.TemplateResponse(
-                "zzzdevice.html",
-                context={
-                    "request": request,
-                    "active_link": self.prefix + "/",
-                    "device_html": decoded_html,
-                    "decoded_html": decoded_html,
-                    "station_id": station_id,
-                    "station_name": station["name"],
-                },
+            # re-fetch the updated device HTML
+            refreshed_device_html = await client.get(
+                f"http://{station['station_ip']}:{station['port']}/hypermedia/devices/{device_id}",
+                headers=headers,
             )
+
+        decoded_html = refreshed_device_html.content.decode("utf-8")
+        return self.templates.TemplateResponse(
+            "zzzdevice.html",
+            context={
+                "request": request,
+                "active_link": self.prefix + "/",
+                "device_html": decoded_html,
+                "decoded_html": decoded_html,
+                "station_id": station_id,
+                "station_name": station["name"],
+            },
+        )
 
         # 3. Propagate station errors
         # return Response(
