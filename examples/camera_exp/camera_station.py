@@ -23,7 +23,7 @@ my_station = StationServer(
 )
 
 # setup the station server
-my_station.setup(lab_ip="localhost:8001")
+my_station.setup(lab_ip="138.253.126.152:8001")
 
 # construct device
 camera = WebCamera(name="my_camera")

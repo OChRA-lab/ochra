@@ -13,7 +13,7 @@ class Lab(Lab):
             hostname (str): Ip address and port of the lab server.
             experiment_id (str, optional): ID of the experiment. Defaults to None.
         """
-        self._lab_conn: LabConnection = LabConnection(hostname,experiment_id)
+        self._lab_conn: LabConnection = LabConnection(hostname,experiment_id,history=True)
 
     def get_station(
         self, station_name: str

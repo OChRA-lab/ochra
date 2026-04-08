@@ -15,7 +15,7 @@ from time import sleep
 from uuid import UUID
 
 # connect to lab
-my_lab = Lab("0.0.0.0:8001","example_id")
+my_lab = Lab("138.253.126.152:8001","example_id")
 
 # get camera station
 camera_station = my_lab.get_station("camera_station")

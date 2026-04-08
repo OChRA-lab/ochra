@@ -31,6 +31,7 @@ class LabConnection(metaclass=SingletonMeta):
         experiment_id: str = None,
         api_key: str = "",
         ssl_verify: bool = False,
+        history = False
     ):
         """
         Constructor for LabConnection class.
@@ -42,10 +43,13 @@ class LabConnection(metaclass=SingletonMeta):
             api_key (str, optional): API key if exists. Defaults to ''.
             ssl_verify (bool, optional): If we need to verify SSL. Defaults to False.
         """
-        self._logger = logging.getLogger(__name__)
+        
         self.rest_adapter: RestAdapter = RestAdapter(
-            hostname, api_key, ssl_verify, self._logger
+            hostname, api_key, ssl_verify, logging.getLogger(__name__)
         )
+        self._logger = logging.getLogger(experiment_id)
+        logging.basicConfig(filename=f"{experiment_id}.log",format="%(asctime)s %(message)s")
+        self._logger.setLevel(10)
         if experiment_id is None:
             self._session_id = str(uuid4())
         else:
@@ -181,6 +185,7 @@ class LabConnection(metaclass=SingletonMeta):
             Operation: An Operation instance representing the status and result of the method call.
         """
         req = ObjectCallRequest(method=method, args=args, caller_id=self._session_id)
+        self._logger.info(f"Made request to object {id} to call method: {method} with args: {args}")
         result: Result = self.rest_adapter.post(
             f"/{type}/{str(id)}/method", data=req.model_dump(mode="json")
         )
@@ -190,7 +195,10 @@ class LabConnection(metaclass=SingletonMeta):
             while op.status != OperationStatus.COMPLETED:
                 time.sleep(5)
             if self.get_property("operation_results",op.result,"success") is False:
-                raise LabEngineException(self.get_property("operation_results",op.result,"error"))
+                error = self.get_property("operation_results",op.result,"error")
+                self._logger.error(f"Error: {error}")
+                raise LabEngineException(error)
+            self._logger.info(f"Operation returned: {op}")
             return op
         except Exception as e:
             raise LabEngineException(f"Unexpected error: {e}")
