@@ -1,0 +1,8 @@
+[INFO - 2026-06-29 09:58:30,867 - Line(163)][ochra.manager.station.station_server]: Starting station server Syringe_pump_station on 0.0.0.0:8002
+[DEBUG - 2026-06-29 10:00:02,294 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-29 10:00:17,330 - Line(347)][ochra.manager.station.station_server]: Calling method move_down on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-29 10:00:50,908 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-29 10:01:10,275 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device 6207cd2e-467d-49a6-859e-782eac76aa57 with args: {}
+[DEBUG - 2026-06-29 10:01:18,614 - Line(347)][ochra.manager.station.station_server]: Calling method move_down on device 6207cd2e-467d-49a6-859e-782eac76aa57 with args: {}
+[DEBUG - 2026-06-29 10:01:32,414 - Line(347)][ochra.manager.station.station_server]: Calling method move_down on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-29 10:04:08,275 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device 6207cd2e-467d-49a6-859e-782eac76aa57 with args: {}

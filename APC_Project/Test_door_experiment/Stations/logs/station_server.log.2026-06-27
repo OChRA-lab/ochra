@@ -1,0 +1,30 @@
+[INFO - 2026-06-27 11:47:44,485 - Line(163)][ochra.manager.station.station_server]: Starting station server Syringe_pump_station on 0.0.0.0:8002
+[DEBUG - 2026-06-27 11:48:17,141 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-27 11:48:31,044 - Line(347)][ochra.manager.station.station_server]: Calling method move_down on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-27 11:48:53,773 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-27 11:49:08,964 - Line(347)][ochra.manager.station.station_server]: Calling method move_down on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-27 11:51:41,243 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[INFO - 2026-06-27 11:55:53,690 - Line(163)][ochra.manager.station.station_server]: Starting station server balance_door_station on 0.0.0.0:8008
+[DEBUG - 2026-06-27 11:56:02,740 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device 6207cd2e-467d-49a6-859e-782eac76aa57 with args: {}
+[DEBUG - 2026-06-27 11:57:33,185 - Line(347)][ochra.manager.station.station_server]: Calling method move_down on device 6207cd2e-467d-49a6-859e-782eac76aa57 with args: {}
+[DEBUG - 2026-06-27 12:04:35,964 - Line(347)][ochra.manager.station.station_server]: Calling method move_down on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-27 12:05:08,664 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-27 12:08:09,056 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device 6207cd2e-467d-49a6-859e-782eac76aa57 with args: {}
+[DEBUG - 2026-06-27 12:17:45,252 - Line(347)][ochra.manager.station.station_server]: Calling method move_down on device 6207cd2e-467d-49a6-859e-782eac76aa57 with args: {}
+[DEBUG - 2026-06-27 12:17:59,589 - Line(347)][ochra.manager.station.station_server]: Calling method move_down on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-27 12:19:43,489 - Line(347)][ochra.manager.station.station_server]: Calling method open_valve on device aea050a0-4cfd-4783-8f13-6623b8ddde90 with args: {}
+[DEBUG - 2026-06-27 12:19:56,354 - Line(347)][ochra.manager.station.station_server]: Calling method close_valve on device aea050a0-4cfd-4783-8f13-6623b8ddde90 with args: {}
+[DEBUG - 2026-06-27 12:21:58,024 - Line(347)][ochra.manager.station.station_server]: Calling method open_vacuum_valve on device b91c2f4d-b5c3-4024-bb3a-0736ce5b2018 with args: {}
+[DEBUG - 2026-06-27 12:22:11,245 - Line(347)][ochra.manager.station.station_server]: Calling method close_vacuum_valve on device b91c2f4d-b5c3-4024-bb3a-0736ce5b2018 with args: {}
+[DEBUG - 2026-06-27 12:39:22,707 - Line(347)][ochra.manager.station.station_server]: Calling method request_pumping on device 4e534dc8-4d3b-4b06-809a-72d73a4e1251 with args: {'withdraw_port': '9', 'dispense_port': '1', 'volume': '500', 'speed': '120'}
+[DEBUG - 2026-06-27 12:47:39,912 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-27 12:47:57,584 - Line(347)][ochra.manager.station.station_server]: Calling method move_down on device fecb2f5a-698e-4410-8020-69b08452ecca with args: {}
+[DEBUG - 2026-06-27 12:59:52,160 - Line(347)][ochra.manager.station.station_server]: Calling method request_pumping on device 4e534dc8-4d3b-4b06-809a-72d73a4e1251 with args: {'withdraw_port': '9', 'dispense_port': '1', 'volume': '500', 'speed': '150'}
+[DEBUG - 2026-06-27 13:03:21,432 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device 6207cd2e-467d-49a6-859e-782eac76aa57 with args: {}
+[INFO - 2026-06-27 13:07:43,025 - Line(163)][ochra.manager.station.station_server]: Starting station server Syringe_pump_station on 0.0.0.0:8002
+[DEBUG - 2026-06-27 13:07:54,588 - Line(347)][ochra.manager.station.station_server]: Calling method move_up on device 6207cd2e-467d-49a6-859e-782eac76aa57 with args: {}
+[DEBUG - 2026-06-27 13:08:08,607 - Line(347)][ochra.manager.station.station_server]: Calling method move_down on device 6207cd2e-467d-49a6-859e-782eac76aa57 with args: {}
+[DEBUG - 2026-06-27 13:24:59,013 - Line(347)][ochra.manager.station.station_server]: Calling method request_pumping on device 4e534dc8-4d3b-4b06-809a-72d73a4e1251 with args: {'withdraw_port': '9', 'dispense_port': '1', 'volume': '400', 'speed': '150'}
+[DEBUG - 2026-06-27 13:55:41,084 - Line(347)][ochra.manager.station.station_server]: Calling method open_vacuum_valve on device b91c2f4d-b5c3-4024-bb3a-0736ce5b2018 with args: {}
+[DEBUG - 2026-06-27 13:55:43,116 - Line(347)][ochra.manager.station.station_server]: Calling method close_vacuum_valve on device b91c2f4d-b5c3-4024-bb3a-0736ce5b2018 with args: {}
+[DEBUG - 2026-06-27 13:58:28,466 - Line(347)][ochra.manager.station.station_server]: Calling method request_pumping on device 4e534dc8-4d3b-4b06-809a-72d73a4e1251 with args: {'withdraw_port': '9', 'dispense_port': '1', 'volume': '500', 'speed': '200'}

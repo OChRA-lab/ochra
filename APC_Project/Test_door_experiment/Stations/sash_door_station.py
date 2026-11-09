@@ -19,7 +19,7 @@ from ochra.manager.station.station_server import StationServer
 sash_door_station = StationServer(
     name="sash_door_station",
     location=Location(lab="ACL", room="main_lab", place="sash_door_station"),
-    station_type=StationType.WORK_STATION,
+    station_type=StationType.WORK_STATION,station_port=8005
 )
 
 # setup the station server
@@ -32,4 +32,4 @@ sash_door_station.add_device(sash_door)
 
 if __name__ == "__main__":
     # run the station server
-    sash_door_station.run()    
+    sash_door_station.run()

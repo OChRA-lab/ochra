@@ -9,30 +9,28 @@ sys.path.append(parent_dir)
 sys.path.append(r"C:\Users\ACL\ochra-apc-devices\ochra_apc_devices")
 
 
-from ochra_apc_devices.devices.fume_hood_sash.handler import FumeHoodSash
-from ochra_apc_devices.devices.filtration.handler import Filtration
+# from ochra_apc_devices.devices.fume_hood_sash.handler import FumeHoodSash
+from ochra_apc_devices.devices.easy_sampler_vial_arm.handler import EasySamplerVialArm
 from ochra.common.spaces.location import Location
 from ochra.common.utils.enum import StationType
 from ochra.manager.station.station_server import StationServer
 
 
 # construct station server
-APC_station = StationServer(
-    name="APC_station",
-    location=Location(lab="ACL", room="main_lab", place="APC_station"),
-    station_type=StationType.WORK_STATION,
+Sample_vial_arm_station = StationServer(
+    name="Sample_vial_arm_station",
+    location=Location(lab="ACL", room="main_lab", place="Sample_vial_arm_station"),
+    station_type=StationType.WORK_STATION,station_port=8007
 )
 
 # setup the station server
-APC_station.setup(lab_ip="138.253.127.183:8001")
+Sample_vial_arm_station.setup(lab_ip="138.253.127.183:8001")
 
 # construct devices
-sash_door = FumeHoodSash(name="sash_door")
-filtration = Filtration(name="filtration")
+arm = EasySamplerVialArm(name="EasySamplerVialArm")
 
-APC_station.add_device(sash_door)
-APC_station.add_device(filtration)
+Sample_vial_arm_station.add_device(arm)
 
 if __name__ == "__main__":
     # run the station server
-    APC_station.run()    
+    Sample_vial_arm_station.run()    

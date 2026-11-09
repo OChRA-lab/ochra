@@ -1,0 +1,2 @@
+[INFO - 2026-07-20 13:40:06,631 - Line(163)][ochra.manager.station.station_server]: Starting station server Syringe_pump_station on 0.0.0.0:8002
+[DEBUG - 2026-07-20 13:42:21,113 - Line(347)][ochra.manager.station.station_server]: Calling method request_pumping on device 4e534dc8-4d3b-4b06-809a-72d73a4e1251 with args: {'withdraw_port': '9', 'dispense_port': '1', 'volume': '40.0', 'speed': '100.0'}

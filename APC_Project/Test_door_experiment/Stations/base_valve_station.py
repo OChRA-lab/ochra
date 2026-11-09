@@ -1,4 +1,4 @@
-"""Run the APC filtration work station."""
+"""Run the APC shared COM4 station for base valve and solid addition."""
 
 import os
 import sys
@@ -10,6 +10,7 @@ sys.path.append(r"C:\Users\ACL\ochra-apc-devices\ochra_apc_devices")
 
 
 from ochra_apc_devices.devices.base_valve.handler import BaseValve
+from ochra_apc_devices.devices.solid_addition.handler import SolidAddition
 from ochra.common.spaces.location import Location
 from ochra.common.utils.enum import StationType
 from ochra.manager.station.station_server import StationServer
@@ -26,9 +27,16 @@ base_valve_station = StationServer(
 base_valve_station.setup(lab_ip="138.253.127.183:8001")
 
 # construct devices
-base_valve = BaseValve(name="base_valve")
+base_valve = BaseValve(name="base_valve", port="COM4")
+solid_addition = SolidAddition(
+    name="solid_addition",
+    address="192.168.1.52",
+    port=5000,
+    serial_port="COM4",
+)
 
 base_valve_station.add_device(base_valve)
+base_valve_station.add_device(solid_addition)
 
 if __name__ == "__main__":
     # run the station server

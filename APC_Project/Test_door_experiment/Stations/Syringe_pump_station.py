@@ -19,14 +19,16 @@ from ochra.manager.station.station_server import StationServer
 Syringe_pump_station = StationServer(
     name="Syringe_pump_station",
     location=Location(lab="ACL", room="main_lab", place="Syringe_pump_station"),
-    station_type=StationType.WORK_STATION, station_port=8005
+    station_type=StationType.WORK_STATION, station_port=8002
 )
 
 # setup the station server
 Syringe_pump_station.setup(lab_ip="138.253.127.183:8001")
 
 # construct devices
-Syringe_pump_station.add_device(TecanXLP6000)
+syringe_pump = TecanXLP6000(name="TecanXLP6000", port="COM5", switch_address="0")
+
+Syringe_pump_station.add_device(syringe_pump)
 
 if __name__ == "__main__":
     # run the station server
