@@ -1,0 +1,12 @@
+stations
+
+
+8001: 
+8002: Syringe pump
+8003: Kern_pcb2500
+8004: Filtration
+8005: Sash_door
+8006: Base valve
+8007: Sample_vial_arm
+8008: Balance door
+8009: Solid addition
